@@ -6,6 +6,10 @@
 
 Native iOS companion for the [Life](https://github.com/nulljosh/life) therapy summary. SwiftUI, iOS 17+, static data, automatic light/dark mode.
 
+## Screenshot
+
+<img src="screenshots/main.png" width="300">
+
 ## Features
 
 - Vertical timeline with color-coded categories (crisis, event, forward)

@@ -7,13 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2248662A5E4D6DAFE1D6188E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E74B3F4446DDC3DE2BAA51F /* Assets.xcassets */; };
-		363219DBA1D6C53B00DB8401 /* LifeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB672ABDD50DC9259B48E851 /* LifeData.swift */; };
-		499F54CAAB1C91AF6F227606 /* LifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812AC70F998366D9FE72ED09 /* LifeApp.swift */; };
-		920EFDCC435338A07D1D868C /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B7087C5C203C3AEB39F309 /* TimelineView.swift */; };
+		133C371A25FA9C70B9B95091 /* SectionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BB3E67EA2A42AF9D81C321 /* SectionCardView.swift */; };
+		71640DCDECD1E5DFD5709E3A /* LifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */; };
+		8022DF61D41931823A0C7EA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF4A260D15979B8F55B6CDE /* ContentView.swift */; };
 		D7E1BF5A5D3AC6F210120B40 /* LifeiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B7C4A696BE1E5F5166FBD6 /* LifeiOSTests.swift */; };
-		E44950F57016B6BE50906E35 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03446190005C1639C1D260C1 /* ContentView.swift */; };
-		E8EBFDF4BA8904DB4F208BA8 /* SectionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8B0181F31A385AC72B7A7B /* SectionCardView.swift */; };
+		D8DF5F4983651D1D835E57A4 /* LifeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D8E04153589ED5D0D4C6C /* LifeData.swift */; };
+		F28E1F7AA84CF1A2E0035A54 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3E3E4045B80887052CD4B1 /* TimelineView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,16 +26,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		03446190005C1639C1D260C1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		1E74B3F4446DDC3DE2BAA51F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		25B7C4A696BE1E5F5166FBD6 /* LifeiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeiOSTests.swift; sourceTree = "<group>"; };
 		393F67C35B3ECCF400E3AD81 /* LifeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LifeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		53B7087C5C203C3AEB39F309 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
+		3D3E3E4045B80887052CD4B1 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
+		5EF4A260D15979B8F55B6CDE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		684E01DE6778A88734A0FC25 /* Life.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Life.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		812AC70F998366D9FE72ED09 /* LifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeApp.swift; sourceTree = "<group>"; };
-		AB8B0181F31A385AC72B7A7B /* SectionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCardView.swift; sourceTree = "<group>"; };
-		E889326E785DC149C847C013 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		FB672ABDD50DC9259B48E851 /* LifeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeData.swift; sourceTree = "<group>"; };
+		7D1D8E04153589ED5D0D4C6C /* LifeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeData.swift; sourceTree = "<group>"; };
+		94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeApp.swift; sourceTree = "<group>"; };
+		B2BB3E67EA2A42AF9D81C321 /* SectionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -52,10 +49,10 @@
 		6C1806F36EB8D6C9CA02A573 = {
 			isa = PBXGroup;
 			children = (
-				EE768F5C5BD606A59053A223 /* life-ios */,
-				D8F4EAA1920185249FDCED3C /* Models */,
+				94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */,
+				DF4395C1A41B0E060FB2CAAF /* Models */,
 				718107EC118EBEA472F11D4E /* Tests */,
-				CC74311CE7555D731AD1B0AC /* Views */,
+				A8CAA4FDD10FAE140505B5F1 /* Views */,
 				4D816874AC9F565981FEB0E6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,35 +65,22 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
-		CC74311CE7555D731AD1B0AC /* Views */ = {
+		A8CAA4FDD10FAE140505B5F1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				03446190005C1639C1D260C1 /* ContentView.swift */,
-				AB8B0181F31A385AC72B7A7B /* SectionCardView.swift */,
-				53B7087C5C203C3AEB39F309 /* TimelineView.swift */,
+				5EF4A260D15979B8F55B6CDE /* ContentView.swift */,
+				B2BB3E67EA2A42AF9D81C321 /* SectionCardView.swift */,
+				3D3E3E4045B80887052CD4B1 /* TimelineView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		D8F4EAA1920185249FDCED3C /* Models */ = {
+		DF4395C1A41B0E060FB2CAAF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				FB672ABDD50DC9259B48E851 /* LifeData.swift */,
+				7D1D8E04153589ED5D0D4C6C /* LifeData.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		EE768F5C5BD606A59053A223 /* life-ios */ = {
-			isa = PBXGroup;
-			children = (
-				1E74B3F4446DDC3DE2BAA51F /* Assets.xcassets */,
-				E889326E785DC149C847C013 /* Info.plist */,
-				812AC70F998366D9FE72ED09 /* LifeApp.swift */,
-				D8F4EAA1920185249FDCED3C /* Models */,
-				CC74311CE7555D731AD1B0AC /* Views */,
-			);
-			name = "life-ios";
-			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,7 +109,6 @@
 			buildConfigurationList = 902D66D1E9F45CD3052252BB /* Build configuration list for PBXNativeTarget "Life" */;
 			buildPhases = (
 				5F56B432D29B35DBE545DE0E /* Sources */,
-				997A0EF9CDEDC077A8CC9413 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -145,7 +128,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 				};
 			};
@@ -169,17 +152,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		997A0EF9CDEDC077A8CC9413 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2248662A5E4D6DAFE1D6188E /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		2AE4895533EA57D7E8060019 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -193,11 +165,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E44950F57016B6BE50906E35 /* ContentView.swift in Sources */,
-				499F54CAAB1C91AF6F227606 /* LifeApp.swift in Sources */,
-				363219DBA1D6C53B00DB8401 /* LifeData.swift in Sources */,
-				E8EBFDF4BA8904DB4F208BA8 /* SectionCardView.swift in Sources */,
-				920EFDCC435338A07D1D868C /* TimelineView.swift in Sources */,
+				8022DF61D41931823A0C7EA9 /* ContentView.swift in Sources */,
+				71640DCDECD1E5DFD5709E3A /* LifeApp.swift in Sources */,
+				D8DF5F4983651D1D835E57A4 /* LifeData.swift in Sources */,
+				133C371A25FA9C70B9B95091 /* SectionCardView.swift in Sources */,
+				F28E1F7AA84CF1A2E0035A54 /* TimelineView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,8 +284,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -373,8 +343,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
