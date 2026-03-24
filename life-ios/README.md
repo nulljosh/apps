@@ -1,0 +1,21 @@
+<img src="icon.svg" width="80">
+
+# Life
+
+![version](https://img.shields.io/badge/version-v1.0.0-blue)
+
+Native iOS companion for the [Life](https://github.com/nulljosh/life) therapy summary. SwiftUI, iOS 17+, static data, automatic light/dark mode.
+
+## Features
+
+- Vertical timeline with color-coded categories (crisis, event, forward)
+- 20 content sections matching the web version
+- System fonts, minimal design
+- Print-friendly layout
+
+## Build
+
+```bash
+xcodegen generate
+open Life.xcodeproj
+```
