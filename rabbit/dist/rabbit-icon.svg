@@ -1,0 +1,47 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="96" fill="#f5f5f7" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Connecting lines (mind map edges) -->
+  <line x1="100" y1="100" x2="42" y2="52" stroke="#0071e3" stroke-width="1.5" opacity="0.25"/>
+  <line x1="100" y1="100" x2="158" y2="52" stroke="#0071e3" stroke-width="1.5" opacity="0.25"/>
+  <line x1="100" y1="100" x2="42" y2="148" stroke="#0071e3" stroke-width="1.5" opacity="0.25"/>
+  <line x1="100" y1="100" x2="158" y2="148" stroke="#0071e3" stroke-width="1.5" opacity="0.25"/>
+  <line x1="100" y1="100" x2="100" y2="30" stroke="#0071e3" stroke-width="1.5" opacity="0.25"/>
+  <line x1="100" y1="100" x2="100" y2="170" stroke="#0071e3" stroke-width="1.5" opacity="0.25"/>
+  <line x1="100" y1="100" x2="30" y2="100" stroke="#0071e3" stroke-width="1.5" opacity="0.25"/>
+  <line x1="100" y1="100" x2="170" y2="100" stroke="#0071e3" stroke-width="1.5" opacity="0.25"/>
+
+  <!-- Secondary edges between outer nodes -->
+  <line x1="42" y1="52" x2="100" y2="30" stroke="#0071e3" stroke-width="1" opacity="0.12" stroke-dasharray="3,3"/>
+  <line x1="100" y1="30" x2="158" y2="52" stroke="#0071e3" stroke-width="1" opacity="0.12" stroke-dasharray="3,3"/>
+  <line x1="158" y1="52" x2="170" y2="100" stroke="#0071e3" stroke-width="1" opacity="0.12" stroke-dasharray="3,3"/>
+  <line x1="170" y1="100" x2="158" y2="148" stroke="#0071e3" stroke-width="1" opacity="0.12" stroke-dasharray="3,3"/>
+  <line x1="158" y1="148" x2="100" y2="170" stroke="#0071e3" stroke-width="1" opacity="0.12" stroke-dasharray="3,3"/>
+  <line x1="100" y1="170" x2="42" y2="148" stroke="#0071e3" stroke-width="1" opacity="0.12" stroke-dasharray="3,3"/>
+  <line x1="42" y1="148" x2="30" y2="100" stroke="#0071e3" stroke-width="1" opacity="0.12" stroke-dasharray="3,3"/>
+  <line x1="30" y1="100" x2="42" y2="52" stroke="#0071e3" stroke-width="1" opacity="0.12" stroke-dasharray="3,3"/>
+
+  <!-- Outer result nodes -->
+  <circle cx="42" cy="52" r="10" fill="rgba(255,255,255,0.72)" stroke="#0071e3" stroke-width="1.5"/>
+  <circle cx="158" cy="52" r="10" fill="rgba(255,255,255,0.72)" stroke="#0071e3" stroke-width="1.5"/>
+  <circle cx="42" cy="148" r="8" fill="rgba(255,255,255,0.72)" stroke="#0071e3" stroke-width="1.5"/>
+  <circle cx="158" cy="148" r="8" fill="rgba(255,255,255,0.72)" stroke="#0071e3" stroke-width="1.5"/>
+  <circle cx="100" cy="30" r="9" fill="rgba(255,255,255,0.72)" stroke="#0071e3" stroke-width="1.5"/>
+  <circle cx="100" cy="170" r="7" fill="rgba(255,255,255,0.72)" stroke="#0071e3" stroke-width="1.5"/>
+  <circle cx="30" cy="100" r="7" fill="rgba(255,255,255,0.72)" stroke="#0071e3" stroke-width="1.5"/>
+  <circle cx="170" cy="100" r="9" fill="rgba(255,255,255,0.72)" stroke="#0071e3" stroke-width="1.5"/>
+
+  <!-- Center search node (frosted glass card) -->
+  <rect x="72" y="80" width="56" height="40" rx="8" fill="rgba(255,255,255,0.85)" stroke="#0071e3" stroke-width="2"/>
+
+  <!-- Search icon in center -->
+  <circle cx="95" cy="97" r="8" fill="none" stroke="#0071e3" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="101" y1="103" x2="109" y2="111" stroke="#0071e3" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Tiny text lines in some nodes to suggest content -->
+  <line x1="36" y1="51" x2="48" y2="51" stroke="#86868b" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="152" y1="51" x2="164" y2="51" stroke="#86868b" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="94" y1="29" x2="106" y2="29" stroke="#86868b" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="164" y1="99" x2="176" y2="99" stroke="#86868b" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+</svg>
