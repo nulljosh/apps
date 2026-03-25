@@ -14,11 +14,10 @@ struct LifeApp: App {
                         .transition(.opacity)
                 }
             }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    withAnimation(.easeOut(duration: 0.3)) {
-                        showSplash = false
-                    }
+            .task {
+                try? await Task.sleep(for: .seconds(0.5))
+                withAnimation(.easeOut(duration: 0.3)) {
+                    showSplash = false
                 }
             }
         }
