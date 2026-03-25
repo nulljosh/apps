@@ -1,8 +1,8 @@
 <img src="icon.svg" width="80">
 
-# Life
+# Josh
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
 Native iOS companion for the [Life](https://github.com/nulljosh/life) therapy summary. SwiftUI, iOS 17+, static data, automatic light/dark mode.
 

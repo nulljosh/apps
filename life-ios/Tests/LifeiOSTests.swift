@@ -1,4 +1,5 @@
 import XCTest
+import SwiftUI
 @testable import Life
 
 final class LifeiOSTests: XCTestCase {
@@ -7,7 +8,7 @@ final class LifeiOSTests: XCTestCase {
     }
 
     func testSectionsHaveContent() {
-        XCTAssertEqual(LifeData.sections.count, 18)
+        XCTAssertEqual(LifeData.sections.count, 20)
         for section in LifeData.sections {
             XCTAssertFalse(section.label.isEmpty)
             XCTAssertFalse(section.paragraphs.isEmpty)
@@ -22,5 +23,32 @@ final class LifeiOSTests: XCTestCase {
         XCTAssertTrue(categories.contains(.crisis))
         XCTAssertTrue(categories.contains(.event))
         XCTAssertTrue(categories.contains(.forward))
+    }
+
+    func testCategoryColors() {
+        XCTAssertEqual(TimelineCategory.crisis.color, .red)
+        XCTAssertEqual(TimelineCategory.event.color, .primary)
+        XCTAssertEqual(TimelineCategory.forward.color, .green)
+    }
+
+    func testCategoryDisplayNames() {
+        XCTAssertEqual(TimelineCategory.crisis.displayName, "Crisis")
+        XCTAssertEqual(TimelineCategory.event.displayName, "Event")
+        XCTAssertEqual(TimelineCategory.forward.displayName, "Forward")
+    }
+
+    func testTimelineEntriesValid() {
+        for entry in LifeData.timeline {
+            XCTAssertFalse(entry.year.isEmpty, "Timeline entry has empty year")
+            XCTAssertFalse(entry.text.isEmpty, "Timeline entry has empty text")
+        }
+    }
+
+    func testSectionsWithNotesHaveContent() {
+        let sectionsWithNotes = LifeData.sections.filter { $0.note != nil }
+        XCTAssertFalse(sectionsWithNotes.isEmpty, "Expected at least one section with a note")
+        for section in sectionsWithNotes {
+            XCTAssertFalse(section.note!.isEmpty, "Section '\(section.label)' has empty note")
+        }
     }
 }

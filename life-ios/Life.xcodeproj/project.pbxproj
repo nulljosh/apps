@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		133C371A25FA9C70B9B95091 /* SectionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BB3E67EA2A42AF9D81C321 /* SectionCardView.swift */; };
 		71640DCDECD1E5DFD5709E3A /* LifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */; };
+		77D161612258A529E84029C2 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF3DBF9A4FCE07AFD972C5C /* SplashView.swift */; };
 		8022DF61D41931823A0C7EA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF4A260D15979B8F55B6CDE /* ContentView.swift */; };
 		D7E1BF5A5D3AC6F210120B40 /* LifeiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B7C4A696BE1E5F5166FBD6 /* LifeiOSTests.swift */; };
 		D8DF5F4983651D1D835E57A4 /* LifeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D8E04153589ED5D0D4C6C /* LifeData.swift */; };
@@ -29,8 +30,9 @@
 		25B7C4A696BE1E5F5166FBD6 /* LifeiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeiOSTests.swift; sourceTree = "<group>"; };
 		393F67C35B3ECCF400E3AD81 /* LifeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LifeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D3E3E4045B80887052CD4B1 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
+		3DF3DBF9A4FCE07AFD972C5C /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		5EF4A260D15979B8F55B6CDE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		684E01DE6778A88734A0FC25 /* Life.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Life.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		684E01DE6778A88734A0FC25 /* Life.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Life.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1D8E04153589ED5D0D4C6C /* LifeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeData.swift; sourceTree = "<group>"; };
 		94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeApp.swift; sourceTree = "<group>"; };
 		B2BB3E67EA2A42AF9D81C321 /* SectionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCardView.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 			children = (
 				5EF4A260D15979B8F55B6CDE /* ContentView.swift */,
 				B2BB3E67EA2A42AF9D81C321 /* SectionCardView.swift */,
+				3DF3DBF9A4FCE07AFD972C5C /* SplashView.swift */,
 				3D3E3E4045B80887052CD4B1 /* TimelineView.swift */,
 			);
 			path = Views;
@@ -129,6 +132,12 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					6B716F59C81617C9F62FBD0E = {
+						DevelopmentTeam = QMM486NPYC;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = 5704AD7FBFB96B7CC2FF0DC8 /* Build configuration list for PBXProject "Life" */;
 			developmentRegion = en;
@@ -167,6 +176,7 @@
 				71640DCDECD1E5DFD5709E3A /* LifeApp.swift in Sources */,
 				D8DF5F4983651D1D835E57A4 /* LifeData.swift in Sources */,
 				133C371A25FA9C70B9B95091 /* SectionCardView.swift in Sources */,
+				77D161612258A529E84029C2 /* SplashView.swift in Sources */,
 				F28E1F7AA84CF1A2E0035A54 /* TimelineView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -204,6 +214,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -286,7 +297,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -345,7 +356,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -361,6 +372,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

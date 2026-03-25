@@ -1,10 +1,10 @@
 <img src="icon.svg" width="80">
 
-# Life
+# Josh
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
-Personal life summary and timeline for therapy. 21 sections covering childhood, family, relationships, mental health, neurodivergence, substance use, career, and neuroscience research.
+Personal life summary and timeline for therapy. 20 sections covering childhood, family, relationships, mental health, neurodivergence, substance use, career, and neuroscience research.
 
 ## Features
 
