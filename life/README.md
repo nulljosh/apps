@@ -1,7 +1,26 @@
+<img src="icon.svg" width="80">
+
 # Life
 
-Personal life summary and timeline for therapy with Amanda.
+![version](https://img.shields.io/badge/version-v1.0.0-blue)
 
-21 sections covering childhood, family, relationships, mental health, neurodivergence, substance use, work, career goals, and neuroscience research on childhood trauma.
+Personal life summary and timeline for therapy. 21 sections covering childhood, family, relationships, mental health, neurodivergence, substance use, career, and neuroscience research.
 
-Open `index.html` in a browser to view. Auto light/dark mode. Mobile-responsive. PDF export included.
+## Features
+
+- Dual timeline: horizontal SVG (desktop) + vertical HTML (mobile)
+- Auto light/dark mode
+- Scroll fade-up animations (IntersectionObserver)
+- Print CSS for PDF export
+- Color-coded events: red (crisis), black (event), green (positive)
+- Safe area support for notched devices
+
+## View
+
+```bash
+open index.html
+```
+
+## License
+
+MIT 2026 Joshua Trommel

@@ -1,16 +1,12 @@
-<div align="center">
+<img src="icon.svg" width="80">
 
 # Lingo
 
-<img src="icon.svg" alt="Lingo" width="120" />
+![version](https://img.shields.io/badge/version-v1.0.0-blue)
 
 Interactive learning platform -- languages, programming, math, science, and more.
 
 [lingo.heyitsmejosh.com](https://lingo.heyitsmejosh.com)
-
-</div>
-
-![version](https://img.shields.io/badge/version-v0.3.0-blue)
 
 ## Features
 

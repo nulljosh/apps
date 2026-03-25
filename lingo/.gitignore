@@ -11,3 +11,5 @@ node_modules/
 *-backup.*
 .vercel
 pb_data/
+pb_data.*/
+supabase/

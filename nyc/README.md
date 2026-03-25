@@ -1,8 +1,8 @@
-![nyc](icon.svg)
+<img src="icon.svg" width="80">
 
 # nyc
 
-![version](https://img.shields.io/badge/version-v0.2.0-blue)
+![version](https://img.shields.io/badge/version-v1.0.0-blue)
 
 Times Square Survival: macOS colony sim set in Times Square. SpriteKit, Swift 6, landscape.
 
@@ -31,11 +31,15 @@ Requires Xcode 16+, macOS 15.0+, xcodegen.
 
 ## Changelog
 
-### v0.2.0
+### v1.0.0
 
+- Stable release: all core systems complete
 - Colonist AI with XP/leveling, traits, and health bars
 - Weapons and combat system
 - Building placement and demolition
+- 3-slot save system with auto-save
+- Interactive tutorial
+- Camera controls and mini-map
 
 ## License
 

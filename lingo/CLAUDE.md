@@ -6,7 +6,7 @@
 - Liquid glass UI (Apple design language), dark mode support
 - Touch-friendly: minimum 44px tap targets
 - All transitions under 300ms, 60fps animations
-- PocketBase migration started but NOT working yet -- do not assume accounts/sync are functional
+- Shipped as static localStorage app. PocketBase/cloud sync is roadmap, not active.
 
 ## Run
 
@@ -14,11 +14,6 @@
 open index.html
 ```
 
-## PocketBase (in progress, not verified)
+## PocketBase (roadmap, not active)
 
-```bash
-./scripts/dev-pocketbase.sh
-./scripts/setup-pocketbase-superuser.sh
-```
-
-Schema must be verified from CLI before any frontend sync work.
+Scripts exist in `scripts/` for future PocketBase integration. Not verified or functional.
