@@ -1,9 +1,20 @@
 import Foundation
+import SwiftUI
 
 enum TimelineCategory: String, CaseIterable {
     case crisis
     case event
     case forward
+
+    var color: Color {
+        switch self {
+        case .crisis: .red
+        case .event: .primary
+        case .forward: .green
+        }
+    }
+
+    var displayName: String { rawValue.capitalized }
 }
 
 struct TimelineEntry: Identifiable {

@@ -9,9 +9,9 @@ struct TimelineView: View {
                 .padding(.bottom, 12)
 
             HStack(spacing: 16) {
-                legendItem(color: .red, label: "Crisis")
-                legendItem(color: .primary, label: "Event")
-                legendItem(color: .green, label: "Forward")
+                ForEach(TimelineCategory.allCases, id: \.self) { cat in
+                    legendItem(color: cat.color, label: cat.displayName)
+                }
             }
             .padding(.bottom, 16)
 
@@ -19,7 +19,7 @@ struct TimelineView: View {
                 HStack(alignment: .top, spacing: 14) {
                     VStack(spacing: 0) {
                         Circle()
-                            .fill(dotColor(for: entry.category))
+                            .fill(entry.category.color)
                             .frame(width: 10, height: 10)
                         if index < LifeData.timeline.count - 1 {
                             Rectangle()
@@ -48,14 +48,6 @@ struct TimelineView: View {
             }
         }
         .padding(.vertical, 16)
-    }
-
-    private func dotColor(for category: TimelineCategory) -> Color {
-        switch category {
-        case .crisis: .red
-        case .event: .primary
-        case .forward: .green
-        }
     }
 
     private func legendItem(color: Color, label: String) -> some View {

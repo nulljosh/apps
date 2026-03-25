@@ -18,6 +18,13 @@ targets:
       - Views
     info:
       path: Info.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.life-ios
@@ -28,5 +35,8 @@ targets:
     platform: iOS
     sources:
       - Tests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: "YES"
     dependencies:
       - target: Life

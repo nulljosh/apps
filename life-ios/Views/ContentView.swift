@@ -4,8 +4,8 @@ struct ContentView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                Text("Life")
-                    .font(.system(size: 48, weight: .ultraLight))
+                Text("Josh")
+                    .font(.system(size: 48, weight: .bold))
                     .tracking(-1)
                     .padding(.bottom, 8)
 
@@ -27,8 +27,8 @@ struct ContentView: View {
                     .foregroundStyle(.secondary)
                     .padding(.top, 12)
 
-                Text("Life")
-                    .font(.system(size: 96, weight: .ultraLight))
+                Text("Josh")
+                    .font(.system(size: 96, weight: .bold))
                     .tracking(-4)
                     .foregroundStyle(.primary.opacity(0.08))
                     .padding(.top, 48)
