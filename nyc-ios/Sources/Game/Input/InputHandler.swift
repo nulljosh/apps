@@ -35,7 +35,6 @@ final class InputHandler {
         pinchRecognizer = pinch
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        tap.require(toFail: pan)
         view.addGestureRecognizer(tap)
         tapRecognizer = tap
 

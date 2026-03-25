@@ -6,7 +6,7 @@ options:
 settings:
   DEVELOPMENT_TEAM: QMM486NPYC
   SWIFT_VERSION: "6.0"
-  MARKETING_VERSION: "0.2.0"
+  MARKETING_VERSION: "0.3.0"
   CURRENT_PROJECT_VERSION: "1"
 targets:
   TimesSquareSimIOS:
@@ -24,3 +24,13 @@ targets:
       INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen
       INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
       SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+  SimIOSTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+    dependencies:
+      - target: TimesSquareSimIOS
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.nyc-ios.tests
+      GENERATE_INFOPLIST_FILE: YES

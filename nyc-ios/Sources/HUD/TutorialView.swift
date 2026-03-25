@@ -32,10 +32,14 @@ struct TutorialView: View {
         }
     }
 
+    private var isInteractiveStep: Bool {
+        step == 2 || step == 4 || step == 5
+    }
+
     var body: some View {
         ZStack {
-            Color.black.opacity(0.6)
-                .allowsHitTesting(true)
+            Color.black.opacity(isInteractiveStep ? 0.3 : 0.6)
+                .allowsHitTesting(!isInteractiveStep)
                 .onTapGesture { advanceIfClickable() }
 
             VStack(spacing: 16) {
@@ -108,6 +112,8 @@ struct TutorialView: View {
                 Rectangle()
                     .stroke(Color(red: 0, green: 0.96, blue: 0.83).opacity(0.5), lineWidth: 2)
             )
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isInteractiveStep ? .top : .center)
+            .padding(.top, isInteractiveStep ? 60 : 0)
         }
     }
 

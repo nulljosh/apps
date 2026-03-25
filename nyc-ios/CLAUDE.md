@@ -1,6 +1,6 @@
 # nyc-ios
 
-v0.2.0
+v0.3.0
 
 ## Rules
 
@@ -15,7 +15,11 @@ v0.2.0
 xcodegen generate && open TimesSquareSimIOS.xcodeproj
 ```
 
-No test command documented.
+## Test
+
+```bash
+xcodegen generate && xcodebuild test -project TimesSquareSimIOS.xcodeproj -scheme TimesSquareSimIOS -destination 'platform=iOS Simulator,name=iPhone 17'
+```
 
 ## Key Files
 

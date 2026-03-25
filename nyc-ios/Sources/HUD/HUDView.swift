@@ -216,7 +216,7 @@ struct GameLogView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            ForEach(gameState.gameLog.suffix(5), id: \.self) { msg in
+            ForEach(Array(gameState.gameLog.suffix(5).enumerated()), id: \.offset) { _, msg in
                 Text(msg)
                     .font(.system(size: 10))
                     .foregroundStyle(Color(red: 0, green: 0.96, blue: 0.83))
