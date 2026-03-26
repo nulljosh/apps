@@ -10,14 +10,17 @@ struct ContentView: View {
                 timelinePage
                 chartsPage
 
-                // Early Childhood & Family
+                // Early Childhood (long section, own page)
                 sectionPage([s[0]])
-                visualPage { PullQuoteView(text: LifeData.pullQuotes[0]) }
-                visualPage { AggressionChart() }
 
-                // Intrusive Memories
-                sectionPage([s[1]])
-                visualPage { TriggersChart() }
+                // Pull Quote + Aggression Chart
+                combinedPage {
+                    PullQuoteView(text: LifeData.pullQuotes[0])
+                    AggressionChart()
+                }
+
+                // Intrusive Memories + Triggers
+                sectionWithVisual([s[1]]) { TriggersChart() }
 
                 // Siblings, Extended Family, Pets & Loss
                 sectionPage([s[2], s[3], s[4]])
@@ -25,39 +28,38 @@ struct ContentView: View {
                 // School, Religion
                 sectionPage([s[5], s[6]])
 
-                // ADHD/Autism, Medication, Previous Therapy
-                sectionPage([s[7], s[8], s[9]])
-                visualPage { DiagnosisGapChart() }
+                // ADHD/Autism, Medication, Previous Therapy + Diagnosis Gap
+                sectionWithVisual([s[7], s[8], s[9]]) { DiagnosisGapChart() }
 
-                // Relationships
-                sectionPage([s[10]])
-                visualPage { RelationshipChart() }
+                // Relationships + Relationship Chart
+                sectionWithVisual([s[10]]) { RelationshipChart() }
 
-                // Sexuality, Friendships
-                sectionPage([s[11], s[12]])
-                visualPage { SocialCircleChart() }
+                // Sexuality, Friendships + Social Circle
+                sectionWithVisual([s[11], s[12]]) { SocialCircleChart() }
 
-                // Housing
-                sectionPage([s[13]])
-                visualPage { PullQuoteView(text: LifeData.pullQuotes[1]) }
-                visualPage { HousingChart() }
+                // Housing + Pull Quote + Housing Chart
+                sectionWithVisual([s[13]]) {
+                    PullQuoteView(text: LifeData.pullQuotes[1])
+                    HousingChart()
+                }
 
-                // Mental Health
+                // Mental Health (long section, own page)
                 sectionPage([s[14]])
-                visualPage { PullQuoteView(text: LifeData.pullQuotes[2]) }
-                visualPage { CopingChart() }
 
-                // Identity & Worldview
-                sectionPage([s[15]])
-                visualPage { StatsGridView() }
+                // Pull Quote + Coping Chart
+                combinedPage {
+                    PullQuoteView(text: LifeData.pullQuotes[2])
+                    CopingChart()
+                }
 
-                // Current Life
-                sectionPage([s[16]])
-                visualPage { DailyRoutineChart() }
+                // Identity & Worldview + Stats
+                sectionWithVisual([s[15]]) { StatsGridView() }
 
-                // Work History, Career & Projects
-                sectionPage([s[17], s[18]])
-                visualPage { LifeMapView() }
+                // Current Life + Daily Routine
+                sectionWithVisual([s[16]]) { DailyRoutineChart() }
+
+                // Work History, Career & Projects + Map
+                sectionWithVisual([s[17], s[18]]) { LifeMapView() }
 
                 // What I Want from Therapy
                 sectionPage([s[19]])
@@ -121,11 +123,27 @@ struct ContentView: View {
         .containerRelativeFrame(.vertical)
     }
 
-    private func visualPage<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+    private func sectionWithVisual<Visual: View>(_ sections: [LifeSection], @ViewBuilder visual: () -> Visual) -> some View {
         ScrollView {
-            content()
-                .padding(.horizontal, 24)
-                .padding(.vertical, 32)
+            VStack(alignment: .leading, spacing: 24) {
+                ForEach(sections) { section in
+                    SectionCardView(section: section)
+                }
+                visual()
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 32)
+        }
+        .containerRelativeFrame(.vertical)
+    }
+
+    private func combinedPage<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                content()
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 32)
         }
         .containerRelativeFrame(.vertical)
     }

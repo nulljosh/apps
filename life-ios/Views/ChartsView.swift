@@ -161,8 +161,7 @@ struct AggressionChart: View {
             }
             .frame(height: 100)
 
-            if let verbal = data.first(where: { $0.label == "Verbal + intimidation" }),
-               let detail = verbal.detail {
+            if let detail = data.compactMap(\.detail).first {
                 Text(detail)
                     .font(.system(size: 10))
                     .foregroundStyle(.secondary)

@@ -2,14 +2,17 @@
 
 # Josh
 
-![version](https://img.shields.io/badge/version-v1.2.0-blue)
+![version](https://img.shields.io/badge/version-v2.0.0-blue)
 
-Personal life summary and timeline for therapy. Live: https://life.heyitsmejosh.com. 20 sections covering childhood, family, relationships, mental health, neurodivergence, substance use, career, and neuroscience research.
+Personal life summary and timeline for therapy. 20 text sections interleaved with 15 visual elements: charts, pull quotes, a stats dashboard, and a geography map. True 50/50 split between prose and visuals.
 
 ## Features
 
 - Dual timeline: horizontal SVG (desktop) + vertical HTML (mobile)
-- Inline SVG charts: life stability line graph + events-by-phase bar chart
+- 10 inline SVG charts: stability, events by phase, aggression, triggers, diagnosis gap, relationships, social circle, housing, coping mechanisms, daily routine
+- 3 pull quotes: key sentences isolated for impact
+- Key figures stats grid (17 years between diagnoses, 0 friends nearby, etc.)
+- Geography map: BC locations + off-map (NYC, Florida, Hawaii)
 - Auto light/dark mode
 - Scroll fade-up animations (IntersectionObserver)
 - Print CSS for PDF export
