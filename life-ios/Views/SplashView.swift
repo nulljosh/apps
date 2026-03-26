@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SplashView: View {
+    @State private var appeared = false
+
     var body: some View {
         ZStack {
             Color(.systemBackground)
@@ -11,11 +13,23 @@ struct SplashView: View {
                     .font(.system(size: 32, weight: .bold))
                     .tracking(-0.5)
                     .multilineTextAlignment(.center)
+                    .scaleEffect(appeared ? 1.0 : 0.9)
+                    .opacity(appeared ? 1.0 : 0)
 
                 Rectangle()
                     .fill(.green)
-                    .frame(width: 40, height: 3)
+                    .frame(width: appeared ? 40 : 0, height: 3)
                     .clipShape(RoundedRectangle(cornerRadius: 2))
+
+                Text("v3.0.0")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .opacity(appeared ? 1.0 : 0)
+            }
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                appeared = true
             }
         }
     }

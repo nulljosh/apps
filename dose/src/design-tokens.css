@@ -1,0 +1,33 @@
+/* dose — Portfolio Design Token Reference
+ *
+ * Extracted from heyitsmejosh.com via vibe.
+ * Applied to index.css variable system. This file is documentation only.
+ *
+ * Source palette:
+ *   --portfolio-bg:        #161b22
+ *   --portfolio-surface:   #1c2128
+ *   --portfolio-elevated:  #2d333b
+ *   --portfolio-border:    #30363d
+ *   --portfolio-border-m:  #21262d
+ *   --portfolio-green:     #26a641
+ *   --portfolio-text:      #e6edf3
+ *   --portfolio-muted:     #8b949e
+ *
+ * Typography:
+ *   Headings: Fraunces (variable, optical size 9-144)
+ *   Body:     DM Sans (400/500/600/700, italic)
+ *   Fallback: -apple-system, BlinkMacSystemFont, system-ui
+ *
+ * Mapping to dose variables:
+ *   --bg           <- portfolio-bg       #161b22
+ *   --bg-secondary <- portfolio-surface  #1c2128
+ *   --bg-tertiary  <- portfolio-elevated #2d333b
+ *   --border       <- portfolio-border   #30363d
+ *   --border-muted <- portfolio-border-m #21262d
+ *   --modal-bg     <- portfolio-surface  #1c2128
+ *   --success      <- portfolio-green    #26a641  (new)
+ *   --accent       <- kept BC blue       #4e9cd7  (unchanged)
+ *
+ * Texture:
+ *   SVG fractalNoise overlay at 0.03 opacity on body::before
+ */

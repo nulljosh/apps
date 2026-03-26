@@ -19,8 +19,11 @@ struct ChartsView: View {
     }
 }
 
+// MARK: - Chart 1: Stability Over Time
+
 struct StabilityChart: View {
     private let data = LifeData.stability
+    @State private var selectedYear: Int?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -46,7 +49,19 @@ struct StabilityChart: View {
                     y: .value("Stability", point.score)
                 )
                 .foregroundStyle(point.category.color)
-                .symbolSize(30)
+                .symbolSize(selectedYear == point.year ? 80 : 30)
+
+                if selectedYear == point.year {
+                    RuleMark(x: .value("Year", point.year))
+                        .foregroundStyle(.tertiary)
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                        .annotation(position: .top, alignment: .center) {
+                            Text("\(point.year) - \(point.label)")
+                                .font(.system(size: 10, weight: .medium))
+                                .padding(6)
+                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 6))
+                        }
+                }
             }
             .chartXScale(domain: 1999...2026)
             .chartYScale(domain: 0...1)
@@ -71,13 +86,33 @@ struct StabilityChart: View {
                     }
                 }
             }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0)
+                            .onEnded { value in
+                                let origin = geo[proxy.plotFrame!].origin
+                                let x = value.location.x - origin.x
+                                if let year: Int = proxy.value(atX: x) {
+                                    let nearest = data.min(by: { abs($0.year - year) < abs($1.year - year) })
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedYear = selectedYear == nearest?.year ? nil : nearest?.year
+                                    }
+                                }
+                            }
+                        )
+                }
+            }
             .frame(height: 180)
         }
     }
 }
 
+// MARK: - Chart 2: Events by Life Phase
+
 struct EventsBarChart: View {
     private let data = LifeData.phases
+    @State private var selectedPhase: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -88,7 +123,7 @@ struct EventsBarChart: View {
                     x: .value("Count", phase.count),
                     y: .value("Phase", phase.phase)
                 )
-                .foregroundStyle(phase.category.color.opacity(0.7))
+                .foregroundStyle(phase.category.color.opacity(selectedPhase == phase.phase ? 1.0 : 0.7))
                 .cornerRadius(3)
                 .annotation(position: .trailing) {
                     Text("\(phase.count)")
@@ -114,7 +149,30 @@ struct EventsBarChart: View {
                     }
                 }
             }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0)
+                            .onEnded { value in
+                                let origin = geo[proxy.plotFrame!].origin
+                                let y = value.location.y - origin.y
+                                if let phase: String = proxy.value(atY: y) {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedPhase = selectedPhase == phase ? nil : phase
+                                    }
+                                }
+                            }
+                        )
+                }
+            }
             .frame(height: 140)
+
+            if let phase = selectedPhase, let item = data.first(where: { $0.phase == phase }) {
+                Text("\(item.phase): \(item.count) events (ages \(item.ages))")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+                    .transition(.scale(scale: 0.95).combined(with: .opacity))
+            }
         }
     }
 }
@@ -123,6 +181,7 @@ struct EventsBarChart: View {
 
 struct AggressionChart: View {
     private let data = LifeData.aggression
+    @State private var selectedLabel: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -134,7 +193,10 @@ struct AggressionChart: View {
                     xEnd: .value("End", period.endAge),
                     y: .value("Type", period.label)
                 )
-                .foregroundStyle(period.category.color.opacity(period.category == .forward ? 0.6 : 0.7))
+                .foregroundStyle(period.category.color.opacity(
+                    selectedLabel == period.label ? 0.9 :
+                    period.category == .forward ? 0.6 : 0.7
+                ))
                 .cornerRadius(3)
             }
             .chartXScale(domain: 0...26)
@@ -159,9 +221,30 @@ struct AggressionChart: View {
                     }
                 }
             }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0)
+                            .onEnded { value in
+                                let origin = geo[proxy.plotFrame!].origin
+                                let y = value.location.y - origin.y
+                                if let label: String = proxy.value(atY: y) {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedLabel = selectedLabel == label ? nil : label
+                                    }
+                                }
+                            }
+                        )
+                }
+            }
             .frame(height: 100)
 
-            if let detail = data.compactMap(\.detail).first {
+            if let label = selectedLabel, let period = data.first(where: { $0.label == label }) {
+                Text("\(period.label): ages \(period.startAge)-\(period.endAge)")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+                    .transition(.scale(scale: 0.95).combined(with: .opacity))
+            } else if let detail = data.compactMap(\.detail).first {
                 Text(detail)
                     .font(.system(size: 10))
                     .foregroundStyle(.secondary)
@@ -175,21 +258,32 @@ struct AggressionChart: View {
 
 struct TriggersChart: View {
     private let data = LifeData.triggers
+    @State private var selectedTrigger: String?
+    @State private var appeared = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             chartTitle("TRIGGER INTENSITY")
 
             HStack(spacing: 0) {
-                ForEach(data) { trigger in
+                ForEach(Array(data.enumerated()), id: \.element.id) { index, trigger in
                     VStack(spacing: 8) {
                         Circle()
                             .fill(TimelineCategory.crisis.color.opacity(0.2))
-                            .frame(width: CGFloat(trigger.intensity * 60), height: CGFloat(trigger.intensity * 60))
+                            .frame(
+                                width: CGFloat(trigger.intensity * 60),
+                                height: CGFloat(trigger.intensity * 60)
+                            )
                             .overlay(
                                 Circle()
                                     .fill(TimelineCategory.crisis.color)
                                     .frame(width: 6, height: 6)
+                            )
+                            .scaleEffect(appeared ? (selectedTrigger == trigger.label ? 1.15 : 1.0) : 0)
+                            .animation(
+                                .spring(response: 0.3, dampingFraction: 0.6)
+                                    .delay(Double(index) * 0.08),
+                                value: appeared
                             )
 
                         Text(trigger.label)
@@ -200,9 +294,16 @@ struct TriggersChart: View {
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            selectedTrigger = selectedTrigger == trigger.label ? nil : trigger.label
+                        }
+                    }
                 }
             }
             .frame(height: 120)
+            .onAppear { appeared = true }
         }
     }
 }
@@ -212,6 +313,8 @@ struct TriggersChart: View {
 struct DiagnosisGapChart: View {
     private let earlyMilestones = LifeData.diagnosisMilestones.filter { $0.age == 8 }
     private let lateMilestones = LifeData.diagnosisMilestones.filter { $0.age >= 25 }
+    @State private var selectedCluster: String?
+    @State private var gapPulse = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -233,12 +336,20 @@ struct DiagnosisGapChart: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
+                .scaleEffect(selectedCluster == "early" ? 1.05 : 1.0)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        selectedCluster = selectedCluster == "early" ? nil : "early"
+                    }
+                }
 
                 // Gap
                 VStack(spacing: 4) {
                     Text("17 years")
                         .font(.system(size: 18, weight: .bold))
                         .foregroundStyle(.red.opacity(0.6))
+                        .scaleEffect(gapPulse ? 1.05 : 1.0)
                     Text("no diagnosis, no consistent treatment")
                         .font(.system(size: 8))
                         .foregroundStyle(.secondary)
@@ -248,6 +359,15 @@ struct DiagnosisGapChart: View {
                         .frame(height: 1)
                 }
                 .frame(maxWidth: .infinity)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
+                        gapPulse = true
+                    }
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.5).delay(0.2)) {
+                        gapPulse = false
+                    }
+                }
 
                 // Age 25-26 cluster
                 VStack(spacing: 4) {
@@ -264,6 +384,13 @@ struct DiagnosisGapChart: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
+                .scaleEffect(selectedCluster == "late" ? 1.05 : 1.0)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        selectedCluster = selectedCluster == "late" ? nil : "late"
+                    }
+                }
             }
             .frame(height: 140)
         }
@@ -274,6 +401,7 @@ struct DiagnosisGapChart: View {
 
 struct RelationshipChart: View {
     private let data = LifeData.relationships
+    @State private var selectedName: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -285,12 +413,23 @@ struct RelationshipChart: View {
                     xEnd: .value("End", r.endYear == r.startYear ? r.startYear + 1 : r.endYear),
                     y: .value("Name", r.name)
                 )
-                .foregroundStyle(r.category.color.opacity(0.6))
+                .foregroundStyle(r.category.color.opacity(selectedName == r.name ? 0.9 : 0.6))
                 .cornerRadius(3)
                 .annotation(position: .trailing) {
                     Text(r.detail)
                         .font(.system(size: 8))
                         .foregroundStyle(.secondary)
+                }
+
+                if selectedName == r.name {
+                    RuleMark(y: .value("Name", r.name))
+                        .foregroundStyle(.clear)
+                        .annotation(position: .overlay, alignment: .center) {
+                            Text("\(r.name): \(r.startYear)-\(r.endYear)")
+                                .font(.system(size: 9, weight: .medium))
+                                .padding(4)
+                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 4))
+                        }
                 }
             }
             .chartXScale(domain: 2013...2026)
@@ -315,6 +454,22 @@ struct RelationshipChart: View {
                     }
                 }
             }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0)
+                            .onEnded { value in
+                                let origin = geo[proxy.plotFrame!].origin
+                                let y = value.location.y - origin.y
+                                if let name: String = proxy.value(atY: y) {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedName = selectedName == name ? nil : name
+                                    }
+                                }
+                            }
+                        )
+                }
+            }
             .frame(height: 100)
 
             HStack(spacing: 4) {
@@ -334,6 +489,7 @@ struct RelationshipChart: View {
 
 struct SocialCircleChart: View {
     private let data = LifeData.socialCircle
+    @State private var selectedYear: Int?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -359,11 +515,17 @@ struct SocialCircleChart: View {
                     y: .value("Count", point.count)
                 )
                 .foregroundStyle(point.category.color)
-                .symbolSize(30)
+                .symbolSize(selectedYear == point.year ? 80 : 30)
                 .annotation(position: .top) {
                     Text(point.label)
                         .font(.system(size: 8))
                         .foregroundStyle(.secondary)
+                }
+
+                if selectedYear == point.year {
+                    RuleMark(x: .value("Year", point.year))
+                        .foregroundStyle(.tertiary)
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
                 }
             }
             .chartXScale(domain: 2004...2027)
@@ -389,6 +551,23 @@ struct SocialCircleChart: View {
                     }
                 }
             }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0)
+                            .onEnded { value in
+                                let origin = geo[proxy.plotFrame!].origin
+                                let x = value.location.x - origin.x
+                                if let year: Int = proxy.value(atX: x) {
+                                    let nearest = data.min(by: { abs($0.year - year) < abs($1.year - year) })
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedYear = selectedYear == nearest?.year ? nil : nearest?.year
+                                    }
+                                }
+                            }
+                        )
+                }
+            }
             .frame(height: 160)
         }
     }
@@ -398,6 +577,7 @@ struct SocialCircleChart: View {
 
 struct HousingChart: View {
     private let data = LifeData.housing
+    @State private var selectedLabel: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -416,7 +596,7 @@ struct HousingChart: View {
                     y: .value("Stability", state.level)
                 )
                 .foregroundStyle(state.category.color)
-                .symbolSize(40)
+                .symbolSize(selectedLabel == state.label ? 80 : 40)
                 .annotation(position: state.level < 0.5 ? .bottom : .top) {
                     Text(state.year)
                         .font(.system(size: 8))
@@ -445,7 +625,30 @@ struct HousingChart: View {
                     }
                 }
             }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0)
+                            .onEnded { value in
+                                let origin = geo[proxy.plotFrame!].origin
+                                let x = value.location.x - origin.x
+                                if let label: String = proxy.value(atX: x) {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedLabel = selectedLabel == label ? nil : label
+                                    }
+                                }
+                            }
+                        )
+                }
+            }
             .frame(height: 140)
+
+            if let label = selectedLabel, let state = data.first(where: { $0.label == label }) {
+                Text("\(state.label) (\(state.year)): \(state.level >= 0.8 ? "Stable" : state.level >= 0.4 ? "Unstable" : "None")")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+                    .transition(.scale(scale: 0.95).combined(with: .opacity))
+            }
         }
     }
 }
@@ -454,6 +657,7 @@ struct HousingChart: View {
 
 struct CopingChart: View {
     private let data = LifeData.coping
+    @State private var selectedCoping: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -480,7 +684,7 @@ struct CopingChart: View {
                         if item.isHealthy {
                             HStack(spacing: 0) {
                                 RoundedRectangle(cornerRadius: 3)
-                                    .fill(Color.green.opacity(0.5))
+                                    .fill(Color.green.opacity(selectedCoping == item.label ? 0.8 : 0.5))
                                     .frame(width: barWidth, height: 14)
                                 Spacer(minLength: 0)
                             }
@@ -488,7 +692,7 @@ struct CopingChart: View {
                             HStack(spacing: 0) {
                                 Spacer(minLength: 0)
                                 RoundedRectangle(cornerRadius: 3)
-                                    .fill(Color.red.opacity(0.5))
+                                    .fill(Color.red.opacity(selectedCoping == item.label ? 0.8 : 0.5))
                                     .frame(width: barWidth, height: 14)
                             }
                         }
@@ -501,6 +705,13 @@ struct CopingChart: View {
                         .frame(width: 90, alignment: .leading)
                         .lineLimit(1)
                 }
+                .scaleEffect(selectedCoping == item.label ? 1.02 : 1.0)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        selectedCoping = selectedCoping == item.label ? nil : item.label
+                    }
+                }
             }
         }
     }
@@ -511,34 +722,52 @@ struct CopingChart: View {
 struct DailyRoutineChart: View {
     private let data = LifeData.dailyRoutine
     private let totalHours: Double = 24
+    @State private var selectedSegment: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             chartTitle("TYPICAL DAY")
 
             ForEach(data) { segment in
-                HStack(spacing: 12) {
-                    Text(segment.label)
-                        .font(.system(size: 11, weight: .medium))
-                        .frame(width: 60, alignment: .trailing)
+                VStack(spacing: 4) {
+                    HStack(spacing: 12) {
+                        Text(segment.label)
+                            .font(.system(size: 11, weight: .medium))
+                            .frame(width: 60, alignment: .trailing)
 
-                    GeometryReader { geo in
-                        let barWidth = geo.size.width * (segment.hours / totalHours)
-                        HStack(spacing: 0) {
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(segment.category == .forward
-                                      ? Color.green.opacity(0.6)
-                                      : Color.primary.opacity(0.15))
-                                .frame(width: barWidth, height: 20)
-                            Spacer(minLength: 0)
+                        GeometryReader { geo in
+                            let barWidth = geo.size.width * (segment.hours / totalHours)
+                            HStack(spacing: 0) {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(segment.category == .forward
+                                          ? Color.green.opacity(selectedSegment == segment.label ? 0.9 : 0.6)
+                                          : Color.primary.opacity(selectedSegment == segment.label ? 0.3 : 0.15))
+                                    .frame(width: barWidth, height: 20)
+                                Spacer(minLength: 0)
+                            }
                         }
-                    }
-                    .frame(height: 20)
+                        .frame(height: 20)
 
-                    Text("~\(Int(segment.hours))h")
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(.secondary)
-                        .frame(width: 30, alignment: .leading)
+                        Text("~\(Int(segment.hours))h")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundStyle(.secondary)
+                            .frame(width: 30, alignment: .leading)
+                    }
+
+                    if selectedSegment == segment.label {
+                        Text("\(segment.label): ~\(Int(segment.hours)) hours per day")
+                            .font(.system(size: 9))
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 72)
+                            .transition(.scale(scale: 0.95).combined(with: .opacity))
+                    }
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        selectedSegment = selectedSegment == segment.label ? nil : segment.label
+                    }
                 }
             }
 
@@ -560,6 +789,7 @@ struct DailyRoutineChart: View {
 
 struct PullQuoteView: View {
     let text: String
+    @State private var appeared = false
 
     var body: some View {
         Text("\"\(text)\"")
@@ -573,6 +803,13 @@ struct PullQuoteView: View {
             .overlay(alignment: .bottom) {
                 Rectangle().fill(.tertiary).frame(height: 0.5)
             }
+            .opacity(appeared ? 1.0 : 0)
+            .offset(y: appeared ? 0 : 12)
+            .onAppear {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                    appeared = true
+                }
+            }
     }
 }
 
@@ -580,6 +817,7 @@ struct PullQuoteView: View {
 
 struct StatsGridView: View {
     private let data = LifeData.stats
+    @State private var appeared = false
 
     var body: some View {
         LazyVGrid(columns: [
@@ -587,11 +825,17 @@ struct StatsGridView: View {
             GridItem(.flexible()),
             GridItem(.flexible()),
         ], spacing: 20) {
-            ForEach(data) { stat in
+            ForEach(Array(data.enumerated()), id: \.element.id) { index, stat in
                 VStack(spacing: 4) {
                     Text(stat.number)
                         .font(.system(size: 36, weight: .bold))
                         .tracking(-1)
+                        .scaleEffect(appeared ? 1.0 : 0.5)
+                        .animation(
+                            .spring(response: 0.4, dampingFraction: 0.6)
+                                .delay(Double(index) * 0.08),
+                            value: appeared
+                        )
                     Text(stat.label)
                         .font(.system(size: 9))
                         .foregroundStyle(.secondary)
@@ -608,6 +852,7 @@ struct StatsGridView: View {
         .overlay(alignment: .bottom) {
             Rectangle().fill(.tertiary).frame(height: 0.5)
         }
+        .onAppear { appeared = true }
     }
 }
 

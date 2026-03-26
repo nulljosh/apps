@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct TimelineView: View {
+    @State private var dotsAppeared = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Timeline: 1999 to 2026")
@@ -21,6 +23,8 @@ struct TimelineView: View {
                         Circle()
                             .fill(entry.category.color)
                             .frame(width: 10, height: 10)
+                            .scaleEffect(dotsAppeared ? 1.0 : 0)
+                            .animation(.spring(response: 0.3, dampingFraction: 0.6).delay(Double(index) * 0.05), value: dotsAppeared)
                         if index < LifeData.timeline.count - 1 {
                             Rectangle()
                                 .fill(.tertiary)
@@ -48,6 +52,7 @@ struct TimelineView: View {
             }
         }
         .padding(.vertical, 16)
+        .onAppear { dotsAppeared = true }
     }
 
     private func legendItem(color: Color, label: String) -> some View {

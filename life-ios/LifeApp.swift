@@ -11,12 +11,12 @@ struct LifeApp: App {
 
                 if showSplash {
                     SplashView()
-                        .transition(.opacity)
+                        .transition(.scale(scale: 1.05).combined(with: .opacity))
                 }
             }
             .task {
                 try? await Task.sleep(for: .seconds(0.5))
-                withAnimation(.easeOut(duration: 0.3)) {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) {
                     showSplash = false
                 }
             }

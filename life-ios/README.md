@@ -2,7 +2,7 @@
 
 # Josh
 
-![version](https://img.shields.io/badge/version-v2.0.0-blue)
+![version](https://img.shields.io/badge/version-v3.0.0-blue)
 
 Native iOS companion for the [Life](https://github.com/nulljosh/apps/tree/main/life) therapy summary. SwiftUI, iOS 17+, static data, automatic light/dark mode.
 

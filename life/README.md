@@ -2,7 +2,7 @@
 
 # Josh
 
-![version](https://img.shields.io/badge/version-v2.0.0-blue)
+![version](https://img.shields.io/badge/version-v3.0.0-blue)
 
 Personal life summary and timeline for therapy. 20 text sections interleaved with 15 visual elements: charts, pull quotes, a stats dashboard, and a geography map. True 50/50 split between prose and visuals.
 

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SectionCardView: View {
     let section: LifeSection
+    @State private var appeared = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -31,6 +32,13 @@ struct SectionCardView: View {
                     .foregroundStyle(.secondary)
                     .italic()
                     .padding(.vertical, 12)
+            }
+        }
+        .scaleEffect(appeared ? 1.0 : 0.97)
+        .opacity(appeared ? 1.0 : 0)
+        .onAppear {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                appeared = true
             }
         }
     }

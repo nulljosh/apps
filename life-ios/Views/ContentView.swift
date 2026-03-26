@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ContentView: View {
     private let s = LifeData.sections
+    @State private var heroAppeared = false
+    @State private var bounceChevron = false
 
     var body: some View {
         ScrollView(.vertical) {
@@ -78,18 +80,30 @@ struct ContentView: View {
                 .font(.system(size: 42, weight: .bold))
                 .tracking(-1)
                 .multilineTextAlignment(.center)
+                .scaleEffect(heroAppeared ? 1.0 : 0.92)
+                .opacity(heroAppeared ? 1.0 : 0)
             Text("Updated March 2026")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .padding(.top, 8)
+                .opacity(heroAppeared ? 1.0 : 0)
             Spacer()
             Image(systemName: "chevron.down")
                 .font(.title3)
                 .foregroundStyle(.tertiary)
+                .offset(y: bounceChevron ? 4 : -4)
                 .padding(.bottom, 40)
         }
         .frame(maxWidth: .infinity)
         .containerRelativeFrame(.vertical)
+        .onAppear {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+                heroAppeared = true
+            }
+            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                bounceChevron = true
+            }
+        }
     }
 
     private var timelinePage: some View {
@@ -125,7 +139,7 @@ struct ContentView: View {
 
     private func sectionWithVisual<Visual: View>(_ sections: [LifeSection], @ViewBuilder visual: () -> Visual) -> some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 28) {
                 ForEach(sections) { section in
                     SectionCardView(section: section)
                 }
@@ -154,6 +168,8 @@ struct ContentView: View {
             Link("github.com/nulljosh/apps/life-ios", destination: URL(string: "https://github.com/nulljosh/apps/tree/main/life-ios")!)
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .padding(.vertical, 12)
+                .padding(.horizontal, 24)
             Text("Joshua Adam Trommel")
                 .font(.system(size: 72, weight: .bold))
                 .tracking(-3)
