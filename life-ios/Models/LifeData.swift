@@ -69,6 +69,7 @@ enum LifeData {
         PhaseData(phase: "Early 20s", ages: "19-22", count: 3, category: .crisis),
         PhaseData(phase: "Recent", ages: "23-26", count: 2, category: .forward),
     ]
+
     static let timeline: [TimelineEntry] = [
         TimelineEntry(year: "1999", text: "Born", detail: nil, category: .forward),
         TimelineEntry(year: "~2001", text: "Earliest memory: dad hitting me at age 2", detail: "Physical aggression until preschool. Verbal aggression continues for years.", category: .crisis),

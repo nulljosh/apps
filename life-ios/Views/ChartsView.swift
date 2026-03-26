@@ -25,14 +25,14 @@ struct StabilityChart: View {
                     x: .value("Year", point.year),
                     y: .value("Stability", point.score)
                 )
-                .foregroundStyle(.green.opacity(0.8))
+                .foregroundStyle(TimelineCategory.forward.color.opacity(0.8))
                 .interpolationMethod(.catmullRom)
 
                 AreaMark(
                     x: .value("Year", point.year),
                     y: .value("Stability", point.score)
                 )
-                .foregroundStyle(.green.opacity(0.06))
+                .foregroundStyle(TimelineCategory.forward.color.opacity(0.06))
                 .interpolationMethod(.catmullRom)
 
                 PointMark(
