@@ -23,6 +23,7 @@ struct ContentView: View {
             LazyVStack(spacing: 0) {
                 heroPage
                 timelinePage
+                chartsPage
 
                 ForEach(Array(pageGroups.enumerated()), id: \.offset) { _, group in
                     sectionPage(group)
@@ -59,6 +60,15 @@ struct ContentView: View {
     private var timelinePage: some View {
         ScrollView {
             TimelineView()
+                .padding(.horizontal, 24)
+                .padding(.vertical, 32)
+        }
+        .containerRelativeFrame(.vertical)
+    }
+
+    private var chartsPage: some View {
+        ScrollView {
+            ChartsView()
                 .padding(.horizontal, 24)
                 .padding(.vertical, 32)
         }

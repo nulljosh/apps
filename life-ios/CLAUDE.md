@@ -8,6 +8,7 @@ Native SwiftUI companion for the Life therapy document.
 - `Views/ContentView.swift` -- Main scroll view
 - `Views/TimelineView.swift` -- Vertical timeline with category dots, legend driven by TimelineCategory.allCases
 - `Views/SectionCardView.swift` -- Reusable section card
+- `Views/ChartsView.swift` -- Swift Charts: stability line graph + events bar chart
 
 ## Notes
 - Private, sensitive content. Same as web version.

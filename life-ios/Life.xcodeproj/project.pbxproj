@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		133C371A25FA9C70B9B95091 /* SectionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BB3E67EA2A42AF9D81C321 /* SectionCardView.swift */; };
+		4EB70F29B71D865315969D60 /* ChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F70B933164400CDDAA7C1E8 /* ChartsView.swift */; };
 		71640DCDECD1E5DFD5709E3A /* LifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */; };
 		77D161612258A529E84029C2 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF3DBF9A4FCE07AFD972C5C /* SplashView.swift */; };
 		8022DF61D41931823A0C7EA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF4A260D15979B8F55B6CDE /* ContentView.swift */; };
@@ -33,6 +34,7 @@
 		3D3E3E4045B80887052CD4B1 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		3DF3DBF9A4FCE07AFD972C5C /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		5EF4A260D15979B8F55B6CDE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		5F70B933164400CDDAA7C1E8 /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
 		684E01DE6778A88734A0FC25 /* Life.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Life.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1D8E04153589ED5D0D4C6C /* LifeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeData.swift; sourceTree = "<group>"; };
 		94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeApp.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 		A8CAA4FDD10FAE140505B5F1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5F70B933164400CDDAA7C1E8 /* ChartsView.swift */,
 				5EF4A260D15979B8F55B6CDE /* ContentView.swift */,
 				B2BB3E67EA2A42AF9D81C321 /* SectionCardView.swift */,
 				3DF3DBF9A4FCE07AFD972C5C /* SplashView.swift */,
@@ -187,6 +190,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EB70F29B71D865315969D60 /* ChartsView.swift in Sources */,
 				8022DF61D41931823A0C7EA9 /* ContentView.swift in Sources */,
 				71640DCDECD1E5DFD5709E3A /* LifeApp.swift in Sources */,
 				D8DF5F4983651D1D835E57A4 /* LifeData.swift in Sources */,

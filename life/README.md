@@ -9,6 +9,7 @@ Personal life summary and timeline for therapy. Live: https://life.heyitsmejosh.
 ## Features
 
 - Dual timeline: horizontal SVG (desktop) + vertical HTML (mobile)
+- Inline SVG charts: life stability line graph + events-by-phase bar chart
 - Auto light/dark mode
 - Scroll fade-up animations (IntersectionObserver)
 - Print CSS for PDF export

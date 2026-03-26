@@ -32,7 +32,43 @@ struct LifeSection: Identifiable {
     let note: String?
 }
 
+struct StabilityPoint: Identifiable {
+    let id = UUID()
+    let year: Int
+    let label: String
+    let score: Double
+    let category: TimelineCategory
+}
+
+struct PhaseData: Identifiable {
+    let id = UUID()
+    let phase: String
+    let ages: String
+    let count: Int
+    let category: TimelineCategory
+}
+
 enum LifeData {
+    static let stability: [StabilityPoint] = [
+        StabilityPoint(year: 1999, label: "Born", score: 0.5, category: .forward),
+        StabilityPoint(year: 2001, label: "Trauma", score: 0.35, category: .crisis),
+        StabilityPoint(year: 2007, label: "ADHD dx", score: 0.65, category: .event),
+        StabilityPoint(year: 2008, label: "Travel", score: 0.75, category: .forward),
+        StabilityPoint(year: 2014, label: "Mikayla", score: 0.7, category: .event),
+        StabilityPoint(year: 2017, label: "Prom", score: 0.75, category: .event),
+        StabilityPoint(year: 2019, label: "Olivia", score: 0.15, category: .crisis),
+        StabilityPoint(year: 2021, label: "Breakdown", score: 0.08, category: .crisis),
+        StabilityPoint(year: 2024, label: "Homeless", score: 0.18, category: .crisis),
+        StabilityPoint(year: 2025, label: "Autism dx", score: 0.5, category: .event),
+        StabilityPoint(year: 2026, label: "Therapy", score: 0.7, category: .forward),
+    ]
+
+    static let phases: [PhaseData] = [
+        PhaseData(phase: "Childhood", ages: "0-10", count: 4, category: .event),
+        PhaseData(phase: "Adolescence", ages: "11-18", count: 2, category: .event),
+        PhaseData(phase: "Early 20s", ages: "19-22", count: 3, category: .crisis),
+        PhaseData(phase: "Recent", ages: "23-26", count: 2, category: .forward),
+    ]
     static let timeline: [TimelineEntry] = [
         TimelineEntry(year: "1999", text: "Born", detail: nil, category: .forward),
         TimelineEntry(year: "~2001", text: "Earliest memory: dad hitting me at age 2", detail: "Physical aggression until preschool. Verbal aggression continues for years.", category: .crisis),

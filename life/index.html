@@ -252,6 +252,42 @@
     line-height: 1.5;
     margin-top: 2px;
   }
+
+  .charts { margin: 3rem 0 2rem; }
+  .chart-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+  }
+  .chart-wrap { margin-bottom: 2.5rem; }
+  .chart-wrap svg { width: 100%; height: auto; display: block; }
+  .chart-wrap svg text {
+    font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+    fill: var(--text-secondary);
+  }
+  .chart-line {
+    stroke: var(--dot-positive);
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .chart-area {
+    fill: var(--dot-positive);
+    opacity: 0.08;
+  }
+  .chart-grid {
+    stroke: var(--border);
+    stroke-width: 0.5;
+  }
+  .chart-dot-crisis { fill: var(--dot-severe); }
+  .chart-dot-event { fill: var(--dot-event); }
+  .chart-dot-positive { fill: var(--dot-positive); }
+  .bar-crisis { fill: var(--dot-severe); opacity: 0.8; }
+  .bar-event { fill: var(--dot-event); opacity: 0.5; }
+  .bar-positive { fill: var(--dot-positive); opacity: 0.8; }
 </style>
 </head>
 <body>
@@ -426,6 +462,93 @@
   <text x="700" y="110" text-anchor="end" class="label">Therapy</text>
   <text x="700" y="121" text-anchor="end" class="label-sub">Langley, BC</text>
 </svg>
+</div>
+
+<div class="charts fade-up">
+
+<div class="chart-wrap">
+<p class="chart-title">Stability over time</p>
+<svg viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
+  <!-- Grid lines -->
+  <line x1="50" y1="20" x2="50" y2="170" class="chart-grid"/>
+  <line x1="50" y1="170" x2="580" y2="170" class="chart-grid"/>
+  <line x1="50" y1="95" x2="580" y2="95" class="chart-grid" stroke-dasharray="4,4"/>
+  <line x1="50" y1="45" x2="580" y2="45" class="chart-grid" stroke-dasharray="4,4"/>
+  <line x1="50" y1="145" x2="580" y2="145" class="chart-grid" stroke-dasharray="4,4"/>
+
+  <!-- Y-axis labels -->
+  <text x="44" y="48" text-anchor="end" font-size="9">High</text>
+  <text x="44" y="98" text-anchor="end" font-size="9">Mid</text>
+  <text x="44" y="173" text-anchor="end" font-size="9">Low</text>
+
+  <!-- Area fill under line -->
+  <path class="chart-area" d="M70,95 C90,95 100,120 130,115 C150,112 170,75 190,65 C220,50 260,55 310,60 C340,63 360,55 390,50 C410,47 420,140 440,155 C455,162 465,160 480,165 C495,168 505,150 520,140 C535,130 545,115 555,95 C560,85 565,70 570,60 L570,170 L70,170 Z"/>
+
+  <!-- Main line -->
+  <path class="chart-line" d="M70,95 C90,95 100,120 130,115 C150,112 170,75 190,65 C220,50 260,55 310,60 C340,63 360,55 390,50 C410,47 420,140 440,155 C455,162 465,160 480,165 C495,168 505,150 520,140 C535,130 545,115 555,95 C560,85 565,70 570,60"/>
+
+  <!-- Data points -->
+  <circle cx="70" cy="95" r="4" class="chart-dot-positive"/>   <!-- Born 1999 -->
+  <circle cx="130" cy="115" r="4" class="chart-dot-crisis"/>   <!-- Trauma ~2001 -->
+  <circle cx="190" cy="65" r="4" class="chart-dot-event"/>     <!-- ADHD dx 2007 -->
+  <circle cx="230" cy="55" r="4" class="chart-dot-positive"/>  <!-- Travel 2008 -->
+  <circle cx="310" cy="60" r="4" class="chart-dot-event"/>     <!-- Mikayla 2014 -->
+  <circle cx="390" cy="50" r="4" class="chart-dot-event"/>     <!-- Prom 2017 -->
+  <circle cx="440" cy="155" r="4" class="chart-dot-crisis"/>   <!-- Olivia 2019 -->
+  <circle cx="480" cy="165" r="4" class="chart-dot-crisis"/>   <!-- Breakdown 2021 -->
+  <circle cx="520" cy="140" r="4" class="chart-dot-crisis"/>   <!-- Homeless 2024 -->
+  <circle cx="555" cy="95" r="4" class="chart-dot-event"/>     <!-- Autism dx 2025 -->
+  <circle cx="570" cy="60" r="4" class="chart-dot-positive"/>  <!-- Therapy 2026 -->
+
+  <!-- X-axis labels -->
+  <text x="70" y="188" text-anchor="middle" font-size="9">1999</text>
+  <text x="130" y="188" text-anchor="middle" font-size="9">'01</text>
+  <text x="190" y="188" text-anchor="middle" font-size="9">'07</text>
+  <text x="230" y="188" text-anchor="middle" font-size="9">'08</text>
+  <text x="310" y="188" text-anchor="middle" font-size="9">'14</text>
+  <text x="390" y="188" text-anchor="middle" font-size="9">'17</text>
+  <text x="440" y="188" text-anchor="middle" font-size="9">'19</text>
+  <text x="480" y="188" text-anchor="middle" font-size="9">'21</text>
+  <text x="520" y="188" text-anchor="middle" font-size="9">'24</text>
+  <text x="555" y="188" text-anchor="middle" font-size="9">'25</text>
+  <text x="570" y="188" text-anchor="middle" font-size="9">'26</text>
+</svg>
+</div>
+
+<div class="chart-wrap">
+<p class="chart-title">Events by life phase</p>
+<svg viewBox="0 0 600 120" preserveAspectRatio="xMidYMid meet">
+  <!-- Phase labels -->
+  <text x="50" y="25" font-size="10" font-weight="500">Childhood</text>
+  <text x="50" y="50" font-size="10" font-weight="500">Adolescence</text>
+  <text x="50" y="75" font-size="10" font-weight="500">Early 20s</text>
+  <text x="50" y="100" font-size="10" font-weight="500">Recent</text>
+
+  <text x="580" y="25" text-anchor="end" font-size="9">ages 0-10</text>
+  <text x="580" y="50" text-anchor="end" font-size="9">ages 11-18</text>
+  <text x="580" y="75" text-anchor="end" font-size="9">ages 19-22</text>
+  <text x="580" y="100" text-anchor="end" font-size="9">ages 23-26</text>
+
+  <!-- Bar backgrounds -->
+  <rect x="160" y="14" width="360" height="14" rx="3" fill="var(--border)" opacity="0.3"/>
+  <rect x="160" y="39" width="360" height="14" rx="3" fill="var(--border)" opacity="0.3"/>
+  <rect x="160" y="64" width="360" height="14" rx="3" fill="var(--border)" opacity="0.3"/>
+  <rect x="160" y="89" width="360" height="14" rx="3" fill="var(--border)" opacity="0.3"/>
+
+  <!-- Bars (4 events max = full width 360px, so each event = 90px) -->
+  <rect x="160" y="14" width="360" height="14" rx="3" class="bar-event"/>      <!-- 4 events -->
+  <rect x="160" y="39" width="180" height="14" rx="3" class="bar-event"/>      <!-- 2 events -->
+  <rect x="160" y="64" width="270" height="14" rx="3" class="bar-crisis"/>     <!-- 3 events (crisis-heavy) -->
+  <rect x="160" y="89" width="180" height="14" rx="3" class="bar-positive"/>   <!-- 2 events (recovery) -->
+
+  <!-- Count labels -->
+  <text x="525" y="25" font-size="10" font-weight="600" fill="var(--text)">4</text>
+  <text x="345" y="50" font-size="10" font-weight="600" fill="var(--text)">2</text>
+  <text x="435" y="75" font-size="10" font-weight="600" fill="var(--text)">3</text>
+  <text x="345" y="100" font-size="10" font-weight="600" fill="var(--text)">2</text>
+</svg>
+</div>
+
 </div>
 
 <p class="section-label fade-up">Early Childhood & Family</p>
