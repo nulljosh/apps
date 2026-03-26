@@ -48,6 +48,85 @@ struct PhaseData: Identifiable {
     let category: TimelineCategory
 }
 
+struct AggressionPeriod: Identifiable {
+    let id = UUID()
+    let label: String
+    let startAge: Int
+    let endAge: Int
+    let category: TimelineCategory
+    let detail: String?
+}
+
+struct TriggerItem: Identifiable {
+    let id = UUID()
+    let label: String
+    let detail: String
+    let intensity: Double // 0-1, controls bubble size
+}
+
+struct DiagnosisMilestone: Identifiable {
+    let id = UUID()
+    let age: Int
+    let label: String
+    let category: TimelineCategory
+}
+
+struct RelationshipPeriod: Identifiable {
+    let id = UUID()
+    let name: String
+    let startYear: Int
+    let endYear: Int
+    let category: TimelineCategory
+    let detail: String
+}
+
+struct SocialPoint: Identifiable {
+    let id = UUID()
+    let year: Int
+    let label: String
+    let count: Double
+    let category: TimelineCategory
+}
+
+struct HousingState: Identifiable {
+    let id = UUID()
+    let label: String
+    let year: String
+    let level: Double // 0=none, 0.5=unstable, 1=stable
+    let category: TimelineCategory
+}
+
+struct CopingItem: Identifiable {
+    let id = UUID()
+    let label: String
+    let detail: String
+    let intensity: Double // 0-1
+    let isHealthy: Bool
+}
+
+struct DailySegment: Identifiable {
+    let id = UUID()
+    let label: String
+    let hours: Double
+    let category: TimelineCategory
+}
+
+struct StatItem: Identifiable {
+    let id = UUID()
+    let number: String
+    let label: String
+}
+
+struct MapLocation: Identifiable {
+    let id = UUID()
+    let name: String
+    let detail: String
+    let x: Double
+    let y: Double
+    let category: TimelineCategory
+    let isOffMap: Bool
+}
+
 enum LifeData {
     static let stability: [StabilityPoint] = [
         StabilityPoint(year: 1999, label: "Born", score: 0.5, category: .forward),
@@ -68,6 +147,97 @@ enum LifeData {
         PhaseData(phase: "Adolescence", ages: "11-18", count: 2, category: .event),
         PhaseData(phase: "Early 20s", ages: "19-22", count: 3, category: .crisis),
         PhaseData(phase: "Recent", ages: "23-26", count: 2, category: .forward),
+    ]
+
+    static let aggression: [AggressionPeriod] = [
+        AggressionPeriod(label: "Physical", startAge: 0, endAge: 5, category: .crisis, detail: nil),
+        AggressionPeriod(label: "Verbal + intimidation", startAge: 0, endAge: 21, category: .crisis, detail: "\"You better listen or your dad will hit you\""),
+        AggressionPeriod(label: "Calm", startAge: 21, endAge: 26, category: .forward, detail: nil),
+    ]
+
+    static let triggers: [TriggerItem] = [
+        TriggerItem(label: "Family", detail: "constant", intensity: 1.0),
+        TriggerItem(label: "Nighttime", detail: "when masking drops", intensity: 0.9),
+        TriggerItem(label: "Places", detail: "specific locations", intensity: 0.6),
+        TriggerItem(label: "Conversations", detail: "specific topics", intensity: 0.6),
+        TriggerItem(label: "Random", detail: "no pattern", intensity: 0.55),
+    ]
+
+    static let diagnosisMilestones: [DiagnosisMilestone] = [
+        DiagnosisMilestone(age: 8, label: "ADHD dx", category: .event),
+        DiagnosisMilestone(age: 8, label: "Dr. Chapman", category: .event),
+        DiagnosisMilestone(age: 8, label: "ADHD meds (brief)", category: .event),
+        DiagnosisMilestone(age: 25, label: "Autism dx", category: .event),
+        DiagnosisMilestone(age: 26, label: "Sertraline", category: .forward),
+        DiagnosisMilestone(age: 26, label: "Amanda", category: .forward),
+        DiagnosisMilestone(age: 26, label: "PWD pending", category: .event),
+    ]
+
+    static let relationships: [RelationshipPeriod] = [
+        RelationshipPeriod(name: "Mikayla", startYear: 2014, endYear: 2017, category: .event, detail: "prom, NYC"),
+        RelationshipPeriod(name: "Olivia", startYear: 2019, endYear: 2019, category: .crisis, detail: "9 months"),
+        RelationshipPeriod(name: "Longest", startYear: 2021, endYear: 2023, category: .event, detail: "breakdown after"),
+    ]
+
+    static let socialCircle: [SocialPoint] = [
+        SocialPoint(year: 2005, label: "Childhood", count: 0.7, category: .forward),
+        SocialPoint(year: 2014, label: "High school", count: 0.75, category: .event),
+        SocialPoint(year: 2018, label: "'17-'19", count: 0.72, category: .event),
+        SocialPoint(year: 2020, label: "'20", count: 0.15, category: .crisis),
+        SocialPoint(year: 2021, label: "'21", count: 0.12, category: .crisis),
+        SocialPoint(year: 2024, label: "'24", count: 0.05, category: .crisis),
+        SocialPoint(year: 2026, label: "'26", count: 0.02, category: .crisis),
+    ]
+
+    static let housing: [HousingState] = [
+        HousingState(label: "Home", year: "'99-'24", level: 1.0, category: .forward),
+        HousingState(label: "Car", year: "Summer '24", level: 0.0, category: .crisis),
+        HousingState(label: "AirBnB", year: "Fall '24", level: 0.5, category: .event),
+        HousingState(label: "Home again", year: "Late '24+", level: 1.0, category: .forward),
+    ]
+
+    static let coping: [CopingItem] = [
+        CopingItem(label: "Weed", detail: "daily, heavy, to suppress memory", intensity: 1.0, isHealthy: false),
+        CopingItem(label: "Vaping", detail: "", intensity: 0.6, isHealthy: false),
+        CopingItem(label: "Self-harm", detail: "since age 22", intensity: 0.7, isHealthy: false),
+        CopingItem(label: "Suppression", detail: "memory erasure", intensity: 0.5, isHealthy: false),
+        CopingItem(label: "Gym", detail: "daily, 1-2 hours", intensity: 0.9, isHealthy: true),
+        CopingItem(label: "Coding", detail: "genuine satisfaction", intensity: 0.85, isHealthy: true),
+        CopingItem(label: "Gaming", detail: "escape / flow state", intensity: 0.7, isHealthy: true),
+        CopingItem(label: "Studying", detail: "calc + bio", intensity: 0.5, isHealthy: true),
+    ]
+
+    static let dailyRoutine: [DailySegment] = [
+        DailySegment(label: "Sleep", hours: 8, category: .event),
+        DailySegment(label: "Gym", hours: 2, category: .forward),
+        DailySegment(label: "Coding", hours: 4, category: .forward),
+        DailySegment(label: "Gaming", hours: 3, category: .event),
+        DailySegment(label: "Other", hours: 7, category: .event),
+    ]
+
+    static let stats: [StatItem] = [
+        StatItem(number: "17", label: "years between\ndiagnoses"),
+        StatItem(number: "21", label: "years of verbal\naggression"),
+        StatItem(number: "8", label: "age at first\ntherapist"),
+        StatItem(number: "26", label: "current\nage"),
+        StatItem(number: "0", label: "close friends\nnearby"),
+        StatItem(number: "2", label: "rehab\nstays"),
+    ]
+
+    static let pullQuotes: [String] = [
+        "If my dad gave me a billion dollars it wouldn't change it.",
+        "I don't know why I was kicked out. I don't know what made them let me back in.",
+        "The coping mechanisms are a mix of self-destructive and genuinely healthy. They just coexist.",
+    ]
+
+    static let mapLocations: [MapLocation] = [
+        MapLocation(name: "Langley", detail: "home, current", x: 0.6, y: 0.7, category: .forward, isOffMap: false),
+        MapLocation(name: "Vancouver Island", detail: "rehab x2, best friend, planned move", x: 0.2, y: 0.55, category: .event, isOffMap: false),
+        MapLocation(name: "Kamloops", detail: "cousins, childhood", x: 0.7, y: 0.35, category: .forward, isOffMap: false),
+        MapLocation(name: "Seattle", detail: "CodeDay", x: 0.55, y: 0.85, category: .forward, isOffMap: false),
+        MapLocation(name: "NYC", detail: "Mikayla, best week", x: 0.0, y: 0.0, category: .forward, isOffMap: true),
+        MapLocation(name: "Florida", detail: "Disneyland, family trips", x: 0.0, y: 0.0, category: .forward, isOffMap: true),
+        MapLocation(name: "Hawaii", detail: "family trips, Feb 2026", x: 0.0, y: 0.0, category: .forward, isOffMap: true),
     ]
 
     static let timeline: [TimelineEntry] = [

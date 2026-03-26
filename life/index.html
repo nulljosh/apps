@@ -34,6 +34,9 @@
     .card p, .note, .section-label, .date, .tl-text, .tl-sub, .tl-year, .tl-title { color: #000; }
     .note, .tl-sub, .tl-year, .section-label, .date { color: #555; }
     .fade-up { opacity: 1; transform: none; }
+    .pull-quote { color: #000; border-color: #ddd; }
+    .stat-number { color: #000; }
+    .stat-label { color: #555; }
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -288,6 +291,63 @@
   .bar-crisis { fill: var(--dot-severe); opacity: 0.8; }
   .bar-event { fill: var(--dot-event); opacity: 0.5; }
   .bar-positive { fill: var(--dot-positive); opacity: 0.8; }
+
+  /* Pull quotes */
+  .pull-quote {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--text);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 0;
+    margin: 2rem 0;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 0;
+    margin: 2rem 0;
+  }
+  @media (max-width: 400px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .stat-item { text-align: center; }
+  .stat-number {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .stat-label {
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 0.375rem;
+    line-height: 1.3;
+  }
+
+  /* Map */
+  .map-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 0;
+    margin: 2rem 0;
+  }
+  .map-wrap svg { width: 100%; height: auto; display: block; }
+  .map-wrap svg text {
+    font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+    fill: var(--text-secondary);
+  }
 </style>
 </head>
 <body>
@@ -464,43 +524,38 @@
 </svg>
 </div>
 
+<!-- CHART 1: Stability over time (existing) -->
 <div class="charts fade-up">
 
 <div class="chart-wrap">
 <p class="chart-title">Stability over time</p>
 <svg viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
-  <!-- Grid lines -->
   <line x1="50" y1="20" x2="50" y2="170" class="chart-grid"/>
   <line x1="50" y1="170" x2="580" y2="170" class="chart-grid"/>
   <line x1="50" y1="95" x2="580" y2="95" class="chart-grid" stroke-dasharray="4,4"/>
   <line x1="50" y1="45" x2="580" y2="45" class="chart-grid" stroke-dasharray="4,4"/>
   <line x1="50" y1="145" x2="580" y2="145" class="chart-grid" stroke-dasharray="4,4"/>
 
-  <!-- Y-axis labels -->
   <text x="44" y="48" text-anchor="end" font-size="9">High</text>
   <text x="44" y="98" text-anchor="end" font-size="9">Mid</text>
   <text x="44" y="173" text-anchor="end" font-size="9">Low</text>
 
-  <!-- Area fill under line -->
   <path class="chart-area" d="M70,95 C90,95 100,120 130,115 C150,112 170,75 190,65 C220,50 260,55 310,60 C340,63 360,55 390,50 C410,47 420,140 440,155 C455,162 465,160 480,165 C495,168 505,150 520,140 C535,130 545,115 555,95 C560,85 565,70 570,60 L570,170 L70,170 Z"/>
 
-  <!-- Main line -->
   <path class="chart-line" d="M70,95 C90,95 100,120 130,115 C150,112 170,75 190,65 C220,50 260,55 310,60 C340,63 360,55 390,50 C410,47 420,140 440,155 C455,162 465,160 480,165 C495,168 505,150 520,140 C535,130 545,115 555,95 C560,85 565,70 570,60"/>
 
-  <!-- Data points -->
-  <circle cx="70" cy="95" r="4" class="chart-dot-positive"/>   <!-- Born 1999 -->
-  <circle cx="130" cy="115" r="4" class="chart-dot-crisis"/>   <!-- Trauma ~2001 -->
-  <circle cx="190" cy="65" r="4" class="chart-dot-event"/>     <!-- ADHD dx 2007 -->
-  <circle cx="230" cy="55" r="4" class="chart-dot-positive"/>  <!-- Travel 2008 -->
-  <circle cx="310" cy="60" r="4" class="chart-dot-event"/>     <!-- Mikayla 2014 -->
-  <circle cx="390" cy="50" r="4" class="chart-dot-event"/>     <!-- Prom 2017 -->
-  <circle cx="440" cy="155" r="4" class="chart-dot-crisis"/>   <!-- Olivia 2019 -->
-  <circle cx="480" cy="165" r="4" class="chart-dot-crisis"/>   <!-- Breakdown 2021 -->
-  <circle cx="520" cy="140" r="4" class="chart-dot-crisis"/>   <!-- Homeless 2024 -->
-  <circle cx="555" cy="95" r="4" class="chart-dot-event"/>     <!-- Autism dx 2025 -->
-  <circle cx="570" cy="60" r="4" class="chart-dot-positive"/>  <!-- Therapy 2026 -->
+  <circle cx="70" cy="95" r="4" class="chart-dot-positive"/>
+  <circle cx="130" cy="115" r="4" class="chart-dot-crisis"/>
+  <circle cx="190" cy="65" r="4" class="chart-dot-event"/>
+  <circle cx="230" cy="55" r="4" class="chart-dot-positive"/>
+  <circle cx="310" cy="60" r="4" class="chart-dot-event"/>
+  <circle cx="390" cy="50" r="4" class="chart-dot-event"/>
+  <circle cx="440" cy="155" r="4" class="chart-dot-crisis"/>
+  <circle cx="480" cy="165" r="4" class="chart-dot-crisis"/>
+  <circle cx="520" cy="140" r="4" class="chart-dot-crisis"/>
+  <circle cx="555" cy="95" r="4" class="chart-dot-event"/>
+  <circle cx="570" cy="60" r="4" class="chart-dot-positive"/>
 
-  <!-- X-axis labels -->
   <text x="70" y="188" text-anchor="middle" font-size="9">1999</text>
   <text x="130" y="188" text-anchor="middle" font-size="9">'01</text>
   <text x="190" y="188" text-anchor="middle" font-size="9">'07</text>
@@ -515,10 +570,10 @@
 </svg>
 </div>
 
+<!-- CHART 2: Events by life phase (existing) -->
 <div class="chart-wrap">
 <p class="chart-title">Events by life phase</p>
 <svg viewBox="0 0 600 120" preserveAspectRatio="xMidYMid meet">
-  <!-- Phase labels -->
   <text x="50" y="25" font-size="10" font-weight="500">Childhood</text>
   <text x="50" y="50" font-size="10" font-weight="500">Adolescence</text>
   <text x="50" y="75" font-size="10" font-weight="500">Early 20s</text>
@@ -529,19 +584,16 @@
   <text x="580" y="75" text-anchor="end" font-size="9">ages 19-22</text>
   <text x="580" y="100" text-anchor="end" font-size="9">ages 23-26</text>
 
-  <!-- Bar backgrounds -->
   <rect x="160" y="14" width="360" height="14" rx="3" fill="var(--border)" opacity="0.3"/>
   <rect x="160" y="39" width="360" height="14" rx="3" fill="var(--border)" opacity="0.3"/>
   <rect x="160" y="64" width="360" height="14" rx="3" fill="var(--border)" opacity="0.3"/>
   <rect x="160" y="89" width="360" height="14" rx="3" fill="var(--border)" opacity="0.3"/>
 
-  <!-- Bars (4 events max = full width 360px, so each event = 90px) -->
-  <rect x="160" y="14" width="360" height="14" rx="3" class="bar-event"/>      <!-- 4 events -->
-  <rect x="160" y="39" width="180" height="14" rx="3" class="bar-event"/>      <!-- 2 events -->
-  <rect x="160" y="64" width="270" height="14" rx="3" class="bar-crisis"/>     <!-- 3 events (crisis-heavy) -->
-  <rect x="160" y="89" width="180" height="14" rx="3" class="bar-positive"/>   <!-- 2 events (recovery) -->
+  <rect x="160" y="14" width="360" height="14" rx="3" class="bar-event"/>
+  <rect x="160" y="39" width="180" height="14" rx="3" class="bar-event"/>
+  <rect x="160" y="64" width="270" height="14" rx="3" class="bar-crisis"/>
+  <rect x="160" y="89" width="180" height="14" rx="3" class="bar-positive"/>
 
-  <!-- Count labels -->
   <text x="525" y="25" font-size="10" font-weight="600" fill="var(--text)">4</text>
   <text x="345" y="50" font-size="10" font-weight="600" fill="var(--text)">2</text>
   <text x="435" y="75" font-size="10" font-weight="600" fill="var(--text)">3</text>
@@ -551,6 +603,7 @@
 
 </div>
 
+<!-- ==================== SECTION: Early Childhood & Family ==================== -->
 <p class="section-label fade-up">Early Childhood & Family</p>
 <div class="card fade-up">
 <p>The biggest problem in my life is what happened when I was a kid. My dad hit me from when I was a toddler until around preschool age. My earliest memory is him hitting me when I was around 2. I genuinely cannot find a way to accept or make sense of hitting a child that young, someone who doesn't even understand language yet. I've tried and I can't. The verbal aggression and intimidation continued for years after the hitting stopped, roughly until about 5 years ago. We had to call the police on him once or twice when I was younger because he was so aggressive. Throwing chairs, slamming doors. That was maybe 5 to 10+ years ago now.</p>
@@ -570,6 +623,40 @@
 <p class="note" style="font-size:0.75rem; border:none; padding:0.5rem 0 0 0;">Sources: Cuartas et al. (2021), "Corporal Punishment and Elevated Neural Response to Threat in Children," <em>Child Development</em>. Tomoda et al. (2009), "Reduced prefrontal cortical gray matter volume in young adults exposed to harsh corporal punishment," <em>NeuroImage</em>. Teicher & Samson (2016), "The effects of childhood maltreatment on brain structure, function and connectivity," <em>Nature Reviews Neuroscience</em>. Gershoff (2016), "Should Parents' Physical Punishment of Children Be Considered a Source of Toxic Stress That Affects Brain Development?" <em>Family Relations</em>.</p>
 </div>
 
+<!-- PULL QUOTE A -->
+<p class="pull-quote fade-up">"If my dad gave me a billion dollars it wouldn't change it."</p>
+
+<!-- CHART 3: Aggression timeline -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Aggression over time</p>
+<svg viewBox="0 0 600 110" preserveAspectRatio="xMidYMid meet">
+  <!-- Axis -->
+  <line x1="50" y1="80" x2="570" y2="80" class="chart-grid"/>
+
+  <!-- Age labels -->
+  <text x="50" y="98" text-anchor="middle" font-size="9">0</text>
+  <text x="148" y="98" text-anchor="middle" font-size="9">5</text>
+  <text x="460" y="98" text-anchor="middle" font-size="9">21</text>
+  <text x="570" y="98" text-anchor="middle" font-size="9">26</text>
+
+  <!-- Physical aggression bar (ages 0-5) -->
+  <rect x="50" y="20" width="98" height="18" rx="3" fill="var(--dot-severe)" opacity="0.9"/>
+  <text x="99" y="33" text-anchor="middle" font-size="9" fill="white" font-weight="500">Physical</text>
+
+  <!-- Verbal aggression bar (ages 0-21) -->
+  <rect x="50" y="44" width="410" height="18" rx="3" fill="var(--dot-severe)" opacity="0.45"/>
+  <text x="255" y="57" text-anchor="middle" font-size="9" fill="var(--text)" font-weight="500">Verbal + intimidation</text>
+
+  <!-- Mom's weaponization annotation -->
+  <text x="255" y="14" text-anchor="middle" font-size="8" fill="var(--text-secondary)">"You better listen or your dad will hit you"</text>
+
+  <!-- Calm period (ages 21-26) -->
+  <rect x="460" y="44" width="110" height="18" rx="3" fill="var(--dot-positive)" opacity="0.6"/>
+  <text x="515" y="57" text-anchor="middle" font-size="9" fill="var(--text)" font-weight="500">Calm</text>
+</svg>
+</div>
+
+<!-- ==================== SECTION: Intrusive Memories ==================== -->
 <p class="section-label fade-up">Intrusive Memories, Nightmares, and Shame</p>
 <div class="card fade-up">
 <p>The intrusive thoughts are constant. All day, every day. Nightmares almost every night unless I smoke enough weed to suppress REM sleep. The nightmares are hard to describe. Abstract, recurring, almost always the same theme. Running away from people, or people running away from me. Triggers are everywhere: seeing my family, being alone at night when the masking drops, specific reminders like places or conversations, and sometimes completely random with no pattern at all. There's no single trigger that dominates. It all hits.</p>
@@ -577,6 +664,39 @@
 <p>The shame isn't as simple as "I deserved it." It's deeper than that. Life itself feels evil. My body feels rejected. My mind is repulsed by my own existence. I feel like I was molested just for existing, never mind hit and yelled at for disobeying before I knew my own name or the language. It plays in my head 24/7 and never ends. The good stuff, family trips, being taken care of, it exists, but it doesn't come close to overriding the early stuff. If my dad gave me a billion dollars it wouldn't change it.</p>
 </div>
 
+<!-- CHART 4: Trigger map -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Trigger intensity</p>
+<svg viewBox="0 0 600 130" preserveAspectRatio="xMidYMid meet">
+  <!-- Bubbles sized by intensity -->
+  <circle cx="100" cy="55" r="32" fill="var(--dot-severe)" opacity="0.25"/>
+  <circle cx="100" cy="55" r="3" fill="var(--dot-severe)"/>
+  <text x="100" y="100" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Family</text>
+  <text x="100" y="113" text-anchor="middle" font-size="8">constant</text>
+
+  <circle cx="220" cy="55" r="30" fill="var(--dot-severe)" opacity="0.25"/>
+  <circle cx="220" cy="55" r="3" fill="var(--dot-severe)"/>
+  <text x="220" y="100" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Nighttime</text>
+  <text x="220" y="113" text-anchor="middle" font-size="8">when masking drops</text>
+
+  <circle cx="330" cy="55" r="22" fill="var(--dot-severe)" opacity="0.2"/>
+  <circle cx="330" cy="55" r="3" fill="var(--dot-severe)"/>
+  <text x="330" y="100" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Places</text>
+  <text x="330" y="113" text-anchor="middle" font-size="8">specific locations</text>
+
+  <circle cx="425" cy="55" r="22" fill="var(--dot-severe)" opacity="0.2"/>
+  <circle cx="425" cy="55" r="3" fill="var(--dot-severe)"/>
+  <text x="425" y="100" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Conversations</text>
+  <text x="425" y="113" text-anchor="middle" font-size="8">specific topics</text>
+
+  <circle cx="530" cy="55" r="20" fill="var(--dot-severe)" opacity="0.2"/>
+  <circle cx="530" cy="55" r="3" fill="var(--dot-severe)"/>
+  <text x="530" y="100" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Random</text>
+  <text x="530" y="113" text-anchor="middle" font-size="8">no pattern</text>
+</svg>
+</div>
+
+<!-- ==================== SECTIONS: Siblings, Extended Family, Pets & Loss ==================== -->
 <p class="section-label fade-up">Siblings</p>
 <div class="card fade-up">
 <p>I have younger siblings. I've never had any real issues with any of them. They're all pretty easygoing. We have a good relationship.</p>
@@ -592,6 +712,7 @@
 <p>I had a French Bulldog briefly but had a mental breakdown and got rid of it. My family has a few dogs and we lost one recently. My dad's mom dying around the same period as COVID and the homelessness added to everything piling up at once.</p>
 </div>
 
+<!-- ==================== SECTIONS: School, Religion ==================== -->
 <p class="section-label fade-up">School</p>
 <div class="card fade-up">
 <p>Started high school in honours. Halfway through grade 10 I switched to a more social track, made a few friends, and stopped taking academics as seriously. Some bullying along the way but nothing that stands out as the defining issue. School was fine. It just wasn't where the real damage was happening.</p>
@@ -602,6 +723,7 @@
 <p>I was raised Christian. Forced. Church, prayers, the whole thing. I rejected it.</p>
 </div>
 
+<!-- ==================== SECTIONS: ADHD, Medication, Previous Therapy ==================== -->
 <p class="section-label fade-up">ADHD and Autism</p>
 <div class="card fade-up">
 <p>I was diagnosed with ADHD when I was 8. I was diagnosed with autism in October 2025 as an adult. My family never really suspected it and I only started figuring it out myself a few years ago. I'm currently waiting to hear back about the Persons With Disabilities (PWD) program in BC. Still waiting as of March 2026, which apparently is pretty normal given how slow the system is.</p>
@@ -617,6 +739,50 @@
 <p>My first therapist was Dr. Chapman at Vancouver Children's Hospital when I was around 8. My dad brought us. After that I lost count. I've talked to more therapists than the rest of my family combined. None of them stuck long enough to make a lasting difference. Amanda is the current one. My parents pay for the therapy they necessitated.</p>
 </div>
 
+<!-- CHART 5: Diagnosis gap -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Diagnosis and treatment timeline</p>
+<svg viewBox="0 0 600 120" preserveAspectRatio="xMidYMid meet">
+  <!-- Axis line -->
+  <line x1="50" y1="50" x2="570" y2="50" class="chart-grid"/>
+
+  <!-- Age 8 cluster -->
+  <circle cx="80" cy="50" r="5" class="chart-dot-event"/>
+  <text x="80" y="38" text-anchor="middle" font-size="8" font-weight="500" fill="var(--text)">ADHD dx</text>
+
+  <circle cx="115" cy="50" r="5" class="chart-dot-event"/>
+  <text x="115" y="72" text-anchor="middle" font-size="8" fill="var(--text)">Dr. Chapman</text>
+
+  <circle cx="145" cy="50" r="5" class="chart-dot-event"/>
+  <text x="145" y="38" text-anchor="middle" font-size="8" fill="var(--text)">ADHD meds</text>
+  <text x="145" y="28" text-anchor="middle" font-size="7">(brief)</text>
+
+  <text x="112" y="92" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Age 8</text>
+
+  <!-- The gap -->
+  <line x1="170" y1="50" x2="400" y2="50" stroke="var(--dot-severe)" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>
+  <text x="285" y="44" text-anchor="middle" font-size="14" font-weight="700" fill="var(--dot-severe)" opacity="0.6">17 years</text>
+  <text x="285" y="68" text-anchor="middle" font-size="9" fill="var(--text-secondary)">no diagnosis, no consistent treatment</text>
+
+  <!-- Age 25-26 cluster -->
+  <circle cx="430" cy="50" r="5" class="chart-dot-event"/>
+  <text x="430" y="38" text-anchor="middle" font-size="8" font-weight="500" fill="var(--text)">Autism dx</text>
+  <text x="430" y="92" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Age 25</text>
+
+  <circle cx="480" cy="50" r="5" class="chart-dot-positive"/>
+  <text x="480" y="72" text-anchor="middle" font-size="8" fill="var(--text)">Sertraline</text>
+
+  <circle cx="520" cy="50" r="5" class="chart-dot-positive"/>
+  <text x="520" y="38" text-anchor="middle" font-size="8" fill="var(--text)">Amanda</text>
+
+  <circle cx="555" cy="50" r="4" class="chart-dot-event" opacity="0.5"/>
+  <text x="555" y="72" text-anchor="middle" font-size="8" fill="var(--text-secondary)">PWD?</text>
+
+  <text x="510" y="108" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Age 26</text>
+</svg>
+</div>
+
+<!-- ==================== SECTION: Relationships ==================== -->
 <p class="section-label fade-up">Relationships</p>
 <div class="card fade-up">
 <p>I had a few relationships in my late teens and early twenties. The first serious one was with Mikayla, who I met online around 2014 and who came to my prom in 2017. My parents flew me to NYC that same year to meet her. Probably the best week of my life. I think back on it so fondly that it makes everything else feel worse by comparison. Not because I'm stuck on her, but because that week was the highest point and nothing since has come close.</p>
@@ -628,6 +794,41 @@
 <p>I'm not in a relationship anymore and I never will be again. It's a waste of time and money in trade for trauma and lifelong problems. I broke up with girls years ago and still suffer trauma we inflicted on each other years later. There's nothing to gain from relationships or friendships. I've had more girlfriends and jobs than I can count. I try hard with all of them and they all go absolutely nowhere. Haven't made either one last longer than 3 years.</p>
 </div>
 
+<!-- CHART 6: Relationship periods -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Relationship periods</p>
+<svg viewBox="0 0 600 130" preserveAspectRatio="xMidYMid meet">
+  <!-- Year axis -->
+  <line x1="50" y1="110" x2="570" y2="110" class="chart-grid"/>
+  <text x="82" y="125" text-anchor="middle" font-size="9">'14</text>
+  <text x="178" y="125" text-anchor="middle" font-size="9">'17</text>
+  <text x="242" y="125" text-anchor="middle" font-size="9">'19</text>
+  <text x="306" y="125" text-anchor="middle" font-size="9">'21</text>
+  <text x="370" y="125" text-anchor="middle" font-size="9">'23</text>
+  <text x="530" y="125" text-anchor="middle" font-size="9">'26</text>
+
+  <!-- Mikayla ~2014-2017 -->
+  <rect x="82" y="20" width="96" height="16" rx="3" fill="var(--dot-event)" opacity="0.5"/>
+  <text x="50" y="32" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Mikayla</text>
+  <text x="183" y="32" font-size="8" fill="var(--text-secondary)">prom, NYC</text>
+
+  <!-- Olivia Apr-Dec 2019 -->
+  <rect x="226" y="46" width="32" height="16" rx="3" fill="var(--dot-severe)" opacity="0.8"/>
+  <text x="50" y="58" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Olivia</text>
+  <text x="262" y="58" font-size="8" fill="var(--text-secondary)">9 months</text>
+
+  <!-- Longest ~2021-2023 -->
+  <rect x="306" y="72" width="64" height="16" rx="3" fill="var(--dot-event)" opacity="0.5"/>
+  <text x="50" y="84" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Longest</text>
+  <text x="374" y="84" font-size="8" fill="var(--text-secondary)">breakdown after</text>
+
+  <!-- Done marker -->
+  <line x1="380" y1="95" x2="570" y2="95" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="475" y="92" text-anchor="middle" font-size="9" fill="var(--text-secondary)">done</text>
+</svg>
+</div>
+
+<!-- ==================== SECTIONS: Sexuality, Friendships ==================== -->
 <p class="section-label fade-up">Sexuality</p>
 <div class="card fade-up">
 <p>I'm straight. I had one gay interaction with an old friend that made me feel grossed out. I have gay friends but most if not all of them have come onto me at some point, which doesn't just turn me off but genuinely disgusts me. Worth noting for the trust and boundaries stuff.</p>
@@ -638,6 +839,51 @@
 <p>I lost most of my friends around 2020. My best friend stuck around and still calls me, but he moved to Vancouver Island a year or two ago out of nowhere. Felt abandoned. He's visited once in two years. I don't really see him anymore and don't really feel like we're friends, or ever were, aside from the fact that he lived a 10-minute walk away in my neighbourhood.</p>
 </div>
 
+<!-- CHART 7: Social circle -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Social circle over time</p>
+<svg viewBox="0 0 600 180" preserveAspectRatio="xMidYMid meet">
+  <!-- Grid -->
+  <line x1="70" y1="160" x2="560" y2="160" class="chart-grid"/>
+  <line x1="70" y1="30" x2="70" y2="160" class="chart-grid"/>
+  <line x1="70" y1="95" x2="560" y2="95" class="chart-grid" stroke-dasharray="4,4"/>
+
+  <!-- Y labels -->
+  <text x="64" y="35" text-anchor="end" font-size="9">Many</text>
+  <text x="64" y="100" text-anchor="end" font-size="9">Few</text>
+  <text x="64" y="164" text-anchor="end" font-size="9">0</text>
+
+  <!-- Area -->
+  <path fill="var(--dot-event)" opacity="0.06" d="M90,60 L200,55 L300,50 L380,140 L420,145 L500,155 L540,158 L540,160 L90,160 Z"/>
+
+  <!-- Line -->
+  <path stroke="var(--dot-event)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6" d="M90,60 L200,55 L300,50 L380,140 L420,145 L500,155 L540,158"/>
+
+  <!-- Dots -->
+  <circle cx="90" cy="60" r="4" class="chart-dot-positive"/>
+  <circle cx="200" cy="55" r="4" class="chart-dot-event"/>
+  <circle cx="300" cy="50" r="4" class="chart-dot-event"/>
+  <circle cx="380" cy="140" r="4" class="chart-dot-crisis"/>
+  <circle cx="420" cy="145" r="4" class="chart-dot-crisis"/>
+  <circle cx="500" cy="155" r="4" class="chart-dot-crisis"/>
+  <circle cx="540" cy="158" r="4" class="chart-dot-crisis"/>
+
+  <!-- X labels -->
+  <text x="90" y="176" text-anchor="middle" font-size="9">Childhood</text>
+  <text x="200" y="176" text-anchor="middle" font-size="9">High school</text>
+  <text x="300" y="176" text-anchor="middle" font-size="9">'17-'19</text>
+  <text x="380" y="176" text-anchor="middle" font-size="9">'20</text>
+  <text x="420" y="176" text-anchor="middle" font-size="9">'21</text>
+  <text x="500" y="176" text-anchor="middle" font-size="9">'24</text>
+  <text x="540" y="176" text-anchor="middle" font-size="9">'26</text>
+
+  <!-- Annotation -->
+  <text x="380" y="130" text-anchor="middle" font-size="8" fill="var(--dot-severe)">lost most friends</text>
+  <text x="500" y="145" text-anchor="start" font-size="8" fill="var(--text-secondary)">best friend moved</text>
+</svg>
+</div>
+
+<!-- ==================== SECTION: Housing ==================== -->
 <p class="section-label fade-up">Housing</p>
 <div class="card fade-up">
 <p>In summer 2024 I was homeless for several months after things got bad at home with my family. I lived in a car I had recently purchased until it broke down on me. My parents moved me into an AirBnB for a few months until they let me move back in. I don't know why I was kicked out. I don't know what made them let me back in or what I said. That uncertainty is its own source of trauma. I don't trust my family to create a basic, simple, safe environment for me, and that goes all the way back to birth. I have never felt safe in my own house, whether I have a job or pay rent or not. People want to lord power over one another, whether they allow you to live under their roof or not. They always want something from you.</p>
@@ -645,6 +891,52 @@
 <p>My parents have called the police on me a few times too. The worst one was during the same period. My dad called the police on me during a self-harm episode. I opened the door and they chased me through the house. I slipped in the kitchen. They arrested me by kneeling on my back, handcuffed me, and brought me to the hospital where I was kept overnight in solitary confinement. They let me out before the end of the next day. The handcuffs left a scar on my wrist that's still there. A permanent physical reminder. I've brought it up with my dad once or twice, how much it bothers me, and he's basically said get over it.</p>
 </div>
 
+<!-- PULL QUOTE B -->
+<p class="pull-quote fade-up">"I don't know why I was kicked out. I don't know what made them let me back in."</p>
+
+<!-- CHART 8: Housing stability -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Housing stability</p>
+<svg viewBox="0 0 600 140" preserveAspectRatio="xMidYMid meet">
+  <!-- Grid -->
+  <line x1="70" y1="120" x2="560" y2="120" class="chart-grid"/>
+
+  <!-- Y labels -->
+  <text x="64" y="38" text-anchor="end" font-size="9">Stable</text>
+  <text x="64" y="78" text-anchor="end" font-size="9">Unstable</text>
+  <text x="64" y="118" text-anchor="end" font-size="9">None</text>
+
+  <!-- Step line -->
+  <path stroke="var(--dot-positive)" stroke-width="2" fill="none" stroke-linecap="round" d="M90,35 L340,35"/>
+  <path stroke="var(--dot-severe)" stroke-width="2" fill="none" stroke-linecap="round" d="M340,35 L340,115"/>
+  <path stroke="var(--dot-severe)" stroke-width="2" fill="none" stroke-linecap="round" d="M340,115 L400,115"/>
+  <path stroke="var(--dot-event)" stroke-width="2" fill="none" stroke-linecap="round" d="M400,115 L400,75"/>
+  <path stroke="var(--dot-event)" stroke-width="2" fill="none" stroke-linecap="round" d="M400,75 L440,75"/>
+  <path stroke="var(--dot-positive)" stroke-width="2" fill="none" stroke-linecap="round" d="M440,75 L440,35"/>
+  <path stroke="var(--dot-positive)" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="6,4" d="M440,35 L560,35"/>
+
+  <!-- Dots -->
+  <circle cx="340" cy="35" r="4" class="chart-dot-positive"/>
+  <circle cx="340" cy="115" r="4" class="chart-dot-crisis"/>
+  <circle cx="400" cy="75" r="4" class="chart-dot-event"/>
+  <circle cx="440" cy="35" r="4" class="chart-dot-positive"/>
+
+  <!-- Labels -->
+  <text x="215" y="28" text-anchor="middle" font-size="9" fill="var(--text)">Home (1999-2024)</text>
+  <text x="370" y="110" text-anchor="middle" font-size="9" fill="var(--dot-severe)">Car</text>
+  <text x="420" y="68" text-anchor="middle" font-size="9" fill="var(--text)">AirBnB</text>
+  <text x="500" y="28" text-anchor="middle" font-size="9" fill="var(--text-secondary)">Home again (uncertain)</text>
+
+  <!-- X labels -->
+  <text x="90" y="135" text-anchor="middle" font-size="9">'99</text>
+  <text x="340" y="135" text-anchor="middle" font-size="9">Summer '24</text>
+  <text x="400" y="135" text-anchor="middle" font-size="9">Fall '24</text>
+  <text x="440" y="135" text-anchor="middle" font-size="9">Late '24</text>
+  <text x="560" y="135" text-anchor="middle" font-size="9">'26</text>
+</svg>
+</div>
+
+<!-- ==================== SECTION: Mental Health ==================== -->
 <p class="section-label fade-up">Mental Health</p>
 <div class="card fade-up">
 <p>My depression and suicidal thoughts don't feel like something I live with constantly in the sense that I'm always visibly falling apart. They hit me out of nowhere. I can get through a whole day fine, keep it together, and then completely fall apart at night. A lot of it has to do with masking all day, autism, emotions, everything, and then losing it when I'm alone. Sleep is inconsistent, anywhere from 4 to 8 hours. Mix of insomnia and oversleeping. Nightmares every night make it worse.</p>
@@ -658,6 +950,56 @@
 <p>I don't really hate myself or anybody specifically. It's more existential. I'm frustrated that we're all forced into existence, the system is broken and inefficient, and people are generally too stupid or mean for their own good. The anger goes both directions, inward as self-harm, outward as snapping at people, but the root of it is frustration with life itself, not with any one person.</p>
 </div>
 
+<!-- PULL QUOTE C -->
+<p class="pull-quote fade-up">"The coping mechanisms are a mix of self-destructive and genuinely healthy. They just coexist."</p>
+
+<!-- CHART 9: Coping mechanisms -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Coping mechanisms</p>
+<svg viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
+  <!-- Center axis -->
+  <line x1="300" y1="15" x2="300" y2="185" class="chart-grid"/>
+
+  <!-- Labels -->
+  <text x="150" y="15" text-anchor="middle" font-size="9" font-weight="500" fill="var(--dot-severe)" opacity="0.8">Self-destructive</text>
+  <text x="450" y="15" text-anchor="middle" font-size="9" font-weight="500" fill="var(--dot-positive)">Healthy</text>
+
+  <!-- Destructive bars (left of center) -->
+  <rect x="60" y="28" width="240" height="16" rx="3" fill="var(--dot-severe)" opacity="0.6"/>
+  <text x="55" y="40" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Weed</text>
+  <text x="65" y="40" font-size="8" fill="white" opacity="0.9">daily, heavy, to suppress memory</text>
+
+  <rect x="160" y="52" width="140" height="16" rx="3" fill="var(--dot-severe)" opacity="0.5"/>
+  <text x="55" y="64" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Vaping</text>
+
+  <rect x="130" y="76" width="170" height="16" rx="3" fill="var(--dot-severe)" opacity="0.5"/>
+  <text x="55" y="88" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Self-harm</text>
+  <text x="135" y="88" font-size="8" fill="white" opacity="0.9">since age 22</text>
+
+  <rect x="180" y="100" width="120" height="16" rx="3" fill="var(--dot-severe)" opacity="0.4"/>
+  <text x="55" y="112" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Suppression</text>
+  <text x="185" y="112" font-size="8" fill="var(--text-secondary)">memory erasure</text>
+
+  <!-- Healthy bars (right of center) -->
+  <rect x="300" y="28" width="220" height="16" rx="3" fill="var(--dot-positive)" opacity="0.6"/>
+  <text x="545" y="40" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Gym</text>
+  <text x="305" y="40" font-size="8" fill="white" opacity="0.9">daily, 1-2 hours</text>
+
+  <rect x="300" y="52" width="200" height="16" rx="3" fill="var(--dot-positive)" opacity="0.5"/>
+  <text x="545" y="64" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Coding</text>
+  <text x="305" y="64" font-size="8" fill="white" opacity="0.9">genuine satisfaction</text>
+
+  <rect x="300" y="76" width="160" height="16" rx="3" fill="var(--dot-positive)" opacity="0.4"/>
+  <text x="545" y="88" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Gaming</text>
+  <text x="305" y="88" font-size="8" fill="var(--text-secondary)">escape / flow state</text>
+
+  <rect x="300" y="100" width="120" height="16" rx="3" fill="var(--dot-positive)" opacity="0.4"/>
+  <text x="545" y="112" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Studying</text>
+  <text x="305" y="112" font-size="8" fill="var(--text-secondary)">calc + bio</text>
+</svg>
+</div>
+
+<!-- ==================== SECTION: Identity & Worldview ==================== -->
 <p class="section-label fade-up">Identity & Worldview</p>
 <div class="card fade-up">
 <p>If someone asks me who I am, I honestly have no idea. I think everyone is just a need machine. A stomach and a brain. Most people don't use their brains though, and I don't even bother mentioning a heart.</p>
@@ -665,6 +1007,35 @@
 <p>My earliest good memories are playing N64 (Diddy Kong Racing, Excitebike), playing at my cousins' house in Kamloops on their Super Nintendo, and playing on our PC when I was very young, before age 10. Screens were the first place I felt safe.</p>
 </div>
 
+<!-- STATS DASHBOARD -->
+<div class="stats-grid fade-up">
+  <div class="stat-item">
+    <div class="stat-number">17</div>
+    <div class="stat-label">years between<br>diagnoses</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">21</div>
+    <div class="stat-label">years of verbal<br>aggression</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">8</div>
+    <div class="stat-label">age at first<br>therapist</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">26</div>
+    <div class="stat-label">current<br>age</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">0</div>
+    <div class="stat-label">close friends<br>nearby</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">2</div>
+    <div class="stat-label">rehab<br>stays</div>
+  </div>
+</div>
+
+<!-- ==================== SECTION: Current Life ==================== -->
 <p class="section-label fade-up">Current Life</p>
 <div class="card fade-up">
 <p>I'm 26 and living with my parents in Langley, BC. I'm not working. I'm waiting on PWD. If the system can fail to diagnose me for two decades, I can wait until they give me $500/month for being autistic. I'm waiting until Wednesday for my welfare. I will never work again unless it's after university (age 30+) in a job that pays $100K+. Otherwise no job is remotely worth it.</p>
@@ -674,6 +1045,42 @@
 <p>I'm hoping to move to Vancouver Island by the end of 2026 to start school. I spend most of my time coding and gaming. Coding is genuine satisfaction, building something real. Gaming is more escape. Both are flow states that keep me out of my head.</p>
 </div>
 
+<!-- CHART 10: Daily routine -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Typical day</p>
+<svg viewBox="0 0 600 70" preserveAspectRatio="xMidYMid meet">
+  <!-- Stacked horizontal bar -->
+  <!-- Sleep 8h = 33.3% of 500px = 167 -->
+  <rect x="50" y="15" width="167" height="24" rx="0" fill="var(--dot-event)" opacity="0.4"/>
+  <text x="133" y="31" text-anchor="middle" font-size="9" fill="var(--text)">Sleep ~8h</text>
+
+  <!-- Gym 2h = 8.3% = 42 -->
+  <rect x="217" y="15" width="42" height="24" rx="0" fill="var(--dot-positive)" opacity="0.7"/>
+  <text x="238" y="31" text-anchor="middle" font-size="8" fill="white">Gym</text>
+
+  <!-- Coding 4h = 16.7% = 83 -->
+  <rect x="259" y="15" width="83" height="24" rx="0" fill="var(--dot-positive)" opacity="0.5"/>
+  <text x="300" y="31" text-anchor="middle" font-size="9" fill="var(--text)">Coding ~4h</text>
+
+  <!-- Gaming 3h = 12.5% = 63 -->
+  <rect x="342" y="15" width="63" height="24" rx="0" fill="var(--dot-event)" opacity="0.3"/>
+  <text x="373" y="31" text-anchor="middle" font-size="9" fill="var(--text)">Gaming ~3h</text>
+
+  <!-- Other 7h = 29.2% = 146 -->
+  <rect x="405" y="15" width="145" height="24" rx="0" fill="var(--border)" opacity="0.4"/>
+  <text x="477" y="31" text-anchor="middle" font-size="9" fill="var(--text-secondary)">Other ~7h</text>
+
+  <!-- Rounded corners on ends only -->
+  <rect x="50" y="15" width="8" height="24" rx="3" fill="var(--dot-event)" opacity="0.4"/>
+  <rect x="542" y="15" width="8" height="24" rx="3" fill="var(--border)" opacity="0.4"/>
+
+  <!-- Weed overlay -->
+  <line x1="50" y1="48" x2="550" y2="48" stroke="var(--dot-severe)" stroke-width="1.5" stroke-dasharray="3,5" opacity="0.4"/>
+  <text x="300" y="62" text-anchor="middle" font-size="8" fill="var(--dot-severe)" opacity="0.6">weed + vaping throughout</text>
+</svg>
+</div>
+
+<!-- ==================== SECTIONS: Work History, Career & Projects ==================== -->
 <p class="section-label fade-up">Work History</p>
 <div class="card fade-up">
 <p>I've had more jobs than I can count. Mix of getting fired, quitting, and burning out. Nothing lasted longer than about 3 years. The pattern is the same every time: start strong, can't sustain it. I've done Apple licensed tech support at Macinhome and Simply Computing, worked at a few restaurants, among other things.</p>
@@ -686,6 +1093,61 @@
 <p>I've built lots of projects I'm proud of. Around age 16, I co-founded Maybulb (maybulb.com) with some internet friends and built Nimble, a Wolfram Alpha menubar app for macOS. We almost sold it for $10K. The website is still up. Around the same time my parents brought me to CodeDay in Seattle a few times, a student hackathon where you build something in 24 hours. Those were good experiences. Met a few friends there that I'm semi still in touch with. The ideas and the building aren't the problem. It's getting the motivation to start in the first place, and then figuring out what's next afterwards. And what to even build, and why I'm supposed to be building shit when I should just be able to exist and relax.</p>
 </div>
 
+<!-- MAP: Life geography -->
+<div class="map-wrap fade-up">
+<p class="chart-title">Geography</p>
+<svg viewBox="0 0 600 280" preserveAspectRatio="xMidYMid meet">
+  <!-- Simplified BC coastline suggestion -->
+  <path d="M120,40 C140,45 160,55 170,80 C175,95 165,110 155,125 C145,140 130,150 120,165 C115,175 118,185 125,190 C135,198 145,195 150,200 C155,208 148,215 140,220 C132,225 125,235 130,245" stroke="var(--border)" stroke-width="1.5" fill="none" opacity="0.5"/>
+
+  <!-- Vancouver Island outline -->
+  <path d="M80,120 C90,110 100,105 108,108 C115,112 118,125 115,140 C112,155 105,168 95,178 C88,185 78,188 72,182 C65,175 62,160 65,145 C68,130 74,122 80,120Z" stroke="var(--border)" stroke-width="1" fill="var(--border)" opacity="0.15"/>
+
+  <!-- Location dots -->
+  <!-- Langley -->
+  <circle cx="180" cy="190" r="7" fill="var(--dot-positive)" opacity="0.8"/>
+  <circle cx="180" cy="190" r="3" fill="var(--dot-positive)"/>
+  <text x="195" y="188" font-size="11" font-weight="600" fill="var(--text)">Langley</text>
+  <text x="195" y="200" font-size="9" fill="var(--text-secondary)">home, current</text>
+
+  <!-- Vancouver Island -->
+  <circle cx="90" cy="150" r="6" fill="var(--dot-event)" opacity="0.6"/>
+  <circle cx="90" cy="150" r="3" fill="var(--dot-event)"/>
+  <text x="30" y="148" text-anchor="end" font-size="10" font-weight="500" fill="var(--text)">Vancouver</text>
+  <text x="30" y="160" text-anchor="end" font-size="10" font-weight="500" fill="var(--text)">Island</text>
+  <text x="30" y="172" text-anchor="end" font-size="8" fill="var(--text-secondary)">rehab x2, best friend</text>
+  <text x="30" y="183" text-anchor="end" font-size="8" fill="var(--dot-positive)">planned move 2026</text>
+
+  <!-- Kamloops -->
+  <circle cx="250" cy="100" r="5" fill="var(--dot-positive)" opacity="0.5"/>
+  <circle cx="250" cy="100" r="2.5" fill="var(--dot-positive)"/>
+  <text x="265" y="98" font-size="10" font-weight="500" fill="var(--text)">Kamloops</text>
+  <text x="265" y="110" font-size="8" fill="var(--text-secondary)">cousins, SNES, childhood</text>
+
+  <!-- Seattle -->
+  <circle cx="175" cy="235" r="4" fill="var(--dot-positive)" opacity="0.4"/>
+  <circle cx="175" cy="235" r="2" fill="var(--dot-positive)"/>
+  <text x="190" y="240" font-size="9" fill="var(--text-secondary)">Seattle (CodeDay)</text>
+
+  <!-- Off-map locations -->
+  <line x1="350" y1="60" x2="550" y2="60" stroke="var(--border)" stroke-width="0.5"/>
+  <text x="350" y="55" font-size="9" font-weight="500" fill="var(--text-secondary)">Beyond BC</text>
+
+  <circle cx="370" cy="85" r="4" fill="var(--dot-positive)" opacity="0.4"/>
+  <text x="382" y="89" font-size="9" fill="var(--text)">NYC</text>
+  <text x="382" y="100" font-size="8" fill="var(--text-secondary)">Mikayla, best week</text>
+
+  <circle cx="370" cy="120" r="4" fill="var(--dot-positive)" opacity="0.4"/>
+  <text x="382" y="124" font-size="9" fill="var(--text)">Florida</text>
+  <text x="382" y="135" font-size="8" fill="var(--text-secondary)">Disneyland, family trips</text>
+
+  <circle cx="370" cy="155" r="4" fill="var(--dot-positive)" opacity="0.4"/>
+  <text x="382" y="159" font-size="9" fill="var(--text)">Hawaii</text>
+  <text x="382" y="170" font-size="8" fill="var(--text-secondary)">family trips, Feb 2026</text>
+</svg>
+</div>
+
+<!-- ==================== SECTION: What I Want from Therapy ==================== -->
 <p class="section-label fade-up">What I Want from Therapy</p>
 <div class="card fade-up">
 <p>Work through what happened growing up. Get the intrusive memories and nightmares to ease up. Understand how all of it affects my relationships. And figure out how to build a more stable life.</p>

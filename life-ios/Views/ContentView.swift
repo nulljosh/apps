@@ -1,22 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    private let pageGroups: [[LifeSection]] = {
-        let s = LifeData.sections
-        return [
-            [s[0]],                     // Early Childhood & Family
-            [s[1]],                     // Intrusive Memories
-            [s[2], s[3], s[4]],         // Siblings, Extended Family, Pets & Loss
-            [s[5], s[6]],              // School, Religion
-            [s[7], s[8], s[9]],        // ADHD/Autism, Medication, Previous Therapy
-            [s[10]],                    // Relationships
-            [s[11], s[12]],            // Sexuality, Friendships
-            [s[13]],                    // Housing
-            [s[14]],                    // Mental Health
-            [s[15], s[16]],            // Identity & Worldview, Current Life
-            [s[17], s[18], s[19]],     // Work History, Career & Projects, Therapy Goals
-        ]
-    }()
+    private let s = LifeData.sections
 
     var body: some View {
         ScrollView(.vertical) {
@@ -25,9 +10,57 @@ struct ContentView: View {
                 timelinePage
                 chartsPage
 
-                ForEach(Array(pageGroups.enumerated()), id: \.offset) { _, group in
-                    sectionPage(group)
-                }
+                // Early Childhood & Family
+                sectionPage([s[0]])
+                visualPage { PullQuoteView(text: LifeData.pullQuotes[0]) }
+                visualPage { AggressionChart() }
+
+                // Intrusive Memories
+                sectionPage([s[1]])
+                visualPage { TriggersChart() }
+
+                // Siblings, Extended Family, Pets & Loss
+                sectionPage([s[2], s[3], s[4]])
+
+                // School, Religion
+                sectionPage([s[5], s[6]])
+
+                // ADHD/Autism, Medication, Previous Therapy
+                sectionPage([s[7], s[8], s[9]])
+                visualPage { DiagnosisGapChart() }
+
+                // Relationships
+                sectionPage([s[10]])
+                visualPage { RelationshipChart() }
+
+                // Sexuality, Friendships
+                sectionPage([s[11], s[12]])
+                visualPage { SocialCircleChart() }
+
+                // Housing
+                sectionPage([s[13]])
+                visualPage { PullQuoteView(text: LifeData.pullQuotes[1]) }
+                visualPage { HousingChart() }
+
+                // Mental Health
+                sectionPage([s[14]])
+                visualPage { PullQuoteView(text: LifeData.pullQuotes[2]) }
+                visualPage { CopingChart() }
+
+                // Identity & Worldview
+                sectionPage([s[15]])
+                visualPage { StatsGridView() }
+
+                // Current Life
+                sectionPage([s[16]])
+                visualPage { DailyRoutineChart() }
+
+                // Work History, Career & Projects
+                sectionPage([s[17], s[18]])
+                visualPage { LifeMapView() }
+
+                // What I Want from Therapy
+                sectionPage([s[19]])
 
                 footerPage
             }
@@ -84,6 +117,15 @@ struct ContentView: View {
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 32)
+        }
+        .containerRelativeFrame(.vertical)
+    }
+
+    private func visualPage<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        ScrollView {
+            content()
+                .padding(.horizontal, 24)
+                .padding(.vertical, 32)
         }
         .containerRelativeFrame(.vertical)
     }
