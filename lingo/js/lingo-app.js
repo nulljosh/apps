@@ -615,7 +615,7 @@ function toggleTheme() {
 
 function updateThemeColor(theme) {
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#1a1a2e' : '#58CC02');
+    if (meta) meta.setAttribute('content', '#0c1a12');
 }
 
 function setupKeyboardNav() {
@@ -1055,7 +1055,7 @@ function vibrate(pattern) {
 }
 
 function spawnConfetti() {
-    const colors = ['#58CC02', '#CE82FF', '#FF4B4B', '#FFC800', '#1CB0F6'];
+    const colors = ['#3d9e6a', '#d4a843', '#e8e4da', '#8a9e90', '#5a8a6a'];
     for (let index = 0; index < 30; index += 1) {
         const piece = document.createElement('div');
         piece.className = 'confetti-piece';
