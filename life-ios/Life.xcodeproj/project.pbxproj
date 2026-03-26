@@ -11,6 +11,7 @@
 		71640DCDECD1E5DFD5709E3A /* LifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */; };
 		77D161612258A529E84029C2 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF3DBF9A4FCE07AFD972C5C /* SplashView.swift */; };
 		8022DF61D41931823A0C7EA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF4A260D15979B8F55B6CDE /* ContentView.swift */; };
+		AC16F576DB2752B3121ACB40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9DCE2E6FF761A0695BBCDD2E /* Assets.xcassets */; };
 		D7E1BF5A5D3AC6F210120B40 /* LifeiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B7C4A696BE1E5F5166FBD6 /* LifeiOSTests.swift */; };
 		D8DF5F4983651D1D835E57A4 /* LifeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D8E04153589ED5D0D4C6C /* LifeData.swift */; };
 		F28E1F7AA84CF1A2E0035A54 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3E3E4045B80887052CD4B1 /* TimelineView.swift */; };
@@ -35,6 +36,7 @@
 		684E01DE6778A88734A0FC25 /* Life.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Life.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1D8E04153589ED5D0D4C6C /* LifeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeData.swift; sourceTree = "<group>"; };
 		94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeApp.swift; sourceTree = "<group>"; };
+		9DCE2E6FF761A0695BBCDD2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B2BB3E67EA2A42AF9D81C321 /* SectionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -51,6 +53,7 @@
 		6C1806F36EB8D6C9CA02A573 = {
 			isa = PBXGroup;
 			children = (
+				9DCE2E6FF761A0695BBCDD2E /* Assets.xcassets */,
 				94A6B8DC3F2EA3B68C26D0A6 /* LifeApp.swift */,
 				DF4395C1A41B0E060FB2CAAF /* Models */,
 				718107EC118EBEA472F11D4E /* Tests */,
@@ -112,6 +115,7 @@
 			buildConfigurationList = 902D66D1E9F45CD3052252BB /* Build configuration list for PBXNativeTarget "Life" */;
 			buildPhases = (
 				5F56B432D29B35DBE545DE0E /* Sources */,
+				997A0EF9CDEDC077A8CC9413 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -158,6 +162,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		997A0EF9CDEDC077A8CC9413 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC16F576DB2752B3121ACB40 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2AE4895533EA57D7E8060019 /* Sources */ = {
@@ -297,7 +312,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -356,7 +371,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";

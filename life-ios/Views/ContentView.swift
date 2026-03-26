@@ -81,7 +81,7 @@ struct ContentView: View {
     private var footerPage: some View {
         VStack {
             Spacer()
-            Link("github.com/nulljosh/life", destination: URL(string: "https://github.com/nulljosh/life")!)
+            Link("github.com/nulljosh/apps/life-ios", destination: URL(string: "https://github.com/nulljosh/apps/tree/main/life-ios")!)
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Text("Joshua Adam Trommel")
