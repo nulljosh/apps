@@ -1,6 +1,13 @@
 import SwiftUI
 import Charts
 
+private func chartTitle(_ text: String) -> some View {
+    Text(text)
+        .font(.system(size: 11, weight: .medium))
+        .tracking(0.8)
+        .foregroundStyle(.secondary)
+}
+
 // MARK: - Original charts (top of document)
 
 struct ChartsView: View {
@@ -17,10 +24,7 @@ struct StabilityChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("STABILITY OVER TIME")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+            chartTitle("STABILITY OVER TIME")
 
             Chart(data) { point in
                 LineMark(
@@ -44,6 +48,7 @@ struct StabilityChart: View {
                 .foregroundStyle(point.category.color)
                 .symbolSize(30)
             }
+            .chartXScale(domain: 1999...2026)
             .chartYScale(domain: 0...1)
             .chartYAxis {
                 AxisMarks(values: [0.0, 0.5, 1.0]) { value in
@@ -57,7 +62,7 @@ struct StabilityChart: View {
                 }
             }
             .chartXAxis {
-                AxisMarks(values: data.map(\.year)) { value in
+                AxisMarks(values: [1999, 2007, 2014, 2019, 2024, 2026]) { value in
                     AxisValueLabel {
                         if let y = value.as(Int.self) {
                             Text(y == 1999 ? "1999" : "'\(String(y).suffix(2))")
@@ -76,10 +81,7 @@ struct EventsBarChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("EVENTS BY LIFE PHASE")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+            chartTitle("EVENTS BY LIFE PHASE")
 
             Chart(data) { phase in
                 BarMark(
@@ -124,10 +126,7 @@ struct AggressionChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("AGGRESSION OVER TIME")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+            chartTitle("AGGRESSION OVER TIME")
 
             Chart(data) { period in
                 BarMark(
@@ -180,10 +179,7 @@ struct TriggersChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("TRIGGER INTENSITY")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+            chartTitle("TRIGGER INTENSITY")
 
             HStack(spacing: 0) {
                 ForEach(data) { trigger in
@@ -215,21 +211,19 @@ struct TriggersChart: View {
 // MARK: - Chart 5: Diagnosis Gap
 
 struct DiagnosisGapChart: View {
-    private let data = LifeData.diagnosisMilestones
+    private let earlyMilestones = LifeData.diagnosisMilestones.filter { $0.age == 8 }
+    private let lateMilestones = LifeData.diagnosisMilestones.filter { $0.age >= 25 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("DIAGNOSIS AND TREATMENT TIMELINE")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+            chartTitle("DIAGNOSIS AND TREATMENT TIMELINE")
 
             HStack(alignment: .center, spacing: 0) {
                 // Age 8 cluster
                 VStack(spacing: 4) {
                     Text("Age 8")
                         .font(.system(size: 11, weight: .semibold))
-                    ForEach(data.filter { $0.age == 8 }) { m in
+                    ForEach(earlyMilestones) { m in
                         HStack(spacing: 4) {
                             Circle()
                                 .fill(m.category.color)
@@ -260,7 +254,7 @@ struct DiagnosisGapChart: View {
                 VStack(spacing: 4) {
                     Text("Age 25-26")
                         .font(.system(size: 11, weight: .semibold))
-                    ForEach(data.filter { $0.age >= 25 }) { m in
+                    ForEach(lateMilestones) { m in
                         HStack(spacing: 4) {
                             Circle()
                                 .fill(m.category.color)
@@ -284,10 +278,7 @@ struct RelationshipChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("RELATIONSHIP PERIODS")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+            chartTitle("RELATIONSHIP PERIODS")
 
             Chart(data) { r in
                 BarMark(
@@ -347,10 +338,7 @@ struct SocialCircleChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("SOCIAL CIRCLE OVER TIME")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+            chartTitle("SOCIAL CIRCLE OVER TIME")
 
             Chart(data) { point in
                 LineMark(
@@ -379,6 +367,7 @@ struct SocialCircleChart: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .chartXScale(domain: 2004...2027)
             .chartYScale(domain: 0...1)
             .chartYAxis {
                 AxisMarks(values: [0.0, 0.5, 1.0]) { value in
@@ -392,7 +381,7 @@ struct SocialCircleChart: View {
                 }
             }
             .chartXAxis {
-                AxisMarks(values: data.map(\.year)) { value in
+                AxisMarks(values: [2005, 2014, 2018, 2020, 2024, 2026]) { value in
                     AxisValueLabel {
                         if let y = value.as(Int.self) {
                             Text("'\(String(y).suffix(2))")
@@ -413,10 +402,7 @@ struct HousingChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("HOUSING STABILITY")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+            chartTitle("HOUSING STABILITY")
 
             Chart(data) { state in
                 LineMark(
@@ -472,10 +458,7 @@ struct CopingChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("COPING MECHANISMS")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+            chartTitle("COPING MECHANISMS")
 
             HStack(spacing: 2) {
                 Text("Self-destructive")
@@ -528,40 +511,48 @@ struct CopingChart: View {
 
 struct DailyRoutineChart: View {
     private let data = LifeData.dailyRoutine
+    private let totalHours: Double = 24
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("TYPICAL DAY")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 16) {
+            chartTitle("TYPICAL DAY")
 
-            Chart(data) { segment in
-                BarMark(
-                    x: .value("Hours", segment.hours),
-                    y: .value("Day", "24h")
-                )
-                .foregroundStyle(segment.category == .forward ? Color.green.opacity(0.5) : Color.primary.opacity(0.2))
-                .cornerRadius(0)
-                .annotation(position: .overlay) {
-                    Text("\(segment.label) ~\(Int(segment.hours))h")
-                        .font(.system(size: 8))
-                        .foregroundStyle(.primary)
+            ForEach(data) { segment in
+                HStack(spacing: 12) {
+                    Text(segment.label)
+                        .font(.system(size: 11, weight: .medium))
+                        .frame(width: 60, alignment: .trailing)
+
+                    GeometryReader { geo in
+                        let barWidth = geo.size.width * (segment.hours / totalHours)
+                        HStack(spacing: 0) {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(segment.category == .forward
+                                      ? Color.green.opacity(0.6)
+                                      : Color.primary.opacity(0.15))
+                                .frame(width: barWidth, height: 20)
+                            Spacer(minLength: 0)
+                        }
+                    }
+                    .frame(height: 20)
+
+                    Text("~\(Int(segment.hours))h")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                        .frame(width: 30, alignment: .leading)
                 }
             }
-            .chartXAxis(.hidden)
-            .chartYAxis(.hidden)
-            .frame(height: 36)
 
-            HStack(spacing: 4) {
-                Rectangle()
-                    .stroke(style: StrokeStyle(lineWidth: 1, dash: [3, 5]))
-                    .foregroundStyle(.red.opacity(0.4))
-                    .frame(width: 20, height: 1)
-                Text("weed + vaping throughout")
-                    .font(.system(size: 8))
+            // Weed overlay note
+            HStack(spacing: 6) {
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(.red.opacity(0.3))
+                    .frame(width: 16, height: 3)
+                Text("weed + vaping throughout the day")
+                    .font(.system(size: 9))
                     .foregroundStyle(.red.opacity(0.5))
             }
+            .padding(.top, 4)
         }
     }
 }
@@ -628,49 +619,61 @@ struct LifeMapView: View {
     private let offMapLocations = LifeData.mapLocations.filter { $0.isOffMap }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("GEOGRAPHY")
-                .font(.system(size: 11, weight: .medium))
-                .tracking(0.8)
-                .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 16) {
+            chartTitle("GEOGRAPHY")
 
-            VStack(alignment: .leading, spacing: 16) {
-                ForEach(bcLocations) { loc in
-                    HStack(spacing: 10) {
+            ForEach(bcLocations) { loc in
+                HStack(spacing: 14) {
+                    ZStack {
+                        Circle()
+                            .fill(loc.category.color.opacity(0.15))
+                            .frame(width: 36, height: 36)
                         Circle()
                             .fill(loc.category.color)
                             .frame(width: 10, height: 10)
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text(loc.name)
-                                .font(.system(size: 12, weight: .semibold))
-                            Text(loc.detail)
-                                .font(.system(size: 10))
-                                .foregroundStyle(.secondary)
-                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(loc.name)
+                            .font(.system(size: 14, weight: .semibold))
+                        Text(loc.detail)
+                            .font(.system(size: 11))
+                            .foregroundStyle(.secondary)
+                            .lineSpacing(2)
                     }
                 }
+            }
 
-                Divider()
+            Rectangle()
+                .fill(.tertiary)
+                .frame(height: 0.5)
+                .padding(.vertical, 4)
 
-                Text("Beyond BC")
-                    .font(.system(size: 9, weight: .medium))
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase)
-                    .tracking(0.5)
+            Text("BEYOND BC")
+                .font(.system(size: 9, weight: .medium))
+                .foregroundStyle(.tertiary)
+                .tracking(0.8)
 
+            HStack(spacing: 20) {
                 ForEach(offMapLocations) { loc in
-                    HStack(spacing: 10) {
+                    VStack(spacing: 6) {
                         Circle()
-                            .fill(loc.category.color.opacity(0.4))
-                            .frame(width: 8, height: 8)
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text(loc.name)
-                                .font(.system(size: 11))
-                            Text(loc.detail)
-                                .font(.system(size: 9))
-                                .foregroundStyle(.secondary)
-                        }
+                            .fill(loc.category.color.opacity(0.3))
+                            .frame(width: 24, height: 24)
+                            .overlay(
+                                Circle()
+                                    .fill(loc.category.color)
+                                    .frame(width: 6, height: 6)
+                            )
+                        Text(loc.name)
+                            .font(.system(size: 10, weight: .medium))
+                        Text(loc.detail)
+                            .font(.system(size: 8))
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(2)
                     }
+                    .frame(maxWidth: .infinity)
                 }
             }
         }

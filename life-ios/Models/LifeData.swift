@@ -121,8 +121,6 @@ struct MapLocation: Identifiable {
     let id = UUID()
     let name: String
     let detail: String
-    let x: Double
-    let y: Double
     let category: TimelineCategory
     let isOffMap: Bool
 }
@@ -231,13 +229,13 @@ enum LifeData {
     ]
 
     static let mapLocations: [MapLocation] = [
-        MapLocation(name: "Langley", detail: "home, current", x: 0.6, y: 0.7, category: .forward, isOffMap: false),
-        MapLocation(name: "Vancouver Island", detail: "rehab x2, best friend, planned move", x: 0.2, y: 0.55, category: .event, isOffMap: false),
-        MapLocation(name: "Kamloops", detail: "cousins, childhood", x: 0.7, y: 0.35, category: .forward, isOffMap: false),
-        MapLocation(name: "Seattle", detail: "CodeDay", x: 0.55, y: 0.85, category: .forward, isOffMap: false),
-        MapLocation(name: "NYC", detail: "Mikayla, best week", x: 0.0, y: 0.0, category: .forward, isOffMap: true),
-        MapLocation(name: "Florida", detail: "Disneyland, family trips", x: 0.0, y: 0.0, category: .forward, isOffMap: true),
-        MapLocation(name: "Hawaii", detail: "family trips, Feb 2026", x: 0.0, y: 0.0, category: .forward, isOffMap: true),
+        MapLocation(name: "Langley", detail: "home, current", category: .forward, isOffMap: false),
+        MapLocation(name: "Vancouver Island", detail: "rehab x2, best friend, planned move", category: .event, isOffMap: false),
+        MapLocation(name: "Kamloops", detail: "cousins, childhood", category: .forward, isOffMap: false),
+        MapLocation(name: "Seattle", detail: "CodeDay", category: .forward, isOffMap: false),
+        MapLocation(name: "NYC", detail: "Mikayla, best week", category: .forward, isOffMap: true),
+        MapLocation(name: "Florida", detail: "Disneyland, family trips", category: .forward, isOffMap: true),
+        MapLocation(name: "Hawaii", detail: "family trips, Feb 2026", category: .forward, isOffMap: true),
     ]
 
     static let timeline: [TimelineEntry] = [
