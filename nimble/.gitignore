@@ -2,8 +2,6 @@
 *.xcworkspace
 build/
 DerivedData/
-.DS_Store
 *.ipa
 *.dSYM.zip
 *.dSYM
-xcuserdata/
