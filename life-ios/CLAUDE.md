@@ -1,4 +1,4 @@
-# Josh (Life iOS)
+# Joshua Adam Trommel (Life iOS)
 
 Native SwiftUI companion for the Life therapy document.
 

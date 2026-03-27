@@ -1,4 +1,4 @@
-import SwiftUI
+import SwiftUI 
 
 struct ContentView: View {
     private let s = LifeData.sections

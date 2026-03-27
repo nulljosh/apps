@@ -1,6 +1,6 @@
 <img src="icon.svg" width="80">
 
-# Josh
+# Joshua Adam Trommel
 
 ![version](https://img.shields.io/badge/version-v3.0.0-blue)
 
