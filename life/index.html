@@ -15,6 +15,9 @@
     --dot-severe: #c00;
     --dot-positive: #2d8a4e;
     --timeline-line: rgba(0, 0, 0, 0.12);
+    --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+    --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -42,7 +45,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+    font-family: var(--font-body);
     max-width: 720px;
     margin: 0 auto;
     padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem) 3rem;
@@ -59,7 +62,7 @@
   }
 
   h1 {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(2.5rem, 7vw, 4rem);
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -86,7 +89,7 @@
   .card {
     border-top: 1px solid var(--border);
     padding: 1.25rem 0;
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.2s var(--spring);
   }
   .card:hover {
     transform: translateY(-2px);
@@ -125,14 +128,14 @@
     letter-spacing: -0.04em;
     line-height: 0.85;
     margin: 4rem 0 2rem;
-    color: var(--text-primary);
+    color: var(--text);
     user-select: none;
   }
 
   /* Timeline dot spring pop */
   .tl-dot {
     transform: scale(0);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.3s var(--spring);
   }
   .tl-entry.visible .tl-dot {
     transform: scale(1);
@@ -142,7 +145,7 @@
   .fade-up {
     opacity: 0;
     transform: translateY(24px) scale(0.97);
-    transition: opacity 0.6s ease-out, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: opacity 0.6s ease-out, transform 0.5s var(--spring);
   }
   .fade-up.visible {
     opacity: 1;
@@ -175,7 +178,7 @@
   }
 
   .tl-title {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-family: var(--font-display);
     font-size: 0.9375rem;
     font-weight: 500;
     margin-bottom: 1.25rem;
@@ -281,7 +284,7 @@
   .chart-wrap { margin-bottom: 3rem; }
   .chart-wrap svg { width: 100%; height: auto; display: block; }
   .chart-wrap svg text {
-    font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+    font-family: var(--font-body);
     fill: var(--text-secondary);
   }
   .chart-line {
@@ -308,10 +311,15 @@
 
   /* Pull quotes */
   .pull-quote {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(1.25rem, 4vw, 1.5rem);
     font-weight: 300;
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.2s var(--spring);
+    line-height: 1.5;
+    color: var(--text);
+    border-left: 2px solid transparent;
+    padding: 2rem 0 2rem 1rem;
+    margin: 2rem 0;
   }
   .pull-quote:hover {
     transform: scale(1.01);
@@ -339,13 +347,13 @@
   }
   .stat-item { text-align: center; }
   .stat-number {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(2.5rem, 8vw, 3.5rem);
     font-weight: 700;
     line-height: 1;
     color: var(--text);
     letter-spacing: -0.02em;
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.2s var(--spring);
   }
   .stat-item:hover .stat-number {
     transform: scale(1.08);
@@ -368,7 +376,7 @@
   }
   .map-wrap svg { width: 100%; height: auto; display: block; }
   .map-wrap svg text {
-    font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+    font-family: var(--font-body);
     fill: var(--text-secondary);
   }
 
@@ -397,14 +405,14 @@
     transition: opacity 0.15s ease-out;
     z-index: 100;
     max-width: 220px;
-    font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+    font-family: var(--font-body);
   }
   .chart-tooltip.visible { opacity: 1; }
 
   /* Interactive SVG elements */
   .chart-interactive {
     cursor: pointer;
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease-out;
+    transition: transform 0.2s var(--spring), opacity 0.15s ease-out;
     transform-origin: center;
     transform-box: fill-box;
   }
@@ -1246,7 +1254,6 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-// Stagger fade-up elements within each parent section
 let prevParent = null;
 let siblingIndex = 0;
 document.querySelectorAll('.fade-up').forEach(el => {
@@ -1256,22 +1263,14 @@ document.querySelectorAll('.fade-up').forEach(el => {
   observer.observe(el);
 });
 
-// Timeline dot spring pop with stagger
-const tlObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); tlObserver.unobserve(e.target); }
-  });
-}, { threshold: 0.1 });
 document.querySelectorAll('.tl-entry').forEach((el, i) => {
   el.querySelector('.tl-dot').style.transitionDelay = (i * 0.04) + 's';
-  tlObserver.observe(el);
+  observer.observe(el);
 });
 
-// Chart tooltip system
 const tip = document.createElement('div');
 tip.className = 'chart-tooltip';
 document.body.appendChild(tip);
-
 let activeTip = null;
 
 function showTip(el, e) {
@@ -1300,14 +1299,18 @@ function hideTip() {
   activeTip = null;
 }
 
-// Desktop: hover
-document.querySelectorAll('[data-tip]').forEach(el => {
-  el.addEventListener('mouseenter', e => showTip(el, e));
-  el.addEventListener('mousemove', e => { if (activeTip === el) positionTip(e); });
-  el.addEventListener('mouseleave', hideTip);
+document.addEventListener('mouseover', e => {
+  const target = e.target.closest('[data-tip]');
+  if (target) showTip(target, e);
+});
+document.addEventListener('mousemove', e => {
+  if (activeTip && activeTip.contains(e.target)) positionTip(e);
+});
+document.addEventListener('mouseout', e => {
+  const target = e.target.closest('[data-tip]');
+  if (target && activeTip === target) hideTip();
 });
 
-// Mobile: tap to show, tap elsewhere to dismiss
 document.addEventListener('touchstart', e => {
   const target = e.target.closest('[data-tip]');
   if (target) {
@@ -1319,11 +1322,11 @@ document.addEventListener('touchstart', e => {
   }
 }, { passive: false });
 
-// Scroll progress bar
 const progressBar = document.getElementById('scrollProgress');
+let scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+window.addEventListener('resize', () => { scrollMax = document.documentElement.scrollHeight - window.innerHeight; });
 window.addEventListener('scroll', () => {
-  const h = document.documentElement.scrollHeight - window.innerHeight;
-  progressBar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0%';
+  progressBar.style.width = scrollMax > 0 ? (window.scrollY / scrollMax * 100) + '%' : '0%';
 }, { passive: true });
 </script>
 </body>
