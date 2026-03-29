@@ -1,60 +1,46 @@
 # Apps Monorepo
 
+v2.0.0
+
 Standalone apps and experiments. Each subdirectory is independent with its own build system.
 
-## Structure
+## Apps
 
-Two types of sub-apps:
+### Web
+- **dose** -- Health tracker (Vite + React). Live: dose.heyitsmejosh.com. Has ios/ + watchos/.
+- **lingo** -- Language learning (vanilla JS PWA)
+- **politics** -- Political compass (vanilla JS)
+- **rabbit** -- Search + mind-map
+- **roost** -- BC real estate (Vite + React PWA)
+- **usage** -- Usage tracking
 
-### SwiftUI Apps (macOS/iOS)
-- browser, browser-ios, life, life-ios, nimble, nyc, nyc-ios
+### iOS (SwiftUI)
+- **browser** / **browser-ios** -- WebKit browser
+- **life** / **life-ios** -- Life simulator
+- **nimble** / **nimble-ios** -- Habit tracker
+- **nyc** / **nyc-ios** -- NYC subway navigator (SpriteKit)
+- **lingo-ios** -- Language learning
+- **dashboard-ios** -- Dashboard
+- **journal-ios** -- Journal companion
+- **portfolio-ios** -- Portfolio companion
+- **rabbit-ios** -- Search companion
 
-Build:
+## Build
+
 ```bash
-cd <app-dir>
-xcodegen generate   # generates .xcodeproj from project.yml
-open *.xcodeproj    # or xcodebuild -scheme <Name> build
+# SwiftUI apps
+cd <app-dir> && xcodegen generate && open *.xcodeproj
+
+# Vite apps
+cd <app-dir> && npm install && npm run dev
+
+# Vanilla apps
+cd <app-dir> && python3 -m http.server 8080
 ```
 
-Requirements: Xcode 16+, xcodegen (`/opt/homebrew/bin/xcodegen`), iOS 17+ / macOS 14+.
-
-Test:
-```bash
-xcodebuild test -scheme <Name> -destination 'platform=macOS'
-```
-
-### Web Apps
-- dose (Vite + React), lingo (vanilla JS PWA), politics (vanilla JS), rabbit, roost (Vite + React PWA)
-
-Build (Vite apps):
-```bash
-cd <app-dir>
-npm install
-npm run dev       # dev server
-npm run build     # production build to dist/
-```
-
-Build (vanilla apps):
-```bash
-cd <app-dir>
-# Open index.html directly or:
-python3 -m http.server 8080
-```
-
-Test (Vite apps):
-```bash
-npm test
-```
-
-## Dose
-
-Full health tracker with web + iOS + watchOS. Has its own Vercel deployment at dose.heyitsmejosh.com.
-- Web: `dose/` -- Vite + React, Dark Editorial design
-- iOS: `dose/ios/` -- SwiftUI, HealthKit, interaction checker
-- watchOS: `dose/ios/watchos/` -- companion app
-- API: `dose/api/sync.js` -- Vercel serverless sync endpoint
+Requirements: Xcode 16+, xcodegen, iOS 17+ / macOS 14+.
 
 ## Conventions
 - Every sub-app has its own README.md, CLAUDE.md, icon.svg, architecture.svg
-- SwiftUI apps use project.yml (xcodegen) instead of checked-in .xcodeproj
+- SwiftUI apps use project.yml (xcodegen)
 - MIT licensed
