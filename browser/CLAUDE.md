@@ -1,4 +1,5 @@
 # Browser
+v2.0.0
 
 ## Rules
 

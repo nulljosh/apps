@@ -32,9 +32,7 @@ xcodebuild -scheme BrowseriOS -destination 'platform=iOS Simulator,name=iPhone 1
 
 ## Changelog
 
-- v2.0.0 - Added tab pinning, suspension, and private browsing controls
-- v2.0.0 - Added content blocker with bundled easylist rules
-- v2.0.0 - Added reader mode and HTTPS-only automatic upgrades
+- v2.0.0 - Added tab pinning, suspension, private browsing controls, content blocker with bundled easylist rules, reader mode, and HTTPS-only automatic upgrades
 
 ## License
 
