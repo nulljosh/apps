@@ -15,6 +15,7 @@ Monorepo for standalone apps and experiments. Each subdirectory is an independen
 | **nimble** | Instant answers: DuckDuckGo + Wikipedia | macOS |
 | **nyc** | Times Square colony survival sim | macOS |
 | **nyc-ios** | Times Square colony survival sim | iOS |
+| **nyc-web** | Times Square colony survival sim | Web |
 | **politics** | Political data explorer | Web |
 | **rabbit** | Experimental | -- |
 | **roost** | Smart home dashboard | Web |

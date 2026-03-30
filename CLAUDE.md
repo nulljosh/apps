@@ -18,7 +18,7 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **browser** / **browser-ios** -- WebKit browser
 - **life** / **life-ios** -- Life simulator
 - **nimble** / **nimble-ios** -- Habit tracker
-- **nyc** / **nyc-ios** -- NYC subway navigator (SpriteKit)
+- **nyc** / **nyc-ios** / **nyc-web** -- Times Square colony sim (SpriteKit / Canvas)
 - **lingo-ios** -- Language learning
 - **dashboard-ios** -- Dashboard
 - **journal-ios** -- Journal companion
