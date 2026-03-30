@@ -1,16 +1,18 @@
 // Canvas renderer -- tiles, entities, selection, health bars, minimap
 
 import { TILE_SIZE, TileColors, GRID_SIZE } from './world.js';
-import { BuildingType, WeaponTypes, ResourceSymbol } from './state.js';
+import { BuildingType, ResourceSymbol } from './state.js';
 
-const COLONIST_SIZE = 12;
+const COLONIST_SIZE = 10;
+const GAP = 1;
+const TILE_R = 4;
 
 const STATE_COLORS = {
     healthy: '#30d158',
     hungry: '#ffd60a',
     suffocating: '#64d2ff',
     exhausted: '#ff9f0a',
-    dead: '#666',
+    dead: '#48484a',
 };
 
 const RESOURCE_COLORS = {
@@ -22,13 +24,36 @@ const RESOURCE_COLORS = {
 };
 
 const BUILDING_COLORS = {
-    shelter: '#2a4a5a',
-    foodStall: '#3a6a3a',
-    generator: '#5a5a2a',
-    filterStation: '#2a3a5a',
-    subwayAccess: '#5a4a2a',
-    billboard: '#5a2a4a',
+    shelter: 'rgba(41, 151, 255, 0.25)',
+    foodStall: 'rgba(48, 209, 88, 0.25)',
+    generator: 'rgba(255, 214, 10, 0.25)',
+    filterStation: 'rgba(100, 210, 255, 0.25)',
+    subwayAccess: 'rgba(255, 159, 10, 0.25)',
+    billboard: 'rgba(255, 55, 95, 0.25)',
 };
+
+const BUILDING_BORDER = {
+    shelter: 'rgba(41, 151, 255, 0.5)',
+    foodStall: 'rgba(48, 209, 88, 0.5)',
+    generator: 'rgba(255, 214, 10, 0.5)',
+    filterStation: 'rgba(100, 210, 255, 0.5)',
+    subwayAccess: 'rgba(255, 159, 10, 0.5)',
+    billboard: 'rgba(255, 55, 95, 0.5)',
+};
+
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+}
 
 export function renderWorld(ctx, canvas, camera, grid, state) {
     ctx.save();
@@ -36,18 +61,25 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
 
     const bounds = camera.visibleBounds(canvas);
 
-    // Tiles
+    // Tiles with rounded corners and gaps
     for (let r = bounds.minRow; r <= bounds.maxRow; r++) {
         for (let c = bounds.minCol; c <= bounds.maxCol; c++) {
             const tile = grid[r][c];
             ctx.fillStyle = TileColors[tile];
-            ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            roundRect(ctx,
+                c * TILE_SIZE + GAP,
+                r * TILE_SIZE + GAP,
+                TILE_SIZE - GAP * 2,
+                TILE_SIZE - GAP * 2,
+                TILE_R
+            );
+            ctx.fill();
         }
     }
 
     // Night overlay
     if (state.isNight) {
-        ctx.fillStyle = 'rgba(0, 0, 30, 0.3)';
+        ctx.fillStyle = 'rgba(0, 0, 20, 0.25)';
         ctx.fillRect(bounds.minCol * TILE_SIZE, bounds.minRow * TILE_SIZE,
             (bounds.maxCol - bounds.minCol + 1) * TILE_SIZE,
             (bounds.maxRow - bounds.minRow + 1) * TILE_SIZE);
@@ -58,41 +90,56 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         if (rn.col < bounds.minCol || rn.col > bounds.maxCol || rn.row < bounds.minRow || rn.row > bounds.maxRow) continue;
         const x = rn.col * TILE_SIZE + TILE_SIZE / 2;
         const y = rn.row * TILE_SIZE + TILE_SIZE / 2;
-        const alpha = rn.remaining <= 0 ? 0.15 : Math.max(0.3, rn.remaining / rn.maxAmount);
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = RESOURCE_COLORS[rn.type];
+        const alpha = rn.remaining <= 0 ? 0.12 : Math.max(0.3, rn.maxAmount > 0 ? rn.remaining / rn.maxAmount : 0);
+
+        // Soft glow
+        ctx.globalAlpha = alpha * 0.3;
+        ctx.fillStyle = RESOURCE_COLORS[rn.type] || '#fff';
         ctx.beginPath();
-        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.arc(x, y, 10, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Core dot
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalAlpha = 1;
+
         // Symbol
-        ctx.fillStyle = '#fff';
-        ctx.font = '8px -apple-system, sans-serif';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.font = '7px -apple-system, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(ResourceSymbol[rn.type], x, y);
+        ctx.fillText(ResourceSymbol[rn.type] || '', x, y);
     }
 
-    // Buildings
+    // Buildings -- glass style
     for (const b of state.buildings) {
         const bt = BuildingType[b.type];
+        if (!bt) continue;
         const [w, h] = bt.size;
-        const bx = b.col * TILE_SIZE;
-        const by = b.row * TILE_SIZE;
-        if (bx + w * TILE_SIZE < bounds.minCol * TILE_SIZE || bx > (bounds.maxCol + 1) * TILE_SIZE) continue;
-        if (by + h * TILE_SIZE < bounds.minRow * TILE_SIZE || by > (bounds.maxRow + 1) * TILE_SIZE) continue;
+        const bx = b.col * TILE_SIZE + GAP;
+        const by = b.row * TILE_SIZE + GAP;
+        const bw = w * TILE_SIZE - GAP * 2;
+        const bh = h * TILE_SIZE - GAP * 2;
+        if (bx + bw < bounds.minCol * TILE_SIZE || bx > (bounds.maxCol + 1) * TILE_SIZE) continue;
+        if (by + bh < bounds.minRow * TILE_SIZE || by > (bounds.maxRow + 1) * TILE_SIZE) continue;
 
-        ctx.fillStyle = BUILDING_COLORS[b.type] || '#333';
-        ctx.fillRect(bx, by, w * TILE_SIZE, h * TILE_SIZE);
-        ctx.strokeStyle = 'rgba(0, 245, 212, 0.4)';
+        ctx.fillStyle = BUILDING_COLORS[b.type] || 'rgba(255,255,255,0.1)';
+        roundRect(ctx, bx, by, bw, bh, TILE_R + 2);
+        ctx.fill();
+
+        ctx.strokeStyle = BUILDING_BORDER[b.type] || 'rgba(255,255,255,0.2)';
         ctx.lineWidth = 1;
-        ctx.strokeRect(bx, by, w * TILE_SIZE, h * TILE_SIZE);
+        roundRect(ctx, bx, by, bw, bh, TILE_R + 2);
+        ctx.stroke();
 
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 9px -apple-system, sans-serif';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.font = '600 8px -apple-system, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(bt.name, bx + (w * TILE_SIZE) / 2, by + (h * TILE_SIZE) / 2);
+        ctx.fillText(bt.name, b.col * TILE_SIZE + (w * TILE_SIZE) / 2, b.row * TILE_SIZE + (h * TILE_SIZE) / 2);
     }
 
     // Colonists
@@ -100,64 +147,87 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         if (c.col < bounds.minCol - 1 || c.col > bounds.maxCol + 1 || c.row < bounds.minRow - 1 || c.row > bounds.maxRow + 1) continue;
         const x = c.col * TILE_SIZE + TILE_SIZE / 2;
         const y = c.row * TILE_SIZE + TILE_SIZE / 2;
+        const color = STATE_COLORS[c.state] || '#666';
 
         // Selection ring
-        const isSelected = c.id === state.selectedColonistId || state.selectedColonistIds.has(c.id);
+        const isSelected = c.id === state.selectedColonistId || (state.selectedColonistIds && state.selectedColonistIds.has(c.id));
         if (isSelected) {
-            ctx.strokeStyle = '#ffd60a';
+            ctx.strokeStyle = 'rgba(255, 214, 10, 0.7)';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(x, y, COLONIST_SIZE + 4, 0, Math.PI * 2);
+            ctx.arc(x, y, COLONIST_SIZE + 5, 0, Math.PI * 2);
             ctx.stroke();
         }
 
-        // Green indicator circle
-        ctx.fillStyle = c.state === 'dead' ? 'rgba(100,100,100,0.4)' : 'rgba(122, 242, 120, 0.4)';
+        // Outer glow
+        ctx.fillStyle = c.state === 'dead' ? 'rgba(72, 72, 74, 0.2)' : color.replace(')', ', 0.15)').replace('rgb', 'rgba').replace('#', '');
+        // Simpler glow approach
+        ctx.globalAlpha = c.state === 'dead' ? 0.15 : 0.2;
+        ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.arc(x, y, COLONIST_SIZE, 0, Math.PI * 2);
+        ctx.arc(x, y, COLONIST_SIZE + 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        // Body -- rounded pill shape
+        ctx.fillStyle = color;
+        roundRect(ctx, x - 5, y - 7, 10, 14, 4);
         ctx.fill();
 
-        // Body
-        ctx.fillStyle = STATE_COLORS[c.state];
-        ctx.fillRect(x - 5, y - 8, 10, 16);
+        // Head
+        ctx.beginPath();
+        ctx.arc(x, y - 10, 4, 0, Math.PI * 2);
+        ctx.fill();
 
         // Health bar
-        const barW = 24;
-        const barH = 3;
+        const barW = 22;
+        const barH = 2;
         const barX = x - barW / 2;
-        const barY = y - COLONIST_SIZE - 6;
-        ctx.fillStyle = 'rgba(50,50,50,0.8)';
-        ctx.fillRect(barX, barY, barW, barH);
+        const barY = y - COLONIST_SIZE - 10;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        roundRect(ctx, barX, barY, barW, barH, 1);
+        ctx.fill();
         const hpFrac = Math.max(0, c.health / 100);
         ctx.fillStyle = hpFrac > 0.5 ? '#30d158' : hpFrac > 0.25 ? '#ffd60a' : '#ff375f';
-        ctx.fillRect(barX, barY, barW * hpFrac, barH);
+        if (hpFrac > 0) {
+            roundRect(ctx, barX, barY, barW * hpFrac, barH, 1);
+            ctx.fill();
+        }
 
         // Name
-        ctx.fillStyle = '#fff';
-        ctx.font = '8px -apple-system, sans-serif';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.font = '600 7px -apple-system, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(c.name, x, barY - 3);
+        ctx.fillText(c.name, x, barY - 4);
     }
 
     // Build ghost
     if (state.inputMode === 'build' && state.selectedBuildingType && state._ghostCol != null) {
         const bt = BuildingType[state.selectedBuildingType];
-        const [w, h] = bt.size;
-        ctx.fillStyle = 'rgba(255,255,255,0.2)';
-        ctx.fillRect(state._ghostCol * TILE_SIZE, state._ghostRow * TILE_SIZE, w * TILE_SIZE, h * TILE_SIZE);
-        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(state._ghostCol * TILE_SIZE, state._ghostRow * TILE_SIZE, w * TILE_SIZE, h * TILE_SIZE);
+        if (bt) {
+            const [w, h] = bt.size;
+            const gx = state._ghostCol * TILE_SIZE + GAP;
+            const gy = state._ghostRow * TILE_SIZE + GAP;
+            ctx.fillStyle = 'rgba(41, 151, 255, 0.15)';
+            roundRect(ctx, gx, gy, w * TILE_SIZE - GAP * 2, h * TILE_SIZE - GAP * 2, TILE_R + 2);
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(41, 151, 255, 0.5)';
+            ctx.lineWidth = 1;
+            roundRect(ctx, gx, gy, w * TILE_SIZE - GAP * 2, h * TILE_SIZE - GAP * 2, TILE_R + 2);
+            ctx.stroke();
+        }
     }
 
     // Selection rectangle
     if (state._selRect) {
         const r = state._selRect;
-        ctx.strokeStyle = 'rgba(0, 245, 212, 0.8)';
-        ctx.fillStyle = 'rgba(0, 245, 212, 0.1)';
+        ctx.strokeStyle = 'rgba(41, 151, 255, 0.6)';
+        ctx.fillStyle = 'rgba(41, 151, 255, 0.08)';
         ctx.lineWidth = 2;
-        ctx.fillRect(r.x, r.y, r.w, r.h);
-        ctx.strokeRect(r.x, r.y, r.w, r.h);
+        roundRect(ctx, r.x, r.y, r.w, r.h, 4);
+        ctx.fill();
+        roundRect(ctx, r.x, r.y, r.w, r.h, 4);
+        ctx.stroke();
     }
 
     ctx.restore();
@@ -172,11 +242,11 @@ export function renderMinimap(ctx, canvas, grid, state, camera) {
     ctx.fillStyle = '#0a0a0c';
     ctx.fillRect(0, 0, mw, mh);
 
-    // Tiles (sampled)
     const step = Math.max(1, Math.floor(GRID_SIZE / mw));
     for (let r = 0; r < GRID_SIZE; r += step) {
+        if (!grid[r]) continue;
         for (let c = 0; c < GRID_SIZE; c += step) {
-            ctx.fillStyle = TileColors[grid[r][c]];
+            ctx.fillStyle = TileColors[grid[r][c]] || '#0a0a0c';
             const px = (c * TILE_SIZE) * scale;
             const py = (r * TILE_SIZE) * scale;
             const ps = TILE_SIZE * scale * step;
@@ -190,12 +260,14 @@ export function renderMinimap(ctx, canvas, grid, state, camera) {
         if (c.state === 'dead') continue;
         const px = c.col * TILE_SIZE * scale;
         const py = c.row * TILE_SIZE * scale;
-        ctx.fillRect(px - 1, py - 1, 3, 3);
+        ctx.beginPath();
+        ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+        ctx.fill();
     }
 
     // Camera viewport
     const bounds = camera.visibleBounds(document.getElementById('game'));
-    ctx.strokeStyle = '#ffd60a';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
     ctx.lineWidth = 1;
     ctx.strokeRect(
         bounds.minCol * TILE_SIZE * scale,

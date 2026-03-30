@@ -2,9 +2,9 @@
 
 # nyc-web
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
-Times Square Survival: web port of the colony survival sim. Vanilla HTML5 Canvas, zero dependencies.
+Times Square Survival: web port of the colony survival sim. Vanilla HTML5 Canvas, zero dependencies. Apple Liquid Glass UI.
 
 ## Features
 

@@ -30,7 +30,9 @@ export function saveGame(slot, state, grid) {
         }
     };
 
-    localStorage.setItem(SAVE_KEY + slot, JSON.stringify(data));
+    try {
+        localStorage.setItem(SAVE_KEY + slot, JSON.stringify(data));
+    } catch { /* quota exceeded or private browsing */ }
     return data.slot;
 }
 
@@ -56,7 +58,7 @@ export function listSlots() {
 }
 
 export function deleteSlot(slot) {
-    localStorage.removeItem(SAVE_KEY + slot);
+    try { localStorage.removeItem(SAVE_KEY + slot); } catch { /* private browsing */ }
 }
 
 export function rebuildGrid(saveData) {

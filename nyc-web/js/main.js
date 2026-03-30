@@ -26,6 +26,7 @@ function init() {
     ctx = canvas.getContext('2d');
     minimapCanvas = document.getElementById('minimap');
     minimapCtx = minimapCanvas.getContext('2d');
+    if (!ctx || !minimapCtx) return;
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
@@ -161,33 +162,34 @@ const hudCallbacks = {
 function gameLoop(timestamp) {
     if (!running) return;
 
-    const dt = lastTime === 0 ? 0 : (timestamp - lastTime) / 1000;
-    lastTime = timestamp;
+    try {
+        const dt = lastTime === 0 ? 0 : (timestamp - lastTime) / 1000;
+        lastTime = timestamp;
 
-    camera.update(dt);
+        camera.update(dt);
 
-    if (timeTick(dt, state)) {
-        needsTick(state);
-        jobTick(state, pathfinder);
-        resourceTick(state);
+        if (timeTick(dt, state)) {
+            needsTick(state);
+            jobTick(state, pathfinder);
+            resourceTick(state);
 
-        // Auto-save
-        if (state.autoSaveEnabled && state.currentTick > 0 && state.currentTick % 60 === 0 && state.lastSaveSlot) {
-            performSave(state.lastSaveSlot);
+            if (state.autoSaveEnabled && state.currentTick > 0 && state.currentTick % 60 === 0 && state.lastSaveSlot) {
+                performSave(state.lastSaveSlot);
+            }
+
+            updateHUD(state, hudCallbacks);
         }
 
-        updateHUD(state, hudCallbacks);
-    }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0a0a0c';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        renderWorld(ctx, canvas, camera, grid, state);
 
-    // Render
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#0a0a0c';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    renderWorld(ctx, canvas, camera, grid, state);
-
-    // Minimap (every 10 frames)
-    if (Math.floor(timestamp / 16) % 10 === 0) {
-        renderMinimap(minimapCtx, minimapCanvas, grid, state, camera);
+        if (Math.floor(timestamp / 16) % 10 === 0) {
+            renderMinimap(minimapCtx, minimapCanvas, grid, state, camera);
+        }
+    } catch (e) {
+        console.error('Game loop error:', e);
     }
 
     requestAnimationFrame(gameLoop);
