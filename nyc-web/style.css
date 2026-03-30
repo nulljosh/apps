@@ -631,6 +631,18 @@ hr {
     margin: 8px 0;
 }
 
+/* HUD utility classes */
+
+.hud-yellow { color: var(--yellow); font-weight: 600; }
+.hud-cyan { color: var(--cyan); font-weight: 700; }
+.hud-pink { color: var(--pink); font-weight: 600; }
+.hud-muted { color: var(--text-tertiary); }
+.hud-muted-sm { font-size: 10px; color: var(--text-tertiary); }
+.hud-section-title { font-size: 12px; font-weight: 600; color: var(--yellow); }
+.hud-big-title { font-size: 28px; font-weight: 700; color: var(--cyan); }
+.hud-panel-name { color: var(--yellow); font-weight: 600; }
+.hud-panel-level { color: var(--cyan); font-weight: 600; }
+
 /* Reduced motion */
 
 @media (prefers-reduced-motion: reduce) {

@@ -55,25 +55,32 @@ function roundRect(ctx, x, y, w, h, r) {
     ctx.closePath();
 }
 
+// Pre-rendered tile sprites for performance
+const tileSprites = {};
+function getTileSprite(tileType) {
+    if (tileSprites[tileType]) return tileSprites[tileType];
+    const size = TILE_SIZE;
+    const c = document.createElement('canvas');
+    c.width = size;
+    c.height = size;
+    const cx = c.getContext('2d');
+    cx.fillStyle = TileColors[tileType] || '#0a0a0c';
+    roundRect(cx, GAP, GAP, size - GAP * 2, size - GAP * 2, TILE_R);
+    cx.fill();
+    tileSprites[tileType] = c;
+    return c;
+}
+
 export function renderWorld(ctx, canvas, camera, grid, state) {
     ctx.save();
     camera.applyTransform(ctx, canvas);
 
     const bounds = camera.visibleBounds(canvas);
 
-    // Tiles with rounded corners and gaps
+    // Tiles (sprite-cached rounded rects)
     for (let r = bounds.minRow; r <= bounds.maxRow; r++) {
         for (let c = bounds.minCol; c <= bounds.maxCol; c++) {
-            const tile = grid[r][c];
-            ctx.fillStyle = TileColors[tile];
-            roundRect(ctx,
-                c * TILE_SIZE + GAP,
-                r * TILE_SIZE + GAP,
-                TILE_SIZE - GAP * 2,
-                TILE_SIZE - GAP * 2,
-                TILE_R
-            );
-            ctx.fill();
+            ctx.drawImage(getTileSprite(grid[r][c]), c * TILE_SIZE, r * TILE_SIZE);
         }
     }
 

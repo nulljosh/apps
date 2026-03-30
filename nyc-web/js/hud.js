@@ -46,8 +46,7 @@ function updateBuildMenu(state, callbacks) {
     buildMenu.textContent = '';
 
     const title = document.createElement('div');
-    title.className = 'hud-title';
-    title.style.color = '#ffd60a';
+    title.className = 'hud-title hud-yellow';
     title.textContent = 'BUILD';
     buildMenu.appendChild(title);
 
@@ -58,7 +57,7 @@ function updateBuildMenu(state, callbacks) {
         btn.className = 'build-btn' + (sel ? ' selected' : '');
 
         const num = document.createElement('span');
-        num.style.cssText = 'color:#ff375f;font-weight:bold';
+        num.className = 'hud-pink';
         num.textContent = `${i + 1}. `;
         btn.appendChild(num);
         btn.appendChild(document.createTextNode(bt.name + ' '));
@@ -99,10 +98,10 @@ function updateColonistPanel(state, callbacks) {
     const header = document.createElement('div');
     header.className = 'panel-header';
     const nameEl = document.createElement('span');
-    nameEl.style.cssText = 'color:#ffd60a;font-weight:bold';
+    nameEl.className = 'hud-panel-name';
     nameEl.textContent = col.name;
     const lvl = document.createElement('span');
-    lvl.style.cssText = 'color:#64d2ff;font-weight:bold';
+    lvl.className = 'hud-panel-level';
     lvl.textContent = `Lv.${col.level}`;
     header.appendChild(nameEl);
     header.appendChild(lvl);
@@ -303,14 +302,14 @@ function updateSettings(state, callbacks) {
 
     // Title
     const title = document.createElement('div');
-    title.style.cssText = 'font-size:28px;font-weight:bold;color:#64d2ff';
+    title.className = 'hud-big-title';
     title.textContent = 'SETTINGS';
     panel.appendChild(title);
     panel.appendChild(createHR());
 
     // Controls
     const ctrlTitle = document.createElement('div');
-    ctrlTitle.style.cssText = 'font-size:12px;font-weight:bold;color:#ffd60a';
+    ctrlTitle.className = 'hud-section-title';
     ctrlTitle.textContent = 'CONTROLS';
     panel.appendChild(ctrlTitle);
 
@@ -337,7 +336,7 @@ function updateSettings(state, callbacks) {
 
     // Save/load
     const saveTitle = document.createElement('div');
-    saveTitle.style.cssText = 'font-size:12px;font-weight:bold;color:#ffd60a';
+    saveTitle.className = 'hud-section-title';
     saveTitle.textContent = 'SAVE / LOAD';
     panel.appendChild(saveTitle);
 
@@ -397,7 +396,7 @@ function updateTutorial(state, callbacks) {
     const header = document.createElement('div');
     header.className = 'tut-header';
     const counter = document.createElement('span');
-    counter.style.cssText = 'font-size:11px;color:rgba(255,255,255,0.5)';
+    counter.className = 'hud-muted-sm';
     counter.textContent = `TUTORIAL ${step + 1}/9`;
     const skip = document.createElement('button');
     skip.className = 'tut-skip';
@@ -408,7 +407,8 @@ function updateTutorial(state, callbacks) {
     panel.appendChild(header);
 
     const titleEl = document.createElement('div');
-    titleEl.style.cssText = 'font-size:24px;font-weight:bold;color:#64d2ff';
+    titleEl.className = 'hud-big-title';
+    titleEl.style.fontSize = '24px';
     titleEl.textContent = data.title;
     panel.appendChild(titleEl);
 

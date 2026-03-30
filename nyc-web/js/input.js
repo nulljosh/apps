@@ -1,7 +1,9 @@
 // Input handler -- keyboard, mouse, touch
 
 import { worldToTile, TILE_SIZE } from './world.js';
-import { BuildingType, BuildingTypes } from './state.js';
+import { BuildingTypes } from './state.js';
+
+function safe(fn) { try { fn(); } catch (e) { console.error('Input error:', e); } }
 
 export function setupInput(canvas, camera, state, callbacks) {
     const keys = {};
@@ -13,7 +15,7 @@ export function setupInput(canvas, camera, state, callbacks) {
         // Cmd/Ctrl+S save
         if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
             e.preventDefault();
-            callbacks.onSave();
+            safe(() => callbacks.onSave());
             return;
         }
 
@@ -25,13 +27,13 @@ export function setupInput(canvas, camera, state, callbacks) {
             case 'b':
                 state.showBuildMenu = !state.showBuildMenu;
                 if (!state.showBuildMenu) state.inputMode = 'normal';
-                callbacks.onHudUpdate();
-                callbacks.onTutorial('buildMenuOpened');
+                safe(() => callbacks.onHudUpdate());
+                safe(() => callbacks.onTutorial('buildMenuOpened'));
                 break;
             case ' ':
                 e.preventDefault();
                 state.isPaused = !state.isPaused;
-                callbacks.onHudUpdate();
+                safe(() => callbacks.onHudUpdate());
                 break;
             case '1': case '2': case '3': case '4': case '5': case '6':
                 const idx = parseInt(e.key) - 1;
@@ -39,12 +41,12 @@ export function setupInput(canvas, camera, state, callbacks) {
                     state.selectedBuildingType = BuildingTypes[idx];
                     state.inputMode = 'build';
                     state.showBuildMenu = true;
-                    callbacks.onHudUpdate();
+                    safe(() => callbacks.onHudUpdate());
                 }
                 break;
             case 'x':
                 state.inputMode = state.inputMode === 'demolish' ? 'normal' : 'demolish';
-                callbacks.onHudUpdate();
+                safe(() => callbacks.onHudUpdate());
                 break;
             case 'escape':
                 if (state.inputMode !== 'normal' || state.showBuildMenu) {
@@ -55,11 +57,11 @@ export function setupInput(canvas, camera, state, callbacks) {
                     state.showSettings = !state.showSettings;
                     state.isPaused = state.showSettings;
                 }
-                callbacks.onHudUpdate();
+                safe(() => callbacks.onHudUpdate());
                 break;
         }
 
-        callbacks.onTutorial('wasdPressed');
+        safe(() => callbacks.onTutorial('wasdPressed'));
     });
 
     document.addEventListener('keyup', e => {
@@ -83,14 +85,12 @@ export function setupInput(canvas, camera, state, callbacks) {
         const world = camera.screenToWorld(sx, sy, canvas);
 
         if (e.button === 2 || e.button === 1) {
-            // Right/middle click: pan
             dragStart = { sx: e.clientX, sy: e.clientY, cx: camera.x, cy: camera.y };
             isDragging = true;
             return;
         }
 
         if (e.shiftKey) {
-            // Shift+click: box select
             isSelecting = true;
             selStart = world;
             return;
@@ -100,13 +100,13 @@ export function setupInput(canvas, camera, state, callbacks) {
 
         switch (state.inputMode) {
             case 'normal':
-                callbacks.onSelectEntity(world.x, world.y);
+                safe(() => callbacks.onSelectEntity(world.x, world.y));
                 break;
             case 'build':
-                callbacks.onPlaceBuilding(tile.col, tile.row);
+                safe(() => callbacks.onPlaceBuilding(tile.col, tile.row));
                 break;
             case 'demolish':
-                callbacks.onDemolish(world.x, world.y);
+                safe(() => callbacks.onDemolish(world.x, world.y));
                 break;
         }
     });
@@ -134,7 +134,6 @@ export function setupInput(canvas, camera, state, callbacks) {
             return;
         }
 
-        // Ghost for build mode
         if (state.inputMode === 'build' && state.selectedBuildingType) {
             const rect = canvas.getBoundingClientRect();
             const sx = (e.clientX - rect.left) * (canvas.width / rect.width);
@@ -153,7 +152,7 @@ export function setupInput(canvas, camera, state, callbacks) {
             const sx = (e.clientX - rect.left) * (canvas.width / rect.width);
             const sy = (e.clientY - rect.top) * (canvas.height / rect.height);
             const world = camera.screenToWorld(sx, sy, canvas);
-            callbacks.onBoxSelect(selStart, world);
+            safe(() => callbacks.onBoxSelect(selStart, world));
             isSelecting = false;
             selStart = null;
             state._selRect = null;

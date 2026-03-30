@@ -62,7 +62,7 @@ export function createColonist(name, col, row) {
     };
 }
 
-export function colonistXpForNext(c) { return c.level * 100; }
+export function colonistXpForNext(c) { return Math.max(100, c.level * 100); }
 export function colonistXpProgress(c) { return c.xp / colonistXpForNext(c); }
 export function colonistMovementSpeed(c) { return 1.0 + c.stats.agi * 0.1; }
 export function colonistHungerDecay(c) { return 1.0 - c.stats.end * 0.05; }
