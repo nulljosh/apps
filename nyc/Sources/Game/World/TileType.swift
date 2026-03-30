@@ -32,9 +32,9 @@ enum TileType: Int, Codable, Sendable {
         switch self {
         case .road: NSColor(red: 0.15, green: 0.15, blue: 0.2, alpha: 1)
         case .sidewalk: NSColor(red: 0.35, green: 0.35, blue: 0.4, alpha: 1)
-        case .building: NSColor(red: 0.05, green: 0.11, blue: 0.16, alpha: 1)
-        case .billboard: NSColor(red: 0.97, green: 0.15, blue: 0.52, alpha: 1)
-        case .subway: NSColor(red: 1.0, green: 0.9, blue: 0.43, alpha: 1)
+        case .building: NSColor(red: 0.04, green: 0.04, blue: 0.05, alpha: 1)
+        case .billboard: NSColor(red: 1.0, green: 0.22, blue: 0.37, alpha: 1)
+        case .subway: NSColor(red: 1.0, green: 0.84, blue: 0.04, alpha: 1)
         case .sewer: NSColor(red: 0.2, green: 0.25, blue: 0.2, alpha: 1)
         case .empty: NSColor(red: 0.05, green: 0.05, blue: 0.1, alpha: 1)
         }

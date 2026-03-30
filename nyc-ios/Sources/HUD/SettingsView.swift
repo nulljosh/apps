@@ -12,7 +12,7 @@ struct SettingsView: View {
             VStack(spacing: 20) {
                 Text("SETTINGS")
                     .font(.system(size: 28, weight: .bold))
-                    .foregroundStyle(Color(red: 0, green: 0.96, blue: 0.83))
+                    .foregroundStyle(Color(red: 0.39, green: 0.82, blue: 1.0))
 
                 Divider().background(Color.white.opacity(0.2))
 
@@ -20,7 +20,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("CONTROLS")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.9, blue: 0.43))
+                        .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.04))
 
                     controlRow(key: "Drag", action: "Pan camera")
                     controlRow(key: "Pinch", action: "Zoom in/out")
@@ -34,7 +34,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("OPTIONS")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.9, blue: 0.43))
+                        .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.04))
 
                     Toggle(isOn: Binding(
                         get: { gameState.autoSaveEnabled },
@@ -45,7 +45,7 @@ struct SettingsView: View {
                             .foregroundStyle(.white)
                     }
                     .toggleStyle(.switch)
-                    .tint(Color(red: 0, green: 0.96, blue: 0.83))
+                    .tint(Color(red: 0.39, green: 0.82, blue: 1.0))
                 }
 
                 Divider().background(Color.white.opacity(0.2))
@@ -54,7 +54,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("SAVE / LOAD")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.9, blue: 0.43))
+                        .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.04))
 
                     let slots = SaveManager.shared.listSlots()
                     ForEach(0..<3, id: \.self) { i in
@@ -78,7 +78,7 @@ struct SettingsView: View {
                                 )
                             }
                             .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(Color(red: 0, green: 0.96, blue: 0.83))
+                            .foregroundStyle(Color(red: 0.39, green: 0.82, blue: 1.0))
                             .buttonStyle(.plain)
                         }
                     }
@@ -92,10 +92,10 @@ struct SettingsView: View {
             }
             .padding(24)
             .frame(width: 360, height: 480)
-            .background(Color(red: 0.05, green: 0.11, blue: 0.16).opacity(0.95))
+            .background(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.95))
             .overlay(
                 Rectangle()
-                    .stroke(Color(red: 0, green: 0.96, blue: 0.83).opacity(0.5), lineWidth: 2)
+                    .stroke(Color(red: 0.39, green: 0.82, blue: 1.0).opacity(0.5), lineWidth: 2)
             )
         }
     }
@@ -104,7 +104,7 @@ struct SettingsView: View {
         HStack {
             Text(key)
                 .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(Color(red: 0.97, green: 0.15, blue: 0.52))
+                .foregroundStyle(Color(red: 1.0, green: 0.22, blue: 0.37))
                 .frame(width: 120, alignment: .leading)
             Text(action)
                 .font(.system(size: 12))

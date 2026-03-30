@@ -51,14 +51,14 @@ struct TutorialView: View {
                     Button(action: skip) {
                         Text("SKIP")
                             .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(Color(red: 0.97, green: 0.15, blue: 0.52))
+                            .foregroundStyle(Color(red: 1.0, green: 0.22, blue: 0.37))
                     }
                     .buttonStyle(.plain)
                 }
 
                 Text(stepData.title)
                     .font(.system(size: 24, weight: .bold))
-                    .foregroundStyle(Color(red: 0, green: 0.96, blue: 0.83))
+                    .foregroundStyle(Color(red: 0.39, green: 0.82, blue: 1.0))
 
                 Text(stepData.body)
                     .font(.system(size: 14))
@@ -68,7 +68,7 @@ struct TutorialView: View {
                 if step == 4 {
                     Text("BUILD")
                         .font(.system(size: 14, weight: .bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.9, blue: 0.43))
+                        .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.04))
                         .padding(.horizontal, 14)
                         .padding(.vertical, 8)
                         .background(Color.white.opacity(0.1))
@@ -83,14 +83,14 @@ struct TutorialView: View {
                                 .foregroundStyle(d == .gather ? Color.black : Color.white.opacity(0.5))
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
-                                .background(d == .gather ? Color(red: 1.0, green: 0.9, blue: 0.43) : Color.white.opacity(0.05))
+                                .background(d == .gather ? Color(red: 1.0, green: 0.84, blue: 0.04) : Color.white.opacity(0.05))
                         }
                     }
                 }
 
                 Text(stepData.hint)
                     .font(.system(size: 11))
-                    .foregroundStyle(Color(red: 1.0, green: 0.9, blue: 0.43))
+                    .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.04))
                     .opacity(hintPulse ? 1.0 : 0.4)
                     .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: hintPulse)
                     .onAppear { hintPulse = true; startAutoSkipTimer() }
@@ -99,7 +99,7 @@ struct TutorialView: View {
                 HStack(spacing: 6) {
                     ForEach(0..<9, id: \.self) { i in
                         Circle()
-                            .fill(i <= step ? Color(red: 0, green: 0.96, blue: 0.83) : Color.white.opacity(0.2))
+                            .fill(i <= step ? Color(red: 0.39, green: 0.82, blue: 1.0) : Color.white.opacity(0.2))
                             .frame(width: 8, height: 8)
                     }
                 }
@@ -107,10 +107,10 @@ struct TutorialView: View {
             }
             .padding(24)
             .frame(maxWidth: 420)
-            .background(Color(red: 0.05, green: 0.11, blue: 0.16).opacity(0.95))
+            .background(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.95))
             .overlay(
                 Rectangle()
-                    .stroke(Color(red: 0, green: 0.96, blue: 0.83).opacity(0.5), lineWidth: 2)
+                    .stroke(Color(red: 0.39, green: 0.82, blue: 1.0).opacity(0.5), lineWidth: 2)
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isInteractiveStep ? .top : .center)
             .padding(.top, isInteractiveStep ? 60 : 0)

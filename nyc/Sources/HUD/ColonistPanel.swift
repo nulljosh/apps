@@ -10,11 +10,11 @@ struct ColonistPanel: View {
                 HStack {
                     Text(colonist.name)
                         .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.9, blue: 0.43))
+                        .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.04))
                     Spacer()
                     Text("Lv.\(colonist.level)")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(Color(red: 0, green: 0.96, blue: 0.83))
+                        .foregroundStyle(Color(red: 0.39, green: 0.82, blue: 1.0))
                 }
 
                 Text(colonist.state.rawValue.uppercased())
@@ -25,22 +25,22 @@ struct ColonistPanel: View {
                 HStack(spacing: 4) {
                     Text(colonist.trait.displayName.uppercased())
                         .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(Color(red: 0.97, green: 0.15, blue: 0.52))
+                        .foregroundStyle(Color(red: 1.0, green: 0.22, blue: 0.37))
                     Text(colonist.trait.description)
                         .font(.system(size: 9))
                         .foregroundStyle(.white.opacity(0.5))
                 }
                 .padding(.horizontal, 6)
                 .padding(.vertical, 3)
-                .background(Color(red: 0.97, green: 0.15, blue: 0.52).opacity(0.15))
+                .background(Color(red: 1.0, green: 0.22, blue: 0.37).opacity(0.15))
 
                 Divider().background(Color.white.opacity(0.2))
 
                 // Health + needs bars
-                needBar(label: "HP ", value: colonist.health, color: Color(red: 0.97, green: 0.15, blue: 0.15))
-                needBar(label: "HNG", value: colonist.hunger, color: Color(red: 0.48, green: 0.95, blue: 0.47))
-                needBar(label: "O2 ", value: colonist.oxygen, color: Color(red: 0, green: 0.96, blue: 0.83))
-                needBar(label: "STS", value: 100 - colonist.stress, color: Color(red: 0.97, green: 0.15, blue: 0.52))
+                needBar(label: "HP ", value: colonist.health, color: Color(red: 1.0, green: 0.27, blue: 0.23))
+                needBar(label: "HNG", value: colonist.hunger, color: Color(red: 0.19, green: 0.82, blue: 0.35))
+                needBar(label: "O2 ", value: colonist.oxygen, color: Color(red: 0.39, green: 0.82, blue: 1.0))
+                needBar(label: "STS", value: 100 - colonist.stress, color: Color(red: 1.0, green: 0.22, blue: 0.37))
                 needBar(label: "SLP", value: colonist.sleep, color: Color(red: 0.48, green: 0.47, blue: 0.95))
 
                 Divider().background(Color.white.opacity(0.2))
@@ -68,7 +68,7 @@ struct ColonistPanel: View {
                                 .fill(Color.white.opacity(0.1))
                                 .frame(height: 8)
                             Rectangle()
-                                .fill(Color(red: 1.0, green: 0.9, blue: 0.43))
+                                .fill(Color(red: 1.0, green: 0.84, blue: 0.04))
                                 .frame(width: max(0, geo.size.width * colonist.xpProgress), height: 8)
                         }
                     }
@@ -101,7 +101,7 @@ struct ColonistPanel: View {
                         .foregroundStyle(.white.opacity(0.6))
                     Text(colonist.weapon.displayName)
                         .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.42, blue: 0.21))
+                        .foregroundStyle(Color(red: 1.0, green: 0.62, blue: 0.04))
                     Spacer()
                     Text("DMG: \(Int(colonist.weapon.damage))")
                         .font(.system(size: 9))
@@ -117,10 +117,10 @@ struct ColonistPanel: View {
             }
             .padding(10)
             .frame(width: 220)
-            .background(Color(red: 0.05, green: 0.11, blue: 0.16).opacity(0.9))
+            .background(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.9))
             .overlay(
                 Rectangle()
-                    .stroke(Color(red: 0, green: 0.96, blue: 0.83).opacity(0.4), lineWidth: 2)
+                    .stroke(Color(red: 0.39, green: 0.82, blue: 1.0).opacity(0.4), lineWidth: 2)
             )
         }
     }
@@ -158,7 +158,7 @@ struct ColonistPanel: View {
             HStack(spacing: 2) {
                 ForEach(0..<10, id: \.self) { i in
                     Rectangle()
-                        .fill(i < value ? Color(red: 0, green: 0.96, blue: 0.83) : Color.white.opacity(0.1))
+                        .fill(i < value ? Color(red: 0.39, green: 0.82, blue: 1.0) : Color.white.opacity(0.1))
                         .frame(width: 12, height: 8)
                 }
             }
@@ -180,17 +180,17 @@ struct ColonistPanel: View {
                 .foregroundStyle(isActive ? Color.black : Color.white.opacity(0.7))
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(isActive ? Color(red: 0, green: 0.96, blue: 0.83) : Color.white.opacity(0.1))
+                .background(isActive ? Color(red: 0.39, green: 0.82, blue: 1.0) : Color.white.opacity(0.1))
         }
         .buttonStyle(.plain)
     }
 
     private func stateColor(_ state: ColonistState) -> Color {
         switch state {
-        case .healthy: Color(red: 0.48, green: 0.95, blue: 0.47)
-        case .hungry: Color(red: 1.0, green: 0.9, blue: 0.43)
-        case .suffocating: Color(red: 0, green: 0.96, blue: 0.83)
-        case .exhausted: Color(red: 1.0, green: 0.42, blue: 0.21)
+        case .healthy: Color(red: 0.19, green: 0.82, blue: 0.35)
+        case .hungry: Color(red: 1.0, green: 0.84, blue: 0.04)
+        case .suffocating: Color(red: 0.39, green: 0.82, blue: 1.0)
+        case .exhausted: Color(red: 1.0, green: 0.62, blue: 0.04)
         case .dead: Color.gray
         }
     }

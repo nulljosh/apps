@@ -33,7 +33,7 @@ final class GameScene: SKScene {
     required init?(coder: NSCoder) { fatalError() }
 
     override func didMove(to view: SKView) {
-        backgroundColor = UIColor(red: 0.05, green: 0.11, blue: 0.16, alpha: 1)
+        backgroundColor = UIColor(red: 0.04, green: 0.04, blue: 0.05, alpha: 1)
         view.showsFPS = true
         view.showsNodeCount = true
 
@@ -258,7 +258,7 @@ final class GameScene: SKScene {
         case 2:
             for (_, node) in colonistNodes {
                 let pulse = SKShapeNode(circleOfRadius: 20)
-                pulse.strokeColor = UIColor(red: 1.0, green: 0.9, blue: 0.43, alpha: 0.9)
+                pulse.strokeColor = UIColor(red: 1.0, green: 0.84, blue: 0.04, alpha: 0.9)
                 pulse.fillColor = .clear
                 pulse.lineWidth = 2
                 pulse.position = node.position

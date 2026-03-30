@@ -9,12 +9,12 @@ final class MenuScene: SKScene {
     private var loadMenuNodes: [SKNode] = []
 
     override func didMove(to view: SKView) {
-        backgroundColor = NSColor(red: 0.05, green: 0.11, blue: 0.16, alpha: 1)
+        backgroundColor = NSColor(red: 0.04, green: 0.04, blue: 0.05, alpha: 1)
 
         let title = SKLabelNode(fontNamed: NSFont.systemFont(ofSize: 14, weight: .bold).fontName)
         title.text = "TIMES SQUARE"
         title.fontSize = 48
-        title.fontColor = NSColor(red: 0, green: 0.96, blue: 0.83, alpha: 1)
+        title.fontColor = NSColor(red: 0.39, green: 0.82, blue: 1.0, alpha: 1)
         title.position = CGPoint(x: size.width / 2, y: size.height * 0.65)
         title.horizontalAlignmentMode = .center
         addChild(title)
@@ -22,7 +22,7 @@ final class MenuScene: SKScene {
         let subtitle = SKLabelNode(fontNamed: NSFont.systemFont(ofSize: 14).fontName)
         subtitle.text = "SURVIVAL SIMULATOR"
         subtitle.fontSize = 20
-        subtitle.fontColor = NSColor(red: 0.97, green: 0.15, blue: 0.52, alpha: 1)
+        subtitle.fontColor = NSColor(red: 1.0, green: 0.22, blue: 0.37, alpha: 1)
         subtitle.position = CGPoint(x: size.width / 2, y: size.height * 0.55)
         subtitle.horizontalAlignmentMode = .center
         addChild(subtitle)
@@ -30,7 +30,7 @@ final class MenuScene: SKScene {
         let newGame = SKLabelNode(fontNamed: NSFont.systemFont(ofSize: 14, weight: .bold).fontName)
         newGame.text = "> NEW GAME"
         newGame.fontSize = 24
-        newGame.fontColor = NSColor(red: 1.0, green: 0.9, blue: 0.43, alpha: 1)
+        newGame.fontColor = NSColor(red: 1.0, green: 0.84, blue: 0.04, alpha: 1)
         newGame.position = CGPoint(x: size.width / 2, y: size.height * 0.38)
         newGame.horizontalAlignmentMode = .center
         newGame.name = "newGame"
@@ -39,7 +39,7 @@ final class MenuScene: SKScene {
         let loadGame = SKLabelNode(fontNamed: NSFont.systemFont(ofSize: 14, weight: .bold).fontName)
         loadGame.text = "> LOAD GAME"
         loadGame.fontSize = 24
-        loadGame.fontColor = NSColor(red: 0, green: 0.96, blue: 0.83, alpha: 1)
+        loadGame.fontColor = NSColor(red: 0.39, green: 0.82, blue: 1.0, alpha: 1)
         loadGame.position = CGPoint(x: size.width / 2, y: size.height * 0.30)
         loadGame.horizontalAlignmentMode = .center
         loadGame.name = "loadGame"
@@ -77,7 +77,7 @@ final class MenuScene: SKScene {
         let header = SKLabelNode(fontNamed: NSFont.systemFont(ofSize: 14, weight: .bold).fontName)
         header.text = "LOAD GAME"
         header.fontSize = 28
-        header.fontColor = NSColor(red: 0, green: 0.96, blue: 0.83, alpha: 1)
+        header.fontColor = NSColor(red: 0.39, green: 0.82, blue: 1.0, alpha: 1)
         header.position = CGPoint(x: size.width / 2, y: size.height * 0.72)
         header.horizontalAlignmentMode = .center
         header.zPosition = 11
@@ -92,7 +92,7 @@ final class MenuScene: SKScene {
 
             let bg = SKShapeNode(rect: CGRect(x: size.width / 2 - 200, y: slotY - 20, width: 400, height: 50), cornerRadius: 0)
             bg.fillColor = NSColor(red: 0.1, green: 0.15, blue: 0.2, alpha: 0.9)
-            bg.strokeColor = NSColor(red: 0, green: 0.96, blue: 0.83, alpha: 0.3)
+            bg.strokeColor = NSColor(red: 0.39, green: 0.82, blue: 1.0, alpha: 0.3)
             bg.lineWidth = 1
             bg.name = "loadSlot\(i + 1)"
             bg.zPosition = 11
@@ -112,7 +112,7 @@ final class MenuScene: SKScene {
                 formatter.dateFormat = "MMM d, HH:mm"
                 let dateStr = formatter.string(from: slot.timestamp)
                 label.text = "SLOT \(i + 1) -- Day \(slot.dayCount) | \(slot.colonistCount) alive | \(dateStr)"
-                label.fontColor = NSColor(red: 1.0, green: 0.9, blue: 0.43, alpha: 1)
+                label.fontColor = NSColor(red: 1.0, green: 0.84, blue: 0.04, alpha: 1)
             } else {
                 label.text = "SLOT \(i + 1) -- EMPTY --"
                 label.fontColor = NSColor(red: 0.4, green: 0.4, blue: 0.45, alpha: 1)

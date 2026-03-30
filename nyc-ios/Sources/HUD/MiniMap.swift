@@ -4,7 +4,7 @@ struct MiniMap: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(Color(red: 0.05, green: 0.11, blue: 0.16).opacity(0.85))
+                .fill(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.85))
                 .frame(width: 150, height: 150)
             Text("MINIMAP")
                 .font(.system(size: 10))
@@ -12,7 +12,7 @@ struct MiniMap: View {
         }
         .overlay(
             Rectangle()
-                .stroke(Color(red: 0, green: 0.96, blue: 0.83).opacity(0.4), lineWidth: 2)
+                .stroke(Color(red: 0.39, green: 0.82, blue: 1.0).opacity(0.4), lineWidth: 2)
         )
     }
 }

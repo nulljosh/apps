@@ -50,7 +50,7 @@ struct HUDView: View {
                     .allowsHitTesting(false)
                 Text("PAUSED")
                     .font(.system(size: 48, weight: .bold))
-                    .foregroundStyle(Color(red: 1.0, green: 0.9, blue: 0.43))
+                    .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.04))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .allowsHitTesting(false)
             }
@@ -68,10 +68,10 @@ struct HUDView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 6)
-                .background(Color(red: 0.05, green: 0.11, blue: 0.16).opacity(0.9))
+                .background(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.9))
                 .overlay(
                     Rectangle()
-                        .stroke(Color(red: 1.0, green: 0.9, blue: 0.43).opacity(0.4), lineWidth: 1)
+                        .stroke(Color(red: 1.0, green: 0.84, blue: 0.04).opacity(0.4), lineWidth: 1)
                 )
                 .allowsHitTesting(true)
                 .padding(.bottom, 4)
@@ -96,13 +96,13 @@ struct HUDView: View {
                         Spacer()
                         Text("SAVED")
                             .font(.system(size: 14, weight: .bold))
-                            .foregroundStyle(Color(red: 0.48, green: 0.95, blue: 0.47))
+                            .foregroundStyle(Color(red: 0.19, green: 0.82, blue: 0.35))
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
-                            .background(Color(red: 0.05, green: 0.11, blue: 0.16).opacity(0.9))
+                            .background(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.9))
                             .overlay(
                                 Rectangle()
-                                    .stroke(Color(red: 0.48, green: 0.95, blue: 0.47).opacity(0.4), lineWidth: 1)
+                                    .stroke(Color(red: 0.19, green: 0.82, blue: 0.35).opacity(0.4), lineWidth: 1)
                             )
                             .transition(.opacity)
                             .padding(8)
@@ -117,7 +117,7 @@ struct HUDView: View {
                     HStack {
                         Spacer()
                         Circle()
-                            .fill(Color(red: 0.48, green: 0.95, blue: 0.47))
+                            .fill(Color(red: 0.19, green: 0.82, blue: 0.35))
                             .frame(width: 6, height: 6)
                             .padding(.trailing, 12)
                             .padding(.top, gameState.showSaveIndicator ? 44 : 12)
@@ -150,7 +150,7 @@ struct HUDView: View {
                 .foregroundStyle(gameState.currentDirective == directive ? Color.black : Color.white.opacity(0.7))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
-                .background(gameState.currentDirective == directive ? Color(red: 1.0, green: 0.9, blue: 0.43) : Color.white.opacity(0.1))
+                .background(gameState.currentDirective == directive ? Color(red: 1.0, green: 0.84, blue: 0.04) : Color.white.opacity(0.1))
         }
         .buttonStyle(.plain)
     }
@@ -164,14 +164,14 @@ struct GameLogView: View {
             ForEach(gameState.gameLog.suffix(5), id: \.self) { msg in
                 Text(msg)
                     .font(.system(size: 10))
-                    .foregroundStyle(Color(red: 0, green: 0.96, blue: 0.83))
+                    .foregroundStyle(Color(red: 0.39, green: 0.82, blue: 1.0))
             }
         }
         .padding(6)
-        .background(Color(red: 0.05, green: 0.11, blue: 0.16).opacity(0.85))
+        .background(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.85))
         .overlay(
             Rectangle()
-                .stroke(Color(red: 0, green: 0.96, blue: 0.83).opacity(0.4), lineWidth: 2)
+                .stroke(Color(red: 0.39, green: 0.82, blue: 1.0).opacity(0.4), lineWidth: 2)
         )
         .frame(maxWidth: 300, alignment: .leading)
     }
