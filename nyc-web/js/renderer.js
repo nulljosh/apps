@@ -167,8 +167,6 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         }
 
         // Outer glow
-        ctx.fillStyle = c.state === 'dead' ? 'rgba(72, 72, 74, 0.2)' : color.replace(')', ', 0.15)').replace('rgb', 'rgba').replace('#', '');
-        // Simpler glow approach
         ctx.globalAlpha = c.state === 'dead' ? 0.15 : 0.2;
         ctx.fillStyle = color;
         ctx.beginPath();
