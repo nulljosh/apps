@@ -13,13 +13,13 @@ const STREET_WIDTH = 3;
 export const TileType = { road: 0, sidewalk: 1, building: 2, billboard: 3, subway: 4, sewer: 5, empty: 6 };
 
 export const TileColors = {
-    [TileType.road]:      '#262633',
-    [TileType.sidewalk]:  '#595966',
-    [TileType.building]:  '#0d1c29',
-    [TileType.billboard]: '#f82685',
-    [TileType.subway]:    '#ffe66d',
-    [TileType.sewer]:     '#334033',
-    [TileType.empty]:     '#0d0d1a',
+    [TileType.road]:      '#1c1c1e',
+    [TileType.sidewalk]:  '#3a3a3c',
+    [TileType.building]:  '#0a0a0c',
+    [TileType.billboard]: '#ff375f',
+    [TileType.subway]:    '#ffd60a',
+    [TileType.sewer]:     '#2c3e2c',
+    [TileType.empty]:     '#0a0a0c',
 };
 
 export const WalkableTiles = new Set([TileType.road, TileType.sidewalk, TileType.subway]);

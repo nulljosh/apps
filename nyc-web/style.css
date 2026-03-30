@@ -3,6 +3,7 @@
 :root {
     --glass-bg: rgba(255, 255, 255, 0.08);
     --glass-bg-heavy: rgba(255, 255, 255, 0.12);
+    --glass-bg-hover: rgba(255, 255, 255, 0.06);
     --glass-border: rgba(255, 255, 255, 0.18);
     --glass-border-light: rgba(255, 255, 255, 0.1);
     --glass-blur: blur(20px);
@@ -21,12 +22,15 @@
     --radius: 16px;
     --radius-sm: 10px;
     --radius-xs: 6px;
+    --radius-pill: 980px;
     --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
     --font-mono: 'SF Mono', ui-monospace, monospace;
     --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+button { font-family: inherit; }
 
 body {
     background: #0a0a0c;
@@ -55,8 +59,7 @@ canvas#game {
     top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: 100;
-    background: radial-gradient(ellipse at 50% 30%, rgba(0, 113, 227, 0.08) 0%, transparent 60%),
-                #0a0a0c;
+    background: #0a0a0c;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -89,8 +92,7 @@ canvas#game {
     font-weight: 600;
     cursor: pointer;
     padding: 14px 48px;
-    font-family: var(--font);
-    border-radius: 980px;
+    border-radius: var(--radius-pill);
     letter-spacing: -0.01em;
     transition: transform 0.2s var(--spring), opacity 0.2s;
 }
@@ -114,28 +116,26 @@ canvas#game {
 
 .menu-slot-btn {
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-light);
     color: var(--text-primary);
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
     padding: 12px 20px;
-    font-family: var(--font);
     display: block;
     width: min(400px, 85vw);
     text-align: left;
     border-radius: var(--radius-sm);
     transition: transform 0.2s var(--spring), background 0.2s;
 }
-.menu-slot-btn:hover:not(:disabled) {
+.menu-slot-btn:hover:not(:disabled):not(.empty) {
     transform: translateY(-2px);
     background: var(--glass-bg-heavy);
 }
 .menu-slot-btn.empty {
     color: var(--text-tertiary);
     cursor: default;
+    pointer-events: none;
 }
 .menu-slot-btn:disabled {
     cursor: default;
@@ -189,9 +189,7 @@ canvas#game {
     top: 58px; left: 12px;
     width: 200px;
     padding: 12px;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur-heavy);
-    -webkit-backdrop-filter: var(--glass-blur-heavy);
+    background: var(--glass-bg-heavy);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     display: none;
@@ -217,13 +215,12 @@ canvas#game {
     font-weight: 500;
     padding: 8px 10px;
     cursor: pointer;
-    font-family: var(--font);
     margin-bottom: 2px;
     border-radius: var(--radius-xs);
     transition: background 0.15s, transform 0.2s var(--spring);
 }
 .build-btn:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--glass-bg-hover);
     transform: translateY(-1px);
 }
 .build-btn.selected {
@@ -250,9 +247,7 @@ canvas#game {
     top: 58px; right: 12px;
     width: 240px;
     padding: 14px;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur-heavy);
-    -webkit-backdrop-filter: var(--glass-blur-heavy);
+    background: var(--glass-bg-heavy);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     display: none;
@@ -270,7 +265,7 @@ canvas#game {
     color: var(--pink);
     padding: 3px 8px;
     background: rgba(255, 55, 95, 0.12);
-    border-radius: 980px;
+    border-radius: var(--radius-pill);
     margin-top: 6px;
     display: inline-block;
 }
@@ -292,7 +287,7 @@ canvas#game {
 .bar-bg {
     flex: 1;
     height: 4px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
     border-radius: 2px;
     overflow: hidden;
 }
@@ -300,7 +295,9 @@ canvas#game {
 .bar-fill {
     height: 100%;
     border-radius: 2px;
-    transition: width 0.3s ease;
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    will-change: transform;
 }
 
 .need-val {
@@ -320,7 +317,7 @@ canvas#game {
 .stat-dot {
     width: 12px;
     height: 4px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
     border-radius: 2px;
 }
 
@@ -335,20 +332,19 @@ canvas#game {
 }
 
 .job-btn {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--glass-bg-hover);
     border: none;
     color: var(--text-secondary);
     font-size: 10px;
     font-weight: 600;
     padding: 5px 10px;
     cursor: pointer;
-    font-family: var(--font);
     border-radius: var(--radius-xs);
     transition: transform 0.2s var(--spring), background 0.15s;
 }
 .job-btn:hover {
     transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
 }
 .job-btn.active {
     background: var(--accent);
@@ -369,7 +365,7 @@ canvas#game {
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
-    border-radius: 980px;
+    border-radius: var(--radius-pill);
 }
 
 .dir-btn {
@@ -380,13 +376,12 @@ canvas#game {
     font-weight: 600;
     padding: 5px 12px;
     cursor: pointer;
-    font-family: var(--font);
-    border-radius: 980px;
+    border-radius: var(--radius-pill);
     transition: transform 0.2s var(--spring), background 0.15s, color 0.15s;
 }
 .dir-btn:hover {
     transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--glass-bg-hover);
 }
 .dir-btn.active {
     background: var(--accent);
@@ -401,8 +396,6 @@ canvas#game {
     max-width: 280px;
     padding: 10px 14px;
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-light);
     border-radius: var(--radius-sm);
     font-size: 11px;
@@ -423,8 +416,6 @@ canvas#game {
     color: var(--text-tertiary);
     padding: 6px 10px;
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-light);
     border-radius: var(--radius-xs);
 }
@@ -473,13 +464,11 @@ canvas#minimap {
 
 #save-indicator {
     position: fixed;
-    top: 12px; right: 12px;
+    top: 56px; right: 12px;
     padding: 8px 16px;
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid rgba(48, 209, 88, 0.3);
-    border-radius: 980px;
+    border-radius: var(--radius-pill);
     color: var(--green);
     font-size: 12px;
     font-weight: 600;
@@ -514,8 +503,6 @@ canvas#minimap {
     overflow-y: auto;
     padding: 28px;
     background: var(--glass-bg-heavy);
-    backdrop-filter: var(--glass-blur-heavy);
-    -webkit-backdrop-filter: var(--glass-blur-heavy);
     border: 1px solid var(--glass-border);
     border-radius: calc(var(--radius) + 4px);
 }
@@ -551,8 +538,7 @@ canvas#minimap {
     font-weight: 600;
     padding: 5px 14px;
     cursor: pointer;
-    font-family: var(--font);
-    border-radius: 980px;
+    border-radius: var(--radius-pill);
     transition: transform 0.2s var(--spring), opacity 0.15s;
 }
 .save-btn:hover {
@@ -579,8 +565,6 @@ canvas#minimap {
     max-width: min(440px, 90vw);
     padding: 28px;
     background: var(--glass-bg-heavy);
-    backdrop-filter: var(--glass-blur-heavy);
-    -webkit-backdrop-filter: var(--glass-blur-heavy);
     border: 1px solid var(--glass-border);
     border-radius: calc(var(--radius) + 4px);
     display: flex;
@@ -596,19 +580,18 @@ canvas#minimap {
 }
 
 .tut-skip {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--glass-bg-hover);
     border: none;
     color: var(--text-secondary);
     font-size: 11px;
     font-weight: 600;
     cursor: pointer;
-    font-family: var(--font);
     padding: 4px 12px;
-    border-radius: 980px;
+    border-radius: var(--radius-pill);
     transition: background 0.15s;
 }
 .tut-skip:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
 }
 
 .tut-hint {
@@ -648,6 +631,15 @@ hr {
     margin: 8px 0;
 }
 
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 /* Mobile adjustments */
 
 @media (max-width: 600px) {
@@ -657,6 +649,16 @@ hr {
         padding: 8px 12px;
         font-size: 11px;
         border-radius: var(--radius-sm);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(10, 10, 12, 0.92);
+    }
+
+    #build-menu,
+    #colonist-panel {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(10, 10, 12, 0.92);
     }
 
     #build-menu {
@@ -680,6 +682,9 @@ hr {
     #directive-bar {
         bottom: 16px;
         padding: 6px 12px;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(10, 10, 12, 0.92);
     }
 
     .dir-btn {

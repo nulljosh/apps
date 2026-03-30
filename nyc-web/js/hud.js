@@ -3,8 +3,8 @@
 import { ResourceTypes, ResourceSymbol, BuildingType, BuildingTypes, ColonistJobs, ColonyDirectives, Traits, WeaponTypes, selectedColonist, colonistXpForNext, colonistXpProgress } from './state.js';
 import { listSlots } from './save.js';
 
-const RES_COLORS = { food: '#7af278', power: '#ffe66d', materials: '#ff6b35', oxygen: '#00f5d4', cash: '#f82685' };
-const STATE_COLORS = { healthy: '#7af278', hungry: '#ffe66d', suffocating: '#00f5d4', exhausted: '#ff6b35', dead: '#666' };
+const RES_COLORS = { food: '#30d158', power: '#ffd60a', materials: '#ff9f0a', oxygen: '#64d2ff', cash: '#ff375f' };
+const STATE_COLORS = { healthy: '#30d158', hungry: '#ffd60a', suffocating: '#64d2ff', exhausted: '#ff9f0a', dead: '#666' };
 
 export function updateHUD(state, callbacks) {
     updateResourceBar(state);
@@ -47,7 +47,7 @@ function updateBuildMenu(state, callbacks) {
 
     const title = document.createElement('div');
     title.className = 'hud-title';
-    title.style.color = '#ffe66d';
+    title.style.color = '#ffd60a';
     title.textContent = 'BUILD';
     buildMenu.appendChild(title);
 
@@ -58,7 +58,7 @@ function updateBuildMenu(state, callbacks) {
         btn.className = 'build-btn' + (sel ? ' selected' : '');
 
         const num = document.createElement('span');
-        num.style.cssText = 'color:#f82685;font-weight:bold';
+        num.style.cssText = 'color:#ff375f;font-weight:bold';
         num.textContent = `${i + 1}. `;
         btn.appendChild(num);
         btn.appendChild(document.createTextNode(bt.name + ' '));
@@ -76,9 +76,7 @@ function updateBuildMenu(state, callbacks) {
         buildMenu.appendChild(btn);
     });
 
-    const hr = document.createElement('hr');
-    hr.style.borderColor = 'rgba(255,255,255,0.2)';
-    buildMenu.appendChild(hr);
+    buildMenu.appendChild(document.createElement('hr'));
 
     const demBtn = document.createElement('button');
     demBtn.className = 'build-btn demolish-btn' + (state.inputMode === 'demolish' ? ' selected' : '');
@@ -101,10 +99,10 @@ function updateColonistPanel(state, callbacks) {
     const header = document.createElement('div');
     header.className = 'panel-header';
     const nameEl = document.createElement('span');
-    nameEl.style.cssText = 'color:#ffe66d;font-weight:bold';
+    nameEl.style.cssText = 'color:#ffd60a;font-weight:bold';
     nameEl.textContent = col.name;
     const lvl = document.createElement('span');
-    lvl.style.cssText = 'color:#00f5d4;font-weight:bold';
+    lvl.style.cssText = 'color:#64d2ff;font-weight:bold';
     lvl.textContent = `Lv.${col.level}`;
     header.appendChild(nameEl);
     header.appendChild(lvl);
@@ -125,11 +123,11 @@ function updateColonistPanel(state, callbacks) {
     panel.appendChild(createHR());
 
     // Need bars
-    panel.appendChild(createNeedBar('HP', col.health, '#f82626'));
-    panel.appendChild(createNeedBar('HNG', col.hunger, '#7af278'));
-    panel.appendChild(createNeedBar('O2', col.oxygen, '#00f5d4'));
-    panel.appendChild(createNeedBar('STS', 100 - col.stress, '#f82685'));
-    panel.appendChild(createNeedBar('SLP', col.sleep, '#7a78f2'));
+    panel.appendChild(createNeedBar('HP', col.health, '#ff453a'));
+    panel.appendChild(createNeedBar('HNG', col.hunger, '#30d158'));
+    panel.appendChild(createNeedBar('O2', col.oxygen, '#64d2ff'));
+    panel.appendChild(createNeedBar('STS', 100 - col.stress, '#ff375f'));
+    panel.appendChild(createNeedBar('SLP', col.sleep, '#0071e3'));
 
     panel.appendChild(createHR());
 
@@ -184,9 +182,7 @@ function updateColonistPanel(state, callbacks) {
 }
 
 function createHR() {
-    const hr = document.createElement('hr');
-    hr.style.borderColor = 'rgba(255,255,255,0.2)';
-    return hr;
+    return document.createElement('hr');
 }
 
 function createNeedBar(label, value, color) {
@@ -199,7 +195,7 @@ function createNeedBar(label, value, color) {
     bg.className = 'bar-bg';
     const fill = document.createElement('div');
     fill.className = 'bar-fill';
-    fill.style.width = `${Math.max(0, Math.min(100, value))}%`;
+    fill.style.transform = `scaleX(${Math.max(0, Math.min(100, value)) / 100})`;
     fill.style.background = color;
     bg.appendChild(fill);
     const val = document.createElement('span');
@@ -244,8 +240,8 @@ function createXPBar(c) {
     bg.className = 'bar-bg';
     const fill = document.createElement('div');
     fill.className = 'bar-fill';
-    fill.style.width = `${pct}%`;
-    fill.style.background = '#ffe66d';
+    fill.style.transform = `scaleX(${pct / 100})`;
+    fill.style.background = '#ffd60a';
     bg.appendChild(fill);
     const val = document.createElement('span');
     val.className = 'need-val';
@@ -307,14 +303,14 @@ function updateSettings(state, callbacks) {
 
     // Title
     const title = document.createElement('div');
-    title.style.cssText = 'font-size:28px;font-weight:bold;color:#00f5d4';
+    title.style.cssText = 'font-size:28px;font-weight:bold;color:#64d2ff';
     title.textContent = 'SETTINGS';
     panel.appendChild(title);
     panel.appendChild(createHR());
 
     // Controls
     const ctrlTitle = document.createElement('div');
-    ctrlTitle.style.cssText = 'font-size:12px;font-weight:bold;color:#ffe66d';
+    ctrlTitle.style.cssText = 'font-size:12px;font-weight:bold;color:#ffd60a';
     ctrlTitle.textContent = 'CONTROLS';
     panel.appendChild(ctrlTitle);
 
@@ -341,7 +337,7 @@ function updateSettings(state, callbacks) {
 
     // Save/load
     const saveTitle = document.createElement('div');
-    saveTitle.style.cssText = 'font-size:12px;font-weight:bold;color:#ffe66d';
+    saveTitle.style.cssText = 'font-size:12px;font-weight:bold;color:#ffd60a';
     saveTitle.textContent = 'SAVE / LOAD';
     panel.appendChild(saveTitle);
 
@@ -412,7 +408,7 @@ function updateTutorial(state, callbacks) {
     panel.appendChild(header);
 
     const titleEl = document.createElement('div');
-    titleEl.style.cssText = 'font-size:24px;font-weight:bold;color:#00f5d4';
+    titleEl.style.cssText = 'font-size:24px;font-weight:bold;color:#64d2ff';
     titleEl.textContent = data.title;
     panel.appendChild(titleEl);
 

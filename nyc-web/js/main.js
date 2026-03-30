@@ -181,7 +181,7 @@ function gameLoop(timestamp) {
 
     // Render
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#0d1c29';
+    ctx.fillStyle = '#0a0a0c';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     renderWorld(ctx, canvas, camera, grid, state);
 

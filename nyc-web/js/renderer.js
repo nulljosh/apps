@@ -6,19 +6,19 @@ import { BuildingType, WeaponTypes, ResourceSymbol } from './state.js';
 const COLONIST_SIZE = 12;
 
 const STATE_COLORS = {
-    healthy: '#7af278',
-    hungry: '#ffe66d',
-    suffocating: '#00f5d4',
-    exhausted: '#ff6b35',
+    healthy: '#30d158',
+    hungry: '#ffd60a',
+    suffocating: '#64d2ff',
+    exhausted: '#ff9f0a',
     dead: '#666',
 };
 
 const RESOURCE_COLORS = {
-    food: '#7af278',
-    power: '#ffe66d',
-    materials: '#ff6b35',
-    oxygen: '#00f5d4',
-    cash: '#f82685',
+    food: '#30d158',
+    power: '#ffd60a',
+    materials: '#ff9f0a',
+    oxygen: '#64d2ff',
+    cash: '#ff375f',
 };
 
 const BUILDING_COLORS = {
@@ -104,7 +104,7 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         // Selection ring
         const isSelected = c.id === state.selectedColonistId || state.selectedColonistIds.has(c.id);
         if (isSelected) {
-            ctx.strokeStyle = '#ffe66d';
+            ctx.strokeStyle = '#ffd60a';
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.arc(x, y, COLONIST_SIZE + 4, 0, Math.PI * 2);
@@ -129,7 +129,7 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         ctx.fillStyle = 'rgba(50,50,50,0.8)';
         ctx.fillRect(barX, barY, barW, barH);
         const hpFrac = Math.max(0, c.health / 100);
-        ctx.fillStyle = hpFrac > 0.5 ? '#4ae64a' : hpFrac > 0.25 ? '#ffe66d' : '#f82685';
+        ctx.fillStyle = hpFrac > 0.5 ? '#30d158' : hpFrac > 0.25 ? '#ffd60a' : '#ff375f';
         ctx.fillRect(barX, barY, barW * hpFrac, barH);
 
         // Name
@@ -169,7 +169,7 @@ export function renderMinimap(ctx, canvas, grid, state, camera) {
     const mh = canvas.height;
     const scale = mw / (GRID_SIZE * TILE_SIZE);
 
-    ctx.fillStyle = '#0d1c29';
+    ctx.fillStyle = '#0a0a0c';
     ctx.fillRect(0, 0, mw, mh);
 
     // Tiles (sampled)
@@ -185,7 +185,7 @@ export function renderMinimap(ctx, canvas, grid, state, camera) {
     }
 
     // Colonists
-    ctx.fillStyle = '#7af278';
+    ctx.fillStyle = '#30d158';
     for (const c of state.colonists) {
         if (c.state === 'dead') continue;
         const px = c.col * TILE_SIZE * scale;
@@ -195,7 +195,7 @@ export function renderMinimap(ctx, canvas, grid, state, camera) {
 
     // Camera viewport
     const bounds = camera.visibleBounds(document.getElementById('game'));
-    ctx.strokeStyle = '#ffe66d';
+    ctx.strokeStyle = '#ffd60a';
     ctx.lineWidth = 1;
     ctx.strokeRect(
         bounds.minCol * TILE_SIZE * scale,
