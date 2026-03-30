@@ -1,6 +1,6 @@
 # nyc-web
 
-v1.1.0
+v1.2.0
 
 Web port of Times Square Survival. Vanilla HTML5 Canvas + JS, no bundler, no dependencies. Apple Liquid Glass UI with rounded tiles, frosted glass HUD, and unified SF color palette.
 
