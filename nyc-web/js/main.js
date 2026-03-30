@@ -1,9 +1,9 @@
 // Main entry -- game loop, init, menu
 
-import { createGameState, createColonist, gameLog, grantXP } from './state.js';
+import { createGameState, createColonist, gameLog, grantXP, BuildingType } from './state.js';
 import { generateWorld, GRID_SIZE, TILE_SIZE, tileAt, worldToTile } from './world.js';
 import { Pathfinder } from './pathfinder.js';
-import { timeTick, needsTick, resourceTick, jobTick, placeBuilding, demolishBuilding, BuildingType } from './systems.js';
+import { timeTick, needsTick, resourceTick, jobTick, placeBuilding, demolishBuilding } from './systems.js';
 import { Camera } from './camera.js';
 import { renderWorld, renderMinimap } from './renderer.js';
 import { setupInput } from './input.js';
