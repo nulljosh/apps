@@ -1,7 +1,7 @@
 # pulse-macos
-v1.0.0
+v1.1.0
 
-SwiftUI macOS app. NavigationSplitView with sidebar, HSplitView detail panels, shared data models with iOS.
+SwiftUI macOS app. NavigationSplitView with sidebar, acupuncture points by meridian, search-based symptom finder, shared data models with iOS.
 
 ## Rules
 - macOS 14.0+, Swift 6.0

@@ -2,9 +2,9 @@
 
 # Pulse iOS
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
-Native iOS companion for the pulse/reflexology web app. Interactive SVG body maps, 35+ pulse points, symptom finder, session tracker.
+Native iOS companion for Pulse. Interactive SVG body maps, 35+ acupuncture points, search-based symptom finder, session tracker.
 
 ## Run
 

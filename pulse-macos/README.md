@@ -2,9 +2,9 @@
 
 # Pulse macOS
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
-Native macOS companion for the pulse/reflexology web app. Sidebar navigation, three-column layout for pulse points, interactive SVG body maps, session tracker.
+Native macOS companion for Pulse. Sidebar navigation, acupuncture points by meridian, interactive SVG body maps, search-based symptom finder, session tracker.
 
 ## Run
 

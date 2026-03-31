@@ -1,7 +1,7 @@
 # pulse-ios
-v1.0.0
+v1.1.0
 
-SwiftUI iOS app. Interactive foot/hand reflexology maps, pulse points by meridian, symptom finder, session tracker.
+SwiftUI iOS app. Interactive foot/hand reflexology maps, acupuncture points by meridian, search-based symptom finder, session tracker.
 
 ## Rules
 - iOS 17.0+, Swift 6.0
