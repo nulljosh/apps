@@ -680,6 +680,41 @@ function setupTouchGestures() {
 }
 
 function renderSubjects(category) {
+    if (isGameCategory(category)) {
+        document.getElementById('categoryTitle').textContent = 'Choose a game';
+        const grid = document.getElementById('subjectGrid');
+        grid.textContent = '';
+        Object.entries(GAMES_REGISTRY).forEach(([id, game]) => {
+            const card = document.createElement('div');
+            card.className = 'subject-card';
+            card.dataset.subject = id;
+            card.dataset.game = 'true';
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', game.name);
+            const iconDiv = document.createElement('div');
+            iconDiv.className = 'subject-icon';
+            const iconEl = document.createElement('i');
+            iconEl.className = game.icon;
+            iconEl.setAttribute('aria-hidden', 'true');
+            iconDiv.appendChild(iconEl);
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'subject-name';
+            nameDiv.textContent = game.name;
+            const levelDiv = document.createElement('div');
+            levelDiv.className = 'subject-level';
+            levelDiv.textContent = game.level;
+            card.appendChild(iconDiv);
+            card.appendChild(nameDiv);
+            card.appendChild(levelDiv);
+            card.addEventListener('click', () => selectSubject(card));
+            card.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectSubject(card); }
+            });
+            grid.appendChild(card);
+        });
+        return;
+    }
     const categoryData = categories[category];
     if (!categoryData) return;
     document.getElementById('categoryTitle').textContent = categoryData.title;
@@ -733,7 +768,11 @@ function selectSubject(card) {
     document.querySelectorAll('.subject-card').forEach((subjectCard) => subjectCard.classList.remove('selected'));
     card.classList.add('selected');
     gameState.selectedSubject = card.dataset.subject;
-    setTimeout(() => startLesson(), 300);
+    if (card.dataset.game === 'true') {
+        setTimeout(() => startGame(card.dataset.subject), 300);
+    } else {
+        setTimeout(() => startLesson(), 300);
+    }
 }
 
 function resetToHome() {

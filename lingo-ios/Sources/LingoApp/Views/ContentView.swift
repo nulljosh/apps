@@ -6,9 +6,35 @@ struct ContentView: View {
     @State private var selectedSubject: Subject?
     @State private var showQuiz = false
     @State private var showTrophies = false
+    @State private var showGame: GameType? = nil
     @State private var quizViewModel = QuizViewModel()
 
     private let categories = QuestionBank.shared.categories
+
+    enum GameType: String, CaseIterable, Identifiable {
+        case chess, game2048, memory, minesweeper, snake
+        var id: String { rawValue }
+        var name: String {
+            switch self {
+            case .chess: return "Chess"
+            case .game2048: return "2048"
+            case .memory: return "Memory"
+            case .minesweeper: return "Minesweeper"
+            case .snake: return "Snake"
+            }
+        }
+        var icon: String {
+            switch self {
+            case .chess: return "checkerboard.rectangle"
+            case .game2048: return "square.grid.2x2.fill"
+            case .memory: return "rectangle.on.rectangle"
+            case .minesweeper: return "circle.grid.3x3.fill"
+            case .snake: return "arrow.right.arrow.left"
+            }
+        }
+    }
+
+    private let gamesCategory = Category(id: "games", title: "Choose a game", icon: "gamecontroller.fill", subjects: [])
 
     var body: some View {
         NavigationStack {
@@ -22,8 +48,13 @@ struct ContentView: View {
                         .padding(.top, 16)
 
                     if let category = selectedCategory {
-                        subjectGrid(category)
-                            .padding(.top, 16)
+                        if category.id == "games" {
+                            gamesGrid
+                                .padding(.top, 16)
+                        } else {
+                            subjectGrid(category)
+                                .padding(.top, 16)
+                        }
                     }
                 }
                 .padding(.bottom, 32)
@@ -42,6 +73,20 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showTrophies) {
                 TrophyView()
+            }
+            .sheet(item: $showGame) { game in
+                NavigationStack {
+                    gameView(for: game)
+                        .navigationTitle(game.name)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button { showGame = nil } label: {
+                                    Image(systemName: "xmark").font(.body.weight(.medium))
+                                }
+                            }
+                        }
+                }
             }
             .fullScreenCover(isPresented: $showQuiz) {
                 QuizView(viewModel: quizViewModel) {
@@ -71,10 +116,14 @@ struct ContentView: View {
 
     // MARK: - Category Picker
 
+    private var allCategories: [Category] {
+        categories + [gamesCategory]
+    }
+
     private var categoryPicker: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
-                ForEach(categories) { category in
+                ForEach(allCategories) { category in
                     Button {
                         withAnimation(.spring(duration: 0.3)) {
                             selectedCategory = category
@@ -104,6 +153,52 @@ struct ContentView: View {
                 }
             }
             .padding(.horizontal)
+        }
+    }
+
+    // MARK: - Games Grid
+
+    private var gamesGrid: some View {
+        LazyVGrid(
+            columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)],
+            spacing: 12
+        ) {
+            ForEach(GameType.allCases) { game in
+                Button {
+                    showGame = game
+                } label: {
+                    VStack(spacing: 8) {
+                        ZStack {
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                                .frame(width: 48, height: 48)
+                            Image(systemName: game.icon)
+                                .font(.title3)
+                                .foregroundStyle(.tint)
+                        }
+                        Text(game.name)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.primary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .padding(.horizontal, 8)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    private func gameView(for game: GameType) -> some View {
+        switch game {
+        case .chess: ChessGameView()
+        case .game2048: Game2048View()
+        case .memory: MemoryGameView()
+        case .minesweeper: MinesweeperView()
+        case .snake: SnakeGameView()
         }
     }
 
