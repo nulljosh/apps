@@ -20,8 +20,8 @@ export default defineConfig({
         name: 'Dose',
         short_name: 'Dose',
         description: 'Health tracker',
-        theme_color: '#0c1220',
-        background_color: '#0c1220',
+        theme_color: '#111111',
+        background_color: '#111111',
         display: 'standalone',
         icons: [
           { src: '/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' },

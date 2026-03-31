@@ -1,33 +1,31 @@
-/* dose — Portfolio Design Token Reference
+/* dose -- Portfolio Vibe Design Token Reference
  *
- * Extracted from heyitsmejosh.com via vibe.
- * Applied to index.css variable system. This file is documentation only.
+ * Vibed from heyitsmejosh.com (portfolio site).
+ * Applied directly to index.css variable system.
  *
- * Source palette:
- *   --portfolio-bg:        #161b22
- *   --portfolio-surface:   #1c2128
- *   --portfolio-elevated:  #2d333b
- *   --portfolio-border:    #30363d
- *   --portfolio-border-m:  #21262d
- *   --portfolio-green:     #26a641
- *   --portfolio-text:      #e6edf3
- *   --portfolio-muted:     #8b949e
+ * Palette:
+ *   Light: --bg #fafafa, --text-primary #000, --text-secondary rgba(0,0,0,0.5)
+ *   Dark:  --bg #111, --text-primary #e8e8e8, --text-secondary rgba(255,255,255,0.5)
+ *   Borders: rgba opacity-based (0.1 / 0.06)
+ *   Accent: blue #3B82F6 / #60A5FA (dose identity, not portfolio monochrome)
  *
  * Typography:
- *   Headings: Fraunces (variable, optical size 9-144)
- *   Body:     DM Sans (400/500/600/700, italic)
- *   Fallback: -apple-system, BlinkMacSystemFont, system-ui
+ *   Font: Geist (self-hosted woff2, Regular 400 + Medium 500)
+ *   h1: weight 200, letter-spacing -0.03em (portfolio hero style)
+ *   h2/h3: weight 500, letter-spacing -0.02em
+ *   Body: weight 400
+ *   Section labels: 0.75rem, weight 500, 0.12em spacing, uppercase, text-tertiary
  *
- * Mapping to dose variables:
- *   --bg           <- portfolio-bg       #161b22
- *   --bg-secondary <- portfolio-surface  #1c2128
- *   --bg-tertiary  <- portfolio-elevated #2d333b
- *   --border       <- portfolio-border   #30363d
- *   --border-muted <- portfolio-border-m #21262d
- *   --modal-bg     <- portfolio-surface  #1c2128
- *   --success      <- portfolio-green    #26a641  (new)
- *   --accent       <- kept BC blue       #4e9cd7  (unchanged)
+ * Interactions:
+ *   Spring easing: cubic-bezier(0.34, 1.56, 0.64, 1)
+ *   List hover: translateX(4px) + opacity fade
+ *   Card/button hover: translateY(-2px) + opacity fade
+ *   Link hover: opacity 0.5
+ *   All transitions: 0.4s ease-out (color), 0.2s spring (transform)
  *
- * Texture:
- *   SVG fractalNoise overlay at 0.03 opacity on body::before
+ * Rules:
+ *   No box-shadow anywhere (flat design)
+ *   No gradients
+ *   No text-shadow or glow effects
+ *   Borders only via 1px solid var(--border)
  */

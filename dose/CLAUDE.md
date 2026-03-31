@@ -1,8 +1,8 @@
 # Dose
-v1.2.0
+v1.3.0
 
 ## Rules
-- Dark Editorial / BC gov blue variant design
+- Portfolio vibe design (Geist font, flat monochrome + blue accent, no shadows/gradients)
 - Mobile-first, bottom nav, safe-area-inset support
 - No backend -- localStorage only
 - Interaction checker must warn when logging substance that interacts with active stack

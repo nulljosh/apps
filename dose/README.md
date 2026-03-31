@@ -1,7 +1,7 @@
 <img src="icon.svg" width="80">
 
 # Dose
-![version](https://img.shields.io/badge/version-v1.2.0-blue)
+![version](https://img.shields.io/badge/version-v1.3.0-blue)
 Personal substance tracker, harm reduction wiki, and health dashboard.
 
 ## Features
@@ -27,6 +27,9 @@ vercel --prod
 - [ ] OCR pill identification
 
 ## Changelog
+v1.3.0
+- Portfolio vibe: Geist font, flat monochrome palette, spring animations, no shadows.
+
 v1.1.0
 - Added dose logging with journal, filters, and search.
 - Built the substance wiki with harm reduction data and interaction checking.
