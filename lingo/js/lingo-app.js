@@ -615,7 +615,7 @@ function toggleTheme() {
 
 function updateThemeColor(theme) {
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', '#0c1a12');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0c1a12' : '#f5f2eb');
 }
 
 function setupKeyboardNav() {

@@ -40,6 +40,39 @@
     --icon-border: rgba(255, 255, 255, 0.06);
 }
 
+[data-theme="light"] {
+    --bg-primary: #f5f2eb;
+    --bg-secondary: #ece8df;
+    --bg-tertiary: #e2ddd3;
+    --text-primary: #1a2e20;
+    --text-secondary: #556b5c;
+    --text-muted: #8a9e90;
+    --accent: #2d7a50;
+    --accent-amber: #b8912e;
+    --border: rgba(0, 0, 0, 0.1);
+    --success: #2d7a50;
+    --error: #b83a3a;
+    --card-bg: #ece8df;
+    --card-border: rgba(0, 0, 0, 0.1);
+    --card-shadow: rgba(0, 0, 0, 0.04);
+    --input-bg: #f5f2eb;
+    --header-bg: #f5f2eb;
+    --choice-selected-bg: #e2ddd3;
+    --correct-bg: #e0f0e4;
+    --correct-border: #a3d4b0;
+    --correct-text: #2d7a50;
+    --incorrect-bg: #f0e0e0;
+    --incorrect-border: #d4a3a3;
+    --subject-1: #e0f0e4;
+    --subject-2: #e0e4f0;
+    --subject-3: #f0ece0;
+    --subject-4: #f0e0e0;
+    --subject-5: #ece0f0;
+    --icon-bg: #e2ddd3;
+    --icon-border: rgba(0, 0, 0, 0.06);
+    color-scheme: light;
+}
+
 /* Dark theme matches root -- Dark Editorial is the default palette */
 
 * {

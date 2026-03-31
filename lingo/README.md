@@ -2,7 +2,7 @@
 
 # Lingo
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
 Interactive learning platform -- languages, programming, math, science, and more.
 
@@ -34,6 +34,11 @@ Vercel (static).
 - [ ] User accounts + cloud sync
 - [ ] Offline mode (service worker)
 - [ ] Leaderboard system
+
+## Changelog
+
+v1.1.0
+- Added light theme with auto system preference detection.
 
 ## License
 
