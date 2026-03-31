@@ -26,6 +26,7 @@ targets:
           - '*.entitlements'
           - Tests
           - DoseWidget
+          - watchos
           - scripts
     dependencies:
       - sdk: HealthKit.framework

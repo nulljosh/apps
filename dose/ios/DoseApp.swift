@@ -8,6 +8,7 @@ struct DoseApp: App {
     @State private var healthKitService = HealthKitService()
     @State private var notificationService = NotificationService()
     @State private var syncService = SyncService()
+    @State private var bodyworkStore = BodyworkSessionStore()
     @State private var showSplash = true
     @State private var biometryType: LABiometryType = .none
     @State private var isUnlocked = false
@@ -35,6 +36,12 @@ struct DoseApp: App {
                     InsightsView(dataStore: dataStore)
                         .tabItem {
                             Label("Insights", systemImage: "chart.line.uptrend.xyaxis")
+                        }
+
+                    BodyworkHubView()
+                        .environment(bodyworkStore)
+                        .tabItem {
+                            Label("Bodywork", systemImage: "figure.mind.and.body")
                         }
 
                     BodyView(dataStore: dataStore, healthKitService: healthKitService)

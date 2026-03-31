@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
+import { SessionProvider } from './context/SessionContext';
 import Nav from './components/Nav';
 import Dashboard from './pages/Dashboard';
 import Substances from './pages/Substances';
 import SubstanceDetail from './pages/SubstanceDetail';
 import Insights from './pages/Insights';
 import Biometrics from './pages/Biometrics';
+import Bodywork from './pages/Bodywork';
+import Feet from './pages/Feet';
+import Hands from './pages/Hands';
+import Abdomen from './pages/Abdomen';
+import Meridians from './pages/Meridians';
+import SymptomFinder from './pages/SymptomFinder';
+import Sessions from './pages/Sessions';
 
 function ThemeToggle({ theme, setTheme }) {
   return (
@@ -37,20 +45,29 @@ export default function App() {
 
   return (
     <HashRouter>
-      <div style={{ minHeight: '100dvh' }}>
-        <ThemeToggle theme={theme} setTheme={setTheme} />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/substances" element={<Substances />} />
-          <Route path="/substances/:id" element={<SubstanceDetail />} />
-          <Route path="/interactions" element={<Substances defaultTab="interactions" />} />
-          <Route path="/insights" element={<Insights />} />
-          <Route path="/biometrics" element={<Biometrics />} />
-          <Route path="/health" element={<Biometrics defaultTab="health" />} />
-          <Route path="*" element={<Dashboard />} />
-        </Routes>
-        <Nav />
-      </div>
+      <SessionProvider>
+        <div style={{ minHeight: '100dvh' }}>
+          <ThemeToggle theme={theme} setTheme={setTheme} />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/substances" element={<Substances />} />
+            <Route path="/substances/:id" element={<SubstanceDetail />} />
+            <Route path="/interactions" element={<Substances defaultTab="interactions" />} />
+            <Route path="/insights" element={<Insights />} />
+            <Route path="/biometrics" element={<Biometrics />} />
+            <Route path="/health" element={<Biometrics defaultTab="health" />} />
+            <Route path="/bodywork" element={<Bodywork />} />
+            <Route path="/feet" element={<Feet />} />
+            <Route path="/hands" element={<Hands />} />
+            <Route path="/abdomen" element={<Abdomen />} />
+            <Route path="/meridians" element={<Meridians />} />
+            <Route path="/symptom-finder" element={<SymptomFinder />} />
+            <Route path="/sessions" element={<Sessions />} />
+            <Route path="*" element={<Dashboard />} />
+          </Routes>
+          <Nav />
+        </div>
+      </SessionProvider>
     </HashRouter>
   );
 }

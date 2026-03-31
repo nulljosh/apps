@@ -30,6 +30,15 @@ const links = [
     ),
   },
   {
+    to: '/bodywork',
+    label: 'Bodywork',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="5" r="3"/><path d="M12 8v8m-4-6h8m-7 6l-3 4m10-4l3 4"/>
+      </svg>
+    ),
+  },
+  {
     to: '/biometrics',
     label: 'Body',
     icon: (

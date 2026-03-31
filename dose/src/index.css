@@ -173,6 +173,57 @@ select option {
 
 button { user-select: none; font-family: inherit; }
 
+/* --- Body Maps --- */
+
+.body-map-container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.body-map-svg {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+}
+
+.zone-path {
+  cursor: pointer;
+  transition: fill-opacity 0.2s ease, stroke-opacity 0.2s ease;
+}
+
+.zone-path:hover {
+  fill-opacity: 0.55;
+  stroke-opacity: 0.8;
+}
+
+.zone-detail {
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.zone-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.zone-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.zone-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 @media print { nav { display: none; } }
 
 @media (prefers-reduced-motion: reduce) {
