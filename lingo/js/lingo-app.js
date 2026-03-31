@@ -19,12 +19,12 @@ const TROPHIES = {
 };
 
 const AVATAR_PRESETS = [
-    { id: 'falcon', emoji: '\u{1F985}', label: 'Falcon' },
-    { id: 'fox', emoji: '\u{1F98A}', label: 'Fox' },
-    { id: 'otter', emoji: '\u{1F9A6}', label: 'Otter' },
-    { id: 'panda', emoji: '\u{1F43C}', label: 'Panda' },
-    { id: 'frog', emoji: '\u{1F438}', label: 'Frog' },
-    { id: 'tiger', emoji: '\u{1F42F}', label: 'Tiger' }
+    { id: 'falcon', emoji: 'F', label: 'Falcon' },
+    { id: 'fox', emoji: 'X', label: 'Fox' },
+    { id: 'otter', emoji: 'O', label: 'Otter' },
+    { id: 'panda', emoji: 'P', label: 'Panda' },
+    { id: 'frog', emoji: 'R', label: 'Frog' },
+    { id: 'tiger', emoji: 'T', label: 'Tiger' }
 ];
 
 const LANG_CODES = {
@@ -621,7 +621,7 @@ function toggleTheme() {
 
 function updateThemeColor(theme) {
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0c1a12' : '#f5f2eb');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#111' : '#fafafa');
 }
 
 function setupKeyboardNav() {
