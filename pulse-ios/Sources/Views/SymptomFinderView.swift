@@ -1,12 +1,15 @@
 import SwiftUI
 
+private let allZones = footZones + handZones
+private let allPoints = getAllPoints()
+private let zoneLookup = Dictionary(uniqueKeysWithValues: (footZones + handZones).map { ($0.id, $0) })
+private let pointLookup = Dictionary(uniqueKeysWithValues: getAllPoints().map { ($0.point.id, $0) })
+
 struct SymptomFinderView: View {
     @State private var query = ""
     @State private var selected: Symptom?
     @State private var placeholderIndex = 0
 
-    private let allZones = footZones + handZones
-    private let allPoints = getAllPoints()
     private let placeholders = [
         "What hurts?",
         "What's sore?",
@@ -28,7 +31,6 @@ struct SymptomFinderView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    // Search bar
                     HStack(spacing: 10) {
                         Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
                         TextField(placeholders[placeholderIndex], text: $query)
@@ -48,7 +50,6 @@ struct SymptomFinderView: View {
                     .padding(.horizontal)
 
                     if let s = selected {
-                        // Result
                         VStack(alignment: .leading, spacing: 16) {
                             Button {
                                 withAnimation { selected = nil }
@@ -73,7 +74,7 @@ struct SymptomFinderView: View {
                                 Text("PRESSURE ZONES")
                                     .font(.caption).fontWeight(.semibold).tracking(1.2).foregroundStyle(.secondary)
                                 ForEach(s.reflexZones, id: \.self) { zId in
-                                    if let zone = allZones.first(where: { $0.id == zId }) {
+                                    if let zone = zoneLookup[zId] {
                                         HStack(alignment: .top, spacing: 10) {
                                             Circle().fill(zone.system.color).frame(width: 8, height: 8).padding(.top, 5)
                                             VStack(alignment: .leading, spacing: 2) {
@@ -89,7 +90,7 @@ struct SymptomFinderView: View {
                                 Text("ACUPUNCTURE POINTS")
                                     .font(.caption).fontWeight(.semibold).tracking(1.2).foregroundStyle(.secondary)
                                 ForEach(s.acuPoints, id: \.self) { pId in
-                                    if let match = allPoints.first(where: { $0.point.id == pId }) {
+                                    if let match = pointLookup[pId] {
                                         HStack(alignment: .top, spacing: 10) {
                                             Text(match.point.id).font(.caption).fontWeight(.bold).foregroundStyle(match.color).padding(.top, 2)
                                             VStack(alignment: .leading, spacing: 2) {
@@ -104,7 +105,6 @@ struct SymptomFinderView: View {
                         .padding(.horizontal)
                         .transition(.opacity)
                     } else {
-                        // Grid
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 8)], spacing: 8) {
                             ForEach(filtered) { s in
                                 Button {
@@ -137,8 +137,9 @@ struct SymptomFinderView: View {
             .navigationTitle(placeholders[placeholderIndex])
             .onChange(of: query) { selected = nil }
             .task {
-                while true {
+                while !Task.isCancelled {
                     try? await Task.sleep(for: .seconds(3))
+                    guard !Task.isCancelled else { break }
                     withAnimation(.easeInOut(duration: 0.3)) {
                         placeholderIndex = (placeholderIndex + 1) % placeholders.count
                     }

@@ -1,11 +1,13 @@
 import SwiftUI
 
+private let allZones = footZones + handZones
+private let allPoints = getAllPoints()
+private let zoneLookup = Dictionary(uniqueKeysWithValues: (footZones + handZones).map { ($0.id, $0) })
+private let pointLookup = Dictionary(uniqueKeysWithValues: getAllPoints().map { ($0.point.id, $0) })
+
 struct MacSymptomFinderView: View {
     @State private var query = ""
     @State private var selected: Symptom?
-
-    private let allZones = footZones + handZones
-    private let allPoints = getAllPoints()
 
     private var filtered: [Symptom] {
         let q = query.trimmingCharacters(in: .whitespaces).lowercased()
@@ -18,7 +20,6 @@ struct MacSymptomFinderView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Search bar
             HStack(spacing: 10) {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
@@ -42,7 +43,6 @@ struct MacSymptomFinderView: View {
             Divider()
 
             if let s = selected ?? (filtered.count == 1 ? filtered.first : nil) {
-                // Result view
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
                         HStack {
@@ -59,7 +59,6 @@ struct MacSymptomFinderView: View {
                             .font(.largeTitle)
                             .fontWeight(.bold)
 
-                        // TLDR self-care
                         VStack(alignment: .leading, spacing: 8) {
                             Label("WHAT TO DO", systemImage: "hand.point.up.left")
                                 .font(.caption).fontWeight(.semibold).tracking(1.2).foregroundStyle(.secondary)
@@ -71,12 +70,11 @@ struct MacSymptomFinderView: View {
                                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
                         }
 
-                        // Reflexology zones
                         VStack(alignment: .leading, spacing: 10) {
                             Label("PRESSURE ZONES", systemImage: "figure.walk")
                                 .font(.caption).fontWeight(.semibold).tracking(1.2).foregroundStyle(.secondary)
                             ForEach(s.reflexZones, id: \.self) { zId in
-                                if let zone = allZones.first(where: { $0.id == zId }) {
+                                if let zone = zoneLookup[zId] {
                                     HStack(alignment: .top, spacing: 12) {
                                         Circle().fill(zone.system.color).frame(width: 10, height: 10).padding(.top, 4)
                                         VStack(alignment: .leading, spacing: 2) {
@@ -90,12 +88,11 @@ struct MacSymptomFinderView: View {
                             }
                         }
 
-                        // Acupuncture points
                         VStack(alignment: .leading, spacing: 10) {
                             Label("ACUPUNCTURE POINTS", systemImage: "target")
                                 .font(.caption).fontWeight(.semibold).tracking(1.2).foregroundStyle(.secondary)
                             ForEach(s.acuPoints, id: \.self) { pId in
-                                if let match = allPoints.first(where: { $0.point.id == pId }) {
+                                if let match = pointLookup[pId] {
                                     HStack(alignment: .top, spacing: 12) {
                                         Text(match.point.id)
                                             .font(.caption).fontWeight(.bold)
@@ -117,7 +114,6 @@ struct MacSymptomFinderView: View {
                     .padding(24)
                 }
             } else {
-                // Symptom grid
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12)], spacing: 12) {
                         ForEach(filtered) { s in
