@@ -26,9 +26,11 @@ struct ChessGameView: View {
         "k": "\u{265A}", "q": "\u{265B}", "r": "\u{265C}", "b": "\u{265D}", "n": "\u{265E}", "p": "\u{265F}"
     ]
 
+    @State private var statusText = "White to move"
+
     var body: some View {
         VStack(spacing: 12) {
-            Text(gameOver ? "\(winner == .white ? "White" : "Black") wins!" : "\(turn == .white ? "White" : "Black") to move")
+            Text(statusText)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(gameOver ? .green : .secondary)
 
@@ -65,7 +67,7 @@ struct ChessGameView: View {
 
             Button("New Game") {
                 board = Self.initialBoard
-                turn = .white; selected = nil; validMoves = []; gameOver = false; winner = nil
+                turn = .white; selected = nil; validMoves = []; gameOver = false; winner = nil; statusText = "White to move"
             }
             .buttonStyle(.bordered)
         }
@@ -76,14 +78,56 @@ struct ChessGameView: View {
     private func isBlack(_ p: Character) -> Bool { p != " " && p.isLowercase }
     private func isOwn(_ p: Character) -> Bool { turn == .white ? isWhite(p) : isBlack(p) }
 
-    private func getMoves(_ r: Int, _ c: Int) -> [(Int, Int)] {
-        let p = board[r][c]
+    private func findKing(_ b: [[Character]], _ white: Bool) -> (Int, Int)? {
+        let k: Character = white ? "K" : "k"
+        for r in 0..<8 { for c in 0..<8 { if b[r][c] == k { return (r, c) } } }
+        return nil
+    }
+
+    private func isAttacked(_ b: [[Character]], _ tr: Int, _ tc: Int, byWhite: Bool) -> Bool {
+        for r in 0..<8 { for c in 0..<8 {
+            let p = b[r][c]
+            if p == " " || (byWhite ? !isWhite(p) : !isBlack(p)) { continue }
+            if getMoves(r, c, b).contains(where: { $0.0 == tr && $0.1 == tc }) { return true }
+        }}
+        return false
+    }
+
+    private func inCheck(_ b: [[Character]], whiteKing: Bool) -> Bool {
+        guard let k = findKing(b, whiteKing) else { return true }
+        return isAttacked(b, k.0, k.1, byWhite: !whiteKing)
+    }
+
+    private func legalMoves(_ r: Int, _ c: Int) -> [(Int, Int)] {
+        let whiteKing = turn == .white
+        return getMoves(r, c, board).filter { (tr, tc) in
+            var copy = board
+            copy[tr][tc] = copy[r][c]; copy[r][c] = " "
+            return !inCheck(copy, whiteKing: whiteKing)
+        }
+    }
+
+    private func hasAnyLegal(_ t: PieceColor) -> Bool {
+        for r in 0..<8 { for c in 0..<8 {
+            let p = board[r][c]
+            if p == " " || (t == .white ? !isWhite(p) : !isBlack(p)) { continue }
+            // temporarily swap turn for legalMoves
+            let savedTurn = turn; turn = t
+            let moves = legalMoves(r, c)
+            turn = savedTurn
+            if !moves.isEmpty { return true }
+        }}
+        return false
+    }
+
+    private func getMoves(_ r: Int, _ c: Int, _ b: [[Character]]) -> [(Int, Int)] {
+        let p = b[r][c]
         let white = isWhite(p)
         var moves: [(Int, Int)] = []
         func tryAdd(_ nr: Int, _ nc: Int) -> Bool {
             guard (0..<8).contains(nr), (0..<8).contains(nc) else { return false }
-            if board[nr][nc] == " " { moves.append((nr, nc)); return true }
-            if (white && isBlack(board[nr][nc])) || (!white && isWhite(board[nr][nc])) { moves.append((nr, nc)) }
+            if b[nr][nc] == " " { moves.append((nr, nc)); return true }
+            if (white && isBlack(b[nr][nc])) || (!white && isWhite(b[nr][nc])) { moves.append((nr, nc)) }
             return false
         }
         func slide(_ dirs: [(Int,Int)]) {
@@ -91,8 +135,8 @@ struct ChessGameView: View {
                 for i in 1..<8 {
                     let nr = r+dr*i, nc = c+dc*i
                     guard (0..<8).contains(nr), (0..<8).contains(nc) else { break }
-                    if board[nr][nc] == " " { moves.append((nr, nc)); continue }
-                    if (white && isBlack(board[nr][nc])) || (!white && isWhite(board[nr][nc])) { moves.append((nr, nc)) }
+                    if b[nr][nc] == " " { moves.append((nr, nc)); continue }
+                    if (white && isBlack(b[nr][nc])) || (!white && isWhite(b[nr][nc])) { moves.append((nr, nc)) }
                     break
                 }
             }
@@ -100,13 +144,13 @@ struct ChessGameView: View {
         switch p.lowercased() {
         case "p":
             let dir = white ? -1 : 1; let start = white ? 6 : 1
-            if (0..<8).contains(r+dir) && board[r+dir][c] == " " {
+            if (0..<8).contains(r+dir) && b[r+dir][c] == " " {
                 moves.append((r+dir, c))
-                if r == start && board[r+dir*2][c] == " " { moves.append((r+dir*2, c)) }
+                if r == start && b[r+dir*2][c] == " " { moves.append((r+dir*2, c)) }
             }
             for dc in [-1, 1] {
                 let nr = r+dir, nc = c+dc
-                if (0..<8).contains(nr) && (0..<8).contains(nc) && ((white && isBlack(board[nr][nc])) || (!white && isWhite(board[nr][nc]))) {
+                if (0..<8).contains(nr) && (0..<8).contains(nc) && ((white && isBlack(b[nr][nc])) || (!white && isWhite(b[nr][nc]))) {
                     moves.append((nr, nc))
                 }
             }
@@ -124,19 +168,29 @@ struct ChessGameView: View {
         guard !gameOver else { return }
         if let sel = selected {
             if validMoves.contains(where: { $0.0 == r && $0.1 == c }) {
-                let captured = board[r][c]
                 board[r][c] = board[sel.0][sel.1]
                 board[sel.0][sel.1] = " "
                 if board[r][c] == "P" && r == 0 { board[r][c] = "Q" }
                 if board[r][c] == "p" && r == 7 { board[r][c] = "q" }
-                if captured.lowercased() == "k" { gameOver = true; winner = turn }
                 turn = turn == .white ? .black : .white
+
+                let check = inCheck(board, whiteKing: turn == .white)
+                let canMove = hasAnyLegal(turn)
+                if !canMove {
+                    gameOver = true
+                    winner = turn == .white ? .black : .white
+                    statusText = check ? "Checkmate -- \(winner == .white ? "White" : "Black") wins!" : "Stalemate -- Draw"
+                } else if check {
+                    statusText = "\(turn == .white ? "White" : "Black") to move -- Check!"
+                } else {
+                    statusText = "\(turn == .white ? "White" : "Black") to move"
+                }
                 selected = nil; validMoves = []
             } else if isOwn(board[r][c]) {
-                selected = (r, c); validMoves = getMoves(r, c)
+                selected = (r, c); validMoves = legalMoves(r, c)
             } else { selected = nil; validMoves = [] }
         } else if isOwn(board[r][c]) {
-            selected = (r, c); validMoves = getMoves(r, c)
+            selected = (r, c); validMoves = legalMoves(r, c)
         }
     }
 }

@@ -132,7 +132,43 @@ function initChess(board) {
     function isBlack(piece) { return piece !== ' ' && piece === piece.toLowerCase(); }
     function isOwnPiece(piece, turn) { return turn === 'white' ? isWhite(piece) : isBlack(piece); }
 
-    function getValidMoves(row, col, b) {
+    function findKing(b, white) {
+        const k = white ? 'K' : 'k';
+        for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) if (b[r][c] === k) return [r, c];
+        return null;
+    }
+
+    function isSquareAttacked(b, tr, tc, byWhite) {
+        for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
+            const p = b[r][c];
+            if (p === ' ' || (byWhite ? !isWhite(p) : !isBlack(p))) continue;
+            if (getRawMoves(r, c, b).some(([mr, mc]) => mr === tr && mc === tc)) return true;
+        }
+        return false;
+    }
+
+    function isInCheck(b, whiteKing) {
+        const k = findKing(b, whiteKing);
+        return !k || isSquareAttacked(b, k[0], k[1], !whiteKing);
+    }
+
+    function getLegalMoves(row, col, b, turn) {
+        return getRawMoves(row, col, b).filter(([r, c]) => {
+            const copy = b.map(rw => [...rw]);
+            copy[r][c] = copy[row][col]; copy[row][col] = ' ';
+            return !isInCheck(copy, turn === 'white');
+        });
+    }
+
+    function hasAnyLegal(b, turn) {
+        for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
+            if (!isOwnPiece(b[r][c], turn)) continue;
+            if (getLegalMoves(r, c, b, turn).length > 0) return true;
+        }
+        return false;
+    }
+
+    function getRawMoves(row, col, b) {
         const piece = b[row][col];
         const moves = [];
         const type = piece.toLowerCase();
@@ -216,7 +252,7 @@ function initChess(board) {
                 }
 
                 if (chessState.selected) {
-                    const validMoves = getValidMoves(chessState.selected[0], chessState.selected[1], chessState.board);
+                    const validMoves = getLegalMoves(chessState.selected[0], chessState.selected[1], chessState.board, chessState.turn);
                     if (validMoves.some(([mr, mc]) => mr === r && mc === c)) {
                         cell.classList.add('valid-move');
                     }
@@ -242,31 +278,37 @@ function initChess(board) {
 
         if (chessState.selected) {
             const [sr, sc] = chessState.selected;
-            const validMoves = getValidMoves(sr, sc, chessState.board);
-            const isValid = validMoves.some(([mr, mc]) => mr === r && mc === c);
+            const legalMoves = getLegalMoves(sr, sc, chessState.board, chessState.turn);
+            const isValid = legalMoves.some(([mr, mc]) => mr === r && mc === c);
 
             if (isValid) {
-                const captured = chessState.board[r][c];
                 chessState.board[r][c] = chessState.board[sr][sc];
                 chessState.board[sr][sc] = ' ';
 
-                // Pawn promotion
                 const movedPiece = chessState.board[r][c];
                 if (movedPiece === 'P' && r === 0) chessState.board[r][c] = 'Q';
                 if (movedPiece === 'p' && r === 7) chessState.board[r][c] = 'q';
 
-                if (captured.toLowerCase() === 'k') {
+                chessState.turn = chessState.turn === 'white' ? 'black' : 'white';
+
+                const inCheck = isInCheck(chessState.board, chessState.turn === 'white');
+                const canMove = hasAnyLegal(chessState.board, chessState.turn);
+
+                if (!canMove) {
                     chessState.gameOver = true;
-                    statusDiv.textContent = (chessState.turn === 'white' ? 'White' : 'Black') + ' wins!';
+                    if (inCheck) {
+                        const winner = chessState.turn === 'white' ? 'Black' : 'White';
+                        statusDiv.textContent = 'Checkmate -- ' + winner + ' wins!';
+                    } else {
+                        statusDiv.textContent = 'Stalemate -- Draw';
+                    }
                     statusDiv.classList.add('game-won');
                     awardGameXP(50);
-                    render();
-                    chessState.selected = null;
-                    return;
+                } else if (inCheck) {
+                    statusDiv.textContent = (chessState.turn === 'white' ? 'White' : 'Black') + ' to move -- Check!';
+                } else {
+                    statusDiv.textContent = (chessState.turn === 'white' ? 'White' : 'Black') + ' to move';
                 }
-
-                chessState.turn = chessState.turn === 'white' ? 'black' : 'white';
-                statusDiv.textContent = (chessState.turn === 'white' ? 'White' : 'Black') + ' to move';
                 chessState.selected = null;
             } else if (isOwnPiece(piece, chessState.turn)) {
                 chessState.selected = [r, c];
