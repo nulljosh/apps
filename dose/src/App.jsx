@@ -7,6 +7,7 @@ import Substances from './pages/Substances';
 import SubstanceDetail from './pages/SubstanceDetail';
 import Insights from './pages/Insights';
 import Biometrics from './pages/Biometrics';
+import Body from './pages/Body';
 import Bodywork from './pages/Bodywork';
 import Feet from './pages/Feet';
 import Hands from './pages/Hands';
@@ -54,6 +55,7 @@ export default function App() {
             <Route path="/substances/:id" element={<SubstanceDetail />} />
             <Route path="/interactions" element={<Substances defaultTab="interactions" />} />
             <Route path="/insights" element={<Insights />} />
+            <Route path="/body" element={<Body />} />
             <Route path="/biometrics" element={<Biometrics />} />
             <Route path="/health" element={<Biometrics defaultTab="health" />} />
             <Route path="/bodywork" element={<Bodywork />} />

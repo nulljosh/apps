@@ -38,15 +38,10 @@ struct DoseApp: App {
                             Label("Insights", systemImage: "chart.line.uptrend.xyaxis")
                         }
 
-                    BodyworkHubView()
+                    CombinedBodyView(dataStore: dataStore, healthKitService: healthKitService)
                         .environment(bodyworkStore)
                         .tabItem {
-                            Label("Bodywork", systemImage: "figure.mind.and.body")
-                        }
-
-                    BodyView(dataStore: dataStore, healthKitService: healthKitService)
-                        .tabItem {
-                            Label("Body", systemImage: "heart.fill")
+                            Label("Body", systemImage: "figure.mind.and.body")
                         }
                 }
                 .task {
