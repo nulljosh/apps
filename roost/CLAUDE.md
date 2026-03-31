@@ -1,5 +1,5 @@
 # roost
-v1.1.0
+v2.0.0
 
 ## Rules
 
@@ -17,11 +17,13 @@ npm run build
 
 ## Key Files
 
-- src/main.jsx: App bootstrap and Vite entry.
-- src/App.jsx: Core layout and page routing.
-- src/hooks/useListings.js: Listing data access and derived state.
-- src/hooks/useFilters.js: Filtering and sorting logic.
-- src/context/FavoritesContext.jsx: Favorites state with localStorage sync.
-- src/components/MapMarker.jsx: Zillow-style price pill SVG markers.
-- src/components/ImageCarousel.jsx: Listing photo carousel and lightbox.
-- src/data/mock-listings.js: 50 mock BC listings with enriched data.
+- src/main.jsx: App bootstrap and Vite entry
+- src/App.jsx: Routing and protected routes
+- src/context/AuthContext.jsx: localStorage auth (login, register, profile)
+- src/context/FavoritesContext.jsx: Favorites with localStorage sync
+- src/context/FiltersContext.jsx: Price, beds, type, sort filters
+- src/components/MapView.jsx: Leaflet map with price pill markers
+- src/components/FilterBar.jsx: Horizontal chip filter bar
+- src/components/ListingCard.jsx: Listing card with photo and stats
+- src/data/listings.js: 50 mock BC listings with seeded generation
+- src/pages/: Login, Register, ForgotPassword, Listings, ListingDetail, Settings
