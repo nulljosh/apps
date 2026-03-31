@@ -1,0 +1,89 @@
+{
+  "" : {
+    "diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/Life-primary.dia",
+    "emit-module-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/Life-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/Life-primary-emit-module.dia",
+    "pch" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/Life-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/Life-primary.swiftdeps"
+  },
+  "/Users/joshua/Documents/Code/apps/life-ios/LifeApp.swift" : {
+    "const-values" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeApp.swiftconstvalues",
+    "dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeApp.d",
+    "diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeApp.dia",
+    "index-unit-output-path" : "/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeApp.o",
+    "llvm-bc" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeApp.bc",
+    "object" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeApp.o",
+    "swift-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeApp.swiftdeps",
+    "swiftmodule" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeApp~partial.swiftmodule"
+  },
+  "/Users/joshua/Documents/Code/apps/life-ios/Models/LifeData.swift" : {
+    "const-values" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeData.swiftconstvalues",
+    "dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeData.d",
+    "diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeData.dia",
+    "index-unit-output-path" : "/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeData.o",
+    "llvm-bc" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeData.bc",
+    "object" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeData.o",
+    "swift-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeData.swiftdeps",
+    "swiftmodule" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/LifeData~partial.swiftmodule"
+  },
+  "/Users/joshua/Documents/Code/apps/life-ios/Views/ChartsView.swift" : {
+    "const-values" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ChartsView.swiftconstvalues",
+    "dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ChartsView.d",
+    "diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ChartsView.dia",
+    "index-unit-output-path" : "/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ChartsView.o",
+    "llvm-bc" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ChartsView.bc",
+    "object" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ChartsView.o",
+    "swift-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ChartsView.swiftdeps",
+    "swiftmodule" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ChartsView~partial.swiftmodule"
+  },
+  "/Users/joshua/Documents/Code/apps/life-ios/Views/ContentView.swift" : {
+    "const-values" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/joshua/Documents/Code/apps/life-ios/Views/SectionCardView.swift" : {
+    "const-values" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SectionCardView.swiftconstvalues",
+    "dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SectionCardView.d",
+    "diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SectionCardView.dia",
+    "index-unit-output-path" : "/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SectionCardView.o",
+    "llvm-bc" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SectionCardView.bc",
+    "object" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SectionCardView.o",
+    "swift-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SectionCardView.swiftdeps",
+    "swiftmodule" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SectionCardView~partial.swiftmodule"
+  },
+  "/Users/joshua/Documents/Code/apps/life-ios/Views/SplashView.swift" : {
+    "const-values" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SplashView.swiftconstvalues",
+    "dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SplashView.d",
+    "diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SplashView.dia",
+    "index-unit-output-path" : "/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SplashView.o",
+    "llvm-bc" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SplashView.bc",
+    "object" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SplashView.o",
+    "swift-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SplashView.swiftdeps",
+    "swiftmodule" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/SplashView~partial.swiftmodule"
+  },
+  "/Users/joshua/Documents/Code/apps/life-ios/Views/TimelineView.swift" : {
+    "const-values" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/TimelineView.swiftconstvalues",
+    "dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/TimelineView.d",
+    "diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/TimelineView.dia",
+    "index-unit-output-path" : "/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/TimelineView.o",
+    "llvm-bc" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/TimelineView.bc",
+    "object" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/TimelineView.o",
+    "swift-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/TimelineView.swiftdeps",
+    "swiftmodule" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/TimelineView~partial.swiftmodule"
+  },
+  "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/joshua/Documents/Code/apps/life-ios/build/Life.build/Debug-iphoneos/Life.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}
