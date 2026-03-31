@@ -9,7 +9,13 @@ const TROPHIES = {
     xp1000: { name: 'Master', desc: 'Earn 1000 XP', icon: 'fa-solid fa-hat-wizard' },
     polyglot: { name: 'Polyglot', desc: 'Study 3 language tracks', icon: 'fa-solid fa-language' },
     mathWiz: { name: 'Math Wizard', desc: 'Complete every math topic', icon: 'fa-solid fa-calculator' },
-    explorer: { name: 'Explorer', desc: 'Try 10 different subjects', icon: 'fa-solid fa-compass' }
+    explorer: { name: 'Explorer', desc: 'Try 10 different subjects', icon: 'fa-solid fa-compass' },
+    gamer: { name: 'Gamer', desc: 'Play 3 different games', icon: 'fa-solid fa-gamepad' },
+    snakemaster: { name: 'Snake Charmer', desc: 'Score 100+ in Snake', icon: 'fa-solid fa-worm' },
+    puzzler: { name: 'Puzzler', desc: 'Score 500+ in 2048', icon: 'fa-solid fa-table-cells-large' },
+    minesweep: { name: 'Bomb Squad', desc: 'Win Minesweeper', icon: 'fa-solid fa-bomb' },
+    memory: { name: 'Elephant', desc: 'Complete Memory in under 12 moves', icon: 'fa-solid fa-brain' },
+    checkmate: { name: 'Grandmaster', desc: 'Win a chess game', icon: 'fa-solid fa-chess-king' }
 };
 
 const AVATAR_PRESETS = [

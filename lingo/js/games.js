@@ -13,6 +13,39 @@ const GAMES_REGISTRY = {
 
 let activeGame = null;
 let gameAnimFrame = null;
+const GAME_SCORES_KEY = 'lingo.gameScores';
+
+function loadGameScores() {
+    try { return JSON.parse(localStorage.getItem(GAME_SCORES_KEY)) || {}; } catch (_) { return {}; }
+}
+
+function saveGameScore(gameId, score) {
+    const scores = loadGameScores();
+    if (!scores[gameId] || score > scores[gameId]) scores[gameId] = score;
+    localStorage.setItem(GAME_SCORES_KEY, JSON.stringify(scores));
+}
+
+function getGameHighScore(gameId) {
+    return loadGameScores()[gameId] || 0;
+}
+
+function trackGamePlayed(gameId) {
+    const key = 'lingo.gamesPlayed';
+    let played;
+    try { played = JSON.parse(localStorage.getItem(key)) || []; } catch (_) { played = []; }
+    if (!played.includes(gameId)) played.push(gameId);
+    localStorage.setItem(key, JSON.stringify(played));
+    return played;
+}
+
+function checkGameTrophies(gameId, score) {
+    const played = trackGamePlayed(gameId);
+    if (played.length >= 3 && typeof saveAchievement === 'function') saveAchievement('gamer');
+    if (gameId === 'snake' && score >= 100) saveAchievement('snakemaster');
+    if (gameId === 'game2048' && score >= 500) saveAchievement('puzzler');
+    if (gameId === 'minesweeper') saveAchievement('minesweep');
+    if (gameId === 'chess') saveAchievement('checkmate');
+}
 
 function isGameCategory(category) {
     return category === 'games';
@@ -125,7 +158,9 @@ function initChess(board) {
         board: initialBoard.map(row => [...row]),
         turn: 'white',
         selected: null,
-        gameOver: false
+        gameOver: false,
+        castling: { K: true, Q: true, k: true, q: true },
+        enPassant: null
     };
 
     function isWhite(piece) { return piece !== ' ' && piece === piece.toUpperCase(); }
@@ -213,6 +248,9 @@ function initChess(board) {
                         if ((white && isBlack(b[nr][nc])) || (!white && isWhite(b[nr][nc]))) {
                             moves.push([nr, nc]);
                         }
+                        if (chessState.enPassant && chessState.enPassant[0] === nr && chessState.enPassant[1] === nc) {
+                            moves.push([nr, nc]);
+                        }
                     }
                 });
                 break;
@@ -225,6 +263,22 @@ function initChess(board) {
                 break;
             case 'k':
                 [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr,dc]) => addIfValid(row+dr, col+dc));
+                // Castling
+                if (white && row === 7 && col === 4) {
+                    if (chessState.castling.K && b[7][5] === ' ' && b[7][6] === ' ' && b[7][7] === 'R'
+                        && !isSquareAttacked(b, 7, 4, true) && !isSquareAttacked(b, 7, 5, true) && !isSquareAttacked(b, 7, 6, true))
+                        moves.push([7, 6]);
+                    if (chessState.castling.Q && b[7][3] === ' ' && b[7][2] === ' ' && b[7][1] === ' ' && b[7][0] === 'R'
+                        && !isSquareAttacked(b, 7, 4, true) && !isSquareAttacked(b, 7, 3, true) && !isSquareAttacked(b, 7, 2, true))
+                        moves.push([7, 2]);
+                } else if (!white && row === 0 && col === 4) {
+                    if (chessState.castling.k && b[0][5] === ' ' && b[0][6] === ' ' && b[0][7] === 'r'
+                        && !isSquareAttacked(b, 0, 4, false) && !isSquareAttacked(b, 0, 5, false) && !isSquareAttacked(b, 0, 6, false))
+                        moves.push([0, 6]);
+                    if (chessState.castling.q && b[0][3] === ' ' && b[0][2] === ' ' && b[0][1] === ' ' && b[0][0] === 'r'
+                        && !isSquareAttacked(b, 0, 4, false) && !isSquareAttacked(b, 0, 3, false) && !isSquareAttacked(b, 0, 2, false))
+                        moves.push([0, 2]);
+                }
                 break;
         }
         return moves;
@@ -282,12 +336,35 @@ function initChess(board) {
             const isValid = legalMoves.some(([mr, mc]) => mr === r && mc === c);
 
             if (isValid) {
+                const movedPiece = chessState.board[sr][sc];
+                // En passant capture
+                if (movedPiece.toLowerCase() === 'p' && chessState.enPassant && chessState.enPassant[0] === r && chessState.enPassant[1] === c) {
+                    chessState.board[sr][c] = ' ';
+                }
+                // Castling execution
+                if (movedPiece.toLowerCase() === 'k' && Math.abs(c - sc) === 2) {
+                    if (c === 6) { chessState.board[sr][5] = chessState.board[sr][7]; chessState.board[sr][7] = ' '; }
+                    if (c === 2) { chessState.board[sr][3] = chessState.board[sr][0]; chessState.board[sr][0] = ' '; }
+                }
                 chessState.board[r][c] = chessState.board[sr][sc];
                 chessState.board[sr][sc] = ' ';
 
-                const movedPiece = chessState.board[r][c];
-                if (movedPiece === 'P' && r === 0) chessState.board[r][c] = 'Q';
-                if (movedPiece === 'p' && r === 7) chessState.board[r][c] = 'q';
+                // En passant tracking
+                if (movedPiece.toLowerCase() === 'p' && Math.abs(r - sr) === 2) {
+                    chessState.enPassant = [(sr + r) / 2, sc];
+                } else {
+                    chessState.enPassant = null;
+                }
+                // Castling rights
+                if (movedPiece === 'K') { chessState.castling.K = false; chessState.castling.Q = false; }
+                if (movedPiece === 'k') { chessState.castling.k = false; chessState.castling.q = false; }
+                if (movedPiece === 'R' && sr === 7 && sc === 7) chessState.castling.K = false;
+                if (movedPiece === 'R' && sr === 7 && sc === 0) chessState.castling.Q = false;
+                if (movedPiece === 'r' && sr === 0 && sc === 7) chessState.castling.k = false;
+                if (movedPiece === 'r' && sr === 0 && sc === 0) chessState.castling.q = false;
+
+                if (chessState.board[r][c] === 'P' && r === 0) chessState.board[r][c] = 'Q';
+                if (chessState.board[r][c] === 'p' && r === 7) chessState.board[r][c] = 'q';
 
                 chessState.turn = chessState.turn === 'white' ? 'black' : 'white';
 
@@ -304,6 +381,7 @@ function initChess(board) {
                     }
                     statusDiv.classList.add('game-won');
                     awardGameXP(50);
+                    checkGameTrophies('chess', 1);
                 } else if (inCheck) {
                     statusDiv.textContent = (chessState.turn === 'white' ? 'White' : 'Black') + ' to move -- Check!';
                 } else {
@@ -401,6 +479,8 @@ function init2048(board) {
             if (!canMove()) {
                 lost = true;
                 awardGameXP(Math.floor(score / 100));
+                saveGameScore('game2048', score);
+                checkGameTrophies('game2048', score);
             }
         }
         render();
@@ -528,6 +608,9 @@ function initMemory(board) {
                 if (matched.size === pairs.length) {
                     statsDiv.textContent = 'Complete in ' + moves + ' moves!';
                     awardGameXP(Math.max(10, 50 - moves));
+                    saveGameScore('memory', 100 - moves);
+                    if (moves <= 12) checkGameTrophies('memory', moves);
+                    else trackGamePlayed('memory');
                 }
             } else {
                 setTimeout(() => {
@@ -669,6 +752,7 @@ function initMinesweeper(board) {
         if (revealedCount === ROWS * COLS - MINES) {
             gameOver = true;
             awardGameXP(30);
+            checkGameTrophies('minesweeper', 1);
         }
         render();
     }
