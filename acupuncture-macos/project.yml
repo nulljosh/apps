@@ -1,0 +1,28 @@
+name: Acupuncture
+options:
+  bundleIdPrefix: com.nulljosh
+  deploymentTarget:
+    macOS: "14.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    DEVELOPMENT_TEAM: QMM486NPYC
+    CODE_SIGN_STYLE: Automatic
+    GENERATE_INFOPLIST_FILE: YES
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Acupuncture:
+    type: application
+    platform: macOS
+    sources:
+      - Sources
+    resources:
+      - Assets.xcassets
+  AcupunctureTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests
+    dependencies:
+      - target: Acupuncture
