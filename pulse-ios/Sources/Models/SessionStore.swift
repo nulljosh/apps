@@ -23,7 +23,8 @@ struct Session: Identifiable, Codable {
 final class SessionStore {
     var sessions: [Session] = []
 
-    private let key = "acu_sessions"
+    private static let storageKey = "pulse_sessions"
+    private let key = storageKey
 
     init() {
         if let data = UserDefaults.standard.data(forKey: key),

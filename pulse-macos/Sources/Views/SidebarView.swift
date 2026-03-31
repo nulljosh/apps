@@ -1,5 +1,13 @@
 import SwiftUI
 
+enum SidebarIcon {
+    static let feet = "figure.walk"
+    static let hands = "hand.raised.fingers.spread"
+    static let points = "target"
+    static let symptoms = "cross.circle"
+    static let history = "clock.arrow.trianglehead.counterclockwise.rotate.90"
+}
+
 enum SidebarItem: String, CaseIterable, Identifiable {
     case feet = "Foot Reflexology"
     case hands = "Hand Reflexology"
@@ -11,11 +19,11 @@ enum SidebarItem: String, CaseIterable, Identifiable {
 
     var icon: String {
         switch self {
-        case .feet: "figure.walk"
-        case .hands: "hand.raised.fingers.spread"
-        case .points: "target"
-        case .symptoms: "cross.circle"
-        case .history: "clock.arrow.trianglehead.counterclockwise.rotate.90"
+        case .feet: SidebarIcon.feet
+        case .hands: SidebarIcon.hands
+        case .points: SidebarIcon.points
+        case .symptoms: SidebarIcon.symptoms
+        case .history: SidebarIcon.history
         }
     }
 }
