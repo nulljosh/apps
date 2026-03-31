@@ -199,8 +199,8 @@ enum LifeData {
         CopingItem(label: "Vaping", detail: "", intensity: 0.6, isHealthy: false),
         CopingItem(label: "Self-harm", detail: "since age 22", intensity: 0.7, isHealthy: false),
         CopingItem(label: "Suppression", detail: "memory erasure", intensity: 0.5, isHealthy: false),
-        CopingItem(label: "Gym", detail: "daily, 1-2 hours", intensity: 0.9, isHealthy: true),
-        CopingItem(label: "Coding", detail: "genuine satisfaction", intensity: 0.85, isHealthy: true),
+        CopingItem(label: "Gym", detail: "daily, 1-2 hours, hitting PRs", intensity: 0.9, isHealthy: true),
+        CopingItem(label: "Coding", detail: "satisfaction + avoidance, 18h sessions", intensity: 0.85, isHealthy: true),
         CopingItem(label: "Gaming", detail: "escape / flow state", intensity: 0.7, isHealthy: true),
         CopingItem(label: "Studying", detail: "calc + bio", intensity: 0.5, isHealthy: true),
     ]
@@ -258,12 +258,14 @@ enum LifeData {
             "My mom didn't just watch. She used it as a weapon. \"You better listen or your dad will hit you.\" She actively threatened me with his violence and framed the whole thing as being for my own good, which she kept saying well into my adult years until I was old enough to actually argue back. She condoned it intentionally. Because of both of them I don't think I'll ever be able to fully trust anyone. My dad acted and my mom weaponized it. Both of them are responsible.",
             "My parents also argued constantly growing up. They only really stopped in the last few years after they realized the arguments were never going anywhere.",
             "My dad hasn't been aggressive in about 5 years. Things eventually got bad enough that they stopped trying to control my life. They're in their 50s now, everyone is mostly fine day to day. Things are calm. But years of fear and intimidation don't just disappear because the house got quieter.",
+            "It's generational. My grandpa is 80 with dementia and still cries about his dad beating him as a kid. Three generations of it. The pattern doesn't break on its own.",
             "I've talked to more therapists than the rest of my family put together and I still carry a lot of shame from those early years. Not just anger at him but shame about myself, like something I internalized back then that never really left. Being autistic makes it worse. The memories don't fade the way they might for other people. They replay with the same intensity 20+ years later. I'm not trying to get anything over on him or use it for points. It just genuinely still hurts all the time.",
             "Research from Harvard (Cuartas et al., 2021) found that hitting a child activates the same threat-response regions in the brain as more severe physical abuse. There were no regions of the brain where the neural response differed between kids who were spanked and kids who were abused. A separate study (Tomoda et al., 2009) found that harsh corporal punishment was associated with a 19% reduction in prefrontal cortex gray matter volume, the same regions that show damage in sexual abuse victims. And Teicher & Samson (2016) in Nature Reviews Neuroscience found that the brain's stress-response architecture does not meaningfully distinguish between being hit and being sexually abused. The neurological effects overlap significantly.",
         ], note: "Sources: Cuartas et al. (2021), Child Development. Tomoda et al. (2009), NeuroImage. Teicher & Samson (2016), Nature Reviews Neuroscience. Gershoff (2016), Family Relations."),
 
         LifeSection(label: "Intrusive Memories, Nightmares, and Shame", paragraphs: [
             "The intrusive thoughts are constant. All day, every day. Nightmares almost every night unless I smoke enough weed to suppress REM sleep. The nightmares are hard to describe. Abstract, recurring, almost always the same theme. Running away from people, or people running away from me. Triggers are everywhere: seeing my family, being alone at night when the masking drops, specific reminders like places or conversations, and sometimes completely random with no pattern at all.",
+            "There is one specific dream I have had since I was about five. Once or twice a month. Always corridors. I'm chasing a faceless figure. When I catch them they turn around and it's me. Then they start chasing me. No exit, just the reversal. It was there at five and it's still there now. Some mornings I'm not sure if I'm relieved or disappointed to be awake.",
             "The shame isn't as simple as \"I deserved it.\" It's deeper than that, harder to put into words. It's a full-body thing, like something got wired wrong early on and never corrected itself. It runs in the background constantly. The good stuff, family trips, being taken care of, it exists, but it doesn't override the early stuff. If my dad gave me a billion dollars it wouldn't change it.",
         ], note: nil),
 
@@ -312,6 +314,8 @@ enum LifeData {
 
         LifeSection(label: "Friendships", paragraphs: [
             "I lost most of my friends around 2020. My best friend stuck around and still calls me, but he moved to Vancouver Island a year or two ago. He's visited once in two years. We've drifted apart. It felt like losing the last person who was actually around.",
+            "My oldest friend Alex and I talked for almost two hours recently about the usual stuff, the future, intelligence, how most people are not applying themselves. Then he started arguing parents should hit their kids more, that his dad throwing him on the couch at 12 was good discipline. Biggest disagreement we have ever had. Kinda bummed me out. I had to laugh a bit because what he described is nothing compared to what I went through at two, and what I went through is nothing compared to my grandpa at 80 still crying about his dad. Hard to hear someone argue it builds character.",
+            "Another friend, Ben, deactivated his Twitter recently. Was going to send him something. No way to reach him now. People just disappear.",
         ], note: nil),
 
         LifeSection(label: "Housing", paragraphs: [
@@ -323,19 +327,20 @@ enum LifeData {
             "My depression and suicidal thoughts don't feel like something I live with constantly in the sense that I'm always visibly falling apart. They hit out of nowhere. I can get through a whole day fine, keep it together, and then fall apart at night. A lot of it has to do with masking all day, autism, emotions, everything, and then losing it when I'm alone. Sleep is inconsistent, anywhere from 4 to 8 hours.",
             "Suicidal thoughts have been there since I was a kid, basically since I can remember. I've made a few attempts, nothing super lethal, more impulsive than planned. The self-harm started around age 22 to 23 after my longest relationship ended. Punching myself in the head. Most recent hospitalization was summer 2024, around the same time I was homeless. I also went to rehab twice in the last few years at Ravensview (Homewood) on Vancouver Island.",
             "I've been smoking weed since I was a teenager. It's escalated over the years to heavy daily use, multiple times a day to suppress memory. I also vape. I drink occasionally but it's not a major thing.",
-            "I gym for an hour or two almost every day and I'm usually beating my athletic average. I don't eat too badly either. The coping mechanisms are a mix of self-destructive and genuinely healthy. They just coexist.",
+            "I gym for an hour or two almost every day and I'm hitting personal bests regularly. The discipline is compounding. I don't eat too badly either. The coping mechanisms are a mix of self-destructive and genuinely healthy. They just coexist.",
             "I don't really hate myself or anybody specifically. It's more of a general frustration. The anger goes both directions, inward as self-harm, outward as snapping at people. The root of it is frustration with how things are, not with any one person.",
         ], note: nil),
 
         LifeSection(label: "Identity & Worldview", paragraphs: [
-            "If someone asks me who I am, I honestly don't have a clear answer. I'm still figuring that out. I know what I'm good at and what I care about, but the bigger picture is still blurry.",
+            "If someone asks me who I am, I honestly don't have a clear answer. I'm still figuring that out. I know what I'm good at and what I care about, but the bigger picture is still blurry. I recently changed my portfolio from old interests to the work I actually want to do now. Small edit, weirdly personal. It made me admit the center of gravity has moved.",
+            "I have read a lot of Jung and some Freud. The dream stuff, the shadow, the idea that you are running from parts of yourself. It resonates more than I expected it to. I did not go looking for it to validate anything. I just kept finding my own patterns described in their work.",
             "My earliest good memories are playing N64 (Diddy Kong Racing, Excitebike), playing at my cousins' house in Kamloops on their Super Nintendo, and playing on our PC when I was very young, before age 10. Screens were the first place I felt safe.",
         ], note: nil),
 
         LifeSection(label: "Current Life", paragraphs: [
-            "I'm 26 and living with my parents in Langley, BC. I'm not working right now. I'm waiting on PWD and welfare. The plan is university first, then a career that actually pays well enough to justify it. I'm not interested in grinding minimum wage jobs that go nowhere.",
-            "Connection with people is hard for me right now. A typical day is sleeping, smoking weed, vaping, gymming, and coding. It's routine, but it's stable.",
-            "I'm hoping to move to Vancouver Island by the end of 2026 to start school. I spend most of my time coding and gaming. Coding is genuine satisfaction, building something real. Gaming is more escape. Both are flow states that keep me out of my head.",
+            "I'm 26 and living with my parents in Langley, BC. I'm not working right now. I'm waiting on PWD and welfare. The plan is university first, then a career that actually pays well enough to justify it. I'm not interested in grinding minimum wage jobs that go nowhere. School is going well so far. Pre-Calc: Projects 88%, Unit Tests 100%, Quizzes 94%. Anatomy: Learning Guides 100%, Projects 100%, Unit Exams 97%.",
+            "Connection with people is hard for me right now. A typical day is sleeping, smoking weed, vaping, gymming, and coding. It's routine, but it's stable. Called my mom on her birthday recently. Went to a doctor's appointment, nothing major. Small stuff that feels normal.",
+            "I'm hoping to move to Vancouver Island by the end of 2026 to start school. I spend most of my time coding and gaming. Coding is genuine satisfaction, building something real. Gaming is more escape. Both are flow states that keep me out of my head. The fastest way to not think about yourself is to build something complicated enough to require all your attention. I have done eighteen-hour sessions more than once. It works until it doesn't.",
         ], note: nil),
 
         LifeSection(label: "Work History", paragraphs: [
