@@ -32,7 +32,7 @@ struct ChessGameView: View {
         VStack(spacing: 12) {
             Text(statusText)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(gameOver ? .green : .secondary)
+                .foregroundStyle(gameOver ? Theme.success : .secondary)
 
             GeometryReader { geo in
                 let size = min(geo.size.width, geo.size.height)
@@ -45,7 +45,7 @@ struct ChessGameView: View {
                         let isValid = validMoves.contains { $0.0 == r && $0.1 == c }
                         ZStack {
                             Rectangle()
-                                .fill(isSelected ? Color.yellow.opacity(0.5) : isDark ? Color.brown.opacity(0.6) : Color.brown.opacity(0.2))
+                                .fill(isSelected ? Color.primary.opacity(0.2) : isDark ? Color(hex: "#c0c0c0") : Color(hex: "#f0f0f0"))
                             if isValid {
                                 Circle()
                                     .fill(.black.opacity(0.25))

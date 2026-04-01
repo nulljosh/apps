@@ -12,11 +12,11 @@ struct TrophyView: View {
                     HStack(spacing: 14) {
                         ZStack {
                             Circle()
-                                .fill(isUnlocked ? Color.yellow.opacity(0.2) : Color(.systemGray5))
+                                .fill(isUnlocked ? Color.primary.opacity(0.1) : Theme.adaptiveBgTertiary)
                                 .frame(width: 44, height: 44)
                             Image(systemName: trophy.icon)
                                 .font(.title3)
-                                .foregroundStyle(isUnlocked ? .yellow : .secondary)
+                                .foregroundStyle(isUnlocked ? .primary : .secondary)
                         }
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -32,7 +32,7 @@ struct TrophyView: View {
 
                         if isUnlocked {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.green)
+                                .foregroundStyle(Theme.success)
                         }
                     }
                     .opacity(isUnlocked ? 1 : 0.5)

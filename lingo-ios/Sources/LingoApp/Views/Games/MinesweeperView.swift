@@ -17,7 +17,7 @@ struct MinesweeperView: View {
             let flags = cells.flatMap { $0 }.filter(\.flagged).count
             Text(gameOver ? (won ? "You Win!" : "Game Over") : "Mines: \(mineCount - flags)")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(gameOver ? (won ? .green : .red) : .secondary)
+                .foregroundStyle(gameOver ? (won ? Theme.success : Theme.error) : .secondary)
 
             GeometryReader { geo in
                 let size = min(geo.size.width, geo.size.height)
@@ -112,8 +112,12 @@ struct MinesweeperView: View {
 
     private func numColor(_ n: Int) -> Color {
         switch n {
-        case 1: return .blue; case 2: return .green; case 3: return .red
-        case 4: return .purple; case 5: return .orange; default: return .primary
+        case 1: return Color(hex: "#555555")
+        case 2: return Color(hex: "#777777")
+        case 3: return Color(hex: "#999999")
+        case 4: return Color(hex: "#444444")
+        case 5: return Color(hex: "#666666")
+        default: return .primary
         }
     }
 }

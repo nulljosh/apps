@@ -20,9 +20,9 @@ struct MemoryGameView: View {
                     let isShown = flipped.contains(i) || matched.contains(i)
                     ZStack {
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(matched.contains(i) ? .green.opacity(0.2) : isShown ? Color.accentColor.opacity(0.15) : .ultraThinMaterial)
+                            .fill(matched.contains(i) ? Theme.success.opacity(0.15) : isShown ? Color.primary.opacity(0.08) : Theme.adaptiveCardBg)
                         RoundedRectangle(cornerRadius: 12)
-                            .strokeBorder(matched.contains(i) ? .green : isShown ? .accentColor : .clear, lineWidth: 2)
+                            .strokeBorder(matched.contains(i) ? Theme.success : isShown ? Color.primary : Theme.adaptiveBorder, lineWidth: 2)
                         if isShown && i < cards.count {
                             Text(cards[i])
                                 .font(.system(size: 32))

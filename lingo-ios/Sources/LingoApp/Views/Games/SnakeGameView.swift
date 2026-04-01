@@ -14,7 +14,7 @@ struct SnakeGameView: View {
         VStack(spacing: 12) {
             Text(dead ? "Game Over -- Score: \(score)" : "Score: \(score)")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(dead ? .red : .secondary)
+                .foregroundStyle(dead ? Theme.error : .secondary)
 
             GeometryReader { geo in
                 let size = min(geo.size.width, geo.size.height)
@@ -24,11 +24,11 @@ struct SnakeGameView: View {
                     ctx.fill(Path(CGRect(origin: .zero, size: CGSize(width: size, height: size))), with: .color(Color(.systemGray6)))
                     // Food
                     let foodRect = CGRect(x: CGFloat(food.0) * cell + 2, y: CGFloat(food.1) * cell + 2, width: cell - 4, height: cell - 4)
-                    ctx.fill(Path(ellipseIn: foodRect), with: .color(.orange))
+                    ctx.fill(Path(ellipseIn: foodRect), with: .color(Color(hex: "#555555")))
                     // Snake
                     for (i, seg) in snake.enumerated() {
                         let r = CGRect(x: CGFloat(seg.0) * cell + 1, y: CGFloat(seg.1) * cell + 1, width: cell - 2, height: cell - 2)
-                        ctx.fill(Path(r), with: .color(i == 0 ? .green : .green.opacity(0.7)))
+                        ctx.fill(Path(r), with: .color(i == 0 ? Color(hex: "#111111") : Color(hex: "#333333")))
                     }
                 }
                 .frame(width: size, height: size)
@@ -72,7 +72,8 @@ struct SnakeGameView: View {
         }
         .font(.title2)
         .frame(width: 52, height: 52)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+        .background(Theme.adaptiveCardBg, in: RoundedRectangle(cornerRadius: 8))
+        .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Theme.adaptiveBorder, lineWidth: 1))
     }
 
     private func resetGame() {

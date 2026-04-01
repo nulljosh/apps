@@ -8,6 +8,7 @@ struct LingoApp: App {
         WindowGroup {
             ContentView()
                 .environment(progressManager)
+                .tint(.primary)
         }
     }
 }

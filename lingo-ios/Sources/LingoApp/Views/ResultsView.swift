@@ -38,7 +38,7 @@ struct ResultsView: View {
                 VStack(spacing: 4) {
                     Text("+\(viewModel.xpEarned)")
                         .font(.title3.weight(.bold))
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.primary)
                     Text("XP earned")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -46,7 +46,7 @@ struct ResultsView: View {
                 VStack(spacing: 4) {
                     Text("\(viewModel.hearts)")
                         .font(.title3.weight(.bold))
-                        .foregroundStyle(.pink)
+                        .foregroundStyle(.primary)
                     Text("Hearts left")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -76,9 +76,9 @@ struct ResultsView: View {
     }
 
     private var scoreColor: Color {
-        if scoreFraction >= 0.8 { return .green }
-        if scoreFraction >= 0.5 { return .orange }
-        return .red
+        if scoreFraction >= 0.8 { return Theme.success }
+        if scoreFraction >= 0.5 { return Color(.secondaryLabel) }
+        return Theme.error
     }
 
     private var titleText: String {

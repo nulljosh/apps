@@ -17,7 +17,7 @@ struct QuizView: View {
                     quizContent(question)
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Theme.adaptiveBg)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -41,7 +41,7 @@ struct QuizView: View {
         HStack(spacing: 16) {
             HStack(spacing: 4) {
                 Image(systemName: "heart.fill")
-                    .foregroundStyle(.pink)
+                    .foregroundStyle(Color(.secondaryLabel))
                     .font(.caption)
                 Text("\(viewModel.hearts)")
                     .font(.subheadline.weight(.semibold).monospacedDigit())
@@ -64,7 +64,7 @@ struct QuizView: View {
                         .fill(Color(.systemGray5))
                         .frame(height: 6)
                     Capsule()
-                        .fill(.tint)
+                        .fill(Color.primary)
                         .frame(width: geo.size.width * viewModel.progressFraction, height: 6)
                         .animation(.spring(duration: 0.3), value: viewModel.progressFraction)
                 }
@@ -122,7 +122,7 @@ struct QuizView: View {
                 VStack(spacing: 12) {
                     Image(systemName: "speaker.wave.3.fill")
                         .font(.title)
-                        .foregroundStyle(.tint)
+                        .foregroundStyle(.primary)
                     Text(question.audio ?? question.question)
                         .font(.title2.weight(.bold))
                         .multilineTextAlignment(.center)
@@ -170,10 +170,10 @@ struct QuizView: View {
                         if viewModel.hasChecked {
                             if choice == question.answer {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.green)
+                                    .foregroundStyle(Theme.success)
                             } else if choice == viewModel.selectedAnswer && !viewModel.isCorrect {
                                 Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(.red)
+                                    .foregroundStyle(Theme.error)
                             }
                         }
                     }
@@ -195,29 +195,29 @@ struct QuizView: View {
     private func choiceBackground(_ choice: String, question: Question) -> some ShapeStyle {
         if viewModel.hasChecked {
             if choice == question.answer {
-                return AnyShapeStyle(Color.green.opacity(0.15))
+                return AnyShapeStyle(Theme.success.opacity(0.15))
             } else if choice == viewModel.selectedAnswer && !viewModel.isCorrect {
-                return AnyShapeStyle(Color.red.opacity(0.15))
+                return AnyShapeStyle(Theme.error.opacity(0.15))
             }
         }
         if choice == viewModel.selectedAnswer {
-            return AnyShapeStyle(Color.accentColor.opacity(0.1))
+            return AnyShapeStyle(Color.primary.opacity(0.08))
         }
-        return AnyShapeStyle(.ultraThinMaterial)
+        return AnyShapeStyle(Theme.adaptiveCardBg)
     }
 
     private func choiceBorder(_ choice: String, question: Question) -> some ShapeStyle {
         if viewModel.hasChecked {
             if choice == question.answer {
-                return AnyShapeStyle(Color.green)
+                return AnyShapeStyle(Theme.success)
             } else if choice == viewModel.selectedAnswer && !viewModel.isCorrect {
-                return AnyShapeStyle(Color.red)
+                return AnyShapeStyle(Theme.error)
             }
         }
         if choice == viewModel.selectedAnswer {
-            return AnyShapeStyle(Color.accentColor)
+            return AnyShapeStyle(Color.primary)
         }
-        return AnyShapeStyle(Color.clear)
+        return AnyShapeStyle(Theme.adaptiveBorder)
     }
 
     // MARK: - Sentence Builder
@@ -234,8 +234,8 @@ struct QuizView: View {
                             .font(.body.weight(.medium))
                             .padding(.horizontal, 14)
                             .padding(.vertical, 8)
-                            .background(.tint.opacity(0.15))
-                            .foregroundStyle(.tint)
+                            .background(Color.primary.opacity(0.08))
+                            .foregroundStyle(.primary)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
                     .buttonStyle(.plain)
@@ -244,7 +244,8 @@ struct QuizView: View {
             }
             .frame(maxWidth: .infinity, minHeight: 48, alignment: .leading)
             .padding(12)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+            .background(Theme.adaptiveCardBg, in: RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Theme.adaptiveBorder, lineWidth: 1))
 
             // Word bank
             wordBankView(words: question.words ?? [])
@@ -263,7 +264,7 @@ struct QuizView: View {
                         .font(.body.weight(.medium))
                         .padding(.horizontal, 14)
                         .padding(.vertical, 8)
-                        .background(viewModel.answerWords.contains(word) ? AnyShapeStyle(Color(.systemGray5)) : AnyShapeStyle(.ultraThinMaterial))
+                        .background(viewModel.answerWords.contains(word) ? AnyShapeStyle(Theme.adaptiveBgTertiary) : AnyShapeStyle(Theme.adaptiveCardBg))
                         .foregroundStyle(viewModel.answerWords.contains(word) ? AnyShapeStyle(.secondary) : AnyShapeStyle(.primary))
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
@@ -280,7 +281,8 @@ struct QuizView: View {
             .font(.body)
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+            .background(Theme.adaptiveCardBg, in: RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Theme.adaptiveBorder, lineWidth: 1))
             .disabled(viewModel.hasChecked)
             .autocorrectionDisabled()
             .textInputAutocapitalization(.never)
@@ -298,16 +300,16 @@ struct QuizView: View {
         if viewModel.hasChecked {
             HStack(spacing: 8) {
                 Image(systemName: viewModel.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundStyle(viewModel.isCorrect ? .green : .red)
+                    .foregroundStyle(viewModel.isCorrect ? Theme.success : Theme.error)
                 if viewModel.isCorrect {
                     Text("Correct!")
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Theme.success)
                 } else {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Incorrect")
                             .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.red)
+                            .foregroundStyle(Theme.error)
                         Text("Answer: \(viewModel.currentQuestion?.answer ?? "")")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -318,7 +320,7 @@ struct QuizView: View {
             .padding(.horizontal)
             .padding(.vertical, 12)
             .background(
-                (viewModel.isCorrect ? Color.green : Color.red).opacity(0.1)
+                (viewModel.isCorrect ? Theme.success : Theme.error).opacity(0.1)
             )
             .transition(.move(edge: .bottom).combined(with: .opacity))
             .animation(.spring(duration: 0.3), value: viewModel.hasChecked)

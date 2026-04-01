@@ -9,7 +9,7 @@ struct Game2048View: View {
         VStack(spacing: 16) {
             Text("Score: \(score)\(gameOver ? " -- Game Over" : "")")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(gameOver ? .red : .secondary)
+                .foregroundStyle(gameOver ? Theme.error : .secondary)
 
             GeometryReader { geo in
                 let size = min(geo.size.width, geo.size.height)
@@ -108,16 +108,16 @@ struct Game2048View: View {
 
     private func tileColor(_ v: Int) -> Color {
         switch v {
-        case 0: return Color(.systemGray5)
-        case 2: return Color(red: 0.93, green: 0.89, blue: 0.85)
-        case 4: return Color(red: 0.93, green: 0.88, blue: 0.78)
-        case 8: return Color(red: 0.95, green: 0.69, blue: 0.47)
-        case 16: return Color(red: 0.96, green: 0.58, blue: 0.39)
-        case 32: return Color(red: 0.96, green: 0.49, blue: 0.37)
-        case 64: return Color(red: 0.96, green: 0.37, blue: 0.23)
-        case 128...256: return Color(red: 0.93, green: 0.81, blue: 0.45)
-        case 512...1024: return Color(red: 0.93, green: 0.78, blue: 0.31)
-        default: return Color(red: 0.24, green: 0.62, blue: 0.42)
+        case 0: return Color(hex: "#e8e8e8")
+        case 2: return Color(hex: "#d4d4d4")
+        case 4: return Color(hex: "#c0c0c0")
+        case 8: return Color(hex: "#a8a8a8")
+        case 16: return Color(hex: "#909090")
+        case 32: return Color(hex: "#787878")
+        case 64: return Color(hex: "#606060")
+        case 128...256: return Color(hex: "#484848")
+        case 512...1024: return Color(hex: "#303030")
+        default: return Color(hex: "#1a1a1a")
         }
     }
 }

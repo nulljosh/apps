@@ -1,5 +1,57 @@
 import SwiftUI
 
+// MARK: - Theme
+
+enum Theme {
+    static let bg = Color(hex: "#fafafa")
+    static let bgSecondary = Color(hex: "#f0f0f0")
+    static let bgTertiary = Color(hex: "#e8e8e8")
+    static let cardBg = Color.white
+    static let border = Color.black.opacity(0.1)
+    static let textPrimary = Color.black
+    static let textMuted = Color.black.opacity(0.3)
+    static let success = Color(hex: "#2d7a50")
+    static let error = Color(hex: "#c44040")
+
+    static let bgDark = Color(hex: "#111111")
+    static let bgSecondaryDark = Color(hex: "#1a1a1a")
+    static let bgTertiaryDark = Color(hex: "#222222")
+    static let cardBgDark = Color(hex: "#1a1a1a")
+    static let borderDark = Color.white.opacity(0.1)
+    static let textPrimaryDark = Color(hex: "#e8e8e8")
+    static let textMutedDark = Color.white.opacity(0.3)
+
+    static func adaptive(light: Color, dark: Color) -> Color {
+        // Use UIKit to resolve color scheme at runtime
+        Color(UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(dark)
+                : UIColor(light)
+        })
+    }
+
+    static var adaptiveBg: Color { adaptive(light: bg, dark: bgDark) }
+    static var adaptiveBgSecondary: Color { adaptive(light: bgSecondary, dark: bgSecondaryDark) }
+    static var adaptiveBgTertiary: Color { adaptive(light: bgTertiary, dark: bgTertiaryDark) }
+    static var adaptiveCardBg: Color { adaptive(light: cardBg, dark: cardBgDark) }
+    static var adaptiveBorder: Color { adaptive(light: border, dark: borderDark) }
+    static var adaptiveTextMuted: Color { adaptive(light: textMuted, dark: textMutedDark) }
+}
+
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+        let scanner = Scanner(string: hex)
+        var rgb: UInt64 = 0
+        scanner.scanHexInt64(&rgb)
+        self.init(
+            red: Double((rgb >> 16) & 0xFF) / 255,
+            green: Double((rgb >> 8) & 0xFF) / 255,
+            blue: Double(rgb & 0xFF) / 255
+        )
+    }
+}
+
 struct ContentView: View {
     @Environment(ProgressManager.self) private var progressManager
     @State private var selectedCategory: Category?
@@ -59,7 +111,7 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 32)
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Theme.adaptiveBg)
             .navigationTitle("Lingo")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -67,7 +119,7 @@ struct ContentView: View {
                         showTrophies = true
                     } label: {
                         Image(systemName: "trophy.fill")
-                            .foregroundStyle(.yellow)
+                            .foregroundStyle(.primary)
                     }
                 }
             }
@@ -105,13 +157,14 @@ struct ContentView: View {
 
     private var statsBar: some View {
         HStack(spacing: 20) {
-            StatBadge(icon: "bolt.fill", value: "\(progressManager.progress.xp)", label: "XP", color: .orange)
-            StatBadge(icon: "flame.fill", value: "\(progressManager.progress.streak)", label: "Streak", color: .red)
-            StatBadge(icon: "heart.fill", value: "\(progressManager.progress.hearts)", label: "Lives", color: .pink)
+            StatBadge(icon: "bolt.fill", value: "\(progressManager.progress.xp)", label: "XP", color: Color(.secondaryLabel))
+            StatBadge(icon: "flame.fill", value: "\(progressManager.progress.streak)", label: "Streak", color: Color(.secondaryLabel))
+            StatBadge(icon: "heart.fill", value: "\(progressManager.progress.hearts)", label: "Lives", color: Color(.secondaryLabel))
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .background(Theme.adaptiveCardBg, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Theme.adaptiveBorder, lineWidth: 1))
     }
 
     // MARK: - Category Picker
@@ -139,13 +192,20 @@ struct ContentView: View {
                         .padding(.vertical, 10)
                         .background(
                             selectedCategory?.id == category.id
-                            ? AnyShapeStyle(.tint)
-                            : AnyShapeStyle(.ultraThinMaterial)
+                            ? AnyShapeStyle(Color.primary)
+                            : AnyShapeStyle(Theme.adaptiveCardBg)
                         )
                         .foregroundStyle(
                             selectedCategory?.id == category.id
-                            ? .white
+                            ? Color(UIColor.systemBackground)
                             : .primary
+                        )
+                        .overlay(
+                            Capsule().strokeBorder(
+                                selectedCategory?.id == category.id
+                                ? Color.clear
+                                : Theme.adaptiveBorder, lineWidth: 1
+                            )
                         )
                         .clipShape(Capsule())
                     }
@@ -170,11 +230,11 @@ struct ContentView: View {
                     VStack(spacing: 8) {
                         ZStack {
                             Circle()
-                                .fill(.ultraThinMaterial)
+                                .fill(Theme.adaptiveBgSecondary)
                                 .frame(width: 48, height: 48)
                             Image(systemName: game.icon)
                                 .font(.title3)
-                                .foregroundStyle(.tint)
+                                .foregroundStyle(.primary)
                         }
                         Text(game.name)
                             .font(.subheadline.weight(.semibold))
@@ -183,7 +243,8 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                     .padding(.horizontal, 8)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                    .background(Theme.adaptiveCardBg, in: RoundedRectangle(cornerRadius: 16))
+                    .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Theme.adaptiveBorder, lineWidth: 1))
                 }
                 .buttonStyle(.plain)
             }
@@ -260,11 +321,11 @@ struct SubjectCard: View {
             VStack(spacing: 8) {
                 ZStack {
                     Circle()
-                        .fill(.ultraThinMaterial)
+                        .fill(Theme.adaptiveBgSecondary)
                         .frame(width: 48, height: 48)
                     Image(systemName: subject.icon)
                         .font(.title3)
-                        .foregroundStyle(.tint)
+                        .foregroundStyle(.primary)
                 }
 
                 Text(subject.name)
@@ -278,14 +339,15 @@ struct SubjectCard: View {
 
                 if isCompleted {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Theme.success)
                         .font(.caption)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
             .padding(.horizontal, 8)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+            .background(Theme.adaptiveCardBg, in: RoundedRectangle(cornerRadius: 16))
+            .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Theme.adaptiveBorder, lineWidth: 1))
         }
         .buttonStyle(.plain)
     }
