@@ -109,15 +109,17 @@ struct Game2048View: View {
     private func tileColor(_ v: Int) -> Color {
         switch v {
         case 0: return Color(hex: "#e8e8e8")
-        case 2: return Color(hex: "#d4d4d4")
-        case 4: return Color(hex: "#c0c0c0")
-        case 8: return Color(hex: "#a8a8a8")
-        case 16: return Color(hex: "#909090")
-        case 32: return Color(hex: "#787878")
-        case 64: return Color(hex: "#606060")
-        case 128...256: return Color(hex: "#484848")
-        case 512...1024: return Color(hex: "#303030")
-        default: return Color(hex: "#1a1a1a")
+        case 2: return Color(hex: "#d4d4d8")
+        case 4: return Color(hex: "#c0c0c8")
+        case 8: return Color(hex: "#a8a8b0")
+        case 16: return Color(hex: "#909098")
+        case 32: return Color(hex: "#787880")
+        case 64: return Color(hex: "#606068")
+        case 128: return Color(hex: "#505058")
+        case 256: return Color(hex: "#404048")
+        case 512: return Color(hex: "#303038")
+        case 1024: return Color(hex: "#202028")
+        default: return Color(hex: "#18181b")
         }
     }
 }

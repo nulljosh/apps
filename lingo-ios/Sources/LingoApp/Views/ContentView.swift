@@ -30,12 +30,12 @@ enum Theme {
         })
     }
 
-    static var adaptiveBg: Color { adaptive(light: bg, dark: bgDark) }
-    static var adaptiveBgSecondary: Color { adaptive(light: bgSecondary, dark: bgSecondaryDark) }
-    static var adaptiveBgTertiary: Color { adaptive(light: bgTertiary, dark: bgTertiaryDark) }
-    static var adaptiveCardBg: Color { adaptive(light: cardBg, dark: cardBgDark) }
-    static var adaptiveBorder: Color { adaptive(light: border, dark: borderDark) }
-    static var adaptiveTextMuted: Color { adaptive(light: textMuted, dark: textMutedDark) }
+    static let adaptiveBg = adaptive(light: bg, dark: bgDark)
+    static let adaptiveBgSecondary = adaptive(light: bgSecondary, dark: bgSecondaryDark)
+    static let adaptiveBgTertiary = adaptive(light: bgTertiary, dark: bgTertiaryDark)
+    static let adaptiveCardBg = adaptive(light: cardBg, dark: cardBgDark)
+    static let adaptiveBorder = adaptive(light: border, dark: borderDark)
+    static let adaptiveTextMuted = adaptive(light: textMuted, dark: textMutedDark)
 }
 
 extension Color {

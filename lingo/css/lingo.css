@@ -32,8 +32,8 @@
     --border: rgba(0,0,0,0.1);
     --success: #2d7a50;
     --error: #c44040;
-    --font: 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-    --font-display: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font: 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+    --font-display: 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
     --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     --radius-sm: 6px;
     --radius-md: 8px;
@@ -102,14 +102,16 @@
 
 body {
     font-family: var(--font);
+    font-weight: 400;
     background: var(--bg-primary);
     color: var(--text-primary);
-    min-height: 100vh;
+    line-height: 1.6;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .header {
@@ -186,15 +188,15 @@ body {
 }
 
 .stat-streak i {
-    color: #FF9600;
+    color: var(--text-secondary);
 }
 
 .stat-xp i {
-    color: #FFC800;
+    color: var(--text-secondary);
 }
 
 .stat-hearts i {
-    color: #FF4B4B;
+    color: var(--text-secondary);
 }
 
 .container {
@@ -300,8 +302,8 @@ body {
 }
 
 .subject-card:hover {
-    opacity: 0.6;
     transform: translateY(-2px);
+    border-color: var(--text-muted);
 }
 
 .subject-card.selected {
@@ -459,7 +461,12 @@ body {
 .math-input:focus,
 .translation-input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(61, 158, 106, 0.15);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .math-input:focus,
+[data-theme="dark"] .translation-input:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
 }
 
 .choices-container {
@@ -484,8 +491,8 @@ body {
 }
 
 .choice-btn:hover {
-    opacity: 0.6;
     transform: translateY(-2px);
+    border-color: var(--text-muted);
 }
 
 .choice-btn:active {
@@ -578,8 +585,8 @@ body {
 }
 
 .btn:hover {
-    opacity: 0.6;
     transform: translateY(-2px);
+    border-color: var(--text-muted);
 }
 
 .btn:disabled {
@@ -595,7 +602,7 @@ body {
 }
 
 .btn-primary:hover {
-    opacity: 0.6;
+    opacity: 0.85;
     color: var(--bg-primary);
 }
 
@@ -995,8 +1002,12 @@ body {
 .ripple {
     position: absolute;
     border-radius: 50%;
-    background: rgba(61, 158, 106, 0.2);
+    background: rgba(0, 0, 0, 0.08);
     width: 100px;
+}
+
+[data-theme="dark"] .ripple {
+    background: rgba(255, 255, 255, 0.08);
     height: 100px;
     margin-left: -50px;
     margin-top: -50px;
@@ -1010,7 +1021,7 @@ body {
     }
     30% {
         transform: scale(1.05);
-        box-shadow: 0 0 0 6px rgba(61, 158, 106, 0.15);
+        box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.06);
     }
     100% {
         transform: scale(1);
@@ -1065,7 +1076,7 @@ body {
     right: 0;
     font-size: 0.875rem;
     font-weight: 800;
-    color: #FFC800;
+    color: var(--text-primary);
     pointer-events: none;
     animation: xpFloat 1s var(--ease) forwards;
     z-index: 101;
@@ -1161,6 +1172,19 @@ body {
     z-index: 10000 !important;
     font-size: 0.875rem;
     font-weight: 700;
+}
+
+/* ── Fade-up entrance animation ── */
+
+.fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* ── Noise texture overlay ── */
@@ -1295,8 +1319,8 @@ body {
 }
 
 .avatar-option:hover {
-    opacity: 0.6;
     transform: translateY(-2px);
+    border-color: var(--text-muted);
 }
 
 .avatar-option.selected {
@@ -1335,7 +1359,7 @@ body {
 }
 
 .auth-submit:hover {
-    opacity: 0.6;
+    opacity: 0.85;
     transform: translateY(-2px);
 }
 
@@ -1373,8 +1397,8 @@ body {
 }
 
 .profile-chip:hover {
-    opacity: 0.6;
     transform: translateY(-2px);
+    border-color: var(--text-muted);
 }
 
 .profile-chip-avatar {

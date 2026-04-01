@@ -112,11 +112,11 @@ struct MinesweeperView: View {
 
     private func numColor(_ n: Int) -> Color {
         switch n {
-        case 1: return Color(hex: "#555555")
-        case 2: return Color(hex: "#777777")
+        case 1: return Color(hex: "#222222")
+        case 2: return Color(hex: "#555555")
         case 3: return Color(hex: "#999999")
-        case 4: return Color(hex: "#444444")
-        case 5: return Color(hex: "#666666")
+        case 4: return Color(hex: "#333333")
+        case 5: return Color(hex: "#777777")
         default: return .primary
         }
     }

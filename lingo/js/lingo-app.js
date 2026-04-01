@@ -505,7 +505,9 @@ function setupEventListeners() {
 }
 
 function updateShellForAuth() {
-    document.getElementById('authShell').style.display = localProfile ? 'none' : 'block';
+    const authShell = document.getElementById('authShell');
+    authShell.style.display = localProfile ? 'none' : 'block';
+    if (!localProfile) authShell.classList.add('visible');
     document.getElementById('appShell').style.display = localProfile ? 'block' : 'none';
 }
 

@@ -49,7 +49,7 @@
     </header>
 
     <div class="container" id="main" role="main">
-        <section class="auth-shell" id="authShell" aria-labelledby="authTitle">
+        <section class="auth-shell fade-up" id="authShell" aria-labelledby="authTitle">
             <div class="auth-card">
                 <div class="auth-copy">
                     <div class="auth-section-label">Get Started</div>
@@ -74,7 +74,7 @@
         </section>
 
         <section class="app-shell" id="appShell">
-        <div class="subject-selection" id="subjectSelection">
+        <div class="subject-selection fade-up" id="subjectSelection">
             <div class="category-tabs" role="tablist" aria-label="Subject categories">
                 <div class="category-tab active" data-category="languages" role="tab" tabindex="0" aria-selected="true" aria-controls="subjectGrid">Languages</div>
                 <div class="category-tab" data-category="programming" role="tab" tabindex="0" aria-selected="false" aria-controls="subjectGrid">Programming</div>
@@ -153,6 +153,11 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('js/sw.js').catch(() => {});
         }
+        // Fade-up observer
+        const fadeObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); } });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => fadeObs.observe(el));
     </script>
 </body>
 </html>
