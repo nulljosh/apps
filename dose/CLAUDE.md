@@ -13,7 +13,7 @@ v1.3.0
 npm run dev       # Dev server
 npm test          # Run tests
 npm run build     # Production build
-vercel --prod     # Deploy
+git push           # Deploy (auto via Vercel Git integration from apps monorepo)
 ```
 
 ## Key Files
