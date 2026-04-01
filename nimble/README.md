@@ -39,6 +39,32 @@ open Nimble.xcodeproj
 
 ![Architecture](architecture.svg)
 
+## Roadmap
+
+### v1.1.0 -- MenuBar & Hotkey
+- Re-enable MenuBarExtra when macOS Tahoe SDK stabilizes
+- Global hotkey (Cmd+Shift+=) to summon/dismiss
+- Search history with arrow key navigation
+- Clear history option in settings
+
+### v1.2.0 -- Smart Answers
+- Unit conversion (length, weight, temperature, volume)
+- Currency conversion via free exchange rate API
+- Timezone queries ("time in Tokyo")
+- Color preview for hex/rgb values
+- Clipboard-aware: auto-fill from clipboard on open
+
+### v1.3.0 -- Integration
+- macOS widgets (small: last answer, medium: search bar)
+- Shortcuts integration for automation
+- Export search history as JSON/CSV
+
+### v2.0.0 -- Multi-Source
+- Pluggable answer sources (Wolfram|Alpha, OpenAI, custom)
+- Bookmarks/favorites for frequent queries
+- Inline web preview for source links
+- iCloud sync for preferences and history across macOS/iOS
+
 ## License
 
 MIT 2026 Joshua Trommel
