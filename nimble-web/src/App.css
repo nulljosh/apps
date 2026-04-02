@@ -1,0 +1,226 @@
+:root {
+  --bg: #f4f4f5;
+  --text: #18181b;
+  --text-muted: #71717a;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(0, 0, 0, 0.08);
+  --edge-color: rgba(10, 132, 255, 0.25);
+  --accent: #0a84ff;
+  --math-bg: rgba(10, 132, 255, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #09090b;
+    --text: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --card-bg: rgba(39, 39, 42, 0.7);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --edge-color: rgba(10, 132, 255, 0.3);
+    --math-bg: rgba(10, 132, 255, 0.15);
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.app {
+  width: 100vw;
+  height: 100vh;
+}
+
+.react-flow__background {
+  background: var(--bg);
+}
+
+/* Center search node */
+.center-node {
+  width: 340px;
+  padding: 24px;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .center-node {
+    width: 280px;
+    padding: 16px;
+  }
+}
+
+.center-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.center-form {
+  display: flex;
+  gap: 8px;
+}
+
+.center-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.center-input:focus {
+  border-color: var(--accent);
+}
+
+.center-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.center-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s;
+}
+
+.center-btn:hover {
+  transform: scale(1.04) translateY(-1px);
+}
+
+.center-btn:active {
+  transform: scale(0.97);
+}
+
+.center-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
+}
+
+.center-error {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #ef4444;
+}
+
+/* Result nodes */
+.result-node {
+  display: block;
+  width: 220px;
+  padding: 14px 16px;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.result-node:hover {
+  transform: scale(1.04) translateY(-2px);
+}
+
+.result-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.result-snippet {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.result-domain {
+  font-size: 10px;
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+/* Math result node */
+.math-node {
+  background: var(--math-bg);
+  border-color: var(--accent);
+  text-align: center;
+  cursor: default;
+}
+
+.result-math-value {
+  font-family: 'Geist Mono', 'SF Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.result-math-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* React Flow controls */
+.flow-controls {
+  background: var(--card-bg) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+.flow-controls button {
+  background: transparent !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  color: var(--text) !important;
+  fill: var(--text) !important;
+}
+
+.flow-controls button:hover {
+  background: var(--card-border) !important;
+}
+
+.flow-controls button svg {
+  fill: var(--text) !important;
+}

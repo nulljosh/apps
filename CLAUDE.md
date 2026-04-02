@@ -10,20 +10,19 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **dose** -- Health tracker (Vite + React). Live: dose.heyitsmejosh.com. Has ios/ + watchos/.
 - **lingo** -- Language learning (vanilla JS PWA)
 - **politics** -- Political compass (vanilla JS)
-- **rabbit** -- Search + mind-map
+- **nimble-web** -- Instant answers + web search with mind-map (Vite + React). Live: nimble.heyitsmejosh.com. Merged from rabbit.
 - **roost** -- BC real estate (Vite + React PWA)
 - **usage** -- Usage tracking
 
 ### iOS (SwiftUI)
 - **browser** / **browser-ios** -- WebKit browser
 - **life** / **life-ios** -- Life simulator
-- **nimble** / **nimble-ios** -- Habit tracker
+- **nimble** / **nimble-ios** -- Instant answers (macOS/iOS)
 - **nyc** / **nyc-ios** / **nyc-web** -- Times Square colony sim (SpriteKit / Canvas)
 - **lingo-ios** -- Language learning
 - **dashboard-ios** -- Dashboard
 - **journal-ios** -- Journal companion
 - **portfolio-ios** -- Portfolio companion
-- **rabbit-ios** -- Search companion
 
 ## Build
 
