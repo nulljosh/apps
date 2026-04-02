@@ -39,8 +39,10 @@ body {
   height: 100vh;
 }
 
-.react-flow__background {
-  background: var(--bg);
+.react-flow,
+.react-flow__background,
+.react-flow__container {
+  background: var(--bg) !important;
 }
 
 /* Center search node */
