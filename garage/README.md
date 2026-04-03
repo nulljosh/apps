@@ -1,6 +1,6 @@
 <img src="public/icon.svg" width="80">
 
-# Garage Door Services
+# Best Choice Garage Doors
 
 ![version](https://img.shields.io/badge/version-v1.0.0-blue)
 
