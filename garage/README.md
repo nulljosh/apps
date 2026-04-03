@@ -1,4 +1,4 @@
-<img src="public/icon.svg" width="80">
+<img src="public/icon.svg" width="80" style="border-radius: 16px">
 
 # Best Choice Garage Doors
 
