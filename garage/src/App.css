@@ -827,22 +827,48 @@ body {
   pointer-events: none;
 }
 
-/* ---- Shortcuts Bar ---- */
+/* ---- App Footer ---- */
 
-.shortcuts-bar {
+.app-footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 8px;
-  background: rgba(245, 245, 247, 0.9);
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: rgba(245, 245, 247, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--border);
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-left a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-left a:hover {
+  color: var(--blue);
+}
+
+.footer-sep {
+  color: var(--border);
+}
+
+.footer-shortcuts {
+  display: flex;
+  gap: 16px;
 }
 
 .shortcut-hint {
@@ -953,8 +979,12 @@ body {
     min-width: 100%;
   }
 
-  .shortcuts-bar {
+  .footer-shortcuts {
     display: none;
+  }
+
+  .app-footer {
+    justify-content: center;
   }
 
   .part-list-footer {

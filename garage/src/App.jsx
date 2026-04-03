@@ -270,11 +270,20 @@ export default function App() {
         <div className="toast animate__animated animate__fadeInUp animate__faster">{toast}</div>
       )}
 
-      {/* Keyboard shortcuts footer */}
-      <footer className="shortcuts-bar">
-        <span className="shortcut-hint">Cmd+K Search</span>
-        <span className="shortcut-hint">Alt+1/2/3 Navigate</span>
-        <span className="shortcut-hint">Esc Close</span>
+      {/* App footer */}
+      <footer className="app-footer">
+        <div className="footer-left">
+          <span>&copy; 2026 Best Choice Garage Doors</span>
+          <span className="footer-sep">|</span>
+          <a href="https://bcgaragedoors.ca" target="_blank" rel="noopener noreferrer">bcgaragedoors.ca</a>
+          <span className="footer-sep">|</span>
+          <a href="https://github.com/nulljosh/bcgd-dashboard" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <div className="footer-shortcuts">
+          <span className="shortcut-hint">Cmd+K Search</span>
+          <span className="shortcut-hint">Alt+1/2/3 Navigate</span>
+          <span className="shortcut-hint">Esc Close</span>
+        </div>
       </footer>
     </div>
   );
