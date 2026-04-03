@@ -1,7 +1,7 @@
-# Garage Door Services
-v1.0.0
+# Best Choice Garage Doors
+v1.1.0
 
-Inventory and stock tracking app for a garage door services company.
+Inventory and stock tracking dashboard for Best Choice Garage Doors (bcgaragedoors.ca).
 
 ## Stack
 - Vite + React 19

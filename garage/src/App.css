@@ -318,11 +318,105 @@ body {
   font-size: 0.82rem;
 }
 
-/* ---- Categories ---- */
+/* ---- Dashboard Grid ---- */
 
-.category-section {
-  margin-top: 28px;
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
 }
+
+.dashboard-section {
+  min-width: 0;
+}
+
+/* Top Stocked */
+
+.top-list {
+  padding: 4px;
+}
+
+.top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.top-row:last-child {
+  border-bottom: none;
+}
+
+.top-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.top-qty {
+  font-weight: 600;
+  color: var(--teal);
+  font-size: 0.88rem;
+}
+
+/* Recent Activity */
+
+.activity-list {
+  padding: 4px;
+}
+
+.activity-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+}
+
+.activity-row:last-child {
+  border-bottom: none;
+}
+
+.activity-action {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  min-width: 70px;
+  color: var(--text-secondary);
+}
+
+.activity-action[data-action="added"],
+.activity-action[data-action="restocked"] {
+  color: var(--green);
+}
+
+.activity-action[data-action="removed"] {
+  color: var(--red);
+}
+
+.activity-action[data-action="used"] {
+  color: var(--orange);
+}
+
+.activity-action[data-action="updated"] {
+  color: var(--blue);
+}
+
+.activity-name {
+  font-weight: 500;
+  flex: 1;
+}
+
+.activity-details {
+  color: var(--text-tertiary);
+  font-size: 0.78rem;
+}
+
+/* ---- Categories ---- */
 
 .category-grid {
   display: grid;
@@ -769,6 +863,10 @@ body {
 
   .stats-row {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
   }
 
   .category-grid {

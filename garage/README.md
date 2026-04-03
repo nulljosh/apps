@@ -1,8 +1,8 @@
-<img src="public/icon.svg" width="80" style="border-radius: 16px">
+<img src="public/logo.png" width="120">
 
 # Best Choice Garage Doors
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
 Inventory and stock tracking for garage door services. Track parts, SKUs, quantities, costs, suppliers, and stock history.
 
