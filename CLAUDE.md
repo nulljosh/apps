@@ -13,6 +13,7 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **nimble-web** -- Instant answers + web search with mind-map (Vite + React). Live: nimble.heyitsmejosh.com. Merged from rabbit.
 - **roost** -- BC real estate (Vite + React PWA)
 - **usage** -- Usage tracking
+- **bhaddie** -- Location-based social + creator economy (web/, ios/, macos/)
 
 ### iOS (SwiftUI)
 - **browser** / **browser-ios** -- WebKit browser

@@ -1,0 +1,16 @@
+name: Bhaddie
+options:
+  bundleIdPrefix: com.nulljosh
+  deploymentTarget:
+    macOS: "15.0"
+settings:
+  SWIFT_VERSION: "6.0"
+  DEVELOPMENT_TEAM: ""
+targets:
+  Bhaddie:
+    type: application
+    platform: macOS
+    sources: [Sources]
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      INFOPLIST_KEY_CFBundleDisplayName: Bhaddie
