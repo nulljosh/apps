@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="32" style="fill:#1a1a1a"/>
+  <rect x="40" y="40" width="50" height="50" rx="8" style="fill:#3a3a3a;stroke:#555;stroke-width:1.5"/>
+  <rect x="110" y="40" width="50" height="50" rx="8" style="fill:#3a3a3a;stroke:#555;stroke-width:1.5"/>
+  <rect x="40" y="110" width="50" height="50" rx="8" style="fill:#3a3a3a;stroke:#555;stroke-width:1.5"/>
+  <rect x="110" y="110" width="50" height="50" rx="8" style="fill:#3a3a3a;stroke:#555;stroke-width:1.5"/>
+  <text x="65" y="72" style="fill:#aaa;font-family:monospace;font-size:14px;text-anchor:middle">web</text>
+  <text x="135" y="72" style="fill:#aaa;font-family:monospace;font-size:14px;text-anchor:middle">ios</text>
+  <text x="65" y="142" style="fill:#aaa;font-family:monospace;font-size:14px;text-anchor:middle">mac</text>
+  <text x="135" y="142" style="fill:#aaa;font-family:monospace;font-size:14px;text-anchor:middle">exp</text>
+</svg>

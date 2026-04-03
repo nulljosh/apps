@@ -1,6 +1,6 @@
 # Apps Monorepo
 
-v2.1.0
+v3.0.0
 
 Standalone apps and experiments. Each subdirectory is independent with its own build system.
 

@@ -1,5 +1,8 @@
+<img src="icon.svg" width="80">
+
 # Apps
-![version](https://img.shields.io/badge/version-v2.1.0-blue)
+
+![version](https://img.shields.io/badge/version-v3.0.0-blue)
 
 Monorepo for standalone apps and experiments. Each subdirectory is an independent project.
 
