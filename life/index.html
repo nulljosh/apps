@@ -380,6 +380,237 @@
     fill: var(--text-secondary);
   }
 
+  /* Comparison table */
+  .comparison-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+  .comparison-table .ct-header {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 1rem 0 0.5rem;
+  }
+  .comparison-table .ct-cell {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    border-top: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .comparison-table .ct-cell:nth-child(even) {
+    color: var(--text);
+    font-weight: 400;
+  }
+  .comparison-table .ct-cell:nth-child(odd) {
+    color: var(--text-secondary);
+  }
+
+  /* Dialog block */
+  .dialog-block {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 0;
+    margin: 2rem 0;
+  }
+  .dialog-line {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    align-items: baseline;
+  }
+  .dialog-line:last-child { margin-bottom: 0; }
+  .dialog-speaker {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    min-width: 3rem;
+  }
+  .dialog-text {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .dialog-internal {
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+  .dialog-context {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Then vs Now card */
+  .then-now {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+  .then-now-col {
+    padding: 1.25rem 1rem;
+  }
+  .then-now-col:first-child {
+    border-right: 1px solid var(--border);
+  }
+  .then-now-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+  .then-now-col:first-child .then-now-label {
+    color: var(--dot-severe);
+  }
+  .then-now-col:last-child .then-now-label {
+    color: var(--dot-positive);
+  }
+  .then-now-item {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    border-left: 2px solid var(--border);
+  }
+  .then-now-col:first-child .then-now-item {
+    border-left-color: var(--dot-severe);
+    opacity: 0.7;
+  }
+  .then-now-col:last-child .then-now-item {
+    border-left-color: var(--dot-positive);
+  }
+  @media (max-width: 400px) {
+    .then-now { grid-template-columns: 1fr; }
+    .then-now-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+
+  /* Flowchart */
+  .flowchart {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 0;
+    margin: 2rem 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0;
+    position: relative;
+    padding-bottom: 1.25rem;
+  }
+  .flow-step:last-child { padding-bottom: 0; }
+  .flow-node {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+  }
+  .flow-node--crisis { background: var(--dot-severe); }
+  .flow-node--event { background: var(--dot-event); }
+  .flow-node--positive { background: var(--dot-positive); }
+  .flow-step::before {
+    content: '';
+    position: absolute;
+    left: 4.5px;
+    top: 14px;
+    bottom: 0;
+    width: 1px;
+    background: var(--timeline-line);
+  }
+  .flow-step:last-child::before { display: none; }
+  .flow-content {
+    flex: 1;
+  }
+  .flow-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .flow-detail {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+  .flow-branch {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .flow-branch-label {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  /* Progress trackers */
+  .progress-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 0;
+    margin: 2rem 0;
+  }
+  @media (max-width: 400px) {
+    .progress-grid { grid-template-columns: 1fr; }
+  }
+  .progress-item {}
+  .progress-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin-bottom: 0.375rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .progress-arrow {
+    font-size: 0.6875rem;
+  }
+  .progress-arrow--up { color: var(--dot-positive); }
+  .progress-arrow--down { color: var(--dot-severe); }
+  .progress-arrow--flat { color: var(--text-secondary); }
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: width 0.6s var(--spring);
+  }
+  .progress-fill--high { background: var(--dot-positive); }
+  .progress-fill--mid { background: var(--dot-event); }
+  .progress-fill--low { background: var(--dot-severe); }
+
   /* Scroll progress bar */
   .scroll-progress {
     position: fixed;
@@ -700,6 +931,25 @@
 <p class="note" style="font-size:0.75rem; border:none; padding:0.5rem 0 0 0;">Sources: Cuartas et al. (2021), "Corporal Punishment and Elevated Neural Response to Threat in Children," <em>Child Development</em>. Tomoda et al. (2009), "Reduced prefrontal cortical gray matter volume in young adults exposed to harsh corporal punishment," <em>NeuroImage</em>. Teicher & Samson (2016), "The effects of childhood maltreatment on brain structure, function and connectivity," <em>Nature Reviews Neuroscience</em>. Gershoff (2016), "Should Parents' Physical Punishment of Children Be Considered a Source of Toxic Stress That Affects Brain Development?" <em>Family Relations</em>.</p>
 </div>
 
+<!-- COMPARISON TABLE: What people saw vs. what was happening -->
+<p class="section-label fade-up">What People Saw vs. What Was Happening</p>
+<div class="comparison-table fade-up">
+  <div class="ct-header">What people saw</div>
+  <div class="ct-header">What was happening</div>
+  <div class="ct-cell">Normal family</div>
+  <div class="ct-cell">Dad hitting me at 2, mom weaponizing it</div>
+  <div class="ct-cell">Nice house, vacations</div>
+  <div class="ct-cell">Constant arguing, fear, intimidation</div>
+  <div class="ct-cell">Kid who has it good</div>
+  <div class="ct-cell">Kid carrying shame that never left</div>
+  <div class="ct-cell">Quiet teenager</div>
+  <div class="ct-cell">Masking 50% of the day, crying at night</div>
+  <div class="ct-cell">Independent young adult</div>
+  <div class="ct-cell">Homeless, living in a car, hospitalized</div>
+  <div class="ct-cell">Smart guy with potential</div>
+  <div class="ct-cell">130+ IQ, no diagnosis for 17 years, smoking weed to stop thinking</div>
+</div>
+
 <!-- PULL QUOTE A -->
 <p class="pull-quote fade-up">"If my dad gave me a billion dollars it wouldn't change it."</p>
 
@@ -789,6 +1039,52 @@
   <text x="530" y="113" text-anchor="middle" font-size="8">no pattern</text>
   </g>
 </svg>
+</div>
+
+<!-- FLOWCHART: What happens when I get triggered -->
+<div class="flowchart fade-up">
+<p class="chart-title">What happens when I get triggered</p>
+<div class="flow-step">
+  <div class="flow-node flow-node--crisis"></div>
+  <div class="flow-content">
+    <div class="flow-label">Trigger hits</div>
+    <div class="flow-detail">Family, nighttime, specific places, random</div>
+  </div>
+</div>
+<div class="flow-step">
+  <div class="flow-node flow-node--event"></div>
+  <div class="flow-content">
+    <div class="flow-label">Mask holds (if daytime)</div>
+    <div class="flow-detail">Keep composure, push through, nobody notices</div>
+  </div>
+</div>
+<div class="flow-step">
+  <div class="flow-node flow-node--crisis"></div>
+  <div class="flow-content">
+    <div class="flow-label">Mask drops (nighttime)</div>
+    <div class="flow-detail">Crying, overwhelm, memories replay at full intensity</div>
+  </div>
+</div>
+<div class="flow-step">
+  <div class="flow-node flow-node--event"></div>
+  <div class="flow-content">
+    <div class="flow-label">Smoke weed</div>
+    <div class="flow-detail">Suppress REM sleep, suppress memory, stop thinking</div>
+  </div>
+</div>
+<div class="flow-step">
+  <div class="flow-node flow-node--event"></div>
+  <div class="flow-content">
+    <div class="flow-label">Sleep with nightmares (or without, if enough weed)</div>
+  </div>
+</div>
+<div class="flow-step">
+  <div class="flow-node flow-node--crisis"></div>
+  <div class="flow-content">
+    <div class="flow-label">Wake up crying</div>
+    <div class="flow-detail">Loop resets. Same thing tomorrow.</div>
+  </div>
+</div>
 </div>
 
 <!-- ==================== SECTION: Sleep ==================== -->
@@ -1152,6 +1448,28 @@
 </div>
 
 <!-- ==================== SECTIONS: Sexuality, Friendships ==================== -->
+<!-- DIALOG BLOCK: The pattern -->
+<div class="dialog-block fade-up">
+<p class="chart-title">The pattern</p>
+<div class="dialog-context">How most conversations go, versus what is actually happening internally.</div>
+<div class="dialog-line">
+  <span class="dialog-speaker">Them</span>
+  <span class="dialog-text">"How are you doing?"</span>
+</div>
+<div class="dialog-line">
+  <span class="dialog-speaker">Me</span>
+  <span class="dialog-text">"I'm good, yeah"</span>
+</div>
+<div class="dialog-line">
+  <span class="dialog-speaker">Them</span>
+  <span class="dialog-text">"Cool, good to hear"</span>
+</div>
+<div class="dialog-line">
+  <span class="dialog-speaker"></span>
+  <span class="dialog-internal">[masking, dissociating, replaying memories from 20 years ago]</span>
+</div>
+</div>
+
 <p class="section-label fade-up">Sexuality</p>
 <div class="card fade-up">
 <p>I'm straight. I had one gay interaction with an old friend that made me feel grossed out. I have gay friends but most if not all of them have come onto me at some point, which doesn't just turn me off but genuinely disgusts me. Worth noting for the trust and boundaries stuff.</p>
@@ -1724,6 +2042,97 @@
   <rect x="120" y="94" width="340" height="14" rx="3" fill="var(--dot-positive)" opacity="0.45" class="chart-interactive" data-tip="Kindness: people say kind, benevolent, smart."/>
   <rect x="120" y="119" width="300" height="14" rx="3" fill="var(--dot-positive)" opacity="0.4" class="chart-interactive" data-tip="Humor: people say funny."/>
   <rect x="120" y="144" width="320" height="14" rx="3" fill="var(--dot-positive)" opacity="0.45" class="chart-interactive" data-tip="Physical strength: gym PRs almost every day. Goes hard 75% of the time."/>
+</svg>
+</div>
+
+<!-- THEN VS NOW -->
+<p class="section-label fade-up">Then vs. Now</p>
+<div class="then-now fade-up">
+  <div class="then-now-col">
+    <div class="then-now-label">Age 21 (2021)</div>
+    <div class="then-now-item">No autism diagnosis</div>
+    <div class="then-now-item">No therapist</div>
+    <div class="then-now-item">Mental breakdown</div>
+    <div class="then-now-item">Self-harm starting</div>
+    <div class="then-now-item">Relationship ending</div>
+    <div class="then-now-item">No direction</div>
+  </div>
+  <div class="then-now-col">
+    <div class="then-now-label">Age 26 (2026)</div>
+    <div class="then-now-item">Autism dx, PWD pending</div>
+    <div class="then-now-item">Therapy with Amanda</div>
+    <div class="then-now-item">Gym daily, hitting PRs</div>
+    <div class="then-now-item">Studying calc + bio</div>
+    <div class="then-now-item">Building real projects</div>
+    <div class="then-now-item">Planning university on the Island</div>
+  </div>
+</div>
+
+<!-- PROGRESS TRACKERS: Where things stand -->
+<p class="section-label fade-up">Where Things Stand</p>
+<div class="progress-grid fade-up">
+  <div class="progress-item">
+    <div class="progress-label">Nightmares <span class="progress-arrow progress-arrow--flat">-- still frequent</span></div>
+    <div class="progress-bar"><div class="progress-fill progress-fill--low" style="width:20%"></div></div>
+  </div>
+  <div class="progress-item">
+    <div class="progress-label">Self-awareness <span class="progress-arrow progress-arrow--up">^ high</span></div>
+    <div class="progress-bar"><div class="progress-fill progress-fill--high" style="width:85%"></div></div>
+  </div>
+  <div class="progress-item">
+    <div class="progress-label">Physical health <span class="progress-arrow progress-arrow--up">^ strong</span></div>
+    <div class="progress-bar"><div class="progress-fill progress-fill--high" style="width:80%"></div></div>
+  </div>
+  <div class="progress-item">
+    <div class="progress-label">Social connections <span class="progress-arrow progress-arrow--down">v very low</span></div>
+    <div class="progress-bar"><div class="progress-fill progress-fill--low" style="width:10%"></div></div>
+  </div>
+  <div class="progress-item">
+    <div class="progress-label">Housing stability <span class="progress-arrow progress-arrow--flat">-- uncertain</span></div>
+    <div class="progress-bar"><div class="progress-fill progress-fill--mid" style="width:50%"></div></div>
+  </div>
+  <div class="progress-item">
+    <div class="progress-label">Academics <span class="progress-arrow progress-arrow--up">^ strong</span></div>
+    <div class="progress-bar"><div class="progress-fill progress-fill--high" style="width:95%"></div></div>
+  </div>
+</div>
+
+<!-- RADAR CHART: Current self-assessment -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Current self-assessment</p>
+<svg viewBox="0 0 400 360" preserveAspectRatio="xMidYMid meet">
+  <!-- Radar background rings -->
+  <polygon points="200,60 310,105 310,235 200,280 90,235 90,105" fill="none" stroke="var(--border)" stroke-width="0.5" opacity="0.5"/>
+  <polygon points="200,90 285,122 285,218 200,250 115,218 115,122" fill="none" stroke="var(--border)" stroke-width="0.5" opacity="0.3"/>
+  <polygon points="200,120 260,140 260,200 200,220 140,200 140,140" fill="none" stroke="var(--border)" stroke-width="0.5" opacity="0.2"/>
+  <polygon points="200,150 235,158 235,183 200,190 165,183 165,158" fill="none" stroke="var(--border)" stroke-width="0.5" opacity="0.1"/>
+
+  <!-- Axis lines -->
+  <line x1="200" y1="60" x2="200" y2="280" stroke="var(--border)" stroke-width="0.5" opacity="0.3"/>
+  <line x1="90" y1="105" x2="310" y2="235" stroke="var(--border)" stroke-width="0.5" opacity="0.3"/>
+  <line x1="90" y1="235" x2="310" y2="105" stroke="var(--border)" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Data polygon: Physical=0.8, Academics=0.95, Creative=0.85, Emotional=0.3, Social=0.05, Financial=0.15 -->
+  <polygon points="200,76 303,114 303,224 200,267 95,224 178,114"
+    fill="var(--dot-positive)" opacity="0.12"/>
+  <polygon points="200,76 303,114 303,224 200,267 95,224 178,114"
+    fill="none" stroke="var(--dot-positive)" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Data dots -->
+  <circle cx="200" cy="76" r="3" fill="var(--dot-positive)" class="chart-interactive" data-tip="Physical health: 0.8. Gym daily, hitting PRs."/>
+  <circle cx="303" cy="114" r="3" fill="var(--dot-positive)" class="chart-interactive" data-tip="Academics: 0.95. Pre-Calc 94%, Anatomy 97%."/>
+  <circle cx="303" cy="224" r="3" fill="var(--dot-positive)" class="chart-interactive" data-tip="Creative output: 0.85. Building real projects, 18-hour coding sessions."/>
+  <circle cx="200" cy="267" r="3" fill="var(--dot-severe)" class="chart-interactive" data-tip="Emotional regulation: 0.3. Mask holds during day, falls apart at night."/>
+  <circle cx="95" cy="224" r="3" fill="var(--dot-severe)" class="chart-interactive" data-tip="Social connections: 0.05. Zero close friends nearby."/>
+  <circle cx="178" cy="114" r="3" fill="var(--dot-severe)" class="chart-interactive" data-tip="Financial stability: 0.15. 5-10K debt, welfare, no income."/>
+
+  <!-- Labels -->
+  <text x="200" y="50" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Physical</text>
+  <text x="320" y="110" text-anchor="start" font-size="10" font-weight="500" fill="var(--text)">Academics</text>
+  <text x="320" y="235" text-anchor="start" font-size="10" font-weight="500" fill="var(--text)">Creative</text>
+  <text x="200" y="298" text-anchor="middle" font-size="10" font-weight="500" fill="var(--text)">Emotional</text>
+  <text x="80" y="240" text-anchor="end" font-size="10" font-weight="500" fill="var(--text)">Social</text>
+  <text x="168" y="104" text-anchor="end" font-size="10" font-weight="500" fill="var(--text)">Financial</text>
 </svg>
 </div>
 
