@@ -785,6 +785,357 @@ struct DailyRoutineChart: View {
     }
 }
 
+// MARK: - Chart 11: Sensory Heatmap
+
+struct SensoryHeatmapChart: View {
+    private let data = LifeData.sensoryProfile
+    @State private var selectedSense: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            chartTitle("SENSORY PROFILE")
+
+            ForEach(data) { item in
+                HStack(spacing: 10) {
+                    Text(item.sense)
+                        .font(.system(size: 10, weight: .medium))
+                        .frame(width: 90, alignment: .trailing)
+
+                    GeometryReader { geo in
+                        let barWidth = geo.size.width * item.intensity
+                        HStack(spacing: 0) {
+                            RoundedRectangle(cornerRadius: 3)
+                                .fill(Color.orange.opacity(
+                                    selectedSense == item.sense
+                                    ? 0.3 + item.intensity * 0.6
+                                    : 0.15 + item.intensity * 0.5
+                                ))
+                                .frame(width: barWidth, height: 20)
+                            Spacer(minLength: 0)
+                        }
+                    }
+                    .frame(height: 20)
+
+                    Text(item.detail)
+                        .font(.system(size: 8))
+                        .foregroundStyle(.secondary)
+                        .frame(width: 100, alignment: .leading)
+                        .lineLimit(2)
+                }
+                .scaleEffect(selectedSense == item.sense ? 1.02 : 1.0)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        selectedSense = selectedSense == item.sense ? nil : item.sense
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Chart 12: Sleep Quality
+
+struct SleepQualityChart: View {
+    private let data = LifeData.sleepPhases
+    @State private var selectedPhase: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            chartTitle("SLEEP QUALITY OVER TIME")
+
+            Chart(data) { phase in
+                LineMark(
+                    x: .value("Phase", phase.phase),
+                    y: .value("Quality", phase.quality)
+                )
+                .foregroundStyle(Color.indigo.opacity(0.6))
+                .interpolationMethod(.catmullRom)
+
+                AreaMark(
+                    x: .value("Phase", phase.phase),
+                    y: .value("Quality", phase.quality)
+                )
+                .foregroundStyle(Color.indigo.opacity(0.06))
+                .interpolationMethod(.catmullRom)
+
+                PointMark(
+                    x: .value("Phase", phase.phase),
+                    y: .value("Quality", phase.quality)
+                )
+                .foregroundStyle(phase.category.color)
+                .symbolSize(selectedPhase == phase.phase ? 80 : 30)
+                .annotation(position: .top) {
+                    Text(phase.years)
+                        .font(.system(size: 8))
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .chartYScale(domain: 0...1)
+            .chartYAxis {
+                AxisMarks(values: [0.0, 0.5, 1.0]) { value in
+                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4, 4]))
+                    AxisValueLabel {
+                        if let v = value.as(Double.self) {
+                            Text(v == 0 ? "Poor" : v == 0.5 ? "Fair" : "Good")
+                                .font(.system(size: 9))
+                        }
+                    }
+                }
+            }
+            .chartXAxis {
+                AxisMarks { value in
+                    AxisValueLabel {
+                        if let label = value.as(String.self) {
+                            Text(label)
+                                .font(.system(size: 9))
+                        }
+                    }
+                }
+            }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0)
+                            .onEnded { value in
+                                let origin = geo[proxy.plotFrame!].origin
+                                let x = value.location.x - origin.x
+                                if let phase: String = proxy.value(atX: x) {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedPhase = selectedPhase == phase ? nil : phase
+                                    }
+                                }
+                            }
+                        )
+                }
+            }
+            .frame(height: 160)
+
+            if let phase = selectedPhase, let item = data.first(where: { $0.phase == phase }) {
+                Text("\(item.phase) (\(item.years)): \(Int(item.quality * 100))% quality")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+                    .transition(.scale(scale: 0.95).combined(with: .opacity))
+            }
+        }
+    }
+}
+
+// MARK: - Chart 13: Financial Timeline
+
+struct FinancialTimelineChart: View {
+    private let data = LifeData.financialTimeline
+    @State private var selectedLabel: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            chartTitle("FINANCIAL TIMELINE")
+
+            ForEach(data) { period in
+                HStack(spacing: 12) {
+                    Circle()
+                        .fill(period.category.color)
+                        .frame(width: 8, height: 8)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(spacing: 6) {
+                            Text(period.label)
+                                .font(.system(size: 11, weight: .semibold))
+                            Text(period.years)
+                                .font(.system(size: 9))
+                                .foregroundStyle(.tertiary)
+                        }
+                        Text(period.source)
+                            .font(.system(size: 9))
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+                }
+                .padding(.vertical, 6)
+                .padding(.horizontal, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(period.category.color.opacity(selectedLabel == period.label ? 0.1 : 0.0))
+                )
+                .scaleEffect(selectedLabel == period.label ? 1.02 : 1.0)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        selectedLabel = selectedLabel == period.label ? nil : period.label
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Chart 14: Substance Use
+
+struct SubstanceChart: View {
+    private let data = LifeData.substanceTimeline
+    @State private var selectedAge: Int?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            chartTitle("SUBSTANCE USE OVER TIME")
+
+            Chart(data) { point in
+                AreaMark(
+                    x: .value("Age", point.age),
+                    y: .value("Weed", point.weedIntensity)
+                )
+                .foregroundStyle(Color.green.opacity(0.15))
+                .interpolationMethod(.catmullRom)
+
+                LineMark(
+                    x: .value("Age", point.age),
+                    y: .value("Weed", point.weedIntensity)
+                )
+                .foregroundStyle(Color.green.opacity(0.7))
+                .interpolationMethod(.catmullRom)
+
+                AreaMark(
+                    x: .value("Age", point.age),
+                    y: .value("Vaping", point.vapingIntensity)
+                )
+                .foregroundStyle(Color.blue.opacity(0.1))
+                .interpolationMethod(.catmullRom)
+
+                LineMark(
+                    x: .value("Age", point.age),
+                    y: .value("Vaping", point.vapingIntensity)
+                )
+                .foregroundStyle(Color.blue.opacity(0.5))
+                .interpolationMethod(.catmullRom)
+                .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+
+                PointMark(
+                    x: .value("Age", point.age),
+                    y: .value("Weed", point.weedIntensity)
+                )
+                .foregroundStyle(Color.green)
+                .symbolSize(selectedAge == point.age ? 60 : 20)
+            }
+            .chartXScale(domain: 17...27)
+            .chartYScale(domain: 0...1)
+            .chartYAxis {
+                AxisMarks(values: [0.0, 0.5, 1.0]) { value in
+                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4, 4]))
+                    AxisValueLabel {
+                        if let v = value.as(Double.self) {
+                            Text(v == 0 ? "None" : v == 0.5 ? "Moderate" : "Heavy")
+                                .font(.system(size: 9))
+                        }
+                    }
+                }
+            }
+            .chartXAxis {
+                AxisMarks(values: [17, 19, 21, 23, 25, 27]) { value in
+                    AxisValueLabel {
+                        if let age = value.as(Int.self) {
+                            Text("age \(age)")
+                                .font(.system(size: 9))
+                        }
+                    }
+                }
+            }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0)
+                            .onEnded { value in
+                                let origin = geo[proxy.plotFrame!].origin
+                                let x = value.location.x - origin.x
+                                if let age: Int = proxy.value(atX: x) {
+                                    let nearest = data.min(by: { abs($0.age - age) < abs($1.age - age) })
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedAge = selectedAge == nearest?.age ? nil : nearest?.age
+                                    }
+                                }
+                            }
+                        )
+                }
+            }
+            .frame(height: 160)
+
+            HStack(spacing: 16) {
+                HStack(spacing: 4) {
+                    Circle().fill(Color.green).frame(width: 6, height: 6)
+                    Text("Weed").font(.system(size: 9)).foregroundStyle(.secondary)
+                }
+                HStack(spacing: 4) {
+                    Circle().fill(Color.blue.opacity(0.5)).frame(width: 6, height: 6)
+                    Text("Vaping").font(.system(size: 9)).foregroundStyle(.secondary)
+                }
+            }
+
+            if let age = selectedAge, let point = data.first(where: { $0.age == age }) {
+                Text("Age \(point.age): \(point.label)")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+                    .transition(.scale(scale: 0.95).combined(with: .opacity))
+            }
+        }
+    }
+}
+
+// MARK: - Chart 15: Strengths
+
+struct StrengthsChart: View {
+    private let data = LifeData.strengths
+    @State private var selectedLabel: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            chartTitle("STRENGTHS")
+
+            Chart(data) { item in
+                BarMark(
+                    x: .value("Intensity", item.intensity),
+                    y: .value("Strength", item.label)
+                )
+                .foregroundStyle(Color.green.opacity(selectedLabel == item.label ? 0.8 : 0.5))
+                .cornerRadius(3)
+                .annotation(position: .trailing) {
+                    Text("\(Int(item.intensity * 100))%")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .chartXScale(domain: 0...1.15)
+            .chartXAxis(.hidden)
+            .chartYAxis {
+                AxisMarks { value in
+                    AxisValueLabel {
+                        if let label = value.as(String.self) {
+                            Text(label)
+                                .font(.system(size: 10, weight: .medium))
+                        }
+                    }
+                }
+            }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0)
+                            .onEnded { value in
+                                let origin = geo[proxy.plotFrame!].origin
+                                let y = value.location.y - origin.y
+                                if let label: String = proxy.value(atY: y) {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedLabel = selectedLabel == label ? nil : label
+                                    }
+                                }
+                            }
+                        )
+                }
+            }
+            .frame(height: 160)
+        }
+    }
+}
+
 // MARK: - Pull Quote
 
 struct PullQuoteView: View {

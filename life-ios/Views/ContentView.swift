@@ -24,29 +24,47 @@ struct ContentView: View {
                 // Intrusive Memories + Triggers
                 sectionWithVisual([s[1]]) { TriggersChart() }
 
+                // Anger & Conflict, Sleep + Sleep Quality Chart
+                sectionWithVisual([s[2], s[3]]) { SleepQualityChart() }
+
                 // Siblings, Extended Family, Pets & Loss
-                sectionPage([s[2], s[3], s[4]])
+                sectionPage([s[4], s[5], s[6]])
+
+                // Grief & Accumulated Loss
+                sectionPage([s[7]])
 
                 // School, Religion
-                sectionPage([s[5], s[6]])
+                sectionPage([s[8], s[9]])
 
-                // ADHD/Autism, Medication, Previous Therapy + Diagnosis Gap
-                sectionWithVisual([s[7], s[8], s[9]]) { DiagnosisGapChart() }
+                // ADHD/Autism + Sensory Profile + Sensory Heatmap
+                sectionWithVisual([s[10], s[11]]) { SensoryHeatmapChart() }
+
+                // Masking & Burnout, Medication, Previous Therapy + Diagnosis Gap
+                sectionWithVisual([s[12], s[13], s[14]]) { DiagnosisGapChart() }
 
                 // Relationships + Relationship Chart
-                sectionWithVisual([s[10]]) { RelationshipChart() }
+                sectionWithVisual([s[15]]) { RelationshipChart() }
 
-                // Sexuality, Friendships + Social Circle
-                sectionWithVisual([s[11], s[12]]) { SocialCircleChart() }
+                // Trust & Attachment
+                sectionPage([s[16]])
+
+                // Sexuality, Boundaries, Friendships + Social Circle
+                sectionWithVisual([s[17], s[18], s[19]]) { SocialCircleChart() }
 
                 // Housing + Pull Quote + Housing Chart
-                sectionWithVisual([s[13]]) {
+                sectionWithVisual([s[20]]) {
                     PullQuoteView(text: LifeData.pullQuotes[1])
                     HousingChart()
                 }
 
                 // Mental Health (long section, own page)
-                sectionPage([s[14]])
+                sectionPage([s[21]])
+
+                // Substances Expanded + Pull Quote + Substance Chart
+                sectionWithVisual([s[22]]) {
+                    PullQuoteView(text: LifeData.pullQuotes[3])
+                    SubstanceChart()
+                }
 
                 // Pull Quote + Coping Chart
                 combinedPage {
@@ -54,17 +72,26 @@ struct ContentView: View {
                     CopingChart()
                 }
 
-                // Identity & Worldview + Stats
-                sectionWithVisual([s[15]]) { StatsGridView() }
+                // Physical Health & Body
+                sectionPage([s[23]])
+
+                // Identity & Worldview, Screen Time + Stats
+                sectionWithVisual([s[24], s[25]]) { StatsGridView() }
 
                 // Current Life + Daily Routine
-                sectionWithVisual([s[16]]) { DailyRoutineChart() }
+                sectionWithVisual([s[26]]) { DailyRoutineChart() }
+
+                // Financial Reality + Financial Timeline Chart
+                sectionWithVisual([s[27]]) { FinancialTimelineChart() }
 
                 // Work History, Career & Projects + Map
-                sectionWithVisual([s[17], s[18]]) { LifeMapView() }
+                sectionWithVisual([s[28], s[29]]) { LifeMapView() }
+
+                // Strengths & What Keeps Me Going + Strengths Chart
+                sectionWithVisual([s[30]]) { StrengthsChart() }
 
                 // What I Want from Therapy
-                sectionPage([s[19]])
+                sectionPage([s[31]])
 
                 footerPage
             }

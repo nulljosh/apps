@@ -8,11 +8,11 @@ Native SwiftUI companion for the Life therapy document.
 - `Views/ContentView.swift` -- Paging scroll view with text sections + visual pages combined
 - `Views/TimelineView.swift` -- Vertical timeline with category dots, legend driven by TimelineCategory.allCases
 - `Views/SectionCardView.swift` -- Reusable section card
-- `Views/ChartsView.swift` -- All chart views (10 Swift Charts + pull quotes + stats grid + map)
+- `Views/ChartsView.swift` -- All chart views (15 Swift Charts + pull quotes + stats grid + map)
 
 ## Visual Elements
-Charts: StabilityChart, EventsBarChart, AggressionChart, TriggersChart, DiagnosisGapChart, RelationshipChart, SocialCircleChart, HousingChart, CopingChart, DailyRoutineChart
-Other: PullQuoteView, StatsGridView, LifeMapView
+Charts (15): StabilityChart, EventsBarChart, AggressionChart, TriggersChart, DiagnosisGapChart, RelationshipChart, SocialCircleChart, HousingChart, CopingChart, DailyRoutineChart, SensoryHeatmapChart, SleepQualityChart, FinancialTimelineChart, SubstanceChart, StrengthsChart
+Other: PullQuoteView (4 quotes), StatsGridView (9 stats), LifeMapView
 Helper: chartTitle() -- shared title styling
 
 ## Page Layout

@@ -8,7 +8,7 @@ final class LifeiOSTests: XCTestCase {
     }
 
     func testSectionsHaveContent() {
-        XCTAssertEqual(LifeData.sections.count, 20)
+        XCTAssertEqual(LifeData.sections.count, 32)
         for section in LifeData.sections {
             XCTAssertFalse(section.label.isEmpty)
             XCTAssertFalse(section.paragraphs.isEmpty)

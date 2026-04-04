@@ -13,10 +13,10 @@ Native iOS companion for the [Life](https://github.com/nulljosh/apps/tree/main/l
 ## Features
 
 - Full-viewport paging scroll with text + visuals combined per page
-- 10 Swift Charts: stability, events by phase, aggression, triggers, diagnosis gap, relationships, social circle, housing, coping mechanisms, daily routine
-- 3 pull quotes, key figures stats grid, geography map
+- 15 Swift Charts: stability, events by phase, aggression, triggers, diagnosis gap, relationships, social circle, housing, coping mechanisms, daily routine, sensory heatmap, sleep quality, financial timeline, substance use, strengths
+- 4 pull quotes, 9-stat key figures grid, geography map
 - Vertical timeline with color-coded categories (crisis, event, forward)
-- 20 content sections matching the web version
+- 32 content sections matching the web version
 - System fonts, minimal design
 
 ## Build
