@@ -1000,6 +1000,25 @@
 <p>I mask about half the day. The other half I get to sit in my room and code plus do homework, science and math. I'd prefer to do that all day but ADHD means I have to go out, eat, talk to people. When the mask drops at night, that's when the crying and overwhelm hits.</p>
 </div>
 
+<!-- CHART: Masking energy budget -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Energy budget</p>
+<svg viewBox="0 0 600 60" preserveAspectRatio="xMidYMid meet">
+  <!-- Stacked horizontal bar: 100% of day -->
+  <!-- Masking ~50% = 250px -->
+  <rect x="50" y="15" width="250" height="24" rx="0" fill="var(--dot-severe)" opacity="0.6" class="chart-interactive" data-tip="Masking: ~50% of energy. Maintaining the mask all day until it drops at night."/>
+  <text x="175" y="31" text-anchor="middle" font-size="9" fill="white" opacity="0.9">Masking ~50%</text>
+
+  <!-- Coding/homework ~35% = 175px -->
+  <rect x="300" y="15" width="175" height="24" rx="0" fill="var(--dot-positive)" opacity="0.6" class="chart-interactive" data-tip="Coding + Homework: ~35% of energy. The productive half."/>
+  <text x="387" y="31" text-anchor="middle" font-size="9" fill="white" opacity="0.9">Coding/Homework ~35%</text>
+
+  <!-- Everything else ~15% = 75px -->
+  <rect x="475" y="15" width="75" height="24" rx="0" fill="var(--dot-event)" opacity="0.35" class="chart-interactive" data-tip="Everything else: ~15%. Eating, errands, talking to people."/>
+  <text x="512" y="31" text-anchor="middle" font-size="9" fill="var(--text)">Other ~15%</text>
+</svg>
+</div>
+
 <p class="section-label fade-up">Medication</p>
 <div class="card fade-up">
 <p>I was briefly put on ADHD medication as a child, maybe a few months to a year at most. I'm considering retrying ADHD medication now as an adult. The only other medication I've taken is sertraline (low dose), which I've been on for about 5 to 6 months on and off as of March 2026.</p>
@@ -1142,6 +1161,24 @@
 <p class="section-label fade-up">Boundaries</p>
 <div class="card fade-up">
 <p>I absolutely cannot set boundaries, not even a question. Hard time saying no. Can't set them at home either. I cannot name a single boundary I've set that actually worked. They mostly get ignored.</p>
+</div>
+
+<!-- CHART: Boundaries -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Boundaries</p>
+<svg viewBox="0 0 600 80" preserveAspectRatio="xMidYMid meet">
+  <!-- Labels -->
+  <text x="50" y="30" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Set</text>
+  <text x="50" y="62" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Respected</text>
+
+  <!-- Boundaries set: small bar -->
+  <rect x="60" y="18" width="80" height="18" rx="3" fill="var(--dot-event)" opacity="0.5" class="chart-interactive" data-tip="Boundaries set: a handful, mostly ignored"/>
+  <text x="148" y="31" font-size="8" fill="var(--text-secondary)">a handful</text>
+
+  <!-- Boundaries respected: nearly zero -->
+  <rect x="60" y="50" width="12" height="18" rx="3" fill="var(--dot-severe)" opacity="0.6" class="chart-interactive" data-tip="Boundaries respected: effectively zero"/>
+  <text x="80" y="63" font-size="8" fill="var(--text-secondary)">effectively zero</text>
+</svg>
 </div>
 
 <p class="section-label fade-up">Friendships</p>
@@ -1378,6 +1415,26 @@
 <p>I feel fine about my body, just tired. The self-harm was because the world is messed up and I had to deal with it. Got hit by a car, couldn't work for years, stole from family, was kicked out, lived in my car. It was a very weird situation that's hard to explain years later. Not solely my fault. Born like this, haven't gotten along great with family for years. I love myself. I wouldn't hurt myself on purpose. People around me hurt me badly. Gym PRs almost every single day because I'm strong. I go as hard as possible about 75% of the time. I'm not the problem.</p>
 </div>
 
+<!-- CHART: Physical health diverging bar -->
+<div class="chart-wrap fade-up">
+<p class="chart-title">Same body</p>
+<svg viewBox="0 0 600 80" preserveAspectRatio="xMidYMid meet">
+  <!-- Center axis -->
+  <line x1="300" y1="10" x2="300" y2="70" class="chart-grid"/>
+
+  <!-- Center label -->
+  <text x="300" y="12" text-anchor="middle" font-size="9" font-weight="500" fill="var(--text-secondary)">Same body</text>
+
+  <!-- Self-harm: left, small bar -->
+  <rect x="220" y="30" width="80" height="22" rx="3" fill="var(--dot-severe)" opacity="0.6" class="chart-interactive" data-tip="Self-harm: punching self in head, started age 22. Not the problem -- people around me hurt me badly."/>
+  <text x="215" y="45" text-anchor="end" font-size="9" font-weight="500" fill="var(--text)">Self-harm</text>
+
+  <!-- Gym PRs: right, large bar -->
+  <rect x="300" y="30" width="220" height="22" rx="3" fill="var(--dot-positive)" opacity="0.6" class="chart-interactive" data-tip="Gym PRs: almost every single day. Strong. Goes as hard as possible 75% of the time."/>
+  <text x="525" y="45" font-size="9" font-weight="500" fill="var(--text)">Gym PRs</text>
+</svg>
+</div>
+
 <!-- ==================== SECTION: Identity & Worldview ==================== -->
 <p class="section-label fade-up">Identity & Worldview</p>
 <div class="card fade-up">
@@ -1425,6 +1482,18 @@
   <div class="stat-item">
     <div class="stat-number">50/50</div>
     <div class="stat-label">weed: help<br>vs. hurt</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">17</div>
+    <div class="stat-label">age first<br>smoked weed</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">0</div>
+    <div class="stat-label">boundaries<br>that worked</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">50%</div>
+    <div class="stat-label">time spent<br>masking</div>
   </div>
 </div>
 

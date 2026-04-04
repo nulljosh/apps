@@ -3,7 +3,7 @@
 Personal life summary document for therapy sessions with Amanda.
 
 ## Structure
-- `index.html` -- Living document. 32 sections, dual timeline (SVG desktop, HTML mobile), 18 inline SVG charts, 4 pull quotes, stats dashboard (9 figures), geography map. Auto light/dark. Print CSS for PDF export.
+- `index.html` -- Living document. 32 sections, dual timeline (SVG desktop, HTML mobile), 21 inline SVG charts, 4 pull quotes, stats dashboard (12 figures), geography map. Auto light/dark. Print CSS for PDF export.
 - `life.pdf` -- PDF export of index.html (regenerated via Chrome headless on each push)
 - `timeline.svg` -- Standalone SVG timeline (deprecated, timeline now embedded in index.html)
 
@@ -43,7 +43,7 @@ Personal life summary document for therapy sessions with Amanda.
 33. Strengths & What Keeps You Going (strength bars chart follows)
 34. What I Want from Therapy
 
-## Visual Elements (24 total)
+## Visual Elements (27 total)
 - Timeline (horizontal SVG desktop, vertical HTML mobile)
 - Stability over time (line chart)
 - Events by life phase (bar chart)
@@ -63,8 +63,11 @@ Personal life summary document for therapy sessions with Amanda.
 - Daily routine (stacked bar)
 - Financial support timeline (segmented bar)
 - Strength bars (horizontal bars)
+- Boundaries (horizontal bar, set vs respected)
+- Energy budget (stacked horizontal bar, masking/coding/other)
+- Same body (diverging bar, self-harm vs gym PRs)
 - 4 pull quotes (isolated large text)
-- Key figures stats grid (9 big numbers)
+- Key figures stats grid (12 big numbers)
 - Geography map (BC + off-map locations)
 
 ## Design

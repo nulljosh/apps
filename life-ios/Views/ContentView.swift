@@ -39,8 +39,10 @@ struct ContentView: View {
                 // ADHD/Autism + Sensory Profile + Sensory Heatmap
                 sectionWithVisual([s[10], s[11]]) { SensoryHeatmapChart() }
 
-                // Masking & Burnout, Medication, Previous Therapy + Diagnosis Gap
-                sectionWithVisual([s[12], s[13], s[14]]) { DiagnosisGapChart() }
+                // Masking & Burnout + Energy Budget, Medication, Previous Therapy + Diagnosis Gap
+                sectionWithVisual([s[12]]) { MaskingEnergyChart() }
+
+                sectionWithVisual([s[13], s[14]]) { DiagnosisGapChart() }
 
                 // Relationships + Relationship Chart
                 sectionWithVisual([s[15]]) { RelationshipChart() }
@@ -48,8 +50,10 @@ struct ContentView: View {
                 // Trust & Attachment
                 sectionPage([s[16]])
 
-                // Sexuality, Boundaries, Friendships + Social Circle
-                sectionWithVisual([s[17], s[18], s[19]]) { SocialCircleChart() }
+                // Sexuality, Boundaries + Boundaries Chart, Friendships + Social Circle
+                sectionWithVisual([s[17], s[18]]) { BoundariesChart() }
+
+                sectionWithVisual([s[19]]) { SocialCircleChart() }
 
                 // Housing + Pull Quote + Housing Chart
                 sectionWithVisual([s[20]]) {
@@ -72,8 +76,8 @@ struct ContentView: View {
                     CopingChart()
                 }
 
-                // Physical Health & Body
-                sectionPage([s[23]])
+                // Physical Health & Body + Body Chart
+                sectionWithVisual([s[23]]) { BodyChart() }
 
                 // Identity & Worldview, Screen Time + Stats
                 sectionWithVisual([s[24], s[25]]) { StatsGridView() }

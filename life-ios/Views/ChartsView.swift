@@ -1136,6 +1136,174 @@ struct StrengthsChart: View {
     }
 }
 
+// MARK: - Chart 16: Boundaries
+
+struct BoundariesChart: View {
+    private let data: [(String, Double)] = [
+        ("Set", 0.3),
+        ("Respected", 0.05),
+    ]
+    @State private var selectedLabel: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            chartTitle("BOUNDARIES")
+
+            ForEach(data, id: \.0) { item in
+                HStack(spacing: 8) {
+                    Text(item.0)
+                        .font(.system(size: 10, weight: .medium))
+                        .frame(width: 70, alignment: .trailing)
+
+                    GeometryReader { geo in
+                        let barWidth = max(geo.size.width * item.1, 4)
+                        HStack(spacing: 0) {
+                            RoundedRectangle(cornerRadius: 3)
+                                .fill(item.1 < 0.1
+                                      ? Color.red.opacity(selectedLabel == item.0 ? 0.8 : 0.6)
+                                      : Color.primary.opacity(selectedLabel == item.0 ? 0.4 : 0.25))
+                                .frame(width: barWidth, height: 18)
+                            Spacer(minLength: 0)
+                        }
+                    }
+                    .frame(height: 18)
+
+                    Text(item.1 < 0.1 ? "effectively zero" : "a handful")
+                        .font(.system(size: 8))
+                        .foregroundStyle(.secondary)
+                        .frame(width: 90, alignment: .leading)
+                }
+                .scaleEffect(selectedLabel == item.0 ? 1.02 : 1.0)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        selectedLabel = selectedLabel == item.0 ? nil : item.0
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Chart 17: Masking Energy Budget
+
+struct MaskingEnergyChart: View {
+    private let segments: [(String, Double, Color, Double)] = [
+        ("Masking", 0.50, .red, 0.6),
+        ("Coding/Homework", 0.35, .green, 0.6),
+        ("Everything Else", 0.15, .primary, 0.25),
+    ]
+    @State private var selectedSegment: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            chartTitle("ENERGY BUDGET")
+
+            GeometryReader { geo in
+                HStack(spacing: 2) {
+                    ForEach(segments, id: \.0) { segment in
+                        let width = geo.size.width * segment.1
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(segment.2.opacity(selectedSegment == segment.0 ? segment.3 + 0.2 : segment.3))
+                            .frame(width: width, height: 28)
+                            .overlay {
+                                if width > 50 {
+                                    Text("\(segment.0) \(Int(segment.1 * 100))%")
+                                        .font(.system(size: 9, weight: .medium))
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                            .scaleEffect(selectedSegment == segment.0 ? 1.04 : 1.0)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                    selectedSegment = selectedSegment == segment.0 ? nil : segment.0
+                                }
+                            }
+                    }
+                }
+            }
+            .frame(height: 28)
+
+            if let seg = selectedSegment {
+                Text(seg == "Masking" ? "Maintaining the mask all day until it drops at night"
+                     : seg == "Coding/Homework" ? "The productive half: coding + calc + bio"
+                     : "Eating, errands, talking to people")
+                    .font(.system(size: 9))
+                    .foregroundStyle(.secondary)
+                    .transition(.scale(scale: 0.95).combined(with: .opacity))
+            }
+        }
+    }
+}
+
+// MARK: - Chart 18: Body (Physical Health Diverging)
+
+struct BodyChart: View {
+    private let items: [(String, Double, Bool)] = [
+        ("Self-harm", 0.3, false),
+        ("Gym PRs", 0.85, true),
+    ]
+    @State private var selectedLabel: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            chartTitle("SAME BODY")
+
+            HStack(spacing: 2) {
+                Text("Crisis")
+                    .font(.system(size: 9, weight: .medium))
+                    .foregroundStyle(.red.opacity(0.7))
+                Spacer()
+                Text("Strength")
+                    .font(.system(size: 9, weight: .medium))
+                    .foregroundStyle(.green)
+            }
+
+            ForEach(items, id: \.0) { item in
+                HStack(spacing: 8) {
+                    Text(item.0)
+                        .font(.system(size: 10, weight: .medium))
+                        .frame(width: 70, alignment: .trailing)
+
+                    GeometryReader { geo in
+                        let barWidth = geo.size.width * item.1
+                        if item.2 {
+                            HStack(spacing: 0) {
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(Color.green.opacity(selectedLabel == item.0 ? 0.8 : 0.5))
+                                    .frame(width: barWidth, height: 18)
+                                Spacer(minLength: 0)
+                            }
+                        } else {
+                            HStack(spacing: 0) {
+                                Spacer(minLength: 0)
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(Color.red.opacity(selectedLabel == item.0 ? 0.8 : 0.5))
+                                    .frame(width: barWidth, height: 18)
+                            }
+                        }
+                    }
+                    .frame(height: 18)
+
+                    Text(item.2 ? "every single day" : "since age 22")
+                        .font(.system(size: 8))
+                        .foregroundStyle(.secondary)
+                        .frame(width: 90, alignment: .leading)
+                        .lineLimit(1)
+                }
+                .scaleEffect(selectedLabel == item.0 ? 1.02 : 1.0)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        selectedLabel = selectedLabel == item.0 ? nil : item.0
+                    }
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Pull Quote
 
 struct PullQuoteView: View {

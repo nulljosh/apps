@@ -302,6 +302,9 @@ enum LifeData {
         StatItem(number: "5+", label: "bong tokes\nper day"),
         StatItem(number: "130+", label: "IQ"),
         StatItem(number: "50/50", label: "help vs.\nhurt"),
+        StatItem(number: "17", label: "age first\nsmoked weed"),
+        StatItem(number: "0", label: "boundaries\nthat worked"),
+        StatItem(number: "50%", label: "time spent\nmasking"),
     ]
 
     static let pullQuotes: [String] = [

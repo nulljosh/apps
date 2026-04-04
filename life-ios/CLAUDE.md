@@ -11,8 +11,8 @@ Native SwiftUI companion for the Life therapy document.
 - `Views/ChartsView.swift` -- All chart views (15 Swift Charts + pull quotes + stats grid + map)
 
 ## Visual Elements
-Charts (15): StabilityChart, EventsBarChart, AggressionChart, TriggersChart, DiagnosisGapChart, RelationshipChart, SocialCircleChart, HousingChart, CopingChart, DailyRoutineChart, SensoryHeatmapChart, SleepQualityChart, FinancialTimelineChart, SubstanceChart, StrengthsChart
-Other: PullQuoteView (4 quotes), StatsGridView (9 stats), LifeMapView
+Charts (18): StabilityChart, EventsBarChart, AggressionChart, TriggersChart, DiagnosisGapChart, RelationshipChart, SocialCircleChart, HousingChart, CopingChart, DailyRoutineChart, SensoryHeatmapChart, SleepQualityChart, FinancialTimelineChart, SubstanceChart, StrengthsChart, BoundariesChart, MaskingEnergyChart, BodyChart
+Other: PullQuoteView (4 quotes), StatsGridView (12 stats), LifeMapView
 Helper: chartTitle() -- shared title styling
 
 ## Page Layout
