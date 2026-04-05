@@ -263,9 +263,20 @@ function updateDirectiveBar(state, callbacks) {
         const btn = document.createElement('button');
         btn.className = 'dir-btn' + (state.currentDirective === d ? ' active' : '');
         btn.textContent = d.toUpperCase();
-        btn.onclick = () => { state.currentDirective = d; callbacks.onHudUpdate(); };
+        btn.onclick = () => { state.currentDirective = d; state.autoplay = false; callbacks.onHudUpdate(); };
         dirBar.appendChild(btn);
     });
+
+    const sep = document.createElement('span');
+    sep.style.cssText = 'width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 4px';
+    dirBar.appendChild(sep);
+
+    const autoBtn = document.createElement('button');
+    autoBtn.className = 'dir-btn' + (state.autoplay ? ' active' : '');
+    autoBtn.style.cssText += state.autoplay ? ';color:#30D158;border-color:#30D158' : '';
+    autoBtn.textContent = 'AUTOPLAY';
+    autoBtn.onclick = () => { state.autoplay = !state.autoplay; callbacks.onHudUpdate(); };
+    dirBar.appendChild(autoBtn);
 }
 
 function updateGameLog(state) {

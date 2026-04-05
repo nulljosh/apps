@@ -3,7 +3,7 @@
 import { createGameState, createColonist, gameLog, grantXP, BuildingType } from './state.js';
 import { generateWorld, GRID_SIZE, TILE_SIZE, tileAt, worldToTile } from './world.js';
 import { Pathfinder } from './pathfinder.js';
-import { timeTick, needsTick, resourceTick, jobTick, placeBuilding, demolishBuilding } from './systems.js';
+import { timeTick, needsTick, resourceTick, jobTick, placeBuilding, demolishBuilding, autoplayTick } from './systems.js';
 import { Camera } from './camera.js';
 import { renderWorld, renderMinimap } from './renderer.js';
 import { setupInput } from './input.js';
@@ -172,6 +172,9 @@ function gameLoop(timestamp) {
             needsTick(state);
             jobTick(state, pathfinder);
             resourceTick(state);
+            autoplayTick(state, grid, pathfinder, (type, col, row) => {
+                placeBuilding(type, col, row, grid, state, pathfinder);
+            });
 
             if (state.autoSaveEnabled && state.currentTick > 0 && state.currentTick % 60 === 0 && state.lastSaveSlot) {
                 performSave(state.lastSaveSlot);

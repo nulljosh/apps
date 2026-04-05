@@ -1,6 +1,6 @@
 // Game systems -- NeedsSystem, TimeSystem, ResourceSystem, BuildSystem, JobSystem
 
-import { grantXP, takeDamage, updateColonistState, gameLog, createBuilding, WeaponTypes, BuildingType } from './state.js';
+import { grantXP, takeDamage, updateColonistState, gameLog, createBuilding, createColonist, WeaponTypes, BuildingType } from './state.js';
 import { TileType, tileAt, setTile, GRID_SIZE } from './world.js';
 
 // TimeSystem
@@ -270,6 +270,103 @@ function assignRandomGatherTarget(i, state) {
         c.pathCols = [target.col];
         c.pathRows = [target.row];
         c.pathIndex = 0;
+    }
+}
+
+// AutoplaySystem -- AI that builds, recruits, and balances directives
+const AUTOPLAY_INTERVAL = 30; // ticks between AI decisions
+
+export function autoplayTick(state, grid, pathfinder, placeBuildingFn) {
+    if (!state.autoplay) return;
+    if (state.currentTick % AUTOPLAY_INTERVAL !== 0) return;
+
+    const alive = state.colonists.filter(c => c.state !== 'dead');
+    const res = state.resources;
+    const buildings = state.buildings;
+
+    // Count building types
+    const counts = {};
+    for (const b of buildings) counts[b.type] = (counts[b.type] || 0) + 1;
+
+    // Assess colony needs
+    const avgHunger = alive.reduce((s, c) => s + c.hunger, 0) / (alive.length || 1);
+    const avgOxygen = alive.reduce((s, c) => s + c.oxygen, 0) / (alive.length || 1);
+    const avgStress = alive.reduce((s, c) => s + c.stress, 0) / (alive.length || 1);
+    const avgSleep = alive.reduce((s, c) => s + c.sleep, 0) / (alive.length || 1);
+
+    // Priority: what to build next
+    let buildType = null;
+
+    if (avgHunger < 40 && (res.food || 0) < 5) {
+        // Need food -- gather more, build food stall if we can
+        if (!counts.foodStall || counts.foodStall < Math.ceil(alive.length / 3)) {
+            buildType = 'foodStall';
+        }
+        state.currentDirective = 'gather';
+    } else if ((res.power || 0) < 3 || avgOxygen < 50) {
+        if (!counts.generator || counts.generator < 2) {
+            buildType = 'generator';
+        }
+        if (!counts.filterStation) buildType = 'filterStation';
+    } else if (avgStress > 60 || avgSleep < 30) {
+        if (!counts.shelter || counts.shelter < Math.ceil(alive.length / 3)) {
+            buildType = 'shelter';
+        }
+    } else if ((res.cash || 0) < 10) {
+        if (!counts.billboard || counts.billboard < 2) {
+            buildType = 'billboard';
+        }
+        state.currentDirective = 'gather';
+    } else {
+        // Stable -- alternate between gather and patrol
+        state.currentDirective = state.currentTick % 60 < 30 ? 'gather' : 'patrol';
+    }
+
+    // Try to place building if we decided on one
+    if (buildType && placeBuildingFn) {
+        const bt = BuildingType[buildType];
+        const [w, h] = bt.size;
+
+        // Check if we can afford it
+        let canAfford = true;
+        for (const [r, amt] of Object.entries(bt.cost)) {
+            if ((res[r] || 0) < amt) { canAfford = false; break; }
+        }
+
+        if (canAfford) {
+            // Find a valid placement near colony center
+            const centerCol = Math.round(alive.reduce((s, c) => s + c.col, 0) / alive.length);
+            const centerRow = Math.round(alive.reduce((s, c) => s + c.row, 0) / alive.length);
+
+            for (let radius = 2; radius < 15; radius++) {
+                let placed = false;
+                for (let dc = -radius; dc <= radius && !placed; dc++) {
+                    for (let dr = -radius; dr <= radius && !placed; dr++) {
+                        const col = centerCol + dc;
+                        const row = centerRow + dr;
+                        if (col < 0 || row < 0 || col + w >= GRID_SIZE || row + h >= GRID_SIZE) continue;
+                        if (canPlace(buildType, col, row, grid, state)) {
+                            placeBuildingFn(buildType, col, row);
+                            placed = true;
+                        }
+                    }
+                }
+                if (placed) break;
+            }
+        }
+    }
+
+    // Auto-recruit: spawn colonist if resources allow and colony is stable
+    if (alive.length < 15 && avgHunger > 60 && avgOxygen > 60 && (res.food || 0) > 10 && (res.materials || 0) > 5) {
+        if (state.currentTick % (AUTOPLAY_INTERVAL * 3) === 0) {
+            const names = ['Sam', 'Taylor', 'Avery', 'Quinn', 'Blake', 'Charlie', 'Drew', 'Emery', 'Finley', 'Harper'];
+            const name = names[alive.length % names.length];
+            const spawnC = alive[0];
+            if (spawnC) {
+                    state.colonists.push(createColonist(name, spawnC.col + 1, spawnC.row));
+                gameLog(state, `${name} joined the colony`);
+            }
+        }
     }
 }
 

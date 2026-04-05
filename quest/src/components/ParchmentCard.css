@@ -1,0 +1,21 @@
+.parchment-card {
+  background-color: var(--parchment);
+  border: 1px solid var(--parchment-dark);
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  color: var(--ink);
+  position: relative;
+  box-shadow: var(--shadow-parchment);
+  clip-path: polygon(
+    0% 2%, 3% 0%, 8% 1%, 15% 0%, 22% 0.5%, 30% 0%, 38% 1%, 45% 0%, 52% 0.5%,
+    60% 0%, 68% 1%, 75% 0%, 82% 0.5%, 90% 0%, 95% 1%, 97% 0%, 100% 2%,
+    100% 98%, 97% 100%, 92% 99%, 85% 100%, 78% 99.5%, 70% 100%, 62% 99%,
+    55% 100%, 48% 99.5%, 40% 100%, 32% 99%, 25% 100%, 18% 99.5%, 10% 100%,
+    5% 99%, 2% 100%, 0% 98%
+  );
+  transition: transform var(--spring-duration) var(--spring);
+}
+
+.parchment-card:hover {
+  transform: translateY(-2px);
+}

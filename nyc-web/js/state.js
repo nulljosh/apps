@@ -126,6 +126,7 @@ export function createGameState() {
         tutorialStep: 0,
         lastSaveSlot: null,
         autoSaveEnabled: true,
+        autoplay: false,
         showSaveIndicator: false,
     };
 }
