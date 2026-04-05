@@ -1,6 +1,9 @@
 // Zero-dependency test runner for nyc-web
 
-import { createColonist, createGameState, grantXP, takeDamage, updateColonistState, colonistXpForNext, colonistXpProgress, createBuilding, createResource } from './state.js';
+import { createColonist, createGameState, grantXP, takeDamage, updateColonistState, colonistXpForNext, colonistXpProgress, createBuilding, createResource,
+    questLevel, questTitle, questXPProgress, createQuest, createReward, addQuest, completeQuestInList,
+    activeQuests, completedQuests, updatePlayerStreak, DifficultyXP, CategoryInfo, colonistClass,
+    randomColonistName, migrateQuestData } from './state.js';
 import { generateWorld, GRID_SIZE, TILE_SIZE, tileAt, setTile, worldToTile, tileToWorld, TileType } from './world.js';
 import { Pathfinder } from './pathfinder.js';
 import { timeTick, canPlace, placeBuilding, demolishBuilding } from './systems.js';
@@ -318,6 +321,194 @@ suite('save.js -- save/load round-trip');
     eq(loadGame(99), null, 'corrupt data returns null');
     try { localStorage.removeItem('nyc_save_99'); } catch {}
     deleteSlot(3);
+}
+
+// ---- Quest System Tests ----
+
+suite('Quest XP Engine');
+{
+    eq(questLevel(0), 0, 'level 0 at 0 XP');
+    eq(questLevel(50), 1, 'level 1 at 50 XP');
+    eq(questLevel(200), 2, 'level 2 at 200 XP');
+    eq(questLevel(450), 3, 'level 3 at 450 XP');
+    eq(questLevel(5000), 10, 'level 10 at 5000 XP');
+    eq(questTitle(0), 'Squire', 'title Squire at level 0');
+    eq(questTitle(1), 'Knight', 'title Knight at level 1');
+    eq(questTitle(100), 'Mythic', 'title Mythic at high level');
+    const prog = questXPProgress(75);
+    eq(prog.level, 1, 'progress level correct');
+    assert(prog.progress === 25, 'progress amount correct');
+    assert(prog.needed === 150, 'needed amount correct');
+}
+
+suite('Quest Difficulty XP');
+{
+    eq(DifficultyXP.F, 10, 'F rank = 10 XP');
+    eq(DifficultyXP.D, 25, 'D rank = 25 XP');
+    eq(DifficultyXP.C, 50, 'C rank = 50 XP');
+    eq(DifficultyXP.B, 100, 'B rank = 100 XP');
+    eq(DifficultyXP.A, 200, 'A rank = 200 XP');
+    eq(DifficultyXP.S, 500, 'S rank = 500 XP');
+}
+
+suite('Quest CRUD');
+{
+    const state = createGameState();
+    const q = addQuest(state, { title: 'Test Quest', difficulty: 'B', category: 'work' });
+    eq(state.questList.length, 1, 'quest added to list');
+    eq(q.title, 'Test Quest', 'quest title correct');
+    eq(q.difficulty, 'B', 'quest difficulty correct');
+    eq(q.category, 'work', 'quest category correct');
+    assert(!q.completed, 'quest starts incomplete');
+    eq(activeQuests(state).length, 1, '1 active quest');
+    eq(completedQuests(state).length, 0, '0 completed quests');
+
+    const result = completeQuestInList(state, q.id);
+    assert(result !== null, 'complete returns result');
+    eq(result.xp, 100, 'B rank gives 100 XP');
+    eq(state.playerXP, 100, 'player XP updated');
+    eq(activeQuests(state).length, 0, '0 active after complete');
+    eq(completedQuests(state).length, 1, '1 completed after complete');
+
+    // Double-complete returns null
+    eq(completeQuestInList(state, q.id), null, 'double complete returns null');
+    // Complete nonexistent returns null
+    eq(completeQuestInList(state, 'fake-id'), null, 'fake id returns null');
+}
+
+suite('Quest Categories & Classes');
+{
+    assert(CategoryInfo.fitness.className === 'Warrior', 'fitness = Warrior');
+    assert(CategoryInfo.study.className === 'Mage', 'study = Mage');
+    assert(CategoryInfo.work.className === 'Rogue', 'work = Rogue');
+    assert(CategoryInfo.personal.className === 'Ranger', 'personal = Ranger');
+    assert(CategoryInfo.creative.className === 'Bard', 'creative = Bard');
+    assert(CategoryInfo.errand.className === 'Merchant', 'errand = Merchant');
+
+    const c = createColonist('ClassTest', 0, 0);
+    assert(colonistClass(c) === null, 'no class without quests');
+    c.dominantCategory = 'fitness';
+    eq(colonistClass(c), 'Warrior', 'class from dominant category');
+}
+
+suite('Quest Rewards');
+{
+    const state = createGameState();
+    state.rewardList = [createReward('Coffee break'), createReward('10 min gaming')];
+    addQuest(state, { title: 'Reward Test', difficulty: 'C', category: 'personal' });
+
+    // Complete -- should either set toast or not (80/20)
+    completeQuestInList(state, state.questList[0].id);
+    // Toast message should exist (either reward or "gods demand more")
+    assert(state.toastMessage !== null, 'toast message set on completion');
+    assert(state.toastMessage.text.length > 0, 'toast has text');
+}
+
+suite('Player Streak');
+{
+    const state = createGameState();
+    updatePlayerStreak(state);
+    eq(state.playerStreak, 1, 'first activity sets streak to 1');
+    assert(state.playerLastActive !== null, 'lastActive set');
+
+    // Same day -- no change
+    const streak = state.playerStreak;
+    updatePlayerStreak(state);
+    eq(state.playerStreak, streak, 'same day no streak change');
+}
+
+suite('Quest Factory');
+{
+    const q = createQuest({ title: 'Factory Test', difficulty: 'A', category: 'study' });
+    assert(q.id.length > 0, 'quest has UUID');
+    eq(q.title, 'Factory Test', 'title set');
+    eq(q.difficulty, 'A', 'difficulty set');
+    eq(q.category, 'study', 'category set');
+    assert(!q.completed, 'starts not completed');
+    assert(q.createdAt.length > 0, 'has timestamp');
+
+    const r = createReward('Free snack');
+    assert(r.id.length > 0, 'reward has UUID');
+    eq(r.text, 'Free snack', 'reward text set');
+    assert(r.active, 'reward starts active');
+}
+
+suite('Colonist Name Generation');
+{
+    const existing = [createColonist('Alex', 0, 0), createColonist('Jordan', 0, 0)];
+    const name = randomColonistName(existing);
+    assert(name !== 'Alex' && name !== 'Jordan', 'avoids existing names');
+    assert(name.length > 0, 'returns a name');
+}
+
+suite('Quest Data Migration');
+{
+    const state = createGameState();
+    // Simulate standalone Quest app data
+    try {
+        localStorage.setItem('quest:quests', JSON.stringify([{ id: 'migrate-1', title: 'Migrated', completed: false }]));
+        localStorage.setItem('quest:profile', JSON.stringify({ totalXP: 500, currentStreak: 3, lastActiveDate: '2026-04-04' }));
+        localStorage.setItem('quest:rewards', JSON.stringify([{ id: 'r1', text: 'Migrate reward', active: true }]));
+    } catch {}
+    migrateQuestData(state);
+    eq(state.questList.length, 1, 'quests migrated');
+    eq(state.questList[0].title, 'Migrated', 'quest title migrated');
+    eq(state.playerXP, 500, 'XP migrated');
+    eq(state.playerStreak, 3, 'streak migrated');
+    eq(state.rewardList.length, 1, 'rewards migrated');
+    // Cleanup
+    try {
+        localStorage.removeItem('quest:quests');
+        localStorage.removeItem('quest:profile');
+        localStorage.removeItem('quest:rewards');
+    } catch {}
+}
+
+suite('Quest Save/Load');
+{
+    const state = createGameState();
+    addQuest(state, { title: 'Save Test Quest', difficulty: 'S', category: 'fitness' });
+    state.playerXP = 1234;
+    state.playerStreak = 7;
+    const { grid } = generateWorld();
+    deleteSlot(3);
+    saveGame(3, state, grid);
+    const loaded = loadGame(3);
+    assert(loaded !== null, 'quest save loads');
+    assert(loaded.questList !== undefined, 'questList in save');
+    eq(loaded.questList.length, 1, 'quest preserved in save');
+    eq(loaded.questList[0].title, 'Save Test Quest', 'quest title in save');
+    eq(loaded.playerXP, 1234, 'playerXP in save');
+    eq(loaded.playerStreak, 7, 'playerStreak in save');
+    deleteSlot(3);
+}
+
+suite('Error Handling');
+{
+    // createQuest with missing fields
+    const q = createQuest({ title: 'Minimal' });
+    eq(q.difficulty, 'C', 'default difficulty C');
+    eq(q.category, 'personal', 'default category personal');
+    eq(q.notes, '', 'default empty notes');
+    assert(q.dueDate === null, 'default null dueDate');
+
+    // questLevel with negative XP
+    eq(questLevel(-100), 0, 'negative XP gives level 0');
+
+    // questTitle with negative level
+    eq(questTitle(-5), 'Squire', 'negative level gives Squire');
+
+    // completeQuestInList with empty state
+    const emptyState = createGameState();
+    eq(completeQuestInList(emptyState, 'nonexistent'), null, 'complete on empty state returns null');
+
+    // DifficultyXP unknown rank
+    assert(DifficultyXP['Z'] === undefined, 'unknown rank is undefined');
+
+    // colonistClass with null category
+    const c = createColonist('Test', 0, 0);
+    c.dominantCategory = 'nonexistent';
+    assert(colonistClass(c) === null, 'unknown category returns null class');
 }
 
 // ---- Summary ----

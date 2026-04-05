@@ -390,6 +390,46 @@ function updateColonistPanel(state, callbacks) {
     posEl.style.cssText = 'font-size:10px;color:rgba(255,255,255,0.4)';
     posEl.textContent = `Pos: (${col.col}, ${col.row})`;
     panel.appendChild(posEl);
+
+    // Quest info section
+    panel.appendChild(createHR());
+    const questTitle = document.createElement('div');
+    questTitle.style.cssText = 'font-size:10px;color:rgba(255,255,255,0.6);font-weight:bold';
+    const cls = colonistClass(col);
+    questTitle.textContent = cls ? `${cls.toUpperCase()} | ${col.questsCompleted || 0} QUESTS` : `${col.questsCompleted || 0} QUESTS DONE`;
+    panel.appendChild(questTitle);
+
+    if (col.activeQuest) {
+        const aq = document.createElement('div');
+        aq.style.cssText = 'font-size:11px;color:#ffd60a;margin-top:4px';
+        aq.textContent = `Active: ${col.activeQuest.title}`;
+        panel.appendChild(aq);
+        const prog = document.createElement('div');
+        prog.style.cssText = 'font-size:9px;color:rgba(255,255,255,0.4)';
+        const pct = Math.max(0, Math.floor((1 - col.activeQuest.ticksRemaining / 60) * 100));
+        prog.textContent = `Progress: ${pct}% | ${col.activeQuest.difficulty}-rank | ${col.activeQuest.category}`;
+        panel.appendChild(prog);
+    } else {
+        const idle = document.createElement('div');
+        idle.style.cssText = 'font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px';
+        idle.textContent = 'No active quest';
+        panel.appendChild(idle);
+    }
+
+    // Recent quest log for this colonist
+    const recentQuests = (state.questLog || []).filter(l => l.colonist === col.name).slice(-3);
+    if (recentQuests.length) {
+        const logTitle = document.createElement('div');
+        logTitle.style.cssText = 'font-size:9px;color:rgba(255,255,255,0.35);margin-top:6px';
+        logTitle.textContent = 'RECENT:';
+        panel.appendChild(logTitle);
+        for (const l of recentQuests) {
+            const entry = document.createElement('div');
+            entry.style.cssText = 'font-size:9px;color:rgba(255,255,255,0.25);padding-left:4px';
+            entry.textContent = `- ${l.quest}`;
+            panel.appendChild(entry);
+        }
+    }
 }
 
 function createHR() {

@@ -379,6 +379,88 @@ export function autoplayTick(state, grid, pathfinder, placeBuildingFn) {
             }
         }
     }
+
+    // Streak bonuses
+    if (state.playerStreak >= 7 && state.currentTick % (AUTOPLAY_INTERVAL * 5) === 0) {
+        // 7-day streak: recruit bonus agent
+        if (alive.length < 25) {
+            const name = randomColonistName(state.colonists);
+            const spawnC = alive[Math.floor(Math.random() * alive.length)];
+            if (spawnC) {
+                const recruit = createColonist(name, spawnC.col + 1, spawnC.row);
+                // Streak recruits start with better stats
+                const stats = ['str','int','agi','end','cha'];
+                for (const s of stats) recruit.stats[s] = Math.min(10, recruit.stats[s] + 2);
+                state.colonists.push(recruit);
+                gameLog(state, `${name} joined (${state.playerStreak}-day streak bonus)`);
+            }
+        }
+    }
+    if (state.playerStreak >= 30 && state.currentTick % (AUTOPLAY_INTERVAL * 10) === 0) {
+        // 30-day streak: colony-wide morale boost
+        for (const c of alive) {
+            c.stress = Math.max(0, c.stress - 15);
+            c.sleep = Math.min(100, c.sleep + 10);
+        }
+        gameLog(state, `30-day streak: colony morale surge`);
+    }
+
+    // Boss encounters -- quests with due dates approaching spawn bosses
+    if (state.currentTick % (AUTOPLAY_INTERVAL * 4) === 0) {
+        bossCheck(state, alive, pathfinder);
+    }
+}
+
+function bossCheck(state, alive, pathfinder) {
+    if (!state.questList) return;
+    const now = Date.now();
+    const DAY_MS = 86400000;
+
+    for (const q of state.questList) {
+        if (q.completed || !q.dueDate) continue;
+        const due = new Date(q.dueDate).getTime();
+        const hoursLeft = (due - now) / (1000 * 60 * 60);
+
+        // Spawn boss if deadline within 24 hours and no existing boss for this quest
+        if (hoursLeft > 0 && hoursLeft < 24) {
+            const bossId = `boss_${q.id}`;
+            if (state.colonists.some(c => c.id === bossId)) continue; // already spawned
+
+            const spawnC = alive[Math.floor(Math.random() * alive.length)];
+            if (!spawnC) continue;
+
+            const boss = createColonist(`BOSS: ${q.title.slice(0, 12)}`, spawnC.col + 5, spawnC.row + 5);
+            boss.id = bossId;
+            boss.stats = { str: 10, int: 10, agi: 8, end: 10, cha: 1 };
+            boss.health = 200;
+            boss.weapon = 'rifle';
+            boss.level = 5;
+            boss.trait = 'hustler';
+            boss.questBubble = { text: `Deadline: ${q.title}`, ticks: 60 };
+            state.colonists.push(boss);
+            gameLog(state, `BOSS spawned: ${q.title} deadline approaching`);
+
+            // Auto-assign nearest colonist to attack
+            let nearest = null;
+            let nearDist = Infinity;
+            for (const c of alive) {
+                const d = Math.abs(c.col - boss.col) + Math.abs(c.row - boss.row);
+                if (d < nearDist) { nearest = c; nearDist = d; }
+            }
+            if (nearest) {
+                nearest.job = 'attack';
+                nearest.attackTargetId = boss.id;
+                nearest.jobOverride = true;
+                const path = pathfinder.findPath(nearest.col, nearest.row, boss.col, boss.row);
+                if (path.length) {
+                    nearest.pathCols = path.map(p => p.col);
+                    nearest.pathRows = path.map(p => p.row);
+                    nearest.pathIndex = 0;
+                }
+                gameLog(state, `${nearest.name} moves to fight the boss`);
+            }
+        }
+    }
 }
 
 // QuestSystem -- colonists perform real-life quests
