@@ -46,10 +46,10 @@ export function needsTick(state) {
             const o2Mult = c.trait === 'ironlung' ? 0.7 : 1.0;
             const stressMult = c.trait === 'anxious' ? 2.0 : 1.0;
 
-            c.hunger = Math.max(0, c.hunger - 0.25 * endMult * wallpaperMult);
-            c.oxygen = Math.max(0, c.oxygen - 0.1 * o2Mult * wallpaperMult);
-            c.stress = Math.min(100, c.stress + 0.15 * stressMult * wallpaperMult);
-            c.sleep = Math.max(0, c.sleep - 0.15 * sleepMult * wallpaperMult);
+            c.hunger = Math.max(0, c.hunger - 0.0625 * endMult * wallpaperMult);
+            c.oxygen = Math.max(0, c.oxygen - 0.025 * o2Mult * wallpaperMult);
+            c.stress = Math.min(100, c.stress + 0.0375 * stressMult * wallpaperMult);
+            c.sleep = Math.max(0, c.sleep - 0.0375 * sleepMult * wallpaperMult);
         }
 
         // CHA stress reduction from nearby colonists

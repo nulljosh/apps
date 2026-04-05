@@ -16,10 +16,10 @@ final class NeedsSystem {
                 let traitO2Mult: Double = gameState.colonists[i].trait == .ironlung ? 0.7 : 1.0
                 let traitStressMult: Double = gameState.colonists[i].trait == .anxious ? 2.0 : 1.0
 
-                gameState.colonists[i].hunger = max(0, gameState.colonists[i].hunger - 0.25 * endMult)
-                gameState.colonists[i].oxygen = max(0, gameState.colonists[i].oxygen - 0.1 * traitO2Mult)
-                gameState.colonists[i].stress = min(100, gameState.colonists[i].stress + 0.15 * traitStressMult)
-                gameState.colonists[i].sleep = max(0, gameState.colonists[i].sleep - 0.15 * traitSleepMult)
+                gameState.colonists[i].hunger = max(0, gameState.colonists[i].hunger - 0.0625 * endMult)
+                gameState.colonists[i].oxygen = max(0, gameState.colonists[i].oxygen - 0.025 * traitO2Mult)
+                gameState.colonists[i].stress = min(100, gameState.colonists[i].stress + 0.0375 * traitStressMult)
+                gameState.colonists[i].sleep = max(0, gameState.colonists[i].sleep - 0.0375 * traitSleepMult)
             }
 
             let col = gameState.colonists[i].col
