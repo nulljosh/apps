@@ -135,6 +135,7 @@ export function colonistXpProgress(c) { return c.xp / colonistXpForNext(c); }
 export function grantXP(c, amount) {
     const adjusted = c.trait === 'hustler' ? Math.floor(amount * 1.2) : amount;
     c.xp += adjusted;
+    const prevLevel = c.level;
     let next = colonistXpForNext(c);
     while (c.xp >= next) {
         c.xp -= next;
@@ -144,6 +145,7 @@ export function grantXP(c, amount) {
         c.stats[s] = Math.min(10, c.stats[s] + 1);
         next = colonistXpForNext(c);
     }
+    return c.level > prevLevel;
 }
 
 export function takeDamage(c, amount) {

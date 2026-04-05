@@ -10,7 +10,7 @@ import { TileType, tileAt, setTile, GRID_SIZE } from './world.js';
 // TimeSystem -- uses real clock for day/night in wallpaper mode
 const TICKS_PER_DAY = 240;
 let accumulated = 0;
-const TICK_INTERVAL = 1.0;
+const TICK_INTERVAL = 0.25;
 
 export function timeTick(dt, state) {
     if (state.isPaused) return false;
@@ -201,10 +201,20 @@ export function jobTick(state, pathfinder) {
 
         if (c.pathIndex >= c.pathCols.length) {
             if (c.job === 'gather') {
-                grantXP(c, 10);
+                const leveled = grantXP(c, 10);
+                state.playerXP += 2;
+                if (leveled) {
+                    spawnLevelUp(c.col, c.row, c.level);
+                    gameLog(state, `${c.name} reached level ${c.level}`);
+                }
                 assignRandomGatherTarget(i, state);
             } else if (c.job === 'patrol') {
-                // Go idle so questTick and autoplay can reassign
+                const leveled = grantXP(c, 5);
+                state.playerXP += 1;
+                if (leveled) {
+                    spawnLevelUp(c.col, c.row, c.level);
+                    gameLog(state, `${c.name} reached level ${c.level}`);
+                }
                 c.job = 'idle';
             }
             continue;
@@ -296,7 +306,7 @@ function assignRandomGatherTarget(i, state) {
 }
 
 // AutoplaySystem -- priority-based AI that builds, recruits, and balances colony
-const AUTOPLAY_INTERVAL = 15;
+const AUTOPLAY_INTERVAL = 8;
 
 function computeColonyMetrics(state, alive) {
     const res = state.resources;
@@ -579,7 +589,7 @@ function bossCheck(state, alive, pathfinder) {
 }
 
 // QuestSystem -- colonists perform real-life quests
-const QUEST_WORK_TICKS = 60;
+const QUEST_WORK_TICKS = 30;
 
 const questBubbles = {
     fitness: ['Hitting the gym', 'Lifting weights', 'Running laps', 'Working out', 'Getting strong'],
@@ -736,7 +746,9 @@ function tickCombat(i, state, pathfinder) {
     if (target.state === 'dead') {
         attacker.job = 'idle';
         attacker.attackTargetId = null;
-        grantXP(attacker, 30);
+        const leveled = grantXP(attacker, 30);
+        state.playerXP += 10;
+        if (leveled) spawnLevelUp(attacker.col, attacker.row, attacker.level);
         gameLog(state, `${attacker.name} killed ${target.name}`);
         return;
     }
@@ -748,7 +760,12 @@ function tickCombat(i, state, pathfinder) {
         const dmg = weapon.damage * (1.0 + attacker.stats.str * 0.1);
         takeDamage(target, dmg);
         spawnDamage(target.col, target.row, dmg);
-        grantXP(attacker, 5);
+        const leveled = grantXP(attacker, 5);
+        state.playerXP += 1;
+        if (leveled) {
+            spawnLevelUp(attacker.col, attacker.row, attacker.level);
+            gameLog(state, `${attacker.name} reached level ${attacker.level}`);
+        }
     } else if (attacker.pathIndex >= attacker.pathCols.length) {
         const path = pathfinder.findPath(attacker.col, attacker.row, target.col, target.row);
         if (path.length) {

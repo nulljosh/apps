@@ -407,7 +407,7 @@ function updateColonistPanel(state, callbacks) {
         panel.appendChild(aq);
         const prog = document.createElement('div');
         prog.style.cssText = 'font-size:9px;color:rgba(255,255,255,0.4)';
-        const pct = Math.max(0, Math.floor((1 - col.activeQuest.ticksRemaining / 60) * 100));
+        const pct = Math.max(0, Math.floor((1 - col.activeQuest.ticksRemaining / 30) * 100));
         prog.textContent = `Progress: ${pct}% | ${col.activeQuest.difficulty}-rank | ${col.activeQuest.category}`;
         panel.appendChild(prog);
     } else {
