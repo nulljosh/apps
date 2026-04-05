@@ -13,6 +13,7 @@ import { renderWorld, renderMinimap } from './renderer.js';
 import { setupInput } from './input.js';
 import { updateHUD, checkTutorialAdvance } from './hud.js';
 import { saveGame, loadGame, listSlots, rebuildGrid } from './save.js';
+import { tickParticles, spawnBuildDust } from './particles.js';
 
 let state = null;
 let grid = null;
@@ -203,9 +204,11 @@ function gameLoop(timestamp) {
             jobTick(state, pathfinder);
             resourceTick(state);
             autoplayTick(state, grid, pathfinder, (type, col, row) => {
-                placeBuilding(type, col, row, grid, state, pathfinder);
+                const b = placeBuilding(type, col, row, grid, state, pathfinder);
+                if (b) { const bt = BuildingType[type]; spawnBuildDust(col, row, bt.size[0], bt.size[1]); }
             });
             questTick(state, pathfinder);
+            tickParticles();
 
             // Victory check
             if (checkVictory(state) && !state.victoryShown) {
@@ -287,6 +290,8 @@ function handlePlace(col, row) {
     if (!state.selectedBuildingType) return;
     const model = placeBuilding(state.selectedBuildingType, col, row, grid, state, pathfinder);
     if (model) {
+        const bt = BuildingType[state.selectedBuildingType];
+        spawnBuildDust(col, row, bt.size[0], bt.size[1]);
         for (const c of state.colonists) {
             if (c.job === 'build' && c.state !== 'dead') {
                 const dist = Math.abs(c.col - col) + Math.abs(c.row - row);

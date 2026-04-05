@@ -4,6 +4,7 @@ import { grantXP, takeDamage, updateColonistState, gameLog, createBuilding, crea
     WeaponTypes, BuildingType, QuestBuildings, CategoryInfo, DifficultyXP,
     activeQuests, addQuest, randomColonistName, colonistClass, syncQuestsToLocalStorage,
     currentPhase, GamePhase } from './state.js';
+import { spawnDamage, spawnXP, spawnQuestComplete, spawnLevelUp } from './particles.js';
 import { TileType, tileAt, setTile, GRID_SIZE } from './world.js';
 
 // TimeSystem -- uses real clock for day/night in wallpaper mode
@@ -203,7 +204,8 @@ export function jobTick(state, pathfinder) {
                 grantXP(c, 10);
                 assignRandomGatherTarget(i, state);
             } else if (c.job === 'patrol') {
-                assignRandomPatrolTarget(i, state, pathfinder);
+                // Go idle so questTick and autoplay can reassign
+                c.job = 'idle';
             }
             continue;
         }
@@ -413,32 +415,37 @@ function growthActions(state, alive, m, pathfinder) {
 }
 
 function assignIdleColonists(state, pathfinder, alive, m) {
+    const hasQuests = activeQuests(state).length > 0;
+    const hasQuestBuildings = state.buildings.some(b =>
+        ['questBoard', 'gym', 'library', 'workshop'].includes(b.type) && b.isActive
+    );
+
+    let questAssigned = 0;
     for (let i = 0; i < alive.length; i++) {
         const c = alive[i];
-        if (c.job !== 'idle' || c.jobOverride) continue;
-
-        // Score possible actions based on colony needs
-        let bestAction = 'patrol';
-        let bestScore = 0;
-
-        // Gather food
-        const foodScore = (100 - m.avgHunger) * 2 + (m.res.food < 10 ? 50 : 0);
-        if (foodScore > bestScore) { bestScore = foodScore; bestAction = 'gather'; }
-
-        // Gather when resources low
-        const matScore = (m.res.materials < 20 ? 40 : 0) + (m.res.cash < 10 ? 30 : 0);
-        if (matScore > bestScore) { bestScore = matScore; bestAction = 'gather'; }
-
-        // Patrol when stable
-        const stableScore = (m.avgHunger > 60 && m.avgOxygen > 60 && m.avgSleep > 60) ? 20 : 0;
-        if (stableScore > bestScore && Math.random() < 0.3) { bestScore = stableScore; bestAction = 'patrol'; }
+        if (c.job !== 'idle' || c.jobOverride || c._questPending) continue;
 
         const idx = state.colonists.indexOf(c);
         if (idx < 0) continue;
 
-        switch (bestAction) {
-            case 'gather': assignNearestGatherTarget(idx, state, pathfinder); break;
-            case 'patrol': assignRandomPatrolTarget(idx, state, pathfinder); break;
+        // Priority: quests first (leave idle so questTick picks them up)
+        if (hasQuests && hasQuestBuildings && questAssigned < Math.ceil(alive.length * 0.6)) {
+            // Leave idle -- questTick will assign them to quest buildings
+            questAssigned++;
+            continue;
+        }
+
+        // Resources low -> gather
+        if (m.avgHunger < 50 || (m.res.food || 0) < 10 || (m.res.materials || 0) < 15) {
+            assignNearestGatherTarget(idx, state, pathfinder);
+            continue;
+        }
+
+        // Otherwise split between gather and patrol
+        if (Math.random() < 0.5) {
+            assignNearestGatherTarget(idx, state, pathfinder);
+        } else {
+            assignRandomPatrolTarget(idx, state, pathfinder);
         }
     }
 }
@@ -531,12 +538,18 @@ function bossCheck(state, alive, pathfinder) {
             const spawnC = alive[Math.floor(Math.random() * alive.length)];
             if (!spawnC) continue;
 
+            const phase = currentPhase(state);
+            const bossHP = phase === GamePhase.VICTORY ? 600 : phase === GamePhase.MASTERY ? 400 : 200;
+            const bossLvl = phase === GamePhase.VICTORY ? 10 : phase === GamePhase.MASTERY ? 8 : 5;
+            const bossWeapon = phase === GamePhase.VICTORY ? 'rifle' : phase === GamePhase.MASTERY ? 'shotgun' : 'rifle';
+
             const boss = createColonist(`BOSS: ${q.title.slice(0, 12)}`, spawnC.col + 5, spawnC.row + 5);
             boss.id = bossId;
             boss.stats = { str: 10, int: 10, agi: 8, end: 10, cha: 1 };
-            boss.health = 200;
-            boss.weapon = 'rifle';
-            boss.level = 5;
+            if (phase === GamePhase.VICTORY) { boss.stats.str = 12; boss.stats.end = 12; }
+            boss.health = bossHP;
+            boss.weapon = bossWeapon;
+            boss.level = bossLvl;
             boss.trait = 'hustler';
             boss.questBubble = { text: `Deadline: ${q.title}`, ticks: 60 };
             state.colonists.push(boss);
@@ -609,7 +622,11 @@ export function questTick(state, pathfinder) {
             c.activeQuest.ticksRemaining--;
             if (c.activeQuest.ticksRemaining <= 0) {
                 const xp = DifficultyXP[c.activeQuest.difficulty] || 50;
+                const prevLevel = c.level;
                 grantXP(c, xp);
+                spawnXP(c.col, c.row, xp);
+                if (c.level > prevLevel) spawnLevelUp(c.col, c.row, c.level);
+                spawnQuestComplete(c.col, c.row);
                 c.questsCompleted = (c.questsCompleted || 0) + 1;
                 if (!c._catCounts) c._catCounts = {};
                 const cat = c.activeQuest.category;
@@ -713,6 +730,7 @@ function tickCombat(i, state, pathfinder) {
     if (dist <= weapon.range) {
         const dmg = weapon.damage * (1.0 + attacker.stats.str * 0.1);
         takeDamage(target, dmg);
+        spawnDamage(target.col, target.row, dmg);
         grantXP(attacker, 5);
     } else if (attacker.pathIndex >= attacker.pathCols.length) {
         const path = pathfinder.findPath(attacker.col, attacker.row, target.col, target.row);

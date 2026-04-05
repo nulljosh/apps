@@ -2,6 +2,7 @@
 
 import { TILE_SIZE, TileColors, GRID_SIZE } from './world.js';
 import { BuildingType, ResourceSymbol, CategoryInfo, colonistClass } from './state.js';
+import { renderParticles } from './particles.js';
 
 const GAP = 1;
 const TILE_R = 4;
@@ -133,21 +134,22 @@ function drawColonist16bit(ctx, c, x, y, state) {
     const bodyColor = cls ? (CLASS_COLORS[cls] || color) : color;
     const skin = skinTone(c.name);
     const isMoving = c.pathIndex < c.pathCols.length;
-    const walkFrame = isMoving ? (renderTick % 8 < 4 ? 0 : 1) : -1;
+    // 4-frame walk cycle: 0=right-forward, 1=neutral, 2=left-forward, 3=neutral
+    const walkFrame = isMoving ? Math.floor(renderTick % 16 / 4) : -1;
     const isDead = c.state === 'dead';
 
     if (isDead) ctx.globalAlpha = 0.3;
 
-    // Legs (2px wide, 5px long)
+    // Legs (2px wide, 5px long) -- 4-frame cycle
     ctx.fillStyle = '#2c2c2e';
     if (walkFrame === 0) {
-        ctx.fillRect(x - 3, y + 5, 2, 5); // left forward
-        ctx.fillRect(x + 1, y + 3, 2, 5); // right back
-    } else if (walkFrame === 1) {
-        ctx.fillRect(x - 3, y + 3, 2, 5); // left back
-        ctx.fillRect(x + 1, y + 5, 2, 5); // right forward
+        ctx.fillRect(x - 3, y + 5, 2, 5);
+        ctx.fillRect(x + 1, y + 3, 2, 5);
+    } else if (walkFrame === 2) {
+        ctx.fillRect(x - 3, y + 3, 2, 5);
+        ctx.fillRect(x + 1, y + 5, 2, 5);
     } else {
-        ctx.fillRect(x - 3, y + 3, 2, 6); // standing
+        ctx.fillRect(x - 3, y + 3, 2, 6);
         ctx.fillRect(x + 1, y + 3, 2, 6);
     }
 
@@ -155,12 +157,12 @@ function drawColonist16bit(ctx, c, x, y, state) {
     ctx.fillStyle = bodyColor;
     ctx.fillRect(x - 4, y - 5, 8, 10);
 
-    // Arms (2px wide, extending from torso sides)
+    // Arms (2px wide) -- 4-frame swing
     ctx.fillStyle = skin;
     if (walkFrame === 0) {
         ctx.fillRect(x - 6, y - 3, 2, 5);
         ctx.fillRect(x + 4, y - 5, 2, 5);
-    } else if (walkFrame === 1) {
+    } else if (walkFrame === 2) {
         ctx.fillRect(x - 6, y - 5, 2, 5);
         ctx.fillRect(x + 4, y - 3, 2, 5);
     } else {
@@ -329,9 +331,14 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         }
     }
 
-    // Night overlay
-    if (state.isNight) {
-        ctx.fillStyle = 'rgba(0, 0, 20, 0.25)';
+    // Time-based colored lighting
+    const hour = state.currentHour;
+    let lightColor = null;
+    if (hour >= 6 && hour < 8) lightColor = 'rgba(255, 180, 80, 0.1)'; // dawn
+    else if (hour >= 18 && hour < 20) lightColor = 'rgba(255, 120, 40, 0.15)'; // sunset
+    else if (hour >= 20 || hour < 6) lightColor = 'rgba(10, 10, 60, 0.3)'; // night
+    if (lightColor) {
+        ctx.fillStyle = lightColor;
         ctx.fillRect(bounds.minCol * TILE_SIZE, bounds.minRow * TILE_SIZE,
             (bounds.maxCol - bounds.minCol + 1) * TILE_SIZE,
             (bounds.maxRow - bounds.minRow + 1) * TILE_SIZE);
@@ -398,11 +405,17 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         ctx.fillText(bt.name, bx + bw / 2, by + bh - 2);
     }
 
-    // Colonists -- 16-bit style
+    // Colonists -- 16-bit style with smooth interpolation
     for (const c of state.colonists) {
-        if (c.col < bounds.minCol - 1 || c.col > bounds.maxCol + 1 || c.row < bounds.minRow - 1 || c.row > bounds.maxRow + 1) continue;
-        const x = c.col * TILE_SIZE + TILE_SIZE / 2;
-        const y = c.row * TILE_SIZE + TILE_SIZE / 2;
+        if (c.col < bounds.minCol - 2 || c.col > bounds.maxCol + 2 || c.row < bounds.minRow - 2 || c.row > bounds.maxRow + 2) continue;
+        // Smooth position lerp
+        const targetX = c.col * TILE_SIZE + TILE_SIZE / 2;
+        const targetY = c.row * TILE_SIZE + TILE_SIZE / 2;
+        if (c._renderX === undefined) { c._renderX = targetX; c._renderY = targetY; }
+        c._renderX += (targetX - c._renderX) * 0.25;
+        c._renderY += (targetY - c._renderY) * 0.25;
+        const x = c._renderX;
+        const y = c._renderY;
 
         // Selection ring
         const isSelected = c.id === state.selectedColonistId || (state.selectedColonistIds && state.selectedColonistIds.has(c.id));
@@ -458,6 +471,9 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
             ctx.fill();
         }
     }
+
+    // Particles (damage numbers, XP, level ups)
+    renderParticles(ctx);
 
     // Build ghost
     if (state.inputMode === 'build' && state.selectedBuildingType && state._ghostCol != null) {
