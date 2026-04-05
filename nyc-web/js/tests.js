@@ -3,7 +3,7 @@
 import { createColonist, createGameState, grantXP, takeDamage, updateColonistState, colonistXpForNext, colonistXpProgress, createBuilding, createResource,
     questLevel, questTitle, questXPProgress, createQuest, createReward, addQuest, completeQuestInList,
     activeQuests, completedQuests, updatePlayerStreak, DifficultyXP, CategoryInfo, colonistClass,
-    randomColonistName, migrateQuestData } from './state.js';
+    randomColonistName, migrateQuestData, currentPhase, checkVictory, GamePhase } from './state.js';
 import { generateWorld, GRID_SIZE, TILE_SIZE, tileAt, setTile, worldToTile, tileToWorld, TileType } from './world.js';
 import { Pathfinder } from './pathfinder.js';
 import { timeTick, canPlace, placeBuilding, demolishBuilding } from './systems.js';
@@ -78,29 +78,29 @@ suite('state.js -- grantXP');
 {
     const c = createColonist('XP', 0, 0);
     c.level = 1; c.xp = 0; c.trait = 'scavenger';
-    grantXP(c, 50);
-    eq(c.xp, 50, 'grants 50 xp');
-    eq(c.level, 1, 'no level up at 50');
-    grantXP(c, 50);
-    eq(c.level, 2, 'levels up at 100');
+    grantXP(c, 25);
+    eq(c.xp, 25, 'grants 25 xp');
+    eq(c.level, 1, 'no level up at 25');
+    grantXP(c, 25);
+    eq(c.level, 2, 'levels up at 50');
     assert(c.xp < 100, 'xp rolls over after level up');
 
     const h = createColonist('Hust', 0, 0);
     h.trait = 'hustler'; h.xp = 0; h.level = 1;
-    grantXP(h, 100);
+    grantXP(h, 50);
     eq(h.level, 2, 'hustler levels up');
-    eq(h.xp, 20, 'hustler gets 20% bonus');
+    eq(h.xp, 10, 'hustler gets 20% bonus');
 }
 
 suite('state.js -- colonistXpForNext');
 {
     const c = createColonist('LVL', 0, 0);
     c.level = 1;
-    eq(colonistXpForNext(c), 100, 'level 1 needs 100');
+    eq(colonistXpForNext(c), 50, 'level 1 needs 50');
     c.level = 5;
-    eq(colonistXpForNext(c), 500, 'level 5 needs 500');
-    c.level = 0;
-    eq(colonistXpForNext(c), 100, 'level 0 returns minimum 100');
+    eq(colonistXpForNext(c), 100, 'level 5 needs 100');
+    c.level = 10;
+    eq(colonistXpForNext(c), 300, 'level 10 needs 300');
 }
 
 suite('state.js -- takeDamage');
@@ -509,6 +509,40 @@ suite('Error Handling');
     const c = createColonist('Test', 0, 0);
     c.dominantCategory = 'nonexistent';
     assert(colonistClass(c) === null, 'unknown category returns null class');
+}
+
+suite('Game Phases & Victory');
+{
+    const state = createGameState();
+    eq(currentPhase(state), GamePhase.SURVIVAL, 'empty state is SURVIVAL');
+    eq(checkVictory(state), false, 'no victory with no colonists');
+
+    // Add 5 colonists -> GROWTH
+    for (let i = 0; i < 5; i++) state.colonists.push(createColonist(`P${i}`, 0, 0));
+    eq(currentPhase(state), GamePhase.GROWTH, '5 colonists = GROWTH');
+
+    // Add 10 with avg level 5 -> MASTERY
+    for (let i = 0; i < 5; i++) state.colonists.push(createColonist(`Q${i}`, 0, 0));
+    for (const c of state.colonists) c.level = 5;
+    eq(currentPhase(state), GamePhase.MASTERY, '10 colonists avg level 5 = MASTERY');
+
+    // Add 15 with avg level 8 -> VICTORY phase
+    for (let i = 0; i < 5; i++) state.colonists.push(createColonist(`R${i}`, 0, 0));
+    for (const c of state.colonists) c.level = 8;
+    eq(currentPhase(state), GamePhase.VICTORY, '15 colonists avg level 8 = VICTORY');
+
+    // Victory requires one level 10
+    eq(checkVictory(state), false, 'no victory without level 10');
+    state.colonists[0].level = 10;
+    eq(checkVictory(state), true, 'victory with level 10 champion');
+}
+
+suite('createReward');
+{
+    const r = createReward('Coffee break');
+    assert(r.id.length > 0, 'reward has id');
+    eq(r.text, 'Coffee break', 'text set');
+    eq(r.active, true, 'starts active');
 }
 
 // ---- Summary ----

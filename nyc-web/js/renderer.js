@@ -1,9 +1,8 @@
-// Canvas renderer -- tiles, entities, selection, health bars, minimap
+// Canvas renderer -- 16-bit style sprites, cached to offscreen canvases
 
 import { TILE_SIZE, TileColors, GRID_SIZE } from './world.js';
-import { BuildingType, ResourceSymbol } from './state.js';
+import { BuildingType, ResourceSymbol, CategoryInfo, colonistClass } from './state.js';
 
-const COLONIST_SIZE = 10;
 const GAP = 1;
 const TILE_R = 4;
 
@@ -13,6 +12,15 @@ const STATE_COLORS = {
     suffocating: '#64d2ff',
     exhausted: '#ff9f0a',
     dead: '#48484a',
+};
+
+const CLASS_COLORS = {
+    Warrior: '#ff375f',
+    Mage: '#0071e3',
+    Rogue: '#30d158',
+    Ranger: '#ff9f0a',
+    Bard: '#bf5af2',
+    Merchant: '#ac8e68',
 };
 
 const RESOURCE_COLORS = {
@@ -63,32 +71,261 @@ function roundRect(ctx, x, y, w, h, r) {
     ctx.closePath();
 }
 
-// Pre-rendered tile sprites for performance
+// Tile sprites with terrain variation (4 brightness variants per type)
 const tileSprites = {};
-function getTileSprite(tileType) {
-    if (tileSprites[tileType]) return tileSprites[tileType];
+function getTileSprite(tileType, col, row) {
+    const variant = (col * 7 + row * 13) % 4;
+    const key = `${tileType}_${variant}`;
+    if (tileSprites[key]) return tileSprites[key];
     const size = TILE_SIZE;
     const c = document.createElement('canvas');
     c.width = size;
     c.height = size;
     const cx = c.getContext('2d');
-    cx.fillStyle = TileColors[tileType] || '#0a0a0c';
+    const baseColor = TileColors[tileType] || '#0a0a0c';
+
+    // Parse and shift brightness
+    const shift = [-6, -3, 0, 4][variant];
+    cx.fillStyle = shiftColor(baseColor, shift);
     roundRect(cx, GAP, GAP, size - GAP * 2, size - GAP * 2, TILE_R);
     cx.fill();
-    tileSprites[tileType] = c;
+
+    // Sidewalk details (deterministic per position)
+    if (tileType === 1 && variant === 0) { // sidewalk + variant 0 = manhole
+        cx.fillStyle = 'rgba(255,255,255,0.06)';
+        cx.fillRect(10, 10, 12, 12);
+    } else if (tileType === 1 && variant === 3) { // cracks
+        cx.strokeStyle = 'rgba(255,255,255,0.05)';
+        cx.lineWidth = 1;
+        cx.beginPath();
+        cx.moveTo(8, 16);
+        cx.lineTo(24, 18);
+        cx.stroke();
+    }
+
+    tileSprites[key] = c;
     return c;
 }
 
+function shiftColor(hex, amount) {
+    if (hex.startsWith('rgba')) return hex;
+    const r = Math.max(0, Math.min(255, parseInt(hex.slice(1, 3), 16) + amount));
+    const g = Math.max(0, Math.min(255, parseInt(hex.slice(3, 5), 16) + amount));
+    const b = Math.max(0, Math.min(255, parseInt(hex.slice(5, 7), 16) + amount));
+    return `rgb(${r},${g},${b})`;
+}
+
+// Skin tones from name hash
+const SKIN_TONES = ['#f5d0a9', '#e8b88a', '#d4956b', '#c47a50', '#8d5524', '#6b3e1f'];
+function skinTone(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = ((hash << 5) - hash + name.charCodeAt(i)) | 0;
+    return SKIN_TONES[Math.abs(hash) % SKIN_TONES.length];
+}
+
+// Render tick for walk animation
+let renderTick = 0;
+
+// Draw a 16-bit style colonist directly (no cache for simplicity + dynamic state)
+function drawColonist16bit(ctx, c, x, y, state) {
+    const color = STATE_COLORS[c.state] || '#666';
+    const cls = colonistClass(c);
+    const bodyColor = cls ? (CLASS_COLORS[cls] || color) : color;
+    const skin = skinTone(c.name);
+    const isMoving = c.pathIndex < c.pathCols.length;
+    const walkFrame = isMoving ? (renderTick % 8 < 4 ? 0 : 1) : -1;
+    const isDead = c.state === 'dead';
+
+    if (isDead) ctx.globalAlpha = 0.3;
+
+    // Legs (2px wide, 5px long)
+    ctx.fillStyle = '#2c2c2e';
+    if (walkFrame === 0) {
+        ctx.fillRect(x - 3, y + 5, 2, 5); // left forward
+        ctx.fillRect(x + 1, y + 3, 2, 5); // right back
+    } else if (walkFrame === 1) {
+        ctx.fillRect(x - 3, y + 3, 2, 5); // left back
+        ctx.fillRect(x + 1, y + 5, 2, 5); // right forward
+    } else {
+        ctx.fillRect(x - 3, y + 3, 2, 6); // standing
+        ctx.fillRect(x + 1, y + 3, 2, 6);
+    }
+
+    // Body (8x10 torso)
+    ctx.fillStyle = bodyColor;
+    ctx.fillRect(x - 4, y - 5, 8, 10);
+
+    // Arms (2px wide, extending from torso sides)
+    ctx.fillStyle = skin;
+    if (walkFrame === 0) {
+        ctx.fillRect(x - 6, y - 3, 2, 5);
+        ctx.fillRect(x + 4, y - 5, 2, 5);
+    } else if (walkFrame === 1) {
+        ctx.fillRect(x - 6, y - 5, 2, 5);
+        ctx.fillRect(x + 4, y - 3, 2, 5);
+    } else {
+        ctx.fillRect(x - 6, y - 4, 2, 5);
+        ctx.fillRect(x + 4, y - 4, 2, 5);
+    }
+
+    // Head (8x8 circle-ish)
+    ctx.fillStyle = skin;
+    ctx.beginPath();
+    ctx.arc(x, y - 9, 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eyes (2 black dots)
+    ctx.fillStyle = '#000';
+    ctx.fillRect(x - 2, y - 10, 1, 1);
+    ctx.fillRect(x + 1, y - 10, 1, 1);
+
+    // Mouth
+    ctx.fillRect(x - 1, y - 8, 2, 1);
+
+    // Weapon overlay
+    if (c.weapon !== 'fists') {
+        ctx.fillStyle = c.weapon === 'bat' ? '#8B4513' : '#888';
+        const wLen = c.weapon === 'rifle' ? 7 : c.weapon === 'shotgun' ? 6 : c.weapon === 'pistol' ? 3 : 4;
+        ctx.fillRect(x + 5, y - 4, wLen, 2);
+    }
+
+    if (isDead) ctx.globalAlpha = 1;
+
+    // Level badge (level >= 3)
+    if (c.level >= 3 && !isDead) {
+        ctx.fillStyle = '#ffd60a';
+        ctx.font = 'bold 6px -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(c.level, x, y - 15);
+    }
+
+    // Class color dot
+    if (cls && !isDead) {
+        ctx.fillStyle = CLASS_COLORS[cls] || '#fff';
+        ctx.beginPath();
+        ctx.arc(x, y + 12, 2, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+// Building icon symbols
+const BUILDING_ICONS = {
+    shelter: (cx, x, y, w, h) => {
+        // House with roof
+        cx.fillStyle = 'rgba(41, 151, 255, 0.6)';
+        cx.beginPath();
+        cx.moveTo(x + w/2, y + 4);
+        cx.lineTo(x + w - 6, y + h/2 - 2);
+        cx.lineTo(x + 6, y + h/2 - 2);
+        cx.closePath();
+        cx.fill();
+        cx.fillRect(x + w/2 - 6, y + h/2 - 2, 12, h/2 - 4);
+        // Window
+        cx.fillStyle = 'rgba(255,255,255,0.3)';
+        cx.fillRect(x + w/2 - 2, y + h/2, 4, 4);
+    },
+    foodStall: (cx, x, y, w, h) => {
+        // Counter with awning
+        cx.fillStyle = 'rgba(48, 209, 88, 0.5)';
+        cx.fillRect(x + 4, y + h/2, w - 8, h/2 - 4);
+        // Awning zigzag
+        cx.strokeStyle = 'rgba(48, 209, 88, 0.7)';
+        cx.lineWidth = 2;
+        cx.beginPath();
+        for (let i = 0; i < 4; i++) {
+            const px = x + 4 + i * ((w - 8) / 4);
+            cx.lineTo(px, y + h/2 - (i % 2 ? 4 : 0));
+        }
+        cx.stroke();
+    },
+    generator: (cx, x, y, w, h) => {
+        // Box with lightning bolt
+        cx.fillStyle = 'rgba(255, 214, 10, 0.4)';
+        cx.fillRect(x + 8, y + 8, w - 16, h - 16);
+        cx.strokeStyle = 'rgba(255, 214, 10, 0.8)';
+        cx.lineWidth = 2;
+        cx.beginPath();
+        cx.moveTo(x + w/2 + 2, y + 10);
+        cx.lineTo(x + w/2 - 2, y + h/2);
+        cx.lineTo(x + w/2 + 2, y + h/2);
+        cx.lineTo(x + w/2 - 2, y + h - 10);
+        cx.stroke();
+    },
+    filterStation: (cx, x, y, w, h) => {
+        // Cylinder with O2
+        cx.fillStyle = 'rgba(100, 210, 255, 0.4)';
+        roundRect(cx, x + 10, y + 6, w - 20, h - 12, 6);
+        cx.fill();
+        cx.fillStyle = 'rgba(100, 210, 255, 0.8)';
+        cx.font = 'bold 10px -apple-system, sans-serif';
+        cx.textAlign = 'center';
+        cx.textBaseline = 'middle';
+        cx.fillText('O2', x + w/2, y + h/2);
+    },
+    questBoard: (cx, x, y, w, h) => {
+        // Wooden frame with papers
+        cx.fillStyle = 'rgba(201, 168, 76, 0.4)';
+        cx.fillRect(x + 6, y + 6, w - 12, h - 12);
+        cx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        cx.fillRect(x + 10, y + 10, 8, 6);
+        cx.fillRect(x + 10, y + 18, 8, 6);
+        if (w > 40) {
+            cx.fillRect(x + 22, y + 10, 8, 6);
+            cx.fillRect(x + 22, y + 18, 8, 6);
+        }
+    },
+    gym: (cx, x, y, w, h) => {
+        // Dumbbell
+        cx.strokeStyle = 'rgba(192, 57, 43, 0.7)';
+        cx.lineWidth = 3;
+        cx.beginPath();
+        cx.moveTo(x + 12, y + h/2);
+        cx.lineTo(x + w - 12, y + h/2);
+        cx.stroke();
+        cx.fillStyle = 'rgba(192, 57, 43, 0.6)';
+        cx.fillRect(x + 8, y + h/2 - 6, 6, 12);
+        cx.fillRect(x + w - 14, y + h/2 - 6, 6, 12);
+    },
+    library: (cx, x, y, w, h) => {
+        // Books
+        const colors = ['rgba(45,74,43,0.6)', 'rgba(0,113,227,0.4)', 'rgba(191,90,242,0.4)'];
+        for (let i = 0; i < 3; i++) {
+            cx.fillStyle = colors[i];
+            cx.fillRect(x + 12 + i * 7, y + 10, 5, h - 20);
+        }
+    },
+    workshop: (cx, x, y, w, h) => {
+        // Gear
+        cx.strokeStyle = 'rgba(139, 105, 20, 0.7)';
+        cx.lineWidth = 2;
+        cx.beginPath();
+        cx.arc(x + w/2, y + h/2, 10, 0, Math.PI * 2);
+        cx.stroke();
+        cx.beginPath();
+        cx.arc(x + w/2, y + h/2, 4, 0, Math.PI * 2);
+        cx.stroke();
+        // Teeth
+        for (let a = 0; a < 6; a++) {
+            const angle = a * Math.PI / 3;
+            cx.beginPath();
+            cx.moveTo(x + w/2 + Math.cos(angle) * 8, y + h/2 + Math.sin(angle) * 8);
+            cx.lineTo(x + w/2 + Math.cos(angle) * 13, y + h/2 + Math.sin(angle) * 13);
+            cx.stroke();
+        }
+    },
+};
+
 export function renderWorld(ctx, canvas, camera, grid, state) {
+    renderTick++;
     ctx.save();
     camera.applyTransform(ctx, canvas);
 
     const bounds = camera.visibleBounds(canvas);
 
-    // Tiles (sprite-cached rounded rects)
+    // Tiles (sprite-cached with terrain variation)
     for (let r = bounds.minRow; r <= bounds.maxRow; r++) {
         for (let c = bounds.minCol; c <= bounds.maxCol; c++) {
-            ctx.drawImage(getTileSprite(grid[r][c]), c * TILE_SIZE, r * TILE_SIZE);
+            ctx.drawImage(getTileSprite(grid[r][c], c, r), c * TILE_SIZE, r * TILE_SIZE);
         }
     }
 
@@ -107,21 +344,18 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         const y = rn.row * TILE_SIZE + TILE_SIZE / 2;
         const alpha = rn.remaining <= 0 ? 0.12 : Math.max(0.3, rn.maxAmount > 0 ? rn.remaining / rn.maxAmount : 0);
 
-        // Soft glow
         ctx.globalAlpha = alpha * 0.3;
         ctx.fillStyle = RESOURCE_COLORS[rn.type] || '#fff';
         ctx.beginPath();
         ctx.arc(x, y, 10, 0, Math.PI * 2);
         ctx.fill();
 
-        // Core dot
         ctx.globalAlpha = alpha;
         ctx.beginPath();
         ctx.arc(x, y, 5, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalAlpha = 1;
 
-        // Symbol
         ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
         ctx.font = '7px -apple-system, sans-serif';
         ctx.textAlign = 'center';
@@ -129,7 +363,7 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         ctx.fillText(ResourceSymbol[rn.type] || '', x, y);
     }
 
-    // Buildings -- glass style
+    // Buildings -- glass style with icons
     for (const b of state.buildings) {
         const bt = BuildingType[b.type];
         if (!bt) continue;
@@ -150,19 +384,25 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         roundRect(ctx, bx, by, bw, bh, TILE_R + 2);
         ctx.stroke();
 
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.font = '600 8px -apple-system, sans-serif';
+        // Draw building icon
+        const iconFn = BUILDING_ICONS[b.type];
+        if (iconFn) {
+            iconFn(ctx, bx, by, bw, bh);
+        }
+
+        // Name label
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.font = '600 7px -apple-system, sans-serif';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(bt.name, b.col * TILE_SIZE + (w * TILE_SIZE) / 2, b.row * TILE_SIZE + (h * TILE_SIZE) / 2);
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(bt.name, bx + bw / 2, by + bh - 2);
     }
 
-    // Colonists
+    // Colonists -- 16-bit style
     for (const c of state.colonists) {
         if (c.col < bounds.minCol - 1 || c.col > bounds.maxCol + 1 || c.row < bounds.minRow - 1 || c.row > bounds.maxRow + 1) continue;
         const x = c.col * TILE_SIZE + TILE_SIZE / 2;
         const y = c.row * TILE_SIZE + TILE_SIZE / 2;
-        const color = STATE_COLORS[c.state] || '#666';
 
         // Selection ring
         const isSelected = c.id === state.selectedColonistId || (state.selectedColonistIds && state.selectedColonistIds.has(c.id));
@@ -170,33 +410,17 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
             ctx.strokeStyle = 'rgba(255, 214, 10, 0.7)';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(x, y, COLONIST_SIZE + 5, 0, Math.PI * 2);
+            ctx.arc(x, y, 14, 0, Math.PI * 2);
             ctx.stroke();
         }
 
-        // Outer glow
-        ctx.globalAlpha = c.state === 'dead' ? 0.15 : 0.2;
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(x, y, COLONIST_SIZE + 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-
-        // Body -- rounded pill shape
-        ctx.fillStyle = color;
-        roundRect(ctx, x - 5, y - 7, 10, 14, 4);
-        ctx.fill();
-
-        // Head
-        ctx.beginPath();
-        ctx.arc(x, y - 10, 4, 0, Math.PI * 2);
-        ctx.fill();
+        drawColonist16bit(ctx, c, x, y, state);
 
         // Health bar
         const barW = 22;
         const barH = 2;
         const barX = x - barW / 2;
-        const barY = y - COLONIST_SIZE - 10;
+        const barY = y - 18;
         ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
         roundRect(ctx, barX, barY, barW, barH, 1);
         ctx.fill();
@@ -219,13 +443,12 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
             const text = c.questBubble.text;
             ctx.font = '500 6px -apple-system, sans-serif';
             const tw = ctx.measureText(text).width + 8;
-            const bx = x - tw / 2;
+            const bxb = x - tw / 2;
             ctx.fillStyle = 'rgba(244, 228, 193, 0.9)';
-            roundRect(ctx, bx, bubbleY - 8, tw, 11, 3);
+            roundRect(ctx, bxb, bubbleY - 8, tw, 11, 3);
             ctx.fill();
             ctx.fillStyle = '#1c1208';
             ctx.fillText(text, x, bubbleY);
-            // tiny triangle pointer
             ctx.beginPath();
             ctx.moveTo(x - 3, bubbleY + 3);
             ctx.lineTo(x + 3, bubbleY + 3);
@@ -289,7 +512,6 @@ export function renderMinimap(ctx, canvas, grid, state, camera) {
         }
     }
 
-    // Colonists
     ctx.fillStyle = '#30d158';
     for (const c of state.colonists) {
         if (c.state === 'dead') continue;
@@ -300,7 +522,6 @@ export function renderMinimap(ctx, canvas, grid, state, camera) {
         ctx.fill();
     }
 
-    // Camera viewport
     const bounds = camera.visibleBounds(document.getElementById('game'));
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
     ctx.lineWidth = 1;

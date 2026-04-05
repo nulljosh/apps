@@ -1,7 +1,9 @@
 // Main entry -- game loop, init, auto-start
 
 import { createGameState, createColonist, gameLog, grantXP, BuildingType, migrateQuestData,
-    randomColonistName, activeQuests, addQuest, completeQuestInList, syncQuestsToLocalStorage } from './state.js';
+    randomColonistName, activeQuests, addQuest, completeQuestInList, syncQuestsToLocalStorage,
+    checkVictory, currentPhase } from './state.js';
+import { initClaudeBridge } from './claude.js';
 import { generateWorld, GRID_SIZE, TILE_SIZE, tileAt, worldToTile } from './world.js';
 import { Pathfinder } from './pathfinder.js';
 import { timeTick, needsTick, resourceTick, jobTick, placeBuilding, demolishBuilding,
@@ -133,6 +135,8 @@ function startGame(loadSlot) {
         },
     };
 
+    initClaudeBridge(state);
+
     setupInput(canvas, camera, state, {
         onSelectEntity: (wx, wy) => selectEntity(wx, wy),
         onPlaceBuilding: (col, row) => handlePlace(col, row),
@@ -202,6 +206,15 @@ function gameLoop(timestamp) {
                 placeBuilding(type, col, row, grid, state, pathfinder);
             });
             questTick(state, pathfinder);
+
+            // Victory check
+            if (checkVictory(state) && !state.victoryShown) {
+                state.victoryShown = true;
+                state.isPaused = true;
+                gameLog(state, 'TIMES SQUARE RECLAIMED');
+                const elapsed = Math.floor(state.currentTick / 60);
+                state.toastMessage = { text: `Victory in ${elapsed} minutes`, ticks: 300 };
+            }
 
             if (state.autoSaveEnabled && state.currentTick > 0 && state.currentTick % 60 === 0 && state.lastSaveSlot) {
                 performSave(state.lastSaveSlot);

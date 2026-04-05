@@ -2,7 +2,8 @@
 
 import { grantXP, takeDamage, updateColonistState, gameLog, createBuilding, createColonist,
     WeaponTypes, BuildingType, QuestBuildings, CategoryInfo, DifficultyXP,
-    activeQuests, randomColonistName, colonistClass, syncQuestsToLocalStorage } from './state.js';
+    activeQuests, addQuest, randomColonistName, colonistClass, syncQuestsToLocalStorage,
+    currentPhase, GamePhase } from './state.js';
 import { TileType, tileAt, setTile, GRID_SIZE } from './world.js';
 
 // TimeSystem -- uses real clock for day/night in wallpaper mode
@@ -199,7 +200,7 @@ export function jobTick(state, pathfinder) {
 
         if (c.pathIndex >= c.pathCols.length) {
             if (c.job === 'gather') {
-                grantXP(c, 5);
+                grantXP(c, 10);
                 assignRandomGatherTarget(i, state);
             } else if (c.job === 'patrol') {
                 assignRandomPatrolTarget(i, state, pathfinder);
@@ -292,87 +293,95 @@ function assignRandomGatherTarget(i, state) {
     }
 }
 
-// AutoplaySystem -- AI that builds, recruits, and balances directives
-const AUTOPLAY_INTERVAL = 30;
+// AutoplaySystem -- priority-based AI that builds, recruits, and balances colony
+const AUTOPLAY_INTERVAL = 15;
 
-export function autoplayTick(state, grid, pathfinder, placeBuildingFn) {
-    if (!state.autoplay) return;
-    if (state.currentTick % AUTOPLAY_INTERVAL !== 0) return;
-
-    const alive = state.colonists.filter(c => c.state !== 'dead');
-    if (!alive.length) return;
+function computeColonyMetrics(state, alive) {
     const res = state.resources;
-    const buildings = state.buildings;
-
     const counts = {};
-    for (const b of buildings) counts[b.type] = (counts[b.type] || 0) + 1;
+    for (const b of state.buildings) counts[b.type] = (counts[b.type] || 0) + 1;
+    return {
+        avgHunger: alive.reduce((s, c) => s + c.hunger, 0) / alive.length,
+        avgOxygen: alive.reduce((s, c) => s + c.oxygen, 0) / alive.length,
+        avgStress: alive.reduce((s, c) => s + c.stress, 0) / alive.length,
+        avgSleep: alive.reduce((s, c) => s + c.sleep, 0) / alive.length,
+        avgLevel: alive.reduce((s, c) => s + c.level, 0) / alive.length,
+        res, counts, phase: currentPhase(state),
+    };
+}
 
-    const avgHunger = alive.reduce((s, c) => s + c.hunger, 0) / alive.length;
-    const avgOxygen = alive.reduce((s, c) => s + c.oxygen, 0) / alive.length;
-    const avgStress = alive.reduce((s, c) => s + c.stress, 0) / alive.length;
-    const avgSleep = alive.reduce((s, c) => s + c.sleep, 0) / alive.length;
-
-    let buildType = null;
-
-    // Auto-build quest buildings when quests exist
-    const quests = activeQuests(state);
-    if (quests.length) {
-        const neededBuildings = new Set(quests.map(q => QuestBuildings[q.category] || 'questBoard'));
-        for (const needed of neededBuildings) {
-            if (!counts[needed]) { buildType = needed; break; }
-        }
+function tryBuild(type, alive, grid, state, placeBuildingFn) {
+    const bt = BuildingType[type];
+    if (!bt) return false;
+    const [w, h] = bt.size;
+    const res = state.resources;
+    for (const [r, amt] of Object.entries(bt.cost)) {
+        if ((res[r] || 0) < amt) return false;
     }
-
-    if (!buildType) {
-        if (avgHunger < 40 && (res.food || 0) < 5) {
-            if (!counts.foodStall || counts.foodStall < Math.ceil(alive.length / 3)) buildType = 'foodStall';
-            state.currentDirective = 'gather';
-        } else if ((res.power || 0) < 3 || avgOxygen < 50) {
-            if (!counts.generator || counts.generator < 2) buildType = 'generator';
-            if (!counts.filterStation) buildType = 'filterStation';
-        } else if (avgStress > 60 || avgSleep < 30) {
-            if (!counts.shelter || counts.shelter < Math.ceil(alive.length / 3)) buildType = 'shelter';
-        } else if ((res.cash || 0) < 10) {
-            if (!counts.billboard || counts.billboard < 2) buildType = 'billboard';
-            state.currentDirective = 'gather';
-        } else {
-            state.currentDirective = state.currentTick % 60 < 30 ? 'gather' : 'patrol';
-        }
-    }
-
-    if (buildType && placeBuildingFn) {
-        const bt = BuildingType[buildType];
-        const [w, h] = bt.size;
-        let canAfford = true;
-        for (const [r, amt] of Object.entries(bt.cost)) {
-            if ((res[r] || 0) < amt) { canAfford = false; break; }
-        }
-        if (canAfford) {
-            const centerCol = Math.round(alive.reduce((s, c) => s + c.col, 0) / alive.length);
-            const centerRow = Math.round(alive.reduce((s, c) => s + c.row, 0) / alive.length);
-            for (let radius = 2; radius < 15; radius++) {
-                let placed = false;
-                for (let dc = -radius; dc <= radius && !placed; dc++) {
-                    for (let dr = -radius; dr <= radius && !placed; dr++) {
-                        const col = centerCol + dc;
-                        const row = centerRow + dr;
-                        if (col < 0 || row < 0 || col + w >= GRID_SIZE || row + h >= GRID_SIZE) continue;
-                        if (canPlace(buildType, col, row, grid, state)) {
-                            placeBuildingFn(buildType, col, row);
-                            placed = true;
-                        }
-                    }
+    const centerCol = Math.round(alive.reduce((s, c) => s + c.col, 0) / alive.length);
+    const centerRow = Math.round(alive.reduce((s, c) => s + c.row, 0) / alive.length);
+    for (let radius = 2; radius < 15; radius++) {
+        for (let dc = -radius; dc <= radius; dc++) {
+            for (let dr = -radius; dr <= radius; dr++) {
+                const col = centerCol + dc;
+                const row = centerRow + dr;
+                if (col < 0 || row < 0 || col + w >= GRID_SIZE || row + h >= GRID_SIZE) continue;
+                if (canPlace(type, col, row, grid, state)) {
+                    placeBuildingFn(type, col, row);
+                    return true;
                 }
-                if (placed) break;
             }
         }
     }
+    return false;
+}
 
-    // Auto-recruit
-    if (alive.length < 20 && avgHunger > 50 && avgOxygen > 50 && (res.food || 0) > 8) {
-        if (state.currentTick % (AUTOPLAY_INTERVAL * 3) === 0) {
+function survivalActions(state, grid, alive, m, placeBuildingFn) {
+    // Food critical
+    if (m.avgHunger < 50) {
+        state.currentDirective = 'gather';
+        if (!m.counts.foodStall || m.counts.foodStall < Math.ceil(alive.length / 3)) {
+            tryBuild('foodStall', alive, grid, state, placeBuildingFn);
+        }
+    }
+    // Oxygen / power critical
+    if (m.avgOxygen < 60 || (m.res.power || 0) < 3) {
+        if (!m.counts.generator || m.counts.generator < 2) {
+            tryBuild('generator', alive, grid, state, placeBuildingFn);
+        }
+        if (!m.counts.filterStation) {
+            tryBuild('filterStation', alive, grid, state, placeBuildingFn);
+        }
+    }
+    // Stress / sleep critical
+    if (m.avgStress > 50 || m.avgSleep < 40) {
+        if (!m.counts.shelter || m.counts.shelter < Math.ceil(alive.length / 3)) {
+            tryBuild('shelter', alive, grid, state, placeBuildingFn);
+        }
+    }
+}
+
+function infrastructureActions(state, grid, alive, m, placeBuildingFn) {
+    // Quest buildings for active quests
+    const quests = activeQuests(state);
+    if (quests.length) {
+        const needed = new Set(quests.map(q => QuestBuildings[q.category] || 'questBoard'));
+        for (const type of needed) {
+            if (!m.counts[type]) tryBuild(type, alive, grid, state, placeBuildingFn);
+        }
+    }
+    // Cash generation
+    if ((m.res.cash || 0) < 15 && (!m.counts.billboard || m.counts.billboard < 2)) {
+        tryBuild('billboard', alive, grid, state, placeBuildingFn);
+    }
+}
+
+function growthActions(state, alive, m, pathfinder) {
+    // Recruit when stable
+    if (alive.length < 20 && m.avgHunger > 40 && m.avgOxygen > 40 && (m.res.food || 0) > 5) {
+        if (state.currentTick % (AUTOPLAY_INTERVAL * 2) === 0) {
             const name = randomColonistName(state.colonists);
-            const spawnC = alive[0];
+            const spawnC = alive[Math.floor(Math.random() * alive.length)];
             if (spawnC) {
                 state.colonists.push(createColonist(name, spawnC.col + 1, spawnC.row));
                 gameLog(state, `${name} joined the colony`);
@@ -382,13 +391,11 @@ export function autoplayTick(state, grid, pathfinder, placeBuildingFn) {
 
     // Streak bonuses
     if (state.playerStreak >= 7 && state.currentTick % (AUTOPLAY_INTERVAL * 5) === 0) {
-        // 7-day streak: recruit bonus agent
         if (alive.length < 25) {
             const name = randomColonistName(state.colonists);
             const spawnC = alive[Math.floor(Math.random() * alive.length)];
             if (spawnC) {
                 const recruit = createColonist(name, spawnC.col + 1, spawnC.row);
-                // Streak recruits start with better stats
                 const stats = ['str','int','agi','end','cha'];
                 for (const s of stats) recruit.stats[s] = Math.min(10, recruit.stats[s] + 2);
                 state.colonists.push(recruit);
@@ -397,16 +404,111 @@ export function autoplayTick(state, grid, pathfinder, placeBuildingFn) {
         }
     }
     if (state.playerStreak >= 30 && state.currentTick % (AUTOPLAY_INTERVAL * 10) === 0) {
-        // 30-day streak: colony-wide morale boost
         for (const c of alive) {
             c.stress = Math.max(0, c.stress - 15);
             c.sleep = Math.min(100, c.sleep + 10);
         }
         gameLog(state, `30-day streak: colony morale surge`);
     }
+}
 
-    // Boss encounters -- quests with due dates approaching spawn bosses
-    if (state.currentTick % (AUTOPLAY_INTERVAL * 4) === 0) {
+function assignIdleColonists(state, pathfinder, alive, m) {
+    for (let i = 0; i < alive.length; i++) {
+        const c = alive[i];
+        if (c.job !== 'idle' || c.jobOverride) continue;
+
+        // Score possible actions based on colony needs
+        let bestAction = 'patrol';
+        let bestScore = 0;
+
+        // Gather food
+        const foodScore = (100 - m.avgHunger) * 2 + (m.res.food < 10 ? 50 : 0);
+        if (foodScore > bestScore) { bestScore = foodScore; bestAction = 'gather'; }
+
+        // Gather when resources low
+        const matScore = (m.res.materials < 20 ? 40 : 0) + (m.res.cash < 10 ? 30 : 0);
+        if (matScore > bestScore) { bestScore = matScore; bestAction = 'gather'; }
+
+        // Patrol when stable
+        const stableScore = (m.avgHunger > 60 && m.avgOxygen > 60 && m.avgSleep > 60) ? 20 : 0;
+        if (stableScore > bestScore && Math.random() < 0.3) { bestScore = stableScore; bestAction = 'patrol'; }
+
+        const idx = state.colonists.indexOf(c);
+        if (idx < 0) continue;
+
+        switch (bestAction) {
+            case 'gather': assignNearestGatherTarget(idx, state, pathfinder); break;
+            case 'patrol': assignRandomPatrolTarget(idx, state, pathfinder); break;
+        }
+    }
+}
+
+const AUTO_QUEST_TEMPLATES = [
+    { cond: (m) => m.avgHunger < 40, title: 'Scavenge food supplies', category: 'errand', difficulty: 'D' },
+    { cond: (m) => m.avgOxygen < 50, title: 'Repair air filters', category: 'work', difficulty: 'D' },
+    { cond: (m) => (m.res.power || 0) < 3, title: 'Restore power grid', category: 'work', difficulty: 'C' },
+    { cond: (m) => !m.counts.shelter && m.phase !== GamePhase.SURVIVAL, title: 'Build emergency shelter', category: 'work', difficulty: 'C' },
+    { cond: (m) => m.avgHunger > 50 && m.avgOxygen > 50, title: 'Recruit new survivor', category: 'errand', difficulty: 'B' },
+    { cond: (m) => m.avgLevel < 3, title: 'Combat training', category: 'fitness', difficulty: 'C' },
+    { cond: (m) => m.avgLevel >= 2, title: 'Study survival techniques', category: 'study', difficulty: 'B' },
+    { cond: (m) => m.avgLevel >= 4, title: 'Creative problem solving', category: 'creative', difficulty: 'B' },
+    { cond: (m) => m.avgLevel >= 5, title: 'Lead exploration party', category: 'personal', difficulty: 'A' },
+    { cond: (m, alive) => alive.length >= 12 && m.avgLevel >= 7, title: 'Reclaim Times Square', category: 'work', difficulty: 'S' },
+];
+
+function autoGenerateQuests(state, m, alive) {
+    if (state.currentTick % (AUTOPLAY_INTERVAL * 4) !== 0) return;
+
+    const active = activeQuests(state);
+    const autoActive = active.filter(q => q.autoGenerated);
+    if (autoActive.length >= 3) return;
+
+    const activeTitles = new Set(active.map(q => q.title));
+    for (const t of AUTO_QUEST_TEMPLATES) {
+        if (autoActive.length >= 3) break;
+        if (activeTitles.has(t.title)) continue;
+        if (t.cond(m, alive)) {
+            addQuest(state, { title: t.title, category: t.category, difficulty: t.difficulty, autoGenerated: true });
+            autoActive.push({}); // count limiter
+        }
+    }
+}
+
+export function autoplayTick(state, grid, pathfinder, placeBuildingFn) {
+    if (!state.autoplay) return;
+    if (state.currentTick % AUTOPLAY_INTERVAL !== 0) return;
+
+    const alive = state.colonists.filter(c => c.state !== 'dead');
+    if (!alive.length) return;
+
+    const m = computeColonyMetrics(state, alive);
+
+    // Phase transitions -- milestone events
+    if (!state._lastPhase) state._lastPhase = GamePhase.SURVIVAL;
+    if (m.phase !== state._lastPhase) {
+        gameLog(state, `-- PHASE: ${m.phase} --`);
+        state.toastMessage = { text: `Phase: ${m.phase}`, ticks: 120 };
+        // Bonus XP on phase transition
+        for (const c of alive) grantXP(c, 25);
+        state._lastPhase = m.phase;
+    }
+
+    // Run all priority actions (not mutually exclusive)
+    survivalActions(state, grid, alive, m, placeBuildingFn);
+    infrastructureActions(state, grid, alive, m, placeBuildingFn);
+    growthActions(state, alive, m, pathfinder);
+    autoGenerateQuests(state, m, alive);
+    assignIdleColonists(state, pathfinder, alive, m);
+
+    // Set directive for non-autoplay colonist assignment
+    if (m.avgHunger < 50 || (m.res.food || 0) < 5) {
+        state.currentDirective = 'gather';
+    } else {
+        state.currentDirective = state.currentTick % 60 < 30 ? 'gather' : 'patrol';
+    }
+
+    // Boss encounters
+    if (state.currentTick % (AUTOPLAY_INTERVAL * 8) === 0) {
         bossCheck(state, alive, pathfinder);
     }
 }
@@ -477,30 +579,43 @@ const questBubbles = {
 
 export function questTick(state, pathfinder) {
     const quests = activeQuests(state);
-    if (!quests.length) return;
 
     const questBuildings = state.buildings.filter(b =>
         ['questBoard', 'gym', 'library', 'workshop'].includes(b.type) && b.isActive
     );
-    if (!questBuildings.length) return;
 
     for (const c of state.colonists) {
         if (c.state === 'dead') continue;
 
-        // Already on a quest -- tick it down
+        // Convert pending quest to active when colonist arrives at building
+        if (c._questPending && c.pathIndex >= c.pathCols.length) {
+            const nearBuilding = questBuildings.some(b =>
+                Math.abs(c.col - b.col) + Math.abs(c.row - b.row) <= 3
+            );
+            if (nearBuilding) {
+                c.activeQuest = { ...c._questPending, ticksRemaining: QUEST_WORK_TICKS };
+                c._questPending = null;
+                const bubbles = questBubbles[c.activeQuest.category] || questBubbles.personal;
+                c.questBubble = { text: bubbles[Math.floor(Math.random() * bubbles.length)], ticks: 40 };
+            } else {
+                // Path ended but not near building -- reset
+                c._questPending = null;
+                c.job = 'idle';
+            }
+        }
+
+        // Already on a quest -- tick it down (only when actually working at building)
         if (c.activeQuest) {
             c.activeQuest.ticksRemaining--;
             if (c.activeQuest.ticksRemaining <= 0) {
                 const xp = DifficultyXP[c.activeQuest.difficulty] || 50;
                 grantXP(c, xp);
                 c.questsCompleted = (c.questsCompleted || 0) + 1;
-                // Track dominant category for class assignment
                 if (!c._catCounts) c._catCounts = {};
                 const cat = c.activeQuest.category;
                 c._catCounts[cat] = (c._catCounts[cat] || 0) + 1;
                 const topCat = Object.entries(c._catCounts).sort((a,b) => b[1]-a[1])[0];
                 if (topCat) c.dominantCategory = topCat[0];
-                // Stat boost from quest category
                 const info = CategoryInfo[cat];
                 if (info && c.questsCompleted % 5 === 0) {
                     for (const stat of info.statBoost) {
@@ -511,7 +626,6 @@ export function questTick(state, pathfinder) {
                 c.questBubble = { text: `Done: ${c.activeQuest.title}`, ticks: 40 };
                 gameLog(state, `${c.name} completed: ${c.activeQuest.title}`);
                 state.questLog.push({ colonist: c.name, quest: c.activeQuest.title, tick: state.currentTick });
-                // Add player XP
                 state.playerXP += xp;
                 c.activeQuest = null;
                 c.job = 'idle';
@@ -519,27 +633,32 @@ export function questTick(state, pathfinder) {
             continue;
         }
 
+        // Skip if already traveling to quest or busy
+        if (c._questPending) continue;
         if (c.job !== 'idle' || c.jobOverride) continue;
+        if (!quests.length || !questBuildings.length) continue;
 
-        // Pick a quest with some variety
+        // Pick a quest
         const quest = quests[Math.floor(Math.random() * quests.length)];
         const targetType = QuestBuildings[quest.category] || 'questBoard';
         const target = questBuildings.find(b => b.type === targetType) || questBuildings[0];
 
         const dist = Math.abs(c.col - target.col) + Math.abs(c.row - target.row);
         if (dist <= 3) {
+            // Already at building -- start immediately
             c.job = 'quest';
             c.activeQuest = { ...quest, ticksRemaining: QUEST_WORK_TICKS };
             const bubbles = questBubbles[quest.category] || questBubbles.personal;
             c.questBubble = { text: bubbles[Math.floor(Math.random() * bubbles.length)], ticks: 40 };
         } else {
+            // Travel to building -- store as pending, do NOT start countdown
             const path = pathfinder.findPath(c.col, c.row, target.col, target.row);
             if (path.length) {
                 c.job = 'quest';
                 c.pathCols = path.map(p => p.col);
                 c.pathRows = path.map(p => p.row);
                 c.pathIndex = 0;
-                c.activeQuest = { ...quest, ticksRemaining: QUEST_WORK_TICKS };
+                c._questPending = { ...quest };
                 c.questBubble = { text: quest.title, ticks: 30 };
             }
         }
@@ -583,7 +702,7 @@ function tickCombat(i, state, pathfinder) {
     if (target.state === 'dead') {
         attacker.job = 'idle';
         attacker.attackTargetId = null;
-        grantXP(attacker, 15);
+        grantXP(attacker, 30);
         gameLog(state, `${attacker.name} killed ${target.name}`);
         return;
     }
@@ -594,7 +713,7 @@ function tickCombat(i, state, pathfinder) {
     if (dist <= weapon.range) {
         const dmg = weapon.damage * (1.0 + attacker.stats.str * 0.1);
         takeDamage(target, dmg);
-        grantXP(attacker, 2);
+        grantXP(attacker, 5);
     } else if (attacker.pathIndex >= attacker.pathCols.length) {
         const path = pathfinder.findPath(attacker.col, attacker.row, target.col, target.row);
         if (path.length) {

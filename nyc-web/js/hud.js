@@ -3,7 +3,8 @@
 import { ResourceTypes, ResourceSymbol, BuildingType, BuildingTypes, ColonistJobs, ColonyDirectives,
     Traits, WeaponTypes, selectedColonist, colonistXpForNext, colonistXpProgress,
     questLevel, questTitle, questXPProgress, activeQuests, completedQuests,
-    DifficultyXP, CategoryInfo, colonistClass, DifficultyRanks, QuestCategories } from './state.js';
+    DifficultyXP, CategoryInfo, colonistClass, DifficultyRanks, QuestCategories,
+    currentPhase, GamePhase } from './state.js';
 import { listSlots } from './save.js';
 
 const RES_COLORS = { food: '#30d158', power: '#ffd60a', materials: '#ff9f0a', oxygen: '#64d2ff', cash: '#ff375f' };
@@ -541,8 +542,22 @@ function updateGameLog(state) {
     });
 }
 
+const PHASE_COLORS = {
+    [GamePhase.SURVIVAL]: '#ff375f',
+    [GamePhase.GROWTH]: '#ffd60a',
+    [GamePhase.MASTERY]: '#0071e3',
+    [GamePhase.VICTORY]: '#30d158',
+};
+
 function updateTimeDisplay(state) {
-    document.getElementById('time-display').textContent = `Tick ${state.currentTick} | ${state.currentHour}:00 | ${state.isNight ? 'NIGHT' : 'DAY'}`;
+    const phase = currentPhase(state);
+    const el = document.getElementById('time-display');
+    el.textContent = '';
+    el.appendChild(document.createTextNode(`Tick ${state.currentTick} | ${state.currentHour}:00 | ${state.isNight ? 'NIGHT' : 'DAY'} | `));
+    const phaseSpan = document.createElement('span');
+    phaseSpan.style.cssText = `color:${PHASE_COLORS[phase] || '#fff'};font-weight:bold`;
+    phaseSpan.textContent = phase;
+    el.appendChild(phaseSpan);
 }
 
 function updatePauseOverlay(state) {
