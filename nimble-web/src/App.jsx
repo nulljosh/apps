@@ -176,6 +176,11 @@ export default function App() {
           ))}
         </div>
       )}
+
+      <footer className="footer">
+        <span>&copy; {new Date().getFullYear()} Nimble. <a href="https://opensource.org/licenses/Apache-2.0" target="_blank" rel="noopener noreferrer">Apache 2.0</a></span>
+        <span>Inspired by <a href="https://maybulb.com" target="_blank" rel="noopener noreferrer">Maybulb</a></span>
+      </footer>
     </div>
   );
 }
