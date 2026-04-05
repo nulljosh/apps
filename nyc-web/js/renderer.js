@@ -30,6 +30,10 @@ const BUILDING_COLORS = {
     filterStation: 'rgba(100, 210, 255, 0.25)',
     subwayAccess: 'rgba(255, 159, 10, 0.25)',
     billboard: 'rgba(255, 55, 95, 0.25)',
+    questBoard: 'rgba(201, 168, 76, 0.3)',
+    gym: 'rgba(192, 57, 43, 0.25)',
+    library: 'rgba(45, 74, 43, 0.25)',
+    workshop: 'rgba(139, 105, 20, 0.25)',
 };
 
 const BUILDING_BORDER = {
@@ -39,6 +43,10 @@ const BUILDING_BORDER = {
     filterStation: 'rgba(100, 210, 255, 0.5)',
     subwayAccess: 'rgba(255, 159, 10, 0.5)',
     billboard: 'rgba(255, 55, 95, 0.5)',
+    questBoard: 'rgba(201, 168, 76, 0.6)',
+    gym: 'rgba(192, 57, 43, 0.5)',
+    library: 'rgba(45, 74, 43, 0.5)',
+    workshop: 'rgba(139, 105, 20, 0.5)',
 };
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -204,6 +212,28 @@ export function renderWorld(ctx, canvas, camera, grid, state) {
         ctx.font = '600 7px -apple-system, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(c.name, x, barY - 4);
+
+        // Quest speech bubble
+        if (c.questBubble) {
+            const bubbleY = barY - 22;
+            const text = c.questBubble.text;
+            ctx.font = '500 6px -apple-system, sans-serif';
+            const tw = ctx.measureText(text).width + 8;
+            const bx = x - tw / 2;
+            ctx.fillStyle = 'rgba(244, 228, 193, 0.9)';
+            roundRect(ctx, bx, bubbleY - 8, tw, 11, 3);
+            ctx.fill();
+            ctx.fillStyle = '#1c1208';
+            ctx.fillText(text, x, bubbleY);
+            // tiny triangle pointer
+            ctx.beginPath();
+            ctx.moveTo(x - 3, bubbleY + 3);
+            ctx.lineTo(x + 3, bubbleY + 3);
+            ctx.lineTo(x, bubbleY + 7);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(244, 228, 193, 0.9)';
+            ctx.fill();
+        }
     }
 
     // Build ghost

@@ -1,6 +1,6 @@
 // Game systems -- NeedsSystem, TimeSystem, ResourceSystem, BuildSystem, JobSystem
 
-import { grantXP, takeDamage, updateColonistState, gameLog, createBuilding, createColonist, WeaponTypes, BuildingType } from './state.js';
+import { grantXP, takeDamage, updateColonistState, gameLog, createBuilding, createColonist, WeaponTypes, BuildingType, syncQuests, QuestBuildings } from './state.js';
 import { TileType, tileAt, setTile, GRID_SIZE } from './world.js';
 
 // TimeSystem
@@ -366,6 +366,91 @@ export function autoplayTick(state, grid, pathfinder, placeBuildingFn) {
                     state.colonists.push(createColonist(name, spawnC.col + 1, spawnC.row));
                 gameLog(state, `${name} joined the colony`);
             }
+        }
+    }
+}
+
+// QuestSystem -- colonists perform real-life quests from the Quest app
+const QUEST_SYNC_INTERVAL = 120; // sync every 120 ticks
+const QUEST_WORK_TICKS = 60;     // ticks to "complete" a quest in-game
+
+const questBubbles = {
+    fitness: ['Hitting the gym', 'Lifting weights', 'Running laps', 'Working out'],
+    study: ['Reading books', 'Taking notes', 'Studying hard', 'At the library'],
+    work: ['Coding away', 'In the zone', 'Building apps', 'Shipping code'],
+    personal: ['Self-care time', 'Getting organized', 'Journaling', 'Meditating'],
+    creative: ['Making art', 'Writing music', 'Designing', 'Creating'],
+    errand: ['Running errands', 'Getting supplies', 'Out and about', 'On a mission'],
+};
+
+export function questTick(state, pathfinder) {
+    // Periodic sync from Quest app localStorage
+    if (state.currentTick % QUEST_SYNC_INTERVAL === 0) {
+        syncQuests(state);
+    }
+
+    if (!state.quests.length) return;
+
+    // Find quest board buildings
+    const questBuildings = state.buildings.filter(b =>
+        ['questBoard', 'gym', 'library', 'workshop'].includes(b.type) && b.isActive
+    );
+    if (!questBuildings.length) return;
+
+    // Assign idle colonists to quests
+    for (const c of state.colonists) {
+        if (c.state === 'dead') continue;
+
+        // Already on a quest -- tick it down
+        if (c.activeQuest) {
+            c.activeQuest.ticksRemaining--;
+            if (c.activeQuest.ticksRemaining <= 0) {
+                // Quest complete in-game
+                grantXP(c, c.activeQuest.xp);
+                c.questBubble = { text: `Done: ${c.activeQuest.title}`, ticks: 30 };
+                gameLog(state, `${c.name} completed quest: ${c.activeQuest.title}`);
+                state.questLog.push({ colonist: c.name, quest: c.activeQuest.title, tick: state.currentTick });
+                c.activeQuest = null;
+                c.job = 'idle';
+            }
+            continue;
+        }
+
+        // Assign a quest to idle colonists near quest buildings
+        if (c.job !== 'idle' || c.jobOverride) continue;
+
+        // Pick a random quest
+        const quest = state.quests[Math.floor(Math.random() * state.quests.length)];
+        const targetType = QuestBuildings[quest.category] || 'questBoard';
+        const target = questBuildings.find(b => b.type === targetType) || questBuildings[0];
+
+        const dist = Math.abs(c.col - target.col) + Math.abs(c.row - target.row);
+        if (dist <= 3) {
+            // Close enough -- start working on quest
+            c.job = 'quest';
+            c.activeQuest = { ...quest, ticksRemaining: QUEST_WORK_TICKS };
+            const bubbles = questBubbles[quest.category] || questBubbles.personal;
+            c.questBubble = { text: bubbles[Math.floor(Math.random() * bubbles.length)], ticks: 40 };
+        } else {
+            // Path to the building
+            const path = pathfinder.findPath(c.col, c.row, target.col, target.row);
+            if (path.length) {
+                c.job = 'quest';
+                c.pathCols = path.map(p => p.col);
+                c.pathRows = path.map(p => p.row);
+                c.pathIndex = 0;
+                c.activeQuest = { ...quest, ticksRemaining: QUEST_WORK_TICKS };
+                const bubbles = questBubbles[quest.category] || questBubbles.personal;
+                c.questBubble = { text: quest.title, ticks: 30 };
+            }
+        }
+    }
+
+    // Tick down speech bubbles
+    for (const c of state.colonists) {
+        if (c.questBubble) {
+            c.questBubble.ticks--;
+            if (c.questBubble.ticks <= 0) c.questBubble = null;
         }
     }
 }

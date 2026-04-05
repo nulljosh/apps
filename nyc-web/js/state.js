@@ -7,8 +7,8 @@ export const ResourceType = { food: 'food', power: 'power', materials: 'material
 export const ResourceTypes = ['food', 'power', 'materials', 'oxygen', 'cash'];
 export const ResourceSymbol = { food: 'F', power: 'P', materials: 'M', oxygen: 'O', cash: '$' };
 
-export const ColonistJob = { idle: 'idle', gather: 'gather', build: 'build', patrol: 'patrol', attack: 'attack' };
-export const ColonistJobs = ['idle', 'gather', 'build', 'patrol', 'attack'];
+export const ColonistJob = { idle: 'idle', gather: 'gather', build: 'build', patrol: 'patrol', attack: 'attack', quest: 'quest' };
+export const ColonistJobs = ['idle', 'gather', 'build', 'patrol', 'attack', 'quest'];
 
 export const ColonyDirective = { idle: 'idle', gather: 'gather', build: 'build', patrol: 'patrol' };
 export const ColonyDirectives = ['idle', 'gather', 'build', 'patrol'];
@@ -40,6 +40,10 @@ export const BuildingType = {
     filterStation: { name: 'Filter Station', cost: { materials: 12, power: 5 },    desc: 'Filters oxygen using power',            size: [2,2] },
     subwayAccess:  { name: 'Subway Access',  cost: { materials: 20, cash: 15 },    desc: 'Fast travel between subway stations',   size: [1,1] },
     billboard:     { name: 'Billboard',      cost: { materials: 5, cash: 20 },     desc: 'Generates cash over time',              size: [2,1] },
+    questBoard:    { name: 'Quest Board',    cost: { materials: 15, cash: 10 },   desc: 'Posts real-life quests for colonists',   size: [2,2] },
+    gym:           { name: 'Gym',            cost: { materials: 20, cash: 15 },   desc: 'Colonists train here (fitness quests)',  size: [2,2] },
+    library:       { name: 'Library',        cost: { materials: 18, cash: 12 },   desc: 'Colonists study here (study quests)',    size: [2,2] },
+    workshop:      { name: 'Workshop',       cost: { materials: 25, cash: 20 },   desc: 'Colonists work here (work quests)',      size: [2,2] },
 };
 export const BuildingTypes = Object.keys(BuildingType);
 
@@ -59,6 +63,8 @@ export function createColonist(name, col, row) {
         pathCols: [], pathRows: [], pathIndex: 0,
         stats: randomStats(), xp: 0, level: 1,
         trait: randomTrait(),
+        activeQuest: null,       // { title, category, xp, ticksRemaining }
+        questBubble: null,       // speech bubble text + ticks remaining
     };
 }
 
@@ -128,8 +134,36 @@ export function createGameState() {
         autoSaveEnabled: true,
         autoplay: false,
         showSaveIndicator: false,
+        quests: [],              // synced from Quest app localStorage
+        questLog: [],            // completed quest messages
     };
 }
+
+// Sync quests from the Quest web app's localStorage
+export function syncQuests(state) {
+    try {
+        const raw = localStorage.getItem('quest:quests');
+        if (!raw) return;
+        const quests = JSON.parse(raw);
+        state.quests = quests.filter(q => !q.completed).map(q => ({
+            id: q.id,
+            title: q.title,
+            category: q.category,
+            difficulty: q.difficulty,
+            xp: { F: 10, D: 25, C: 50, B: 100, A: 200, S: 500 }[q.difficulty] || 50,
+        }));
+    } catch { /* Quest app not installed or no data */ }
+}
+
+// Category -> building type mapping for quest destinations
+export const QuestBuildings = {
+    fitness: 'gym',
+    study: 'library',
+    work: 'workshop',
+    personal: 'questBoard',
+    creative: 'library',
+    errand: 'questBoard',
+};
 
 export function gameLog(state, msg) {
     state.gameLog.push(msg);
