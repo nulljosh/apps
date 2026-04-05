@@ -2,7 +2,7 @@
 
 # nyc-web
 
-![version](https://img.shields.io/badge/version-v2.0.0-blue)
+![version](https://img.shields.io/badge/version-v2.1.1-blue)
 
 Times Square Survival: colony sim with intelligent AI that can beat itself in under an hour. Vanilla HTML5 Canvas, zero dependencies. 16-bit sprites, priority-based AI, Claude Code integration.
 

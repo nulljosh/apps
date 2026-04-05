@@ -1,6 +1,6 @@
 # nyc-web
 
-v2.0.0
+v2.1.1
 
 Times Square Survival with intelligent AI. Vanilla HTML5 Canvas + JS, no bundler, no dependencies. 16-bit sprites, priority-based autoplay AI, auto-quest generation, game phases with victory condition. Claude Code integration via `window._claudeBridge`.
 
