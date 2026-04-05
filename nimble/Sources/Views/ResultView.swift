@@ -9,18 +9,20 @@ struct ResultView: View {
             EmptyView()
 
         case .math(let value):
-            HStack {
-                Text("=")
-                    .font(.system(size: 20, weight: .light))
-                    .foregroundStyle(.secondary)
+            VStack(spacing: 4) {
                 Text(value)
-                    .font(.system(size: 28, weight: .medium, design: .monospaced))
+                    .font(.system(size: 28, weight: .semibold, design: .monospaced))
                     .foregroundStyle(.primary)
                     .textSelection(.enabled)
-                Spacer()
+
+                Text("RESULT")
+                    .font(.system(size: 9, weight: .medium))
+                    .foregroundStyle(.tertiary)
+                    .tracking(1.2)
             }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
             .padding(.horizontal, 20)
-            .padding(.vertical, 12)
 
         case .text(let heading, let body, _, _, let imageURL):
             ScrollView {
@@ -32,7 +34,7 @@ struct ResultView: View {
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 64, height: 64)
+                                    .frame(width: 60, height: 60)
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
                             default:
                                 EmptyView()
@@ -43,7 +45,7 @@ struct ResultView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         if let heading, !heading.isEmpty {
                             Text(heading)
-                                .font(.system(size: 15, weight: .semibold))
+                                .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(.primary)
                         }
 
@@ -66,9 +68,9 @@ struct ResultView: View {
                     ForEach(Array(items.enumerated()), id: \.offset) { index, item in
                         HStack(spacing: 10) {
                             Text("\(index + 1)")
-                                .font(.system(size: 11, weight: .medium))
+                                .font(.system(size: 10, weight: .medium, design: .monospaced))
                                 .foregroundStyle(.tertiary)
-                                .frame(width: 20)
+                                .frame(width: 18)
                             Text(item)
                                 .font(.system(size: 13))
                                 .foregroundStyle(.primary)
@@ -80,7 +82,7 @@ struct ResultView: View {
 
                         if index < items.count - 1 {
                             Divider()
-                                .padding(.leading, 50)
+                                .padding(.leading, 48)
                         }
                     }
                 }

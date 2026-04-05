@@ -9,42 +9,42 @@ struct ResultView: View {
             EmptyView()
 
         case .math(let value):
-            HStack {
-                Text("=")
-                    .font(.system(size: 22, weight: .light))
-                    .foregroundStyle(.secondary)
+            VStack(spacing: 6) {
                 Text(value)
-                    .font(.system(size: 32, weight: .medium, design: .monospaced))
-                    .foregroundStyle(state.theme.textColor)
+                    .font(.system(size: 36, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(state.theme.color)
                     .textSelection(.enabled)
-                Spacer()
+
+                Text("RESULT")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.tertiary)
+                    .tracking(1.2)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 24)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
 
         case .text(let heading, let body, _, _, let imageURL):
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 10) {
                 if let imageURL, let url = URL(string: imageURL) {
-                    HStack {
-                        AsyncImage(url: url) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 80, height: 80)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                            default:
-                                EmptyView()
-                            }
+                    AsyncImage(url: url) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 72, height: 72)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        default:
+                            EmptyView()
                         }
-                        Spacer()
                     }
                 }
 
                 if let heading, !heading.isEmpty {
                     Text(heading)
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(state.theme.textColor)
                 }
 
@@ -55,32 +55,36 @@ struct ResultView: View {
                     .lineSpacing(4)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(16)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
 
         case .list(let items, _):
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(items.enumerated()), id: \.offset) { index, item in
                     HStack(spacing: 12) {
                         Text("\(index + 1)")
-                            .font(.system(size: 13, weight: .medium, design: .monospaced))
+                            .font(.system(size: 12, weight: .medium, design: .monospaced))
                             .foregroundStyle(.tertiary)
-                            .frame(width: 24)
+                            .frame(width: 22)
                         Text(item)
                             .font(.system(size: 14))
                             .foregroundStyle(state.theme.textColor)
                             .textSelection(.enabled)
                             .lineLimit(3)
                     }
-                    .padding(.horizontal, 20)
+                    .padding(.horizontal, 16)
                     .padding(.vertical, 10)
 
                     if index < items.count - 1 {
                         Divider()
-                            .padding(.leading, 56)
+                            .padding(.leading, 50)
                     }
                 }
             }
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
 
         case .error(let message, let searchURL):
             VStack(spacing: 10) {
@@ -97,9 +101,10 @@ struct ResultView: View {
                     .tint(state.theme.color)
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
             .frame(maxWidth: .infinity)
+            .padding(16)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
         }
     }
 }
