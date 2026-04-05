@@ -2,7 +2,7 @@
 
 # nyc-ios
 
-![version](https://img.shields.io/badge/version-v0.3.0-blue)
+![version](https://img.shields.io/badge/version-v0.3.1-blue)
 
 iOS companion for Times Square Survival. SpriteKit colony sim with touch input, landscape only.
 
@@ -31,7 +31,7 @@ Requires Xcode 16+, iOS 17.0+, xcodegen.
 
 ## Changelog
 
-### v0.3.0
+### v0.3.1
 - Fixed tutorial overlay blocking touch interaction on interactive steps
 - Fixed duplicate ForEach ID warning in game log
 - Improved touch responsiveness (removed tap-pan dependency)

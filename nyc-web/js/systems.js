@@ -201,20 +201,10 @@ export function jobTick(state, pathfinder) {
 
         if (c.pathIndex >= c.pathCols.length) {
             if (c.job === 'gather') {
-                const leveled = grantXP(c, 10);
-                state.playerXP += 2;
-                if (leveled) {
-                    spawnLevelUp(c.col, c.row, c.level);
-                    gameLog(state, `${c.name} reached level ${c.level}`);
-                }
+                awardXP(c, 10, 2, state);
                 assignRandomGatherTarget(i, state);
             } else if (c.job === 'patrol') {
-                const leveled = grantXP(c, 5);
-                state.playerXP += 1;
-                if (leveled) {
-                    spawnLevelUp(c.col, c.row, c.level);
-                    gameLog(state, `${c.name} reached level ${c.level}`);
-                }
+                awardXP(c, 5, 1, state);
                 c.job = 'idle';
             }
             continue;
@@ -589,7 +579,16 @@ function bossCheck(state, alive, pathfinder) {
 }
 
 // QuestSystem -- colonists perform real-life quests
-const QUEST_WORK_TICKS = 30;
+export const QUEST_WORK_TICKS = 30;
+
+function awardXP(c, xpAmount, playerXPAmount, state) {
+    const leveled = grantXP(c, xpAmount);
+    state.playerXP += playerXPAmount;
+    if (leveled) {
+        spawnLevelUp(c.col, c.row, c.level);
+        gameLog(state, `${c.name} reached level ${c.level}`);
+    }
+}
 
 const questBubbles = {
     fitness: ['Hitting the gym', 'Lifting weights', 'Running laps', 'Working out', 'Getting strong'],
@@ -746,9 +745,7 @@ function tickCombat(i, state, pathfinder) {
     if (target.state === 'dead') {
         attacker.job = 'idle';
         attacker.attackTargetId = null;
-        const leveled = grantXP(attacker, 30);
-        state.playerXP += 10;
-        if (leveled) spawnLevelUp(attacker.col, attacker.row, attacker.level);
+        awardXP(attacker, 30, 10, state);
         gameLog(state, `${attacker.name} killed ${target.name}`);
         return;
     }
@@ -760,12 +757,7 @@ function tickCombat(i, state, pathfinder) {
         const dmg = weapon.damage * (1.0 + attacker.stats.str * 0.1);
         takeDamage(target, dmg);
         spawnDamage(target.col, target.row, dmg);
-        const leveled = grantXP(attacker, 5);
-        state.playerXP += 1;
-        if (leveled) {
-            spawnLevelUp(attacker.col, attacker.row, attacker.level);
-            gameLog(state, `${attacker.name} reached level ${attacker.level}`);
-        }
+        awardXP(attacker, 5, 1, state);
     } else if (attacker.pathIndex >= attacker.pathCols.length) {
         const path = pathfinder.findPath(attacker.col, attacker.row, target.col, target.row);
         if (path.length) {

@@ -3,7 +3,7 @@ import Foundation
 @MainActor
 final class TimeSystem {
     private var accumulated: TimeInterval = 0
-    private let tickInterval: TimeInterval = 1.0
+    private let tickInterval: TimeInterval = 0.25
     let ticksPerDay = 240
 
     func update(deltaTime: TimeInterval, gameState: GameState) -> Bool {

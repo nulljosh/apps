@@ -6,6 +6,7 @@ import { ResourceTypes, ResourceSymbol, BuildingType, BuildingTypes, ColonistJob
     DifficultyXP, CategoryInfo, colonistClass, DifficultyRanks, QuestCategories,
     currentPhase, GamePhase } from './state.js';
 import { listSlots } from './save.js';
+import { QUEST_WORK_TICKS } from './systems.js';
 
 const RES_COLORS = { food: '#30d158', power: '#ffd60a', materials: '#ff9f0a', oxygen: '#64d2ff', cash: '#ff375f' };
 const STATE_COLORS = { healthy: '#30d158', hungry: '#ffd60a', suffocating: '#64d2ff', exhausted: '#ff9f0a', dead: '#666' };
@@ -407,7 +408,7 @@ function updateColonistPanel(state, callbacks) {
         panel.appendChild(aq);
         const prog = document.createElement('div');
         prog.style.cssText = 'font-size:9px;color:rgba(255,255,255,0.4)';
-        const pct = Math.max(0, Math.floor((1 - col.activeQuest.ticksRemaining / 30) * 100));
+        const pct = Math.max(0, Math.floor((1 - col.activeQuest.ticksRemaining / QUEST_WORK_TICKS) * 100));
         prog.textContent = `Progress: ${pct}% | ${col.activeQuest.difficulty}-rank | ${col.activeQuest.category}`;
         panel.appendChild(prog);
     } else {

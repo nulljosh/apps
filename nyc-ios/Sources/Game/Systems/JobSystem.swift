@@ -38,10 +38,19 @@ final class JobSystem {
 
             guard gameState.colonists[i].hasPath else {
                 if gameState.colonists[i].job == .gather {
-                    gameState.colonists[i].grantXP(5)
+                    let leveled = gameState.colonists[i].grantXP(10)
+                    gameState.playerXP += 2
+                    if leveled {
+                        gameState.log("\(gameState.colonists[i].name) reached level \(gameState.colonists[i].level)")
+                    }
                     assignRandomGatherTarget(colonistIndex: i, gameState: gameState)
                 } else if gameState.colonists[i].job == .patrol {
-                    assignRandomPatrolTarget(colonistIndex: i, gameState: gameState)
+                    let leveled = gameState.colonists[i].grantXP(5)
+                    gameState.playerXP += 1
+                    if leveled {
+                        gameState.log("\(gameState.colonists[i].name) reached level \(gameState.colonists[i].level)")
+                    }
+                    gameState.colonists[i].job = .idle
                 }
                 continue
             }
@@ -176,7 +185,11 @@ final class JobSystem {
         guard !target.isDead else {
             gameState.colonists[colonistIndex].job = .idle
             gameState.colonists[colonistIndex].attackTargetId = nil
-            gameState.colonists[colonistIndex].grantXP(15)
+            let leveled = gameState.colonists[colonistIndex].grantXP(30)
+            gameState.playerXP += 10
+            if leveled {
+                gameState.log("\(attacker.name) reached level \(gameState.colonists[colonistIndex].level)")
+            }
             gameState.log("\(attacker.name) killed \(target.name)")
             return
         }
@@ -185,7 +198,11 @@ final class JobSystem {
         if dist <= attacker.weapon.range {
             let dmg = attacker.weapon.damage * (1.0 + Double(attacker.stats.str) * 0.1)
             gameState.colonists[targetIdx].takeDamage(dmg)
-            gameState.colonists[colonistIndex].grantXP(2)
+            let leveled = gameState.colonists[colonistIndex].grantXP(5)
+            gameState.playerXP += 1
+            if leveled {
+                gameState.log("\(gameState.colonists[colonistIndex].name) reached level \(gameState.colonists[colonistIndex].level)")
+            }
         } else if !attacker.hasPath {
             if let pathfinder {
                 let path = pathfinder.findPath(fromCol: attacker.col, fromRow: attacker.row, toCol: target.col, toRow: target.row)

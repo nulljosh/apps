@@ -146,14 +146,17 @@ struct ColonistModel: Identifiable, Codable, Sendable {
         Double(xp) / Double(xpForNextLevel)
     }
 
-    mutating func grantXP(_ amount: Int) {
+    @discardableResult
+    mutating func grantXP(_ amount: Int) -> Bool {
         let adjusted = trait == .hustler ? Int(Double(amount) * 1.2) : amount
         xp += adjusted
+        let prevLevel = level
         while xp >= xpForNextLevel {
             xp -= xpForNextLevel
             level += 1
             stats.boostRandom()
         }
+        return level > prevLevel
     }
 
     var movementSpeed: Double {

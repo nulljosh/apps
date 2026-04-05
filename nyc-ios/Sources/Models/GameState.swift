@@ -42,6 +42,9 @@ final class GameState {
     var autoSaveEnabled: Bool = true
     var showSaveIndicator: Bool = false
 
+    // Player progression
+    var playerXP: Int = 0
+
     var selectedColonist: ColonistModel? {
         guard let id = selectedColonistId else { return nil }
         return colonists.first { $0.id == id }

@@ -1,6 +1,6 @@
 # nyc-ios
 
-v0.3.0
+v0.3.1
 
 ## Rules
 
