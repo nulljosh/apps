@@ -21,6 +21,13 @@ export function saveGame(slot, state, grid) {
         currentTick: state.currentTick,
         flatGrid,
         gridSize: grid.length,
+        // Quest data
+        questList: state.questList,
+        rewardList: state.rewardList,
+        playerXP: state.playerXP,
+        playerStreak: state.playerStreak,
+        playerLastActive: state.playerLastActive,
+        questLog: state.questLog,
         slot: {
             slot,
             saveName: `Slot ${slot}`,

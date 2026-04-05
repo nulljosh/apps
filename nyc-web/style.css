@@ -709,3 +709,83 @@ hr {
         height: 100px;
     }
 }
+
+/* Player Profile */
+#player-profile {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 14px;
+    min-width: 180px;
+    z-index: 10;
+}
+.pp-title { font-weight: 700; font-size: 13px; color: #ffd60a; margin-bottom: 4px; }
+.pp-xp-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+.pp-xp-fill { height: 100%; background: #ffd60a; border-radius: 2px; transition: width 0.4s ease; }
+.pp-stats { font-size: 10px; color: rgba(255,255,255,0.6); font-family: 'SF Mono', monospace; }
+.pp-quests { font-size: 10px; color: #0071e3; margin-top: 4px; }
+.pp-quests:hover { text-decoration: underline; }
+
+/* Quest Board */
+#quest-board {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(10, 10, 12, 0.92);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 16px;
+    width: 340px;
+    max-height: 70vh;
+    overflow-y: auto;
+    z-index: 50;
+}
+.qb-header { font-weight: 700; font-size: 13px; letter-spacing: 0.1em; color: #fff; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.qb-close { cursor: pointer; color: rgba(255,255,255,0.4); font-size: 14px; padding: 4px; }
+.qb-close:hover { color: #ff453a; }
+.qb-add { text-align: center; padding: 8px; border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; color: rgba(255,255,255,0.5); font-size: 11px; cursor: pointer; margin-bottom: 8px; letter-spacing: 0.08em; }
+.qb-add:hover { border-color: #0071e3; color: #0071e3; }
+.qb-form { margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
+.qb-input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 12px; outline: none; }
+.qb-input:focus { border-color: #0071e3; }
+.qb-row { display: flex; gap: 6px; }
+.qb-select { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 6px; color: #fff; font-size: 11px; }
+.qb-btn { flex: 1; padding: 8px; background: #0071e3; border: none; border-radius: 6px; color: #fff; font-size: 11px; font-weight: 600; cursor: pointer; letter-spacing: 0.06em; }
+.qb-btn.dim { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); }
+.qb-btn:hover { opacity: 0.85; }
+.qb-section { font-size: 10px; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); margin: 10px 0 4px; }
+.qb-quest { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: rgba(255,255,255,0.04); border-radius: 6px; margin-bottom: 3px; }
+.qb-quest.done { opacity: 0.4; }
+.qb-rank { font-weight: 700; font-size: 12px; width: 18px; text-align: center; }
+.qb-name { flex: 1; font-size: 12px; color: rgba(255,255,255,0.85); }
+.qb-xp { font-size: 10px; color: #ffd60a; font-family: 'SF Mono', monospace; }
+.qb-complete { cursor: pointer; color: #30d158; font-size: 14px; padding: 2px 6px; border-radius: 4px; }
+.qb-complete:hover { background: rgba(48, 209, 88, 0.15); }
+
+/* Toast */
+#toast-msg {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 214, 10, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 214, 10, 0.3);
+    border-radius: 980px;
+    padding: 8px 24px;
+    color: #ffd60a;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 200;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}

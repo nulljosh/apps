@@ -1,9 +1,11 @@
-// Main entry -- game loop, init, menu
+// Main entry -- game loop, init, auto-start
 
-import { createGameState, createColonist, gameLog, grantXP, BuildingType } from './state.js';
+import { createGameState, createColonist, gameLog, grantXP, BuildingType, migrateQuestData,
+    randomColonistName, activeQuests, addQuest, completeQuestInList, syncQuestsToLocalStorage } from './state.js';
 import { generateWorld, GRID_SIZE, TILE_SIZE, tileAt, worldToTile } from './world.js';
 import { Pathfinder } from './pathfinder.js';
-import { timeTick, needsTick, resourceTick, jobTick, placeBuilding, demolishBuilding, autoplayTick, questTick } from './systems.js';
+import { timeTick, needsTick, resourceTick, jobTick, placeBuilding, demolishBuilding,
+    autoplayTick, questTick, wallpaperCameraTick } from './systems.js';
 import { Camera } from './camera.js';
 import { renderWorld, renderMinimap } from './renderer.js';
 import { setupInput } from './input.js';
@@ -31,7 +33,14 @@ function init() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    showMenu();
+    // Auto-start: try to load last save, otherwise new game
+    const slots = listSlots();
+    const lastSlot = slots.findIndex(s => s !== null);
+    if (lastSlot >= 0) {
+        startGame(lastSlot + 1);
+    } else {
+        startGame(null);
+    }
 }
 
 function resizeCanvas() {
@@ -82,7 +91,6 @@ function startGame(loadSlot) {
         if (save) {
             grid = rebuildGrid(save);
             state.colonists = save.colonists;
-            // Restore Sets (JSON doesn't serialize Set)
             state.selectedColonistIds = new Set();
             state.buildings = save.buildings;
             state.resourceNodes = save.resourceNodes;
@@ -91,6 +99,12 @@ function startGame(loadSlot) {
             state.currentHour = Math.floor((save.currentTick % 240) / 10);
             state.lastSaveSlot = loadSlot;
             state.tutorialStep = null;
+            // Restore quest data from save
+            if (save.questList) state.questList = save.questList;
+            if (save.rewardList) state.rewardList = save.rewardList;
+            if (save.playerXP) state.playerXP = save.playerXP;
+            if (save.playerStreak) state.playerStreak = save.playerStreak;
+            if (save.playerLastActive) state.playerLastActive = save.playerLastActive;
             gameLog(state, 'Game loaded');
         } else {
             freshWorld();
@@ -99,14 +113,26 @@ function startGame(loadSlot) {
         freshWorld();
     }
 
+    // Migrate quest data from standalone Quest app
+    migrateQuestData(state);
+
     pathfinder.buildGraph(grid);
 
-    // Center camera
     const center = GRID_SIZE / 2;
     camera.x = center * TILE_SIZE;
     camera.y = center * TILE_SIZE;
 
-    // Input
+    // Expose state for quest board HUD
+    window._gameState = state;
+    window._gameCallbacks = {
+        addQuest: (data) => { addQuest(state, data); updateHUD(state, hudCallbacks); },
+        completeQuest: (id) => { completeQuestInList(state, id); updateHUD(state, hudCallbacks); },
+        toggleWallpaper: () => {
+            state.wallpaperMode = !state.wallpaperMode;
+            updateHUD(state, hudCallbacks);
+        },
+    };
+
     setupInput(canvas, camera, state, {
         onSelectEntity: (wx, wy) => selectEntity(wx, wy),
         onPlaceBuilding: (col, row) => handlePlace(col, row),
@@ -128,12 +154,12 @@ function freshWorld() {
     const result = generateWorld();
     grid = result.grid;
     state.resourceNodes = result.resources;
-    state.tutorialStep = 0;
+    state.tutorialStep = null; // skip tutorial in auto-start
+    state.autoplay = true;
 
-    // Spawn 5 colonists near center
-    const names = ['Alex', 'Jordan', 'Casey', 'Riley', 'Morgan'];
     const center = GRID_SIZE / 2;
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 8; i++) {
+        const name = randomColonistName(state.colonists);
         let col = center, row = center;
         for (let dc = 0; dc < 10; dc++) {
             for (let dr = 0; dr < 10; dr++) {
@@ -143,13 +169,12 @@ function freshWorld() {
                 if (t !== null && (t === 0 || t === 1 || t === 4)) { col = c; row = r; dc = 99; break; }
             }
         }
-        state.colonists.push(createColonist(names[i], col, row));
+        state.colonists.push(createColonist(name, col, row));
     }
 
-    if (state.colonists.length >= 2) {
-        state.colonists[0].job = 'gather';
-        state.colonists[1].job = 'gather';
-    }
+    state.colonists[0].job = 'gather';
+    state.colonists[1].job = 'gather';
+    state.lastSaveSlot = 1;
 
     gameLog(state, 'Welcome to Times Square');
 }
@@ -167,6 +192,7 @@ function gameLoop(timestamp) {
         lastTime = timestamp;
 
         camera.update(dt);
+        wallpaperCameraTick(camera, state);
 
         if (timeTick(dt, state)) {
             needsTick(state);
@@ -180,6 +206,9 @@ function gameLoop(timestamp) {
             if (state.autoSaveEnabled && state.currentTick > 0 && state.currentTick % 60 === 0 && state.lastSaveSlot) {
                 performSave(state.lastSaveSlot);
             }
+
+            // Sync quests to localStorage periodically
+            if (state.currentTick % 120 === 0) syncQuestsToLocalStorage(state);
 
             updateHUD(state, hudCallbacks);
         }
@@ -208,7 +237,6 @@ function selectEntity(wx, wy) {
         if (Math.abs(wx - cx) < 20 && Math.abs(wy - cy) < 20) {
             state.selectedColonistId = c.id;
             gameLog(state, `Selected ${c.name}`);
-            checkTutorialAdvance(state, 'colonistSelected');
             updateHUD(state, hudCallbacks);
             return;
         }
@@ -246,10 +274,6 @@ function handlePlace(col, row) {
     if (!state.selectedBuildingType) return;
     const model = placeBuilding(state.selectedBuildingType, col, row, grid, state, pathfinder);
     if (model) {
-        if (state.selectedBuildingType === 'shelter') {
-            checkTutorialAdvance(state, 'shelterPlaced');
-        }
-        // Grant build XP
         for (const c of state.colonists) {
             if (c.job === 'build' && c.state !== 'dead') {
                 const dist = Math.abs(c.col - col) + Math.abs(c.row - row);
@@ -278,12 +302,11 @@ function performSave(slot) {
     saveGame(targetSlot, state, grid);
     state.lastSaveSlot = targetSlot;
     state.showSaveIndicator = true;
-    gameLog(state, `Game saved to slot ${targetSlot}`);
+    gameLog(state, `Saved to slot ${targetSlot}`);
     updateHUD(state, hudCallbacks);
     setTimeout(() => { state.showSaveIndicator = false; updateHUD(state, hudCallbacks); }, 2000);
 }
 
-// Minimap click-to-navigate
 document.addEventListener('DOMContentLoaded', () => {
     init();
 

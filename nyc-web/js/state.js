@@ -1,4 +1,4 @@
-// Game state and models -- direct port from Swift
+// Game state and models -- NYC + Quest integrated
 
 let _nextId = 0;
 export function uuid() { return `${++_nextId}-${Math.random().toString(36).slice(2, 8)}`; }
@@ -12,8 +12,6 @@ export const ColonistJobs = ['idle', 'gather', 'build', 'patrol', 'attack', 'que
 
 export const ColonyDirective = { idle: 'idle', gather: 'gather', build: 'build', patrol: 'patrol' };
 export const ColonyDirectives = ['idle', 'gather', 'build', 'patrol'];
-
-export const ColonistState = { healthy: 'healthy', hungry: 'hungry', suffocating: 'suffocating', exhausted: 'exhausted', dead: 'dead' };
 
 export const WeaponTypes = {
     fists:   { damage: 5,  range: 1, name: 'FISTS' },
@@ -47,11 +45,59 @@ export const BuildingType = {
 };
 export const BuildingTypes = Object.keys(BuildingType);
 
-export const InputMode = { normal: 'normal', build: 'build', demolish: 'demolish' };
+// Quest system types (absorbed from standalone Quest app)
+export const DifficultyXP = { F: 10, D: 25, C: 50, B: 100, A: 200, S: 500 };
+export const DifficultyRanks = ['F', 'D', 'C', 'B', 'A', 'S'];
+export const QuestCategories = ['fitness', 'study', 'work', 'personal', 'creative', 'errand'];
+export const CategoryInfo = {
+    fitness:  { label: 'Fitness',  className: 'Warrior',  color: '#ff375f', statBoost: ['str', 'end'] },
+    study:    { label: 'Study',    className: 'Mage',     color: '#0071e3', statBoost: ['int', 'cha'] },
+    work:     { label: 'Work',     className: 'Rogue',    color: '#30d158', statBoost: ['agi', 'int'] },
+    personal: { label: 'Personal', className: 'Ranger',   color: '#ff9f0a', statBoost: ['end', 'agi'] },
+    creative: { label: 'Creative', className: 'Bard',     color: '#bf5af2', statBoost: ['cha', 'str'] },
+    errand:   { label: 'Errand',   className: 'Merchant', color: '#ac8e68', statBoost: ['int', 'cha'] },
+};
+export const LevelTitles = ['Squire', 'Knight', 'Champion', 'Hero', 'Legend', 'Mythic'];
+
+export const QuestBuildings = {
+    fitness: 'gym', study: 'library', work: 'workshop',
+    personal: 'questBoard', creative: 'library', errand: 'questBoard',
+};
+
+export function questLevel(totalXP) { return Math.floor(Math.sqrt(totalXP / 50)); }
+export function questTitle(level) { return LevelTitles[Math.min(Math.max(level, 0), LevelTitles.length - 1)]; }
+export function questXPForNext(level) { return (level + 1) * (level + 1) * 50; }
+export function questXPProgress(totalXP) {
+    const level = questLevel(totalXP);
+    const cur = level * level * 50;
+    const next = (level + 1) * (level + 1) * 50;
+    return { level, progress: totalXP - cur, needed: next - cur, percent: (totalXP - cur) / (next - cur) * 100 };
+}
+
+export function createQuest({ title, difficulty = 'C', category = 'personal', notes = '', dueDate = null }) {
+    return {
+        id: crypto.randomUUID(),
+        title, difficulty, category, notes, dueDate,
+        completed: false, completedAt: null,
+        createdAt: new Date().toISOString(),
+    };
+}
 
 function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 function randomStats() { return { str: randInt(1,10), int: randInt(1,10), agi: randInt(1,10), end: randInt(1,10), cha: randInt(1,10) }; }
 function randomTrait() { return TraitKeys[randInt(0, TraitKeys.length - 1)]; }
+
+const COLONIST_NAMES = [
+    'Alex', 'Jordan', 'Casey', 'Riley', 'Morgan', 'Sam', 'Taylor', 'Avery', 'Quinn', 'Blake',
+    'Charlie', 'Drew', 'Emery', 'Finley', 'Harper', 'Jesse', 'Dakota', 'Sage', 'Rowan', 'Phoenix',
+    'Kai', 'Reese', 'Ellis', 'Skyler', 'Marley', 'Lennox', 'River', 'Hayden', 'Remy', 'Kit',
+];
+
+export function randomColonistName(existing) {
+    const used = new Set(existing.map(c => c.name));
+    const available = COLONIST_NAMES.filter(n => !used.has(n));
+    return available.length ? available[randInt(0, available.length - 1)] : `Agent-${randInt(100,999)}`;
+}
 
 export function createColonist(name, col, row) {
     return {
@@ -63,17 +109,20 @@ export function createColonist(name, col, row) {
         pathCols: [], pathRows: [], pathIndex: 0,
         stats: randomStats(), xp: 0, level: 1,
         trait: randomTrait(),
-        activeQuest: null,       // { title, category, xp, ticksRemaining }
-        questBubble: null,       // speech bubble text + ticks remaining
+        activeQuest: null,
+        questBubble: null,
+        questsCompleted: 0,
+        dominantCategory: null,
     };
+}
+
+export function colonistClass(c) {
+    if (!c.dominantCategory) return null;
+    return CategoryInfo[c.dominantCategory]?.className || null;
 }
 
 export function colonistXpForNext(c) { return Math.max(100, c.level * 100); }
 export function colonistXpProgress(c) { return c.xp / colonistXpForNext(c); }
-export function colonistMovementSpeed(c) { return 1.0 + c.stats.agi * 0.1; }
-export function colonistHungerDecay(c) { return 1.0 - c.stats.end * 0.05; }
-export function colonistBuildDiscount(c) { return c.stats.int * 0.02; }
-
 export function grantXP(c, amount) {
     const adjusted = c.trait === 'hustler' ? Math.floor(amount * 1.2) : amount;
     c.xp += adjusted;
@@ -81,7 +130,6 @@ export function grantXP(c, amount) {
     while (c.xp >= next) {
         c.xp -= next;
         c.level++;
-        // Boost random stat
         const stats = ['str','int','agi','end','cha'];
         const s = stats[randInt(0,4)];
         c.stats[s] = Math.min(10, c.stats[s] + 1);
@@ -128,42 +176,106 @@ export function createGameState() {
         gameLog: [],
         showBuildMenu: false,
         showSettings: false,
+        showQuestBoard: false,
+        wallpaperMode: false,
         currentDirective: 'idle',
         tutorialStep: 0,
         lastSaveSlot: null,
         autoSaveEnabled: true,
-        autoplay: false,
+        autoplay: true,           // default ON
         showSaveIndicator: false,
-        quests: [],              // synced from Quest app localStorage
-        questLog: [],            // completed quest messages
+        // Quest system (integrated)
+        questList: [],            // full quest objects with CRUD
+        rewardList: [],           // dopamine rewards
+        questLog: [],             // completed quest log
+        playerXP: 0,
+        playerStreak: 0,
+        playerLastActive: null,
+        toastMessage: null,       // { text, ticks }
     };
 }
 
-// Sync quests from the Quest web app's localStorage
-export function syncQuests(state) {
+// Migrate quest data from standalone Quest app on first load
+export function migrateQuestData(state) {
     try {
-        const raw = localStorage.getItem('quest:quests');
-        if (!raw) return;
-        const quests = JSON.parse(raw);
-        state.quests = quests.filter(q => !q.completed).map(q => ({
-            id: q.id,
-            title: q.title,
-            category: q.category,
-            difficulty: q.difficulty,
-            xp: { F: 10, D: 25, C: 50, B: 100, A: 200, S: 500 }[q.difficulty] || 50,
-        }));
-    } catch { /* Quest app not installed or no data */ }
+        const quests = localStorage.getItem('quest:quests');
+        if (quests) {
+            const parsed = JSON.parse(quests);
+            if (parsed.length && !state.questList.length) {
+                state.questList = parsed;
+            }
+        }
+        const rewards = localStorage.getItem('quest:rewards');
+        if (rewards) {
+            const parsed = JSON.parse(rewards);
+            if (parsed.length && !state.rewardList.length) {
+                state.rewardList = parsed;
+            }
+        }
+        const profile = localStorage.getItem('quest:profile');
+        if (profile) {
+            const p = JSON.parse(profile);
+            if (p.totalXP && !state.playerXP) {
+                state.playerXP = p.totalXP;
+                state.playerStreak = p.currentStreak || 0;
+                state.playerLastActive = p.lastActiveDate;
+            }
+        }
+    } catch { /* no standalone data */ }
 }
 
-// Category -> building type mapping for quest destinations
-export const QuestBuildings = {
-    fitness: 'gym',
-    study: 'library',
-    work: 'workshop',
-    personal: 'questBoard',
-    creative: 'library',
-    errand: 'questBoard',
-};
+// Write back to quest:quests for backward compat
+export function syncQuestsToLocalStorage(state) {
+    try {
+        localStorage.setItem('quest:quests', JSON.stringify(state.questList));
+        localStorage.setItem('quest:profile', JSON.stringify({
+            name: 'Adventurer',
+            totalXP: state.playerXP,
+            currentStreak: state.playerStreak,
+            lastActiveDate: state.playerLastActive,
+        }));
+        localStorage.setItem('quest:rewards', JSON.stringify(state.rewardList));
+    } catch { /* storage full */ }
+}
+
+export function addQuest(state, data) {
+    const quest = createQuest(data);
+    state.questList.unshift(quest);
+    syncQuestsToLocalStorage(state);
+    gameLog(state, `New quest: ${quest.title}`);
+    return quest;
+}
+
+export function completeQuestInList(state, questId) {
+    const quest = state.questList.find(q => q.id === questId);
+    if (!quest || quest.completed) return null;
+    quest.completed = true;
+    quest.completedAt = new Date().toISOString();
+    const xp = DifficultyXP[quest.difficulty] || 50;
+    state.playerXP += xp;
+    updatePlayerStreak(state);
+    syncQuestsToLocalStorage(state);
+    // Roll reward
+    const active = state.rewardList.filter(r => r.active);
+    if (active.length && Math.random() < 0.8) {
+        const reward = active[Math.floor(Math.random() * active.length)];
+        state.toastMessage = { text: reward.text, ticks: 120 };
+    } else if (active.length) {
+        state.toastMessage = { text: 'The gods demand more...', ticks: 80 };
+    }
+    return { quest, xp };
+}
+
+export function updatePlayerStreak(state) {
+    const today = new Date().toISOString().slice(0, 10);
+    if (state.playerLastActive === today) return;
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    state.playerStreak = state.playerLastActive === yesterday ? state.playerStreak + 1 : 1;
+    state.playerLastActive = today;
+}
+
+export function activeQuests(state) { return state.questList.filter(q => !q.completed); }
+export function completedQuests(state) { return state.questList.filter(q => q.completed); }
 
 export function gameLog(state, msg) {
     state.gameLog.push(msg);

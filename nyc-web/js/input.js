@@ -20,10 +20,26 @@ export function setupInput(canvas, camera, state, callbacks) {
         }
 
         switch (e.key.toLowerCase()) {
-            case 'w': case 'arrowup': camera.panY = -1; break;
-            case 's': case 'arrowdown': camera.panY = 1; break;
-            case 'a': case 'arrowleft': camera.panX = -1; break;
-            case 'd': case 'arrowright': camera.panX = 1; break;
+            case 'arrowup': camera.panY = -1; break;
+            case 'arrowdown': camera.panY = 1; break;
+            case 'arrowleft': camera.panX = -1; break;
+            case 'arrowright': camera.panX = 1; break;
+            case 'w':
+                if (e.shiftKey) {
+                    // Shift+W = wallpaper mode
+                    state.wallpaperMode = !state.wallpaperMode;
+                    safe(() => callbacks.onHudUpdate());
+                } else {
+                    camera.panY = -1;
+                }
+                break;
+            case 's': camera.panY = 1; break;
+            case 'a': camera.panX = -1; break;
+            case 'd': camera.panX = 1; break;
+            case 'q':
+                state.showQuestBoard = !state.showQuestBoard;
+                safe(() => callbacks.onHudUpdate());
+                break;
             case 'b':
                 state.showBuildMenu = !state.showBuildMenu;
                 if (!state.showBuildMenu) state.inputMode = 'normal';

@@ -1,13 +1,27 @@
 // HUD -- HTML overlay updates
 
-import { ResourceTypes, ResourceSymbol, BuildingType, BuildingTypes, ColonistJobs, ColonyDirectives, Traits, WeaponTypes, selectedColonist, colonistXpForNext, colonistXpProgress } from './state.js';
+import { ResourceTypes, ResourceSymbol, BuildingType, BuildingTypes, ColonistJobs, ColonyDirectives,
+    Traits, WeaponTypes, selectedColonist, colonistXpForNext, colonistXpProgress,
+    questLevel, questTitle, questXPProgress, activeQuests, completedQuests,
+    DifficultyXP, CategoryInfo, colonistClass, DifficultyRanks, QuestCategories } from './state.js';
 import { listSlots } from './save.js';
 
 const RES_COLORS = { food: '#30d158', power: '#ffd60a', materials: '#ff9f0a', oxygen: '#64d2ff', cash: '#ff375f' };
 const STATE_COLORS = { healthy: '#30d158', hungry: '#ffd60a', suffocating: '#64d2ff', exhausted: '#ff9f0a', dead: '#666' };
 
 export function updateHUD(state, callbacks) {
+    const hud = document.getElementById('hud');
+    if (state.wallpaperMode) {
+        hud.style.opacity = '0';
+        hud.style.pointerEvents = 'none';
+        updateToast(state);
+        return;
+    }
+    hud.style.opacity = '1';
+    hud.style.pointerEvents = 'auto';
+
     updateResourceBar(state);
+    updatePlayerProfile(state);
     updateBuildMenu(state, callbacks);
     updateColonistPanel(state, callbacks);
     updateDirectiveBar(state, callbacks);
@@ -17,6 +31,204 @@ export function updateHUD(state, callbacks) {
     updateSaveIndicator(state);
     updateSettings(state, callbacks);
     updateTutorial(state, callbacks);
+    updateQuestBoard(state);
+    updateToast(state);
+}
+
+function updatePlayerProfile(state) {
+    let el = document.getElementById('player-profile');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'player-profile';
+        document.getElementById('hud').appendChild(el);
+    }
+    const prog = questXPProgress(state.playerXP);
+    const title = questTitle(prog.level);
+    const alive = state.colonists.filter(c => c.state !== 'dead').length;
+
+    el.textContent = '';
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'pp-title';
+    titleDiv.textContent = `Lvl ${prog.level} ${title}`;
+    el.appendChild(titleDiv);
+
+    const track = document.createElement('div');
+    track.className = 'pp-xp-track';
+    const fill = document.createElement('div');
+    fill.className = 'pp-xp-fill';
+    fill.style.width = Math.min(prog.percent, 100) + '%';
+    track.appendChild(fill);
+    el.appendChild(track);
+
+    const stats = document.createElement('div');
+    stats.className = 'pp-stats';
+    stats.textContent = `${state.playerXP} XP | ${state.playerStreak}d streak | ${alive} alive`;
+    el.appendChild(stats);
+
+    const quests = document.createElement('div');
+    quests.className = 'pp-quests';
+    quests.textContent = `${activeQuests(state).length} active quests [Q]`;
+    quests.style.cursor = 'pointer';
+    quests.onclick = () => { state.showQuestBoard = !state.showQuestBoard; };
+    el.appendChild(quests);
+}
+
+function updateQuestBoard(state) {
+    let el = document.getElementById('quest-board');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'quest-board';
+        document.getElementById('hud').appendChild(el);
+    }
+    el.style.display = state.showQuestBoard ? 'block' : 'none';
+    if (!state.showQuestBoard) return;
+
+    const active = activeQuests(state);
+    const done = completedQuests(state);
+
+    el.textContent = '';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'qb-header';
+    header.textContent = 'QUEST BOARD';
+    const close = document.createElement('span');
+    close.className = 'qb-close';
+    close.textContent = 'X';
+    close.onclick = () => { state.showQuestBoard = false; };
+    header.appendChild(close);
+    el.appendChild(header);
+
+    // Add button
+    const addBtn = document.createElement('div');
+    addBtn.className = 'qb-add';
+    addBtn.textContent = '+ ADD QUEST';
+    el.appendChild(addBtn);
+
+    // Form (hidden)
+    const form = document.createElement('div');
+    form.className = 'qb-form';
+    form.style.display = 'none';
+
+    const titleInput = document.createElement('input');
+    titleInput.className = 'qb-input';
+    titleInput.placeholder = 'Quest name...';
+    form.appendChild(titleInput);
+
+    const row1 = document.createElement('div');
+    row1.className = 'qb-row';
+    const diffSel = document.createElement('select');
+    diffSel.className = 'qb-select';
+    DifficultyRanks.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r;
+        opt.textContent = `${r} (${DifficultyXP[r]}xp)`;
+        if (r === 'C') opt.selected = true;
+        diffSel.appendChild(opt);
+    });
+    row1.appendChild(diffSel);
+    const catSel = document.createElement('select');
+    catSel.className = 'qb-select';
+    QuestCategories.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = CategoryInfo[c].label;
+        catSel.appendChild(opt);
+    });
+    row1.appendChild(catSel);
+    form.appendChild(row1);
+
+    const row2 = document.createElement('div');
+    row2.className = 'qb-row';
+    const submitBtn = document.createElement('button');
+    submitBtn.className = 'qb-btn';
+    submitBtn.textContent = 'INSCRIBE';
+    submitBtn.onclick = () => {
+        const t = titleInput.value.trim();
+        if (!t) return;
+        window._gameCallbacks?.addQuest({ title: t, difficulty: diffSel.value, category: catSel.value });
+        form.style.display = 'none';
+        titleInput.value = '';
+    };
+    row2.appendChild(submitBtn);
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'qb-btn dim';
+    cancelBtn.textContent = 'CANCEL';
+    cancelBtn.onclick = () => { form.style.display = 'none'; };
+    row2.appendChild(cancelBtn);
+    form.appendChild(row2);
+    el.appendChild(form);
+
+    addBtn.onclick = () => { form.style.display = form.style.display === 'none' ? 'block' : 'none'; };
+
+    // Active quests
+    const secActive = document.createElement('div');
+    secActive.className = 'qb-section';
+    secActive.textContent = `ACTIVE (${active.length})`;
+    el.appendChild(secActive);
+
+    for (const q of active) {
+        const cat = CategoryInfo[q.category] || {};
+        const row = document.createElement('div');
+        row.className = 'qb-quest';
+
+        const rank = document.createElement('span');
+        rank.className = 'qb-rank';
+        rank.style.color = cat.color || '#fff';
+        rank.textContent = q.difficulty;
+        row.appendChild(rank);
+
+        const name = document.createElement('span');
+        name.className = 'qb-name';
+        name.textContent = q.title;
+        row.appendChild(name);
+
+        const xp = document.createElement('span');
+        xp.className = 'qb-xp';
+        xp.textContent = (DifficultyXP[q.difficulty] || 50) + 'xp';
+        row.appendChild(xp);
+
+        const check = document.createElement('span');
+        check.className = 'qb-complete';
+        check.textContent = '\u2713';
+        check.onclick = () => { window._gameCallbacks?.completeQuest(q.id); };
+        row.appendChild(check);
+
+        el.appendChild(row);
+    }
+
+    // Completed
+    if (done.length) {
+        const secDone = document.createElement('div');
+        secDone.className = 'qb-section';
+        secDone.textContent = `COMPLETED (${done.length})`;
+        el.appendChild(secDone);
+        for (const q of done.slice(0, 10)) {
+            const row = document.createElement('div');
+            row.className = 'qb-quest done';
+            const name = document.createElement('span');
+            name.className = 'qb-name';
+            name.textContent = q.title;
+            row.appendChild(name);
+            el.appendChild(row);
+        }
+    }
+}
+
+function updateToast(state) {
+    let el = document.getElementById('toast-msg');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'toast-msg';
+        document.body.appendChild(el);
+    }
+    if (state.toastMessage) {
+        el.textContent = state.toastMessage.text;
+        el.style.display = 'block';
+        el.style.opacity = Math.min(1, state.toastMessage.ticks / 20);
+    } else {
+        el.style.display = 'none';
+    }
 }
 
 function updateResourceBar(state) {
