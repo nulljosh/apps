@@ -1,5 +1,52 @@
 const MATH_FUNCTIONS = ['sqrt', 'sin', 'cos', 'tan', 'log', 'ln', 'abs', 'pow', 'mod', 'pi'];
 
+const WORD_NUMBERS = {
+  zero: '0', one: '1', two: '2', three: '3', four: '4',
+  five: '5', six: '6', seven: '7', eight: '8', nine: '9',
+  ten: '10', eleven: '11', twelve: '12', thirteen: '13',
+  fourteen: '14', fifteen: '15', sixteen: '16', seventeen: '17',
+  eighteen: '18', nineteen: '19', twenty: '20', thirty: '30',
+  forty: '40', fifty: '50', sixty: '60', seventy: '70',
+  eighty: '80', ninety: '90', hundred: '100', thousand: '1000',
+  million: '1000000',
+};
+
+const WORD_OPERATORS = [
+  ['multiplied by', '*'], ['divided by', '/'], ['added to', '+'],
+  ['to the power of', '^'],
+  ['plus', '+'], ['add', '+'], ['minus', '-'], ['subtract', '-'],
+  ['less', '-'], ['times', '*'], ['over', '/'],
+  ['squared', '^2'], ['cubed', '^3'],
+];
+
+const FILLER_PATTERNS = [
+  'what is ', 'whats ', "what's ", 'calculate ', 'how much is ',
+  'compute ', 'solve ', 'evaluate ', 'the answer to ', 'result of ',
+];
+
+function parseNaturalLanguageMath(input) {
+  let text = input.toLowerCase().trim();
+  const hasWordNumber = Object.keys(WORD_NUMBERS).some(w => text.includes(w));
+  const hasWordOp = WORD_OPERATORS.some(([w]) => text.includes(w));
+  if (!hasWordNumber || !hasWordOp) return null;
+
+  for (const filler of FILLER_PATTERNS) {
+    if (text.startsWith(filler)) text = text.slice(filler.length);
+  }
+  text = text.replace(/\?/g, '').trim();
+
+  for (const [word, op] of WORD_OPERATORS) {
+    text = text.replaceAll(word, ` ${op} `);
+  }
+  for (const [word, num] of Object.entries(WORD_NUMBERS)) {
+    text = text.replace(new RegExp(`\\b${word}\\b`, 'g'), num);
+  }
+  text = text.replace(/\s+/g, ' ').trim();
+
+  if (!/^[\d.+\-*/^%() ]+$/.test(text)) return null;
+  return text;
+}
+
 function isMathExpression(input) {
   let test = input.toLowerCase();
   for (const fn of MATH_FUNCTIONS) {
@@ -81,12 +128,7 @@ function evaluateWithFunctions(expr) {
   return null;
 }
 
-export function evaluateMath(input) {
-  const expr = input.trim();
-  if (!expr) return null;
-  if (!isMathExpression(expr)) return null;
-  if (!hasOperation(expr)) return null;
-
+function evaluateExpression(expr) {
   let processed = expr.replace(/\bpi\b/gi, String(Math.PI));
   if (processed.toLowerCase() === 'e') return formatResult(Math.E);
   processed = processed.replace(/\be\b/gi, String(Math.E));
@@ -104,6 +146,20 @@ export function evaluateMath(input) {
     const result = Function('"use strict"; return (' + safe + ')')();
     if (typeof result === 'number' && isFinite(result)) return formatResult(result);
   } catch {}
+
+  return null;
+}
+
+export function evaluateMath(input) {
+  const expr = input.trim();
+  if (!expr) return null;
+
+  if (isMathExpression(expr) && hasOperation(expr)) {
+    return evaluateExpression(expr);
+  }
+
+  const natural = parseNaturalLanguageMath(expr);
+  if (natural) return evaluateExpression(natural);
 
   return null;
 }

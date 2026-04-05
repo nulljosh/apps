@@ -14,6 +14,7 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [mathResult, setMathResult] = useState(null);
+  const [instantAnswer, setInstantAnswer] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
@@ -42,21 +43,25 @@ export default function App() {
 
     const math = evaluateMath(q);
     setMathResult(math);
+    setInstantAnswer(null);
 
-    try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&limit=20`);
-      if (res.ok) {
-        const data = await res.json();
-        setResults(data.results || []);
-      } else if (!math) {
-        setError('Search failed. Try again.');
-        setResults([]);
-      }
-    } catch {
-      if (!math) {
-        setError('Network error.');
-        setResults([]);
-      }
+    const encoded = encodeURIComponent(q);
+    const [searchRes, instantRes] = await Promise.allSettled([
+      fetch(`/api/search?q=${encoded}&limit=20`),
+      !math ? fetch(`/api/instant?q=${encoded}`) : Promise.resolve(null),
+    ]);
+
+    if (searchRes.status === 'fulfilled' && searchRes.value?.ok) {
+      const data = await searchRes.value.json();
+      setResults(data.results || []);
+    } else if (!math) {
+      setError('Search failed. Try again.');
+      setResults([]);
+    }
+
+    if (!math && instantRes.status === 'fulfilled' && instantRes.value?.ok) {
+      const data = await instantRes.value.json();
+      if (data.type) setInstantAnswer(data);
     }
 
     setLoading(false);
@@ -74,7 +79,7 @@ export default function App() {
     }
   }, [query, placeholder]);
 
-  const showResults = hasSearched && (mathResult || results.length > 0 || error);
+  const showResults = hasSearched && (mathResult || instantAnswer || results.length > 0 || error);
 
   return (
     <div className={`app ${showResults ? 'has-results' : ''}`}>
@@ -133,6 +138,40 @@ export default function App() {
             <div className="result-card math-card animate__animated animate__fadeInUp" style={{ animationDuration: '0.35s' }}>
               <div className="math-value">{mathResult}</div>
               <div className="math-label">Result</div>
+            </div>
+          )}
+
+          {instantAnswer && instantAnswer.type === 'text' && (
+            <div className="result-card instant-card animate__animated animate__fadeInUp" style={{ animationDuration: '0.35s' }}>
+              {instantAnswer.imageURL && (
+                <img src={instantAnswer.imageURL} alt="" className="instant-image" />
+              )}
+              {instantAnswer.heading && (
+                <div className="instant-heading">{instantAnswer.heading}</div>
+              )}
+              <div className="instant-body">{instantAnswer.body}</div>
+              {instantAnswer.source && (
+                <div className="instant-source">
+                  {instantAnswer.sourceURL ? (
+                    <a href={instantAnswer.sourceURL} target="_blank" rel="noopener noreferrer">
+                      {instantAnswer.source}
+                    </a>
+                  ) : instantAnswer.source}
+                </div>
+              )}
+            </div>
+          )}
+
+          {instantAnswer && instantAnswer.type === 'list' && (
+            <div className="result-card instant-card animate__animated animate__fadeInUp" style={{ animationDuration: '0.35s' }}>
+              <ul className="instant-list">
+                {instantAnswer.items.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+              {instantAnswer.source && (
+                <div className="instant-source">{instantAnswer.source}</div>
+              )}
             </div>
           )}
 
