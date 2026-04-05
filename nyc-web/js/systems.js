@@ -599,7 +599,7 @@ const questBubbles = {
     errand: ['Running errands', 'Getting supplies', 'Out and about', 'On a mission', 'Shopping'],
 };
 
-export function questTick(state, pathfinder) {
+export function questTick(state, grid, pathfinder) {
     const quests = activeQuests(state);
 
     const questBuildings = state.buildings.filter(b =>

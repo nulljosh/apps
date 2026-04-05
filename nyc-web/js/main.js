@@ -207,7 +207,7 @@ function gameLoop(timestamp) {
                 const b = placeBuilding(type, col, row, grid, state, pathfinder);
                 if (b) { const bt = BuildingType[type]; spawnBuildDust(col, row, bt.size[0], bt.size[1]); }
             });
-            questTick(state, pathfinder);
+            questTick(state, grid, pathfinder);
             tickParticles();
 
             // Victory check
