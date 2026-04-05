@@ -37,3 +37,14 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.nimble-ios.tests
         GENERATE_INFOPLIST_FILE: YES
+  NimbleIOSUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - UITests
+    dependencies:
+      - target: NimbleIOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.nimble-ios.uitests
+        GENERATE_INFOPLIST_FILE: YES
