@@ -2,20 +2,24 @@
 
 # nyc-web
 
-![version](https://img.shields.io/badge/version-v1.2.0-blue)
+![version](https://img.shields.io/badge/version-v2.0.0-blue)
 
-Times Square Survival: web port of the colony survival sim. Vanilla HTML5 Canvas, zero dependencies. Apple Liquid Glass UI.
+Times Square Survival: colony sim with intelligent AI that can beat itself in under an hour. Vanilla HTML5 Canvas, zero dependencies. 16-bit sprites, priority-based AI, Claude Code integration.
 
 ## Features
 
-- Colonist AI with health bars, directives, XP/leveling, traits
+- Priority-based AI: survival > infrastructure > growth > quests
+- Auto-quest generation based on colony state
+- Game phases (SURVIVAL > GROWTH > MASTERY > VICTORY)
+- Victory condition: 15 alive, avg level 8, one level 10 champion
+- 16-bit colonist sprites with limbs, skin tones, walk animation, weapons
+- Building icons (shelter roof, generator lightning, gym dumbbell)
+- Claude Code bridge (`window._claudeBridge`) for activity integration
+- Colonist RPG classes (Warrior, Mage, Rogue, Ranger, Bard, Merchant)
 - Weapons and combat system
 - Building placement and demolition
 - 3-slot save system (localStorage)
-- Interactive tutorial
-- Camera pan/zoom (WASD, scroll, touch)
-- Mobile touch support (pinch-to-zoom, drag-to-pan)
-- Minimap with click-to-navigate
+- Camera pan/zoom (WASD, scroll, touch, mobile)
 
 ## Run
 

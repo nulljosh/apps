@@ -1,8 +1,8 @@
 # nyc-web
 
-v1.2.0
+v2.0.0
 
-Web port of Times Square Survival. Vanilla HTML5 Canvas + JS, no bundler, no dependencies. Apple Liquid Glass UI with rounded tiles, frosted glass HUD, and unified SF color palette.
+Times Square Survival with intelligent AI. Vanilla HTML5 Canvas + JS, no bundler, no dependencies. 16-bit sprites, priority-based autoplay AI, auto-quest generation, game phases with victory condition. Claude Code integration via `window._claudeBridge`.
 
 ## Run
 
@@ -31,3 +31,4 @@ python3 -m http.server 8080
 - js/input.js: Keyboard, mouse, touch input
 - js/hud.js: HTML HUD overlays
 - js/save.js: localStorage save/load
+- js/claude.js: Claude Code integration bridge
