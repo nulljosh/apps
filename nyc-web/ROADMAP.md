@@ -16,27 +16,34 @@
 - [x] v2.0 Game phases (SURVIVAL > GROWTH > MASTERY > VICTORY)
 - [x] v2.0 Claude Code bridge (window._claudeBridge)
 - [x] v2.0 Terrain variation (brightness variants, sidewalk details)
+- [x] v2.1 4-frame walk animation
+- [x] v2.1 Particle effects (damage numbers, XP sparkles, level-up burst, build dust)
+- [x] v2.1 Smooth colonist movement (position interpolation)
+- [x] v2.1 Colored day/night lighting (dawn orange, sunset amber, night blue)
+- [x] v2.1 Difficulty scaling (bosses scale with game phase)
+- [x] v2.1 Quest pathfinding fix (path to adjacent tile, not building tile)
 
-## Next Up (v2.1 -- Graphics)
-- [ ] Sprite sheet animation (4 frames: idle, walk-left, walk-right, work)
-- [ ] Particle effects (damage numbers, XP gain sparkles, build dust)
-- [ ] Building interiors (visible through transparent walls when zoomed in)
-- [ ] Day/night lighting (orange sunset, blue moonlight, not just dark overlay)
-- [ ] Weather effects (rain particles, fog overlay, snow)
-- [ ] Smooth colonist movement (interpolated position between ticks)
+## Next (most to least important)
 
-## Next Up (v2.1 -- Gameplay)
-- [ ] Difficulty scaling per phase (enemies get tougher in MASTERY)
+### Must Have
+- [ ] Sprite outlines (1px dark border for character definition)
+- [ ] Hair/hat variation per colonist (procedural, name hash)
+- [ ] Idle animations (breathing bob, head turn)
+- [ ] Work animation (arms moving when at quest building)
+- [ ] Building interiors (visible when zoomed in close)
+
+### Should Have
+- [ ] Weather effects (rain particles, fog overlay)
+- [ ] Screen shake on boss spawn
 - [ ] Colonist specialization (dedicated gatherers, builders, fighters)
-- [ ] Trade system between colonists
-- [ ] Research tree (unlock better buildings, weapons)
-- [ ] Sound effects (web audio API)
-- [ ] Active Claude hook (auto-feed file edits and commits to game)
+- [ ] Research tree (unlock better buildings and weapons)
+- [ ] Sound effects (web audio API -- place, hit, level up, quest done)
 
-## Future (v3.0)
-- [ ] Cross-platform sync
+### Nice to Have
+- [ ] Procedural events (storms, raids, traveling traders)
+- [ ] Active Claude hook (auto-feed commits to game)
+- [ ] Cross-platform sync (share saves between devices)
 - [ ] macOS wallpaper mode
 - [ ] Health mirroring (Apple Health -> colonist vitals)
 - [ ] Multi-city expansion
-- [ ] Procedural events (storms, raids, traders)
 - [ ] Multiplayer (shared colony via WebSocket)

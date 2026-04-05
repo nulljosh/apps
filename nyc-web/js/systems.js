@@ -668,8 +668,25 @@ export function questTick(state, pathfinder) {
             const bubbles = questBubbles[quest.category] || questBubbles.personal;
             c.questBubble = { text: bubbles[Math.floor(Math.random() * bubbles.length)], ticks: 40 };
         } else {
-            // Travel to building -- store as pending, do NOT start countdown
-            const path = pathfinder.findPath(c.col, c.row, target.col, target.row);
+            // Find walkable tile adjacent to building (building tiles are removed from pathfinder)
+            const bt = BuildingType[target.type];
+            const [bw, bh] = bt ? bt.size : [2, 2];
+            let destCol = -1, destRow = -1, bestDist = Infinity;
+            for (let dr = -1; dr <= bh; dr++) {
+                for (let dc = -1; dc <= bw; dc++) {
+                    if (dr >= 0 && dr < bh && dc >= 0 && dc < bw) continue; // skip building tiles
+                    const tc = target.col + dc;
+                    const tr = target.row + dr;
+                    if (tc < 0 || tr < 0 || tc >= GRID_SIZE || tr >= GRID_SIZE) continue;
+                    const t = tileAt(grid, tc, tr);
+                    if (t === null || t === TileType.building) continue;
+                    const d = Math.abs(c.col - tc) + Math.abs(c.row - tr);
+                    if (d < bestDist) { destCol = tc; destRow = tr; bestDist = d; }
+                }
+            }
+            if (destCol < 0) continue; // no walkable neighbor
+
+            const path = pathfinder.findPath(c.col, c.row, destCol, destRow);
             if (path.length) {
                 c.job = 'quest';
                 c.pathCols = path.map(p => p.col);
