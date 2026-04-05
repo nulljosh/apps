@@ -2,7 +2,7 @@
 
 # Nimble iOS
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
 <p align="center"><img src="Resources/preview.png" width="300"></p>
 
@@ -10,8 +10,9 @@ iOS companion for [Nimble](../nimble/), the instant-answers app. SwiftUI, no API
 
 ## Features
 
-- Instant search with DuckDuckGo + Wikipedia
+- Instant search with DuckDuckGo + Wikipedia (parallel, 5s timeout)
 - Offline math evaluation (trig, sqrt, log, powers, pi)
+- Natural language math ("whats nine plus ten" -> 19)
 - 8 color themes with haptic feedback
 - Copy result text, open in Safari
 - Rotating placeholder suggestions

@@ -104,6 +104,13 @@ final class QueryEngine: Sendable {
         var expr = input.trimmingCharacters(in: .whitespaces)
         guard !expr.isEmpty else { return nil }
 
+        // Try natural language math first ("whats nine plus ten" -> "9 + 10")
+        if let nlExpr = parseNaturalLanguageMath(expr) {
+            if let result = evaluateNumericExpression(nlExpr) {
+                return result
+            }
+        }
+
         // Reject natural language: strip math tokens, check what's left
         var testStr = expr.lowercased()
         let mathFunctions = ["sqrt", "sin", "cos", "tan", "log", "ln", "abs", "pow", "mod", "pi"]
@@ -255,28 +262,28 @@ final class QueryEngine: Sendable {
     }
 
     func query(_ input: String) async -> QueryResult {
-        // Try DDG first
-        if let ddgResult = await queryDDG(input) {
-            return ddgResult
-        }
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 5
+        let session = URLSession(configuration: config)
 
-        // Fallback to Wikipedia
-        if let wikiResult = await queryWikipedia(input) {
-            return wikiResult
-        }
+        async let ddg = queryDDG(input, session: session)
+        async let wiki = queryWikipedia(input, session: session)
+
+        if let ddgResult = await ddg { return ddgResult }
+        if let wikiResult = await wiki { return wikiResult }
 
         let encoded = input.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? input
         return .error("No instant answer found.", searchURL: "https://duckduckgo.com/?q=\(encoded)")
     }
 
-    private func queryDDG(_ input: String) async -> QueryResult? {
+    private func queryDDG(_ input: String, session: URLSession = .shared) async -> QueryResult? {
         guard let encoded = input.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "https://api.duckduckgo.com/?q=\(encoded)&format=json&no_html=1&skip_disambig=1") else {
             return nil
         }
 
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let (data, _) = try await session.data(from: url)
             let ddg = try JSONDecoder().decode(DDGResponse.self, from: data)
 
             if let abstract = ddg.abstractText, !abstract.isEmpty {
@@ -321,12 +328,12 @@ final class QueryEngine: Sendable {
         }
     }
 
-    private func queryWikipedia(_ input: String) async -> QueryResult? {
+    private func queryWikipedia(_ input: String, session: URLSession = .shared) async -> QueryResult? {
         // First try direct page summary
         let searchTerm = input.replacingOccurrences(of: " ", with: "_")
         if let encoded = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
            let url = URL(string: "https://en.wikipedia.org/api/rest_v1/page/summary/\(encoded)"),
-           let result = await fetchWikiSummary(url: url) {
+           let result = await fetchWikiSummary(url: url, session: session) {
             return result
         }
 
@@ -337,7 +344,7 @@ final class QueryEngine: Sendable {
         }
 
         do {
-            let (data, _) = try await URLSession.shared.data(from: searchURL)
+            let (data, _) = try await session.data(from: searchURL)
             if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                let query = json["query"] as? [String: Any],
                let search = query["search"] as? [[String: Any]],
@@ -348,18 +355,18 @@ final class QueryEngine: Sendable {
                       let summaryURL = URL(string: "https://en.wikipedia.org/api/rest_v1/page/summary/\(titleEncoded)") else {
                     return nil
                 }
-                return await fetchWikiSummary(url: summaryURL)
+                return await fetchWikiSummary(url: summaryURL, session: session)
             }
         } catch {}
 
         return nil
     }
 
-    private func fetchWikiSummary(url: URL) async -> QueryResult? {
+    private func fetchWikiSummary(url: URL, session: URLSession = .shared) async -> QueryResult? {
         guard let url = Optional(url) else { return nil }
 
         do {
-            let (data, response) = try await URLSession.shared.data(from: url)
+            let (data, response) = try await session.data(from: url)
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
                 return nil
             }
@@ -376,6 +383,94 @@ final class QueryEngine: Sendable {
         } catch {
             return nil
         }
+    }
+
+    private static let wordNumbers: [String: String] = [
+        "zero": "0", "one": "1", "two": "2", "three": "3", "four": "4",
+        "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9",
+        "ten": "10", "eleven": "11", "twelve": "12", "thirteen": "13",
+        "fourteen": "14", "fifteen": "15", "sixteen": "16", "seventeen": "17",
+        "eighteen": "18", "nineteen": "19", "twenty": "20", "thirty": "30",
+        "forty": "40", "fifty": "50", "sixty": "60", "seventy": "70",
+        "eighty": "80", "ninety": "90", "hundred": "100", "thousand": "1000",
+        "million": "1000000"
+    ]
+
+    private static let wordOperators: [String: String] = [
+        "plus": "+", "add": "+", "added to": "+",
+        "minus": "-", "subtract": "-", "less": "-",
+        "times": "*", "multiplied by": "*", "x": "*",
+        "divided by": "/", "over": "/",
+        "to the power of": "^", "squared": "^2", "cubed": "^3"
+    ]
+
+    private static let fillerPatterns = [
+        "what is ", "whats ", "what's ", "calculate ", "how much is ",
+        "compute ", "solve ", "evaluate ", "the answer to ", "result of "
+    ]
+
+    func parseNaturalLanguageMath(_ input: String) -> String? {
+        var text = input.lowercased().trimmingCharacters(in: .whitespaces)
+
+        // Must contain at least one word-number and one word-operator
+        let hasWordNumber = Self.wordNumbers.keys.contains(where: { text.contains($0) })
+        let hasWordOp = Self.wordOperators.keys.contains(where: { text.contains($0) })
+        guard hasWordNumber && hasWordOp else { return nil }
+
+        // Strip filler
+        for filler in Self.fillerPatterns {
+            if text.hasPrefix(filler) {
+                text = String(text.dropFirst(filler.count))
+            }
+        }
+        text = text.replacingOccurrences(of: "?", with: "").trimmingCharacters(in: .whitespaces)
+
+        // Replace multi-word operators first
+        for (word, op) in Self.wordOperators.sorted(by: { $0.key.count > $1.key.count }) {
+            text = text.replacingOccurrences(of: word, with: " \(op) ")
+        }
+
+        // Replace word numbers
+        for (word, num) in Self.wordNumbers {
+            text = text.replacingOccurrences(of: "\\b\(word)\\b", with: num, options: .regularExpression)
+        }
+
+        // Clean up whitespace
+        text = text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+            .trimmingCharacters(in: .whitespaces)
+
+        // Verify it looks like a math expression now
+        let mathChars = CharacterSet(charactersIn: "0123456789.+-*/^%() ").union(.whitespaces)
+        let isMath = text.unicodeScalars.allSatisfy { mathChars.contains($0) }
+        guard isMath else { return nil }
+
+        return text
+    }
+
+    private func evaluateNumericExpression(_ expr: String) -> String? {
+        // Reuse existing evaluateMath logic on the converted expression
+        var e = expr
+        e = e.replacingOccurrences(of: "\\bpi\\b", with: String(Double.pi), options: .regularExpression)
+
+        if let funcResult = evaluateWithFunctions(e) {
+            return formatResult(funcResult)
+        }
+
+        let cleaned = e
+            .replacingOccurrences(of: "^", with: "**")
+        let validChars = CharacterSet(charactersIn: "0123456789.+-*/(). ")
+        let isValid = cleaned.unicodeScalars.allSatisfy { validChars.contains($0) }
+        guard isValid else { return nil }
+
+        let floatCleaned = cleaned.replacingOccurrences(
+            of: #"\b(\d+)\b"#, with: "$1.0", options: .regularExpression
+        )
+
+        let expression = NSExpression(format: floatCleaned)
+        if let result = expression.expressionValue(with: nil, context: nil) as? NSNumber {
+            return formatResult(result.doubleValue)
+        }
+        return nil
     }
 
     func randomSuggestion(useDefaults: Bool) -> String {
