@@ -162,6 +162,45 @@ struct FinancialPeriod: Identifiable {
     let category: TimelineCategory
 }
 
+struct ComparisonRow: Identifiable {
+    let id = UUID()
+    let left: String
+    let right: String
+}
+
+struct DialogLine: Identifiable {
+    let id = UUID()
+    let speaker: String
+    let text: String
+    let isInternal: Bool
+}
+
+struct ThenNowItem: Identifiable {
+    let id = UUID()
+    let text: String
+}
+
+struct FlowStep: Identifiable {
+    let id = UUID()
+    let label: String
+    let detail: String?
+    let category: TimelineCategory
+}
+
+struct ProgressItem: Identifiable {
+    let id = UUID()
+    let label: String
+    let value: Double
+    let direction: String
+    let detail: String
+}
+
+struct RadarDimension: Identifiable {
+    let id = UUID()
+    let label: String
+    let value: Double
+}
+
 enum LifeData {
     static let stability: [StabilityPoint] = [
         StabilityPoint(year: 1999, label: "Born", score: 0.5, category: .forward),
@@ -322,6 +361,67 @@ enum LifeData {
         MapLocation(name: "NYC", detail: "Mikayla, best week", category: .forward, isOffMap: true),
         MapLocation(name: "Florida", detail: "Disneyland, family trips", category: .forward, isOffMap: true),
         MapLocation(name: "Hawaii", detail: "family trips, Feb 2026", category: .forward, isOffMap: true),
+    ]
+
+    static let comparisonTable: [ComparisonRow] = [
+        ComparisonRow(left: "Normal family", right: "Dad hitting me at 2, mom weaponizing it"),
+        ComparisonRow(left: "Nice house, vacations", right: "Constant arguing, fear, intimidation"),
+        ComparisonRow(left: "Kid who has it good", right: "Kid carrying shame that never left"),
+        ComparisonRow(left: "Quiet teenager", right: "Masking 50% of the day, crying at night"),
+        ComparisonRow(left: "Independent young adult", right: "Homeless, living in a car, hospitalized"),
+        ComparisonRow(left: "Smart guy with potential", right: "130+ IQ, no diagnosis for 17 years, smoking weed to stop thinking"),
+    ]
+
+    static let dialogPattern: [DialogLine] = [
+        DialogLine(speaker: "Them", text: "How are you doing?", isInternal: false),
+        DialogLine(speaker: "Me", text: "I'm good, yeah", isInternal: false),
+        DialogLine(speaker: "Them", text: "Cool, good to hear", isInternal: false),
+        DialogLine(speaker: "", text: "masking, dissociating, replaying memories from 20 years ago", isInternal: true),
+    ]
+
+    static let triggerFlow: [FlowStep] = [
+        FlowStep(label: "Trigger hits", detail: "Family, nighttime, specific places, random", category: .crisis),
+        FlowStep(label: "Mask holds (if daytime)", detail: "Keep composure, push through, nobody notices", category: .event),
+        FlowStep(label: "Mask drops (nighttime)", detail: "Crying, overwhelm, memories replay at full intensity", category: .crisis),
+        FlowStep(label: "Smoke weed", detail: "Suppress REM sleep, suppress memory, stop thinking", category: .event),
+        FlowStep(label: "Sleep with nightmares", detail: "Or without, if enough weed", category: .event),
+        FlowStep(label: "Wake up crying", detail: "Loop resets. Same thing tomorrow.", category: .crisis),
+    ]
+
+    static let thenItems: [ThenNowItem] = [
+        ThenNowItem(text: "No autism diagnosis"),
+        ThenNowItem(text: "No therapist"),
+        ThenNowItem(text: "Mental breakdown"),
+        ThenNowItem(text: "Self-harm starting"),
+        ThenNowItem(text: "Relationship ending"),
+        ThenNowItem(text: "No direction"),
+    ]
+
+    static let nowItems: [ThenNowItem] = [
+        ThenNowItem(text: "Autism dx, PWD pending"),
+        ThenNowItem(text: "Therapy with Amanda"),
+        ThenNowItem(text: "Gym daily, hitting PRs"),
+        ThenNowItem(text: "Studying calc + bio"),
+        ThenNowItem(text: "Building real projects"),
+        ThenNowItem(text: "Planning university on the Island"),
+    ]
+
+    static let progressTrackers: [ProgressItem] = [
+        ProgressItem(label: "Nightmares", value: 0.2, direction: "flat", detail: "still frequent"),
+        ProgressItem(label: "Self-awareness", value: 0.85, direction: "up", detail: "high"),
+        ProgressItem(label: "Physical health", value: 0.8, direction: "up", detail: "strong"),
+        ProgressItem(label: "Social connections", value: 0.1, direction: "down", detail: "very low"),
+        ProgressItem(label: "Housing stability", value: 0.5, direction: "flat", detail: "uncertain"),
+        ProgressItem(label: "Academics", value: 0.95, direction: "up", detail: "strong"),
+    ]
+
+    static let radarDimensions: [RadarDimension] = [
+        RadarDimension(label: "Physical", value: 0.8),
+        RadarDimension(label: "Academics", value: 0.95),
+        RadarDimension(label: "Creative", value: 0.85),
+        RadarDimension(label: "Emotional", value: 0.3),
+        RadarDimension(label: "Social", value: 0.05),
+        RadarDimension(label: "Financial", value: 0.15),
     ]
 
     static let timeline: [TimelineEntry] = [

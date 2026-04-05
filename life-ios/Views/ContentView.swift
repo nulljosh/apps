@@ -21,8 +21,11 @@ struct ContentView: View {
                     AggressionChart()
                 }
 
-                // Intrusive Memories + Triggers
-                sectionWithVisual([s[1]]) { TriggersChart() }
+                // Intrusive Memories + Triggers + Trigger Flow
+                sectionWithVisual([s[1]]) {
+                    TriggersChart()
+                    TriggerFlowView()
+                }
 
                 // Anger & Conflict, Sleep + Sleep Quality Chart
                 sectionWithVisual([s[2], s[3]]) { SleepQualityChart() }
@@ -39,8 +42,12 @@ struct ContentView: View {
                 // ADHD/Autism + Sensory Profile + Sensory Heatmap
                 sectionWithVisual([s[10], s[11]]) { SensoryHeatmapChart() }
 
-                // Masking & Burnout + Energy Budget, Medication, Previous Therapy + Diagnosis Gap
-                sectionWithVisual([s[12]]) { MaskingEnergyChart() }
+                // Masking & Burnout + Energy Budget + Comparison Table + Dialog Pattern
+                sectionWithVisual([s[12]]) {
+                    MaskingEnergyChart()
+                    ComparisonTableView()
+                    DialogBlockView()
+                }
 
                 sectionWithVisual([s[13], s[14]]) { DiagnosisGapChart() }
 
@@ -82,8 +89,11 @@ struct ContentView: View {
                 // Identity & Worldview, Screen Time + Stats
                 sectionWithVisual([s[24], s[25]]) { StatsGridView() }
 
-                // Current Life + Daily Routine
-                sectionWithVisual([s[26]]) { DailyRoutineChart() }
+                // Current Life + Daily Routine + Progress Trackers
+                sectionWithVisual([s[26]]) {
+                    DailyRoutineChart()
+                    ProgressTrackersView()
+                }
 
                 // Financial Reality + Financial Timeline Chart
                 sectionWithVisual([s[27]]) { FinancialTimelineChart() }
@@ -93,6 +103,12 @@ struct ContentView: View {
 
                 // Strengths & What Keeps Me Going + Strengths Chart
                 sectionWithVisual([s[30]]) { StrengthsChart() }
+
+                // Then vs Now + Radar Self-Assessment
+                combinedPage {
+                    ThenNowView()
+                    RadarChartView()
+                }
 
                 // What I Want from Therapy
                 sectionPage([s[31]])

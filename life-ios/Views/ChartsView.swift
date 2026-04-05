@@ -1442,3 +1442,375 @@ struct LifeMapView: View {
         }
     }
 }
+
+// MARK: - Comparison Table
+
+struct ComparisonTableView: View {
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            chartTitle("WHAT PEOPLE SAW VS. WHAT WAS HAPPENING")
+
+            HStack(spacing: 0) {
+                Text("What people saw")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .textCase(.uppercase)
+                    .tracking(0.5)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("What was happening")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .textCase(.uppercase)
+                    .tracking(0.5)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.vertical, 8)
+
+            ForEach(Array(LifeData.comparisonTable.enumerated()), id: \.element.id) { index, row in
+                Divider()
+                HStack(alignment: .top, spacing: 12) {
+                    Text(row.left)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(row.right)
+                        .font(.caption)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.vertical, 8)
+                .opacity(appeared ? 1.0 : 0)
+                .animation(.spring(response: 0.3, dampingFraction: 0.7).delay(Double(index) * 0.06), value: appeared)
+            }
+        }
+        .onAppear { appeared = true }
+    }
+}
+
+// MARK: - Dialog Block
+
+struct DialogBlockView: View {
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            chartTitle("THE PATTERN")
+
+            Text("How most conversations go, versus what is actually happening internally.")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .italic()
+                .padding(.bottom, 12)
+
+            Divider()
+
+            ForEach(Array(LifeData.dialogPattern.enumerated()), id: \.element.id) { index, line in
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    if !line.speaker.isEmpty {
+                        Text(line.speaker.uppercased())
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(.secondary)
+                            .tracking(0.5)
+                            .frame(width: 32, alignment: .leading)
+                    } else {
+                        Rectangle()
+                            .fill(.clear)
+                            .frame(width: 32)
+                    }
+
+                    if line.isInternal {
+                        Text("[\(line.text)]")
+                            .font(.caption)
+                            .italic()
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("\"\(line.text)\"")
+                            .font(.subheadline)
+                    }
+                }
+                .padding(.vertical, 6)
+                .opacity(appeared ? 1.0 : 0)
+                .animation(.spring(response: 0.3, dampingFraction: 0.7).delay(Double(index) * 0.15), value: appeared)
+            }
+        }
+        .onAppear { appeared = true }
+    }
+}
+
+// MARK: - Trigger Flow
+
+struct TriggerFlowView: View {
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            chartTitle("WHAT HAPPENS WHEN I GET TRIGGERED")
+
+            ForEach(Array(LifeData.triggerFlow.enumerated()), id: \.element.id) { index, step in
+                HStack(alignment: .top, spacing: 14) {
+                    VStack(spacing: 0) {
+                        Circle()
+                            .fill(step.category.color)
+                            .frame(width: 10, height: 10)
+                            .scaleEffect(appeared ? 1.0 : 0)
+                            .animation(.spring(response: 0.3, dampingFraction: 0.6).delay(Double(index) * 0.08), value: appeared)
+                        if index < LifeData.triggerFlow.count - 1 {
+                            Rectangle()
+                                .fill(.tertiary)
+                                .frame(width: 1)
+                                .frame(maxHeight: .infinity)
+                        }
+                    }
+                    .frame(width: 10)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(step.label)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        if let detail = step.detail {
+                            Text(detail)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.bottom, 16)
+                }
+            }
+        }
+        .onAppear { appeared = true }
+    }
+}
+
+// MARK: - Then vs Now
+
+struct ThenNowView: View {
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            chartTitle("THEN VS. NOW")
+
+            HStack(alignment: .top, spacing: 1) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("AGE 21 (2021)")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundStyle(.red)
+                        .tracking(0.5)
+                        .padding(.bottom, 4)
+
+                    ForEach(LifeData.thenItems) { item in
+                        HStack(spacing: 8) {
+                            Rectangle()
+                                .fill(.red.opacity(0.6))
+                                .frame(width: 2)
+                            Text(item.text)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(height: 20)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("AGE 26 (2026)")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundStyle(.green)
+                        .tracking(0.5)
+                        .padding(.bottom, 4)
+
+                    ForEach(LifeData.nowItems) { item in
+                        HStack(spacing: 8) {
+                            Rectangle()
+                                .fill(.green.opacity(0.6))
+                                .frame(width: 2)
+                            Text(item.text)
+                                .font(.caption)
+                        }
+                        .frame(height: 20)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 12)
+            }
+        }
+        .opacity(appeared ? 1.0 : 0)
+        .scaleEffect(appeared ? 1.0 : 0.97)
+        .onAppear {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                appeared = true
+            }
+        }
+    }
+}
+
+// MARK: - Progress Trackers
+
+struct ProgressTrackersView: View {
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            chartTitle("WHERE THINGS STAND")
+
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                ForEach(LifeData.progressTrackers) { item in
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text(item.label.uppercased())
+                                .font(.system(size: 9, weight: .medium))
+                                .foregroundStyle(.secondary)
+                                .tracking(0.5)
+                            Spacer()
+                            Text(directionSymbol(item.direction) + " " + item.detail)
+                                .font(.system(size: 9))
+                                .foregroundStyle(directionColor(item.direction))
+                        }
+
+                        GeometryReader { geo in
+                            ZStack(alignment: .leading) {
+                                Rectangle()
+                                    .fill(.tertiary)
+                                    .frame(height: 4)
+                                Rectangle()
+                                    .fill(fillColor(item.value))
+                                    .frame(width: appeared ? geo.size.width * item.value : 0, height: 4)
+                                    .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(0.2), value: appeared)
+                            }
+                        }
+                        .frame(height: 4)
+                    }
+                }
+            }
+        }
+        .onAppear { appeared = true }
+    }
+
+    private func directionSymbol(_ dir: String) -> String {
+        switch dir {
+        case "up": return "^"
+        case "down": return "v"
+        default: return "--"
+        }
+    }
+
+    private func directionColor(_ dir: String) -> Color {
+        switch dir {
+        case "up": return .green
+        case "down": return .red
+        default: return .secondary
+        }
+    }
+
+    private func fillColor(_ value: Double) -> Color {
+        if value >= 0.7 { return .green }
+        if value >= 0.4 { return .primary }
+        return .red
+    }
+}
+
+// MARK: - Radar Chart
+
+struct RadarChartView: View {
+    private let data = LifeData.radarDimensions
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            chartTitle("CURRENT SELF-ASSESSMENT")
+
+            GeometryReader { geo in
+                let center = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
+                let radius = min(geo.size.width, geo.size.height) / 2.5
+                let count = data.count
+
+                ZStack {
+                    ForEach([1.0, 0.75, 0.5, 0.25], id: \.self) { scale in
+                        Path { path in
+                            for i in 0...count {
+                                let angle = (CGFloat(i) / CGFloat(count)) * .pi * 2 - .pi / 2
+                                let point = CGPoint(
+                                    x: center.x + cos(angle) * radius * scale,
+                                    y: center.y + sin(angle) * radius * scale
+                                )
+                                if i == 0 { path.move(to: point) }
+                                else { path.addLine(to: point) }
+                            }
+                        }
+                        .stroke(.tertiary, lineWidth: 0.5)
+                    }
+
+                    ForEach(0..<count, id: \.self) { i in
+                        let angle = (CGFloat(i) / CGFloat(count)) * .pi * 2 - .pi / 2
+                        Path { path in
+                            path.move(to: center)
+                            path.addLine(to: CGPoint(
+                                x: center.x + cos(angle) * radius,
+                                y: center.y + sin(angle) * radius
+                            ))
+                        }
+                        .stroke(.tertiary, lineWidth: 0.5)
+                    }
+
+                    Path { path in
+                        for i in 0...count {
+                            let idx = i % count
+                            let angle = (CGFloat(idx) / CGFloat(count)) * .pi * 2 - .pi / 2
+                            let val = appeared ? data[idx].value : 0
+                            let point = CGPoint(
+                                x: center.x + cos(angle) * radius * val,
+                                y: center.y + sin(angle) * radius * val
+                            )
+                            if i == 0 { path.move(to: point) }
+                            else { path.addLine(to: point) }
+                        }
+                    }
+                    .fill(.green.opacity(0.12))
+
+                    Path { path in
+                        for i in 0...count {
+                            let idx = i % count
+                            let angle = (CGFloat(idx) / CGFloat(count)) * .pi * 2 - .pi / 2
+                            let val = appeared ? data[idx].value : 0
+                            let point = CGPoint(
+                                x: center.x + cos(angle) * radius * val,
+                                y: center.y + sin(angle) * radius * val
+                            )
+                            if i == 0 { path.move(to: point) }
+                            else { path.addLine(to: point) }
+                        }
+                    }
+                    .stroke(.green.opacity(0.6), lineWidth: 1.5)
+
+                    ForEach(0..<count, id: \.self) { i in
+                        let angle = (CGFloat(i) / CGFloat(count)) * .pi * 2 - .pi / 2
+                        let val = appeared ? data[i].value : 0
+                        let dotPos = CGPoint(
+                            x: center.x + cos(angle) * radius * val,
+                            y: center.y + sin(angle) * radius * val
+                        )
+                        let labelPos = CGPoint(
+                            x: center.x + cos(angle) * (radius + 20),
+                            y: center.y + sin(angle) * (radius + 20)
+                        )
+
+                        Circle()
+                            .fill(data[i].value >= 0.5 ? .green : .red)
+                            .frame(width: 6, height: 6)
+                            .position(dotPos)
+
+                        Text(data[i].label)
+                            .font(.system(size: 10, weight: .medium))
+                            .position(labelPos)
+                    }
+                }
+            }
+            .frame(height: 260)
+            .animation(.spring(response: 0.6, dampingFraction: 0.7), value: appeared)
+        }
+        .onAppear { appeared = true }
+    }
+}
