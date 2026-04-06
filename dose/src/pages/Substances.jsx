@@ -20,6 +20,22 @@ export default function Substances({ defaultTab = 'browse' }) {
     results = results.filter(s => s.category === category);
   }
 
+  // Counts per category for the filter pills
+  const categoryCounts = CATEGORIES.reduce((acc, cat) => {
+    acc[cat] = cat === 'all'
+      ? substances.length
+      : substances.filter(s => s.category === cat).length;
+    return acc;
+  }, {});
+
+  // When showing "all" with no query, group results by category for scannability
+  const grouped = (!query && category === 'all')
+    ? CATEGORIES.filter(c => c !== 'all' && categoryCounts[c] > 0).map(c => ({
+        category: c,
+        items: results.filter(s => s.category === c),
+      }))
+    : null;
+
   return (
     <main className="page">
       <h1 className="page-title">Library</h1>
@@ -52,20 +68,38 @@ export default function Substances({ defaultTab = 'browse' }) {
             />
           </div>
 
-          <div className="filter-row">
-            {CATEGORIES.map(cat => (
+          <div className="filter-row" style={{ position: 'sticky', top: 0, background: 'var(--bg)', zIndex: 5, paddingTop: 4, paddingBottom: 8 }}>
+            {CATEGORIES.filter(c => c === 'all' || categoryCounts[c] > 0).map(cat => (
               <button
                 key={cat}
                 onClick={() => setCategory(cat)}
                 className={`filter-pill${category === cat ? ' active' : ''}`}
               >
                 {cat === 'all' ? 'All' : cat.replace('-', ' ')}
+                <span style={{ opacity: 0.55, marginLeft: 6, fontSize: '0.75em' }}>{categoryCounts[cat]}</span>
               </button>
             ))}
           </div>
 
           {results.length === 0 ? (
             <div className="card-empty">No substances match "{query}".</div>
+          ) : grouped ? (
+            <>
+              <div className="count-label">
+                {results.length} substances across {grouped.length} categories
+              </div>
+              {grouped.map(group => (
+                <section key={group.category} style={{ marginTop: 18 }}>
+                  <div className="section-label" style={{ marginBottom: 8 }}>
+                    {group.category.replace('-', ' ')}
+                    <span style={{ opacity: 0.5, marginLeft: 8 }}>{group.items.length}</span>
+                  </div>
+                  <div className="substance-grid">
+                    {group.items.map(s => <SubstanceCard key={s.id} substance={s} />)}
+                  </div>
+                </section>
+              ))}
+            </>
           ) : (
             <>
               <div className="count-label">
