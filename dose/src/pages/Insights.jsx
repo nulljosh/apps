@@ -20,8 +20,18 @@ export default function Insights() {
   const { getEntries } = useDoseLog();
   const { getById } = useSubstances();
 
+  // Try last 30 days; if empty, fall back to all-time so users see something
+  // as soon as they have any log history at all.
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-  const entries = getEntries({ since });
+  let entries = getEntries({ since });
+  let windowLabel = 'last 30 days';
+  if (entries.length === 0) {
+    entries = getEntries();
+    windowLabel = 'all time';
+  }
+  const windowDays = windowLabel === 'all time' && entries.length > 0
+    ? Math.max(1, Math.ceil((Date.now() - new Date(entries[entries.length - 1].timestamp).getTime()) / 86400000))
+    : 30;
   const heatmap = buildHeatmap(entries);
   const maxVal = Math.max(...Object.values(heatmap), 1);
 
@@ -36,7 +46,7 @@ export default function Insights() {
       <div className="flex-center" style={{ gap: 12, marginBottom: 6 }}>
         <h1 className="page-title">Insights</h1>
       </div>
-      <p className="page-subtitle">Pattern analysis -- last 30 days</p>
+      <p className="page-subtitle">Pattern analysis -- {windowLabel}</p>
 
       {!hasData ? (
         <div className="card-empty" style={{ padding: '60px 20px' }}>
@@ -110,7 +120,7 @@ export default function Insights() {
             {[
               { label: 'Total doses', value: entries.length },
               { label: 'Unique substances', value: Object.keys(freq).length },
-              { label: 'Avg doses/day', value: (entries.length / 30).toFixed(1) },
+              { label: 'Avg doses/day', value: (entries.length / windowDays).toFixed(1) },
               { label: 'Most active day', value: (() => {
                 const dayCounts = {};
                 entries.forEach(e => {
