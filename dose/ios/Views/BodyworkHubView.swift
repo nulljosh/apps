@@ -30,6 +30,14 @@ struct BodyworkHubView: View {
                     }
                 }
 
+                Section("Facemaxxing") {
+                    NavigationLink {
+                        FacemaxxingView()
+                    } label: {
+                        Label("Protocols", systemImage: "face.smiling")
+                    }
+                }
+
                 Section("History") {
                     NavigationLink {
                         SessionHistoryView()

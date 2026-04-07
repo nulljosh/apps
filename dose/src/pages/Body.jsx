@@ -9,6 +9,7 @@ const bodyworkCards = [
   { to: '/abdomen', title: 'Abdominal Referral', desc: '9 zones', icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a1 1 0 110 2 1 1 0 010-2zm-1 4h2v8h-2z' },
   { to: '/meridians', title: 'Acupuncture', desc: '35+ points', icon: 'M12 2v6m0 4v10M9 6l3-4 3 4M9 18l3 4 3-4' },
   { to: '/symptom-finder', title: 'What Hurts?', desc: '12 symptoms', icon: 'M9 12h6m-3-3v6m8-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { to: '/facemaxxing', title: 'Facemaxxing', desc: '10 protocols', icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zM8 10h.01M16 10h.01M9 16s1 1 3 1 3-1 3-1' },
 ];
 
 export default function Body() {

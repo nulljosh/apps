@@ -12,7 +12,6 @@
 		0625FA0A9F7B279451AC3D03 /* HealthScoringService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35B4CA4C84F585801A747BC /* HealthScoringService.swift */; };
 		180B194DDD05ED344A86B79B /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4760F98075780C9B8F1CC276 /* HealthKitService.swift */; };
 		19F672F7C0B340BF2064AD28 /* SubstanceDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D389B60E83500D2B9DEF0674 /* SubstanceDatabase.swift */; };
-		224C7C9547AC4856F4A09F12 /* default.profraw in Resources */ = {isa = PBXBuildFile; fileRef = F56DE22C3ED21CD61F714179 /* default.profraw */; };
 		24660FAA26FC1C7E6E90F1A7 /* SymptomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCAF4F0A4735E383F7CFF5A /* SymptomData.swift */; };
 		2916D332F0CA9DCE57E3E55A /* SessionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E12140D5AE0B99C6BE9A2E2 /* SessionHistoryView.swift */; };
 		293C2350E646A41D465B5C71 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9D5B4E7C646AF50DADE68 /* DashboardView.swift */; };
@@ -53,6 +52,7 @@
 		ABB8E0E7DF8799E15D5F8F3D /* DoseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A079F23A43B3D36B334FF32C /* DoseApp.swift */; };
 		AF2EE850115F47E5069C2894 /* BiometricEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653F0F0518590F33D5A3B4E7 /* BiometricEntry.swift */; };
 		B6FF682DBA1AA10662434838 /* CombinedBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C71A91DA5229F06F59D920 /* CombinedBodyView.swift */; };
+		BF9493800113655A88D85254 /* FacemaxxingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56DF19EBDDEE9E4FDA41EEB /* FacemaxxingView.swift */; };
 		C8CD7C6DF71D15C441256EF0 /* HealthGradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201D1FBEC07905F67B1CD6BD /* HealthGradeView.swift */; };
 		D0543C1D007690A261712370 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1A42396D0DFA8095574F4E1 /* Assets.xcassets */; };
 		D0AD42AC88B044B65135658F /* BodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89880E71F4CFEC147A66F6D /* BodyView.swift */; };
@@ -67,6 +67,7 @@
 		F454B90BDC9C6728AFC85059 /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5D99774E34A7DF4A654E8B /* SyncService.swift */; };
 		F46354BDDB98C68C89845402 /* ScoreRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE344409A1BE34BA7475210 /* ScoreRingView.swift */; };
 		F500DF9C98BA54C81952A707 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22EBE90B2870358FDB8E8A2 /* NotificationServiceTests.swift */; };
+		F68F4FEDE8C7343285092539 /* FacemaxxingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1423AF24A075D2E9C57A3983 /* FacemaxxingData.swift */; };
 		F752117B8C5CC20A5352F309 /* InteractionCheckerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51CB366EDF75BD6D938FE83 /* InteractionCheckerView.swift */; };
 /* End PBXBuildFile section */
 
@@ -105,6 +106,7 @@
 		040453F2FBE219F6BE6E9EF2 /* HealthKitServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitServiceTests.swift; sourceTree = "<group>"; };
 		0579E166DEB2959E738B0078 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		0C94A81983B50109C6711C13 /* RemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersView.swift; sourceTree = "<group>"; };
+		1423AF24A075D2E9C57A3983 /* FacemaxxingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacemaxxingData.swift; sourceTree = "<group>"; };
 		1B81164D54A3AC904FC6F511 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		201D1FBEC07905F67B1CD6BD /* HealthGradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthGradeView.swift; sourceTree = "<group>"; };
 		205050801CD88BEC9478D15F /* SymptomFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomFinderView.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 		C4CE0151530910199A429544 /* BodyworkHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyworkHubView.swift; sourceTree = "<group>"; };
 		C534B06DF281DF9336AC3148 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		C544CCCD81868C4B209D0611 /* AbdomenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbdomenView.swift; sourceTree = "<group>"; };
+		C56DF19EBDDEE9E4FDA41EEB /* FacemaxxingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacemaxxingView.swift; sourceTree = "<group>"; };
 		C61C9DB011C450F0694A6A68 /* SubstanceDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstanceDatabaseTests.swift; sourceTree = "<group>"; };
 		C73D6509C5D3FD25AA4BF404 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		C9B5EA7E88D5810D00958E35 /* AddDoseSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDoseSheet.swift; sourceTree = "<group>"; };
@@ -166,7 +169,6 @@
 		F1A42396D0DFA8095574F4E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F44E31E74E4854CCAC953A0F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		F51CB366EDF75BD6D938FE83 /* InteractionCheckerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionCheckerView.swift; sourceTree = "<group>"; };
-		F56DE22C3ED21CD61F714179 /* default.profraw */ = {isa = PBXFileReference; path = default.profraw; sourceTree = "<group>"; };
 		FECB687953F8BAFC321BD953 /* ReflexologyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflexologyData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -249,6 +251,7 @@
 				653F0F0518590F33D5A3B4E7 /* BiometricEntry.swift */,
 				3C67CD3A5C3E2E612F4991D2 /* BodyworkSessionStore.swift */,
 				EA8A362B5594412890C60399 /* DoseEntry.swift */,
+				1423AF24A075D2E9C57A3983 /* FacemaxxingData.swift */,
 				5DF53B8C6866BC96CCA4E991 /* HealthEntry.swift */,
 				34E0BEB4D9F0D597B9D49142 /* MyMedication.swift */,
 				FECB687953F8BAFC321BD953 /* ReflexologyData.swift */,
@@ -268,6 +271,7 @@
 				C4CE0151530910199A429544 /* BodyworkHubView.swift */,
 				67C71A91DA5229F06F59D920 /* CombinedBodyView.swift */,
 				9CD9D5B4E7C646AF50DADE68 /* DashboardView.swift */,
+				C56DF19EBDDEE9E4FDA41EEB /* FacemaxxingView.swift */,
 				B5219BB1D836FC41CB9C0B21 /* GlassModifiers.swift */,
 				201D1FBEC07905F67B1CD6BD /* HealthGradeView.swift */,
 				EFB01F77676536A2104228F9 /* HealthView.swift */,
@@ -294,7 +298,6 @@
 			isa = PBXGroup;
 			children = (
 				F1A42396D0DFA8095574F4E1 /* Assets.xcassets */,
-				F56DE22C3ED21CD61F714179 /* default.profraw */,
 				A079F23A43B3D36B334FF32C /* DoseApp.swift */,
 				C1AB670E690641B4F946393E /* icon.svg */,
 				F02F797F12B5742B4B1C3F12 /* Info.plist */,
@@ -450,7 +453,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0543C1D007690A261712370 /* Assets.xcassets in Resources */,
-				224C7C9547AC4856F4A09F12 /* default.profraw in Resources */,
 				594D341ADD6085A618851F1B /* icon.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -492,6 +494,8 @@
 				483C2F7A1F3B64999EF4D79E /* DataStore.swift in Sources */,
 				ABB8E0E7DF8799E15D5F8F3D /* DoseApp.swift in Sources */,
 				75470391AE1D44671307F73A /* DoseEntry.swift in Sources */,
+				F68F4FEDE8C7343285092539 /* FacemaxxingData.swift in Sources */,
+				BF9493800113655A88D85254 /* FacemaxxingView.swift in Sources */,
 				2B1BF4519E0BE393BCA523B0 /* GlassModifiers.swift in Sources */,
 				7751731F8EDA40F1D681413C /* HealthEntry.swift in Sources */,
 				C8CD7C6DF71D15C441256EF0 /* HealthGradeView.swift in Sources */,

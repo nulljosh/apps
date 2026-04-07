@@ -10,6 +10,19 @@ struct DashboardView: View {
                     doseCountCard
                     lastDoseCard
                     activeStackCard
+                    NavigationLink {
+                        FacemaxxingView()
+                    } label: {
+                        HStack {
+                            Image(systemName: "face.smiling")
+                            Text("Facemaxxing").font(.caption)
+                            Spacer()
+                            Image(systemName: "chevron.right").font(.caption2).foregroundStyle(.secondary)
+                        }
+                        .padding()
+                        .background(.purple.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.horizontal)
             }

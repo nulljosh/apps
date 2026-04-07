@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		15EA3CC06AA2A4DE423D6C14 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BA41BFAA90519B44D0EF1F /* DashboardView.swift */; };
 		26D13BE40CDBFAF742933008 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F7909FD190614948278C32 /* ContentView.swift */; };
+		7D3447213AB6378CB95C7CC5 /* FacemaxxingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7CBEBA4D946F6F5E5F4B1 /* FacemaxxingView.swift */; };
+		939F133EF8906E278183CEDD /* FacemaxxingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CC0444B9E8C85D21D3C397F /* FacemaxxingData.swift */; };
 		DF4D7187969A0E9929A675A2 /* DoseWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92682E00C34C1B2C3B908F13 /* DoseWatchApp.swift */; };
 		EA831BDBB431704D2CD6D968 /* QuickLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F2F60B8B159C52DC3B1F9B /* QuickLogView.swift */; };
 		ED9A2A74CB8C27A45C75C941 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB22726A314FE2937C8DCF81 /* Assets.xcassets */; };
@@ -17,12 +19,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0CC0444B9E8C85D21D3C397F /* FacemaxxingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacemaxxingData.swift; sourceTree = "<group>"; };
 		3BEE5B1489130E281F002FC9 /* SharedDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedDataStore.swift; sourceTree = "<group>"; };
 		48F2F60B8B159C52DC3B1F9B /* QuickLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLogView.swift; sourceTree = "<group>"; };
 		50F7909FD190614948278C32 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		92682E00C34C1B2C3B908F13 /* DoseWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseWatchApp.swift; sourceTree = "<group>"; };
 		C4BA41BFAA90519B44D0EF1F /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		C513DFB06035A17589423F3B /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		C6B7CBEBA4D946F6F5E5F4B1 /* FacemaxxingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacemaxxingView.swift; sourceTree = "<group>"; };
 		DB22726A314FE2937C8DCF81 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FF618F51806FAD649AB24C70 /* DoseWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DoseWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -49,6 +53,7 @@
 		1561179EF6279AF2CDD492F5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0CC0444B9E8C85D21D3C397F /* FacemaxxingData.swift */,
 				3BEE5B1489130E281F002FC9 /* SharedDataStore.swift */,
 			);
 			path = Models;
@@ -71,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				C4BA41BFAA90519B44D0EF1F /* DashboardView.swift */,
+				C6B7CBEBA4D946F6F5E5F4B1 /* FacemaxxingView.swift */,
 				C513DFB06035A17589423F3B /* HistoryView.swift */,
 				48F2F60B8B159C52DC3B1F9B /* QuickLogView.swift */,
 			);
@@ -151,6 +157,8 @@
 				26D13BE40CDBFAF742933008 /* ContentView.swift in Sources */,
 				15EA3CC06AA2A4DE423D6C14 /* DashboardView.swift in Sources */,
 				DF4D7187969A0E9929A675A2 /* DoseWatchApp.swift in Sources */,
+				939F133EF8906E278183CEDD /* FacemaxxingData.swift in Sources */,
+				7D3447213AB6378CB95C7CC5 /* FacemaxxingView.swift in Sources */,
 				FAEF505FA9141CB20A04CC5C /* HistoryView.swift in Sources */,
 				EA831BDBB431704D2CD6D968 /* QuickLogView.swift in Sources */,
 				F09C91B0F54CE8F112F0CB20 /* SharedDataStore.swift in Sources */,

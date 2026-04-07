@@ -6,6 +6,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
     case abdomen = "Abdomen"
     case meridians = "Meridians"
     case symptoms = "Symptoms"
+    case facemaxxing = "Facemaxxing"
     case sessions = "Sessions"
 
     var id: String { rawValue }
@@ -17,6 +18,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         case .abdomen: "figure.stand"
         case .meridians: "target"
         case .symptoms: "cross.circle"
+        case .facemaxxing: "face.smiling"
         case .sessions: "clock.arrow.trianglehead.counterclockwise.rotate.90"
         }
     }
@@ -29,6 +31,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         case .abdomen: MacAbdomenView()
         case .meridians: MacMeridianListView()
         case .symptoms: MacSymptomFinderView()
+        case .facemaxxing: MacFacemaxxingView()
         case .sessions: MacSessionHistoryView()
         }
     }
