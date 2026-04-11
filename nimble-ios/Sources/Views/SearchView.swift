@@ -80,6 +80,57 @@ struct SearchView: View {
                         .padding(.top, 14)
                         .padding(.bottom, 8)
                     }
+
+                    // Web results
+                    if !state.webResults.isEmpty {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("WEB")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundStyle(.tertiary)
+                                .tracking(1.2)
+                                .padding(.horizontal, 16)
+                                .padding(.top, 16)
+                                .padding(.bottom, 8)
+
+                            ForEach(state.webResults) { r in
+                                Button(action: {
+                                    if let url = URL(string: r.url) {
+                                        UIApplication.shared.open(url)
+                                    }
+                                }) {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(r.domain)
+                                            .font(.system(size: 11))
+                                            .foregroundStyle(state.theme.color)
+                                        Text(r.title)
+                                            .font(.system(size: 14, weight: .medium))
+                                            .foregroundStyle(.primary)
+                                            .lineLimit(2)
+                                            .multilineTextAlignment(.leading)
+                                        if !r.snippet.isEmpty {
+                                            Text(r.snippet)
+                                                .font(.system(size: 12))
+                                                .foregroundStyle(.secondary)
+                                                .lineLimit(2)
+                                                .multilineTextAlignment(.leading)
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 12)
+                                }
+                                .buttonStyle(.plain)
+
+                                if r.id != state.webResults.last?.id {
+                                    Divider().padding(.leading, 16)
+                                }
+                            }
+                        }
+                        .background(.ultraThinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 16)
+                    }
                 }
             }
             .background(state.theme.backgroundColor)

@@ -61,6 +61,7 @@ final class AppState {
 
     var queryText: String = ""
     var result: QueryResult = .none
+    var webResults: [WebResult] = []
     var currentPlaceholder: String = ""
     var searchURL: String = ""
     var showSettings: Bool = false
@@ -107,12 +108,16 @@ final class AppState {
             }
         }
 
-        // Query DDG + Wikipedia
+        // Query DDG + Wikipedia + web search in parallel
         result = .loading
+        webResults = []
         let engine = queryEngine
         Task { @MainActor [weak self] in
-            let queryResult = await engine.query(text)
+            async let instantTask = engine.query(text)
+            async let webTask = engine.fetchWebResults(text)
+            let (queryResult, results) = await (instantTask, webTask)
             self?.result = queryResult
+            self?.webResults = results
             switch queryResult {
             case .text, .list, .math:
                 self?.triggerHaptic(.success)

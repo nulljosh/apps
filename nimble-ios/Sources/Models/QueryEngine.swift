@@ -1,5 +1,15 @@
 import Foundation
 
+struct WebResult: Identifiable {
+    let id = UUID()
+    let title: String
+    let url: String
+    let snippet: String
+    var domain: String {
+        (try? URL(string: url).map { $0.host?.replacingOccurrences(of: "www.", with: "") ?? "" }) ?? ""
+    }
+}
+
 struct DDGResponse: Codable {
     let abstractText: String?
     let abstractSource: String?
@@ -476,5 +486,28 @@ final class QueryEngine: Sendable {
     func randomSuggestion(useDefaults: Bool) -> String {
         let pool = useDefaults ? Self.suggestions : Self.defaultSuggestions
         return pool.randomElement() ?? "Search anything..."
+    }
+
+    func fetchWebResults(_ query: String) async -> [WebResult] {
+        guard let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "https://nimble.heyitsmejosh.com/api/search?q=\(encoded)&limit=10") else {
+            return []
+        }
+        do {
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = 8
+            let session = URLSession(configuration: config)
+            let (data, _) = try await session.data(from: url)
+            guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let results = json["results"] as? [[String: Any]] else { return [] }
+            return results.compactMap { r in
+                guard let title = r["title"] as? String,
+                      let url = r["url"] as? String else { return nil }
+                let snippet = r["snippet"] as? String ?? ""
+                return WebResult(title: title, url: url, snippet: snippet)
+            }
+        } catch {
+            return []
+        }
     }
 }
