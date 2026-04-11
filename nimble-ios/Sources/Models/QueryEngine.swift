@@ -6,7 +6,7 @@ struct WebResult: Identifiable {
     let url: String
     let snippet: String
     var domain: String {
-        (try? URL(string: url).map { $0.host?.replacingOccurrences(of: "www.", with: "") ?? "" }) ?? ""
+        URL(string: url)?.host?.replacingOccurrences(of: "www.", with: "") ?? ""
     }
 }
 
