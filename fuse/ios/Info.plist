@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>fuse</string>
+    <key>CFBundleDisplayName</key>
+    <string>fuse</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.heyitsmejosh.fuse</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UILaunchScreen</key>
+    <dict/>
+    <key>NSCalendarsUsageDescription</key>
+    <string>fuse reads your calendars to show upcoming events and countdowns.</string>
+    <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+    <string>fuse reads your calendars to show upcoming events and countdowns.</string>
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>fuse reads your calendars to show upcoming events and countdowns.</string>
+    <key>NSRemindersUsageDescription</key>
+    <string>fuse reads reminders to include them in your timeline.</string>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+    </dict>
+</dict>
+</plist>

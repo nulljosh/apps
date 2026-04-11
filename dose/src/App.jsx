@@ -16,6 +16,7 @@ import Meridians from './pages/Meridians';
 import SymptomFinder from './pages/SymptomFinder';
 import Sessions from './pages/Sessions';
 import Facemaxxing from './pages/Facemaxxing';
+import LabResults from './pages/LabResults';
 
 function ThemeToggle({ theme, setTheme }) {
   return (
@@ -67,6 +68,7 @@ export default function App() {
             <Route path="/symptom-finder" element={<SymptomFinder />} />
             <Route path="/sessions" element={<Sessions />} />
             <Route path="/facemaxxing" element={<Facemaxxing />} />
+            <Route path="/lab-results" element={<LabResults />} />
             <Route path="*" element={<Dashboard />} />
           </Routes>
           <Nav />

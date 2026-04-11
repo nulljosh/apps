@@ -4,25 +4,64 @@ import SwiftUI
 @Observable
 final class PortfolioViewModel {
     var projects: [Project] = []
+    var contributions: [Contribution] = []
+    var eventMap: [String: [GitHubEvent]] = [:]
     var isLoading = false
     var errorMessage: String?
 
-    func loadProjects() async {
+    func load() async {
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
 
-        // Static project data matching heyitsmejosh.com
+        loadStaticProjects()
+
+        async let contribTask = PortfolioAPI.fetchContributions()
+        async let eventsTask = PortfolioAPI.fetchEvents()
+
+        do {
+            let (contribs, events) = try await (contribTask, eventsTask)
+            contributions = contribs
+            var map: [String: [GitHubEvent]] = [:]
+            for ev in events {
+                map[ev.date, default: []].append(ev)
+            }
+            eventMap = map
+        } catch {
+            // contributions are non-critical — degrade gracefully
+            print("Contributions/events fetch failed: \(error)")
+        }
+    }
+
+    var currentStreak: Int {
+        var count = 0
+        for c in contributions.reversed() {
+            if c.count > 0 { count += 1 } else { break }
+        }
+        return count
+    }
+
+    var longestStreak: Int {
+        var longest = 0, run = 0
+        for c in contributions {
+            run = c.count > 0 ? run + 1 : 0
+            longest = max(longest, run)
+        }
+        return longest
+    }
+
+    var totalContributions: Int {
+        contributions.reduce(0) { $0 + $1.count }
+    }
+
+    private func loadStaticProjects() {
         projects = [
-            Project(id: "opticon", name: "Monica", summary: "Personal intelligence platform. Financial terminal, prediction markets, news mapping, portfolio tracking.", tags: ["web", "ios"], version: "5.0.0", urlString: "https://opticon.heyitsmejosh.com", iconSystemName: "chart.line.uptrend.xyaxis"),
-            Project(id: "tally", name: "Tally", summary: "BC Self-Serve scraper and benefits guide. Session cookie auth, Vercel Blob cache.", tags: ["web", "ios"], version: nil, urlString: "https://tally.heyitsmejosh.com", iconSystemName: "doc.text.magnifyingglass"),
-            Project(id: "dose", name: "Dose", summary: "Health tracker with 200+ substances, daily check-ins, biometrics, HealthKit sync.", tags: ["web", "ios"], version: nil, urlString: "https://dose.heyitsmejosh.com", iconSystemName: "pills.fill"),
-            Project(id: "spark", name: "Spark", summary: "Idea-sharing platform with auth, posts, voting. Supabase backend.", tags: ["web", "ios"], version: nil, urlString: "https://spark.heyitsmejosh.com", iconSystemName: "lightbulb.fill"),
-            Project(id: "systems", name: "Systems", summary: "Low-level systems monorepo: C compiler (ARM64), OS kernel, shell, debugger, profiler, KV store.", tags: ["systems"], version: nil, urlString: "https://github.com/nulljosh/systems", iconSystemName: "cpu"),
-            Project(id: "apps", name: "Apps", summary: "Small standalone apps monorepo: browser, nimble, nyc, rabbit, lingo, roost, and more.", tags: ["ios", "web"], version: nil, urlString: "https://github.com/nulljosh/apps", iconSystemName: "square.grid.2x2"),
-            Project(id: "journal", name: "Journal", summary: "Personal blog. Jekyll, GitHub Pages.", tags: ["web"], version: nil, urlString: "https://journal.heyitsmejosh.com", iconSystemName: "book.fill"),
-            Project(id: "arthur", name: "Arthur", summary: "Custom 65M-param language model. PyTorch training, C99 inference, MoE architecture.", tags: ["ai"], version: nil, urlString: "https://github.com/nulljosh/arthur", iconSystemName: "brain"),
-            Project(id: "bots", name: "Bots", summary: "AI automation bots: phone calls (fony), food ordering, strain tracker.", tags: ["ai"], version: nil, urlString: nil, iconSystemName: "robot"),
+            Project(id: "monica", name: "Monica", summary: "Personal intelligence platform. Markets, macro, news, and daily briefs.", tags: ["web", "ios", "macos"], version: "5.0.0", urlString: "https://monica.heyitsmejosh.com", iconSystemName: "chart.line.uptrend.xyaxis"),
+            Project(id: "spark", name: "Spark", summary: "Idea-sharing platform with auth, posts, and voting. Supabase backend.", tags: ["web", "ios"], version: nil, urlString: "https://spark.heyitsmejosh.com", iconSystemName: "lightbulb.fill"),
+            Project(id: "tally", name: "Tally", summary: "BC benefits tracker and self-serve scraper.", tags: ["web", "ios"], version: nil, urlString: "https://tally.heyitsmejosh.com", iconSystemName: "doc.text.magnifyingglass"),
+            Project(id: "dose", name: "Dose", summary: "Health tracker for drugs, vitamins, and biometrics. 200+ substances, HealthKit sync.", tags: ["ios"], version: nil, urlString: "https://dose.heyitsmejosh.com", iconSystemName: "pills.fill"),
+            Project(id: "nimble", name: "Nimble", summary: "Instant answers and web search with mind-map visualization.", tags: ["web", "macos", "ios"], version: nil, urlString: "https://nimble.heyitsmejosh.com", iconSystemName: "magnifyingglass"),
+            Project(id: "nyc", name: "NYC", summary: "Times Square Survival. Colony sim with AI colonists, combat, and building placement.", tags: ["web", "macos", "ios"], version: nil, urlString: "https://nyc.heyitsmejosh.com", iconSystemName: "building.2.fill"),
         ]
     }
 }
