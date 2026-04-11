@@ -48,23 +48,39 @@ enum ComponentType: String, CaseIterable, Identifiable {
         case .checkbox: "[✓] Label"
         case .radio: "(●) Option"
         case .toggle: "[●━━━━━━]"
-        case .table: "┌──────────┬──────────┬──────────┐\n│ Column A │ Column B │ Column C │\n├──────────┼──────────┼──────────┤\n│ Cell 1   │ Cell 2   │ Cell 3   │\n└──────────┴──────────┴──────────┘"
-        case .modal: "┌─────────────────────────[×]──┐\n│ Modal Title                  │\n│                              │\n│  Content here...             │\n│           [ Cancel ]  [ OK ] │\n└──────────────────────────────┘"
-        case .browser: "┌────────────────────────────────────┐\n│ ◄ ► ⟳  [__________________________]│\n├────────────────────────────────────┤\n│                                    │\n└────────────────────────────────────┘"
-        case .card: "┌──────────────────────────┐\n│ Card Title               │\n│                          │\n│ Card content goes here.  │\n│                          │\n└──────────────────────────┘"
-        case .navbar: "┌────────────────────────────────────────┐\n│ ≡  Logo            Search...      ☆  │\n└────────────────────────────────────────┘"
-        case .tabs: "┌────────┐  ─────────  ─────────\n│  Tab 1 │   Tab 2     Tab 3   \n└────────┴────────────────────"
+        case .table:
+            "┌──────────┬──────────┬──────────┐\n│ Column A │ Column B │ Column C │\n├──────────┼──────────┼──────────┤\n│ Cell 1   │ Cell 2   │ Cell 3   │\n└──────────┴──────────┴──────────┘"
+        case .modal:
+            "┌─────────────────────────[×]──┐\n│ Modal Title                  │\n│                              │\n│  Content here...             │\n│           [ Cancel ]  [ OK ] │\n└──────────────────────────────┘"
+        case .browser:
+            "┌────────────────────────────────────┐\n│ ◄ ► ⟳  [__________________________]│\n├────────────────────────────────────┤\n│                                    │\n└────────────────────────────────────┘"
+        case .card:
+            "┌──────────────────────────┐\n│ Card Title               │\n│                          │\n│ Card content goes here.  │\n│                          │\n└──────────────────────────┘"
+        case .navbar:
+            "┌────────────────────────────────────────┐\n│ ≡  Logo            Search...      ☆  │\n└────────────────────────────────────────┘"
+        case .tabs:
+            "┌────────┐  ─────────  ─────────\n│  Tab 1 │   Tab 2     Tab 3   \n└────────┴────────────────────"
         case .progress: "▓▓▓▓▓▓░░░░░░░░░░░░░░"
         case .icon: "★"
-        case .image: "╔══════════════════╗\n║ ░░░░░░░░░░░░░░░░ ║\n║ ░░░░░░░░░░░░░░░░ ║\n╚══════════════════╝"
+        case .image:
+            "╔══════════════════╗\n║ ░░░░░░░░░░░░░░░░ ║\n║ ░░░░░░░░░░░░░░░░ ║\n╚══════════════════╝"
         case .divider: "────────────────────────────────────────"
-        case .alert: "┌────────────────────────────────┐\n│ ⚠  Warning: Alert message here │\n└────────────────────────────────┘"
+        case .alert:
+            "┌────────────────────────────────┐\n│ ⚠  Warning: Alert message here │\n└────────────────────────────────┘"
         case .breadcrumb: "Home > Section > Page"
-        case .avatar: "╭──────╮\n│  DH  │\n╰──────╯"
-        case .list: "• List item one\n• List item two\n• List item three"
+        case .avatar:
+            "╭──────╮\n│  DH  │\n╰──────╯"
+        case .list:
+            "• List item one\n• List item two\n• List item three"
         case .stepper: "● ─────── ○ ─────── ○ ─────── ○"
         case .rating: "★★★☆☆"
-        case .skeleton: "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░"
+        case .skeleton:
+            "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░\n░░░░░░░░░░░░░░░░░░░░░░░"
         }
     }
+
+    /// Number of rows the template spans
+    var templateRows: Int { template.components(separatedBy: "\n").count }
+    /// Number of cols the template spans (widest line)
+    var templateCols: Int { template.components(separatedBy: "\n").map(\.count).max() ?? 0 }
 }

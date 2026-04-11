@@ -2,8 +2,6 @@ import SwiftUI
 
 struct MacDashboardView: View {
     @Bindable var dataStore: DataStore
-    @State private var showAdd = false
-
     private var activePills: [String] {
         let cutoff = Date().addingTimeInterval(-24 * 3600)
         let active = dataStore.doseEntries.filter { $0.timestamp >= cutoff }
@@ -36,8 +34,9 @@ struct MacDashboardView: View {
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
-                    Button("Log a Dose") { showAdd = true }
-                        .buttonStyle(.borderedProminent)
+                    Text("Log doses from the iOS app")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 // Insight card
@@ -109,9 +108,6 @@ struct MacDashboardView: View {
             .padding(24)
         }
         .navigationTitle("Dashboard")
-        .sheet(isPresented: $showAdd) {
-            AddDoseSheet(dataStore: dataStore)
-        }
     }
 
     private var greeting: String {

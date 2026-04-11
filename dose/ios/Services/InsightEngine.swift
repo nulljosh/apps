@@ -84,12 +84,22 @@ struct InsightEngine {
     static func anomalyAlerts(biometrics: [BiometricEntry]) -> [Insight] {
         guard biometrics.count >= 5 else { return [] }
 
-        var metricHistory: [String: [(date: String, value: Double)]] = [:]
+        // Extract named metric series from typed BiometricEntry fields
+        typealias MetricRow = (date: Date, value: Double)
+        var metricHistory: [String: [MetricRow]] = [:]
+
+        func push(_ key: String, _ val: Double?, _ date: Date) {
+            guard let v = val else { return }
+            metricHistory[key, default: []].append((date: date, value: v))
+        }
+
         for bio in biometrics {
-            for (metric, val) in bio.metrics {
-                guard let v = val as? Double else { continue }
-                metricHistory[metric, default: []].append((date: bio.date, value: v))
-            }
+            push("sleep", bio.sleepHours, bio.date)
+            push("heartRate", bio.heartRate.map(Double.init), bio.date)
+            push("hrv", bio.hrv, bio.date)
+            push("bloodOxygen", bio.bloodOxygen, bio.date)
+            push("weight", bio.weight, bio.date)
+            push("steps", bio.steps.map(Double.init), bio.date)
         }
 
         let metricLabels: [String: String] = [
@@ -113,7 +123,7 @@ struct InsightEngine {
             let direction = latest.value > m ? "above" : "below"
             insights.append(Insight(
                 type: .anomaly,
-                title: "\(label) unusual on \(latest.date)",
+                title: "\(label) unusual on \(formatted(latest.date))",
                 detail: "\(Int(latest.value)) vs avg \(Int(m)) — \(direction) normal range",
                 severity: .warning
             ))
@@ -130,20 +140,28 @@ struct InsightEngine {
             "sleep": "sleep", "heartRate": "heart rate", "hrv": "HRV",
         ]
 
+        let calendar = Calendar.current
         var insights: [Insight] = []
 
         for subId in substanceIds {
-            let onDays = Set(doseEntries.filter { $0.substanceKey == subId }.map { dateString($0.timestamp) })
+            let onDays = Set(doseEntries.filter { $0.substanceKey == subId }
+                .map { calendar.startOfDay(for: $0.timestamp) })
+
             var onVals: [String: [Double]] = [:]
             var offVals: [String: [Double]] = [:]
 
             for bio in biometrics {
-                let isOn = onDays.contains(bio.date)
-                for (metric, val) in bio.metrics {
-                    guard let v = val as? Double else { continue }
-                    if isOn { onVals[metric, default: []].append(v) }
-                    else { offVals[metric, default: []].append(v) }
+                let bioDay = calendar.startOfDay(for: bio.date)
+                let isOn = onDays.contains(bioDay)
+
+                func bucket(_ key: String, _ val: Double?) {
+                    guard let v = val else { return }
+                    if isOn { onVals[key, default: []].append(v) }
+                    else { offVals[key, default: []].append(v) }
                 }
+                bucket("sleep", bio.sleepHours)
+                bucket("heartRate", bio.heartRate.map(Double.init))
+                bucket("hrv", bio.hrv)
             }
 
             for (metric, label) in metricLabels {

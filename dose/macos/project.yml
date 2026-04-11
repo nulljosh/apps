@@ -22,6 +22,15 @@ targets:
           - CLAUDE.md
           - icon.svg
           - architecture.svg
+      - path: ../ios/Models/BiometricEntry.swift
+      - path: ../ios/Models/DoseEntry.swift
+      - path: ../ios/Models/HealthEntry.swift
+      - path: ../ios/Models/LabResult.swift
+      - path: ../ios/Models/MyMedication.swift
+      - path: ../ios/Models/Substance.swift
+      - path: ../ios/Data/SubstanceDatabase.swift
+      - path: ../ios/Services/DataStore.swift
+      - path: ../ios/Services/InsightEngine.swift
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.dose.mac
       GENERATE_INFOPLIST_FILE: YES
