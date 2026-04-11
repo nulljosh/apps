@@ -17,7 +17,7 @@ struct SidebarView: View {
             Section("Filter by Provider") {
                 Label("All Providers", systemImage: "square.stack.3d.up")
                     .tag(Optional<AIProvider>.none)
-                    .foregroundStyle(store.selectedProvider == nil ? .accentColor : .primary)
+                    .foregroundStyle(store.selectedProvider == nil ? Color.accentColor : Color.primary)
                     .onTapGesture { store.selectedProvider = nil }
 
                 ForEach(AIProvider.allCases) { provider in

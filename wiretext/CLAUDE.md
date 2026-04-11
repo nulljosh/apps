@@ -20,7 +20,7 @@ npm run build                # production build
 
 ## Design
 
-Dark Editorial: `#0c1a12` bg, `#3d9e6a` green, `#d4a843` amber, `#e8e4da` cream, Fraunces serif + DM Sans body.
+Zinc dark: `#09090b` bg, `#6366f1` indigo accent, `#f4f4f5` text, `#71717a` muted. Inter + monospace. Matches portfolio aesthetic.
 
 ## Architecture
 

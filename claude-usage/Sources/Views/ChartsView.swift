@@ -16,7 +16,7 @@ struct ChartsView: View {
         return result
     }
 
-    private var conversationsByDay: [(date: Date, count: Int)] {
+    private var conversationsByDay: [(date: Date, conversations: Int)] {
         store.last30DaysActivity()
     }
 
@@ -45,7 +45,7 @@ struct ChartsView: View {
                     Chart(conversationsByDay, id: \.date) { item in
                         BarMark(
                             x: .value("Date", item.date, unit: .day),
-                            y: .value("Conversations", item.count)
+                            y: .value("Conversations", item.conversations)
                         )
                         .foregroundStyle(.blue.gradient)
                         .cornerRadius(3)

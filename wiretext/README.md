@@ -17,7 +17,7 @@ npm install && npm run dev
 - Hover preview before placing
 - Export as `.txt` or copy to clipboard
 - Undo / Redo (50 steps)
-- Dark Editorial design (Fraunces + DM Sans, green accents)
+- Zinc dark design (Inter, indigo accents)
 
 ## Stack
 
@@ -26,3 +26,7 @@ Vite 6 + React 19. No external UI libraries.
 ## License
 
 MIT 2026 Joshua Trommel
+
+## Live
+
+[wiretext.heyitsmejosh.com](https://wiretext.heyitsmejosh.com)

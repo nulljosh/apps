@@ -61,7 +61,7 @@ struct UsageEntry: Identifiable, Codable, Equatable {
     }
 }
 
-struct UsageSettings: Codable {
+struct UsageSettings: Codable, Equatable {
     var claudeMonthly: Double = 136.60
     var chatgptMonthly: Double = 27.00
     var geminiMonthly: Double = 0
