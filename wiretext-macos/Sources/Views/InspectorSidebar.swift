@@ -35,8 +35,8 @@ struct InspectorSidebar: View {
                     InspectorSection(title: "Canvas") {
                         InspectorRow("Width", "\(CanvasModel.cols) cols")
                         InspectorRow("Height", "\(CanvasModel.rows) rows")
-                        InspectorRow("Char W", "\(CanvasModel.charW, specifier: "%.1f")px")
-                        InspectorRow("Char H", "\(CanvasModel.charH, specifier: "%.1f")px")
+                        InspectorRow("Char W", String(format: "%.1fpx", CanvasModel.charW))
+                        InspectorRow("Char H", String(format: "%.1fpx", CanvasModel.charH))
                     }
 
                     InspectorSection(title: "Content") {

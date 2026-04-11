@@ -90,7 +90,7 @@ class CanvasTextView: NSTextView {
         if let old = trackingArea { removeTrackingArea(old) }
         let area = NSTrackingArea(
             rect: bounds,
-            options: [.mouseMoved, .activeInWindow, .inVisibleRect],
+            options: [.mouseMoved, .activeAlways, .inVisibleRect],
             owner: self,
             userInfo: nil
         )

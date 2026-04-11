@@ -82,13 +82,15 @@ final class CanvasModel {
     var canUndo: Bool { historyIndex > 0 }
     var canRedo: Bool { historyIndex < history.count - 1 }
 
+    @MainActor
     func exportText() {
         let panel = NSSavePanel()
         panel.nameFieldStringValue = "wireframe.txt"
         panel.allowedContentTypes = [.plainText]
-        panel.begin { [self] result in
+        let text = self.render()
+        panel.begin { result in
             if result == .OK, let url = panel.url {
-                try? self.render().write(to: url, atomically: true, encoding: .utf8)
+                try? text.write(to: url, atomically: true, encoding: .utf8)
             }
         }
     }
