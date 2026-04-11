@@ -10,79 +10,6 @@ struct WebResult: Identifiable {
     }
 }
 
-struct DDGResponse: Codable {
-    let abstractText: String?
-    let abstractSource: String?
-    let abstractURL: String?
-    let answer: String?
-    let answerType: String?
-    let definition: String?
-    let definitionSource: String?
-    let definitionURL: String?
-    let heading: String?
-    let image: String?
-    let relatedTopics: [DDGTopic]?
-
-    enum CodingKeys: String, CodingKey {
-        case abstractText = "AbstractText"
-        case abstractSource = "AbstractSource"
-        case abstractURL = "AbstractURL"
-        case answer = "Answer"
-        case answerType = "AnswerType"
-        case definition = "Definition"
-        case definitionSource = "DefinitionSource"
-        case definitionURL = "DefinitionURL"
-        case heading = "Heading"
-        case image = "Image"
-        case relatedTopics = "RelatedTopics"
-    }
-}
-
-struct DDGTopic: Codable {
-    let text: String?
-    let firstURL: String?
-    let topics: [DDGSubTopic]?
-
-    enum CodingKeys: String, CodingKey {
-        case text = "Text"
-        case firstURL = "FirstURL"
-        case topics = "Topics"
-    }
-}
-
-struct DDGSubTopic: Codable {
-    let text: String?
-    let firstURL: String?
-
-    enum CodingKeys: String, CodingKey {
-        case text = "Text"
-        case firstURL = "FirstURL"
-    }
-}
-
-struct WikiResponse: Codable {
-    let title: String?
-    let extract: String?
-    let thumbnail: WikiThumbnail?
-    let contentUrls: WikiContentURLs?
-
-    enum CodingKeys: String, CodingKey {
-        case title, extract, thumbnail
-        case contentUrls = "content_urls"
-    }
-}
-
-struct WikiThumbnail: Codable {
-    let source: String?
-}
-
-struct WikiContentURLs: Codable {
-    let desktop: WikiDesktopURL?
-}
-
-struct WikiDesktopURL: Codable {
-    let page: String?
-}
 
 final class QueryEngine: Sendable {
     private static let suggestions: [String] = {
@@ -272,127 +199,31 @@ final class QueryEngine: Sendable {
     }
 
     func query(_ input: String) async -> QueryResult {
-        let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = 5
-        let session = URLSession(configuration: config)
-
-        async let ddg = queryDDG(input, session: session)
-        async let wiki = queryWikipedia(input, session: session)
-
-        if let ddgResult = await ddg { return ddgResult }
-        if let wikiResult = await wiki { return wikiResult }
-
         let encoded = input.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? input
-        return .error("No instant answer found.", searchURL: "https://duckduckgo.com/?q=\(encoded)")
-    }
-
-    private func queryDDG(_ input: String, session: URLSession = .shared) async -> QueryResult? {
-        guard let encoded = input.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: "https://api.duckduckgo.com/?q=\(encoded)&format=json&no_html=1&skip_disambig=1") else {
-            return nil
+        let fallback = QueryResult.error("No instant answer found.", searchURL: "https://duckduckgo.com/?q=\(encoded)")
+        guard let url = URL(string: "https://nimble.heyitsmejosh.com/api/instant?q=\(encoded)") else {
+            return fallback
         }
-
         do {
-            let (data, _) = try await session.data(from: url)
-            let ddg = try JSONDecoder().decode(DDGResponse.self, from: data)
-
-            if let abstract = ddg.abstractText, !abstract.isEmpty {
-                let source = ddg.abstractSource ?? "DuckDuckGo"
-                let sourceURL = ddg.abstractURL
-                let imageURL = ddg.image.flatMap { $0.isEmpty ? nil : "https://duckduckgo.com\($0)" }
-                return .text(heading: ddg.heading, body: abstract, source: source, sourceURL: sourceURL, imageURL: imageURL)
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = 5
+            let (data, _) = try await URLSession(configuration: config).data(from: url)
+            guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let type = json["type"] as? String else { return fallback }
+            if type == "text", let body = json["body"] as? String, !body.isEmpty {
+                return .text(
+                    heading: json["heading"] as? String,
+                    body: body,
+                    source: json["source"] as? String ?? "Nimble",
+                    sourceURL: json["sourceURL"] as? String,
+                    imageURL: json["imageURL"] as? String
+                )
             }
-
-            if let answer = ddg.answer, !answer.isEmpty {
-                // Strip HTML tags from answer
-                let clean = answer.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
-                return .text(heading: nil, body: clean, source: "DuckDuckGo", sourceURL: nil, imageURL: nil)
-            }
-
-            if let definition = ddg.definition, !definition.isEmpty {
-                return .text(heading: ddg.heading, body: definition, source: ddg.definitionSource ?? "DuckDuckGo", sourceURL: ddg.definitionURL, imageURL: nil)
-            }
-
-            if let topics = ddg.relatedTopics, !topics.isEmpty {
-                var items: [String] = []
-                for topic in topics.prefix(5) {
-                    if let text = topic.text, !text.isEmpty {
-                        items.append(text)
-                    }
-                    if let subs = topic.topics {
-                        for sub in subs.prefix(2) {
-                            if let text = sub.text, !text.isEmpty {
-                                items.append(text)
-                            }
-                        }
-                    }
-                }
-                if !items.isEmpty {
-                    return .list(items: items, source: "DuckDuckGo")
-                }
-            }
-
-            return nil
-        } catch {
-            return nil
-        }
-    }
-
-    private func queryWikipedia(_ input: String, session: URLSession = .shared) async -> QueryResult? {
-        // First try direct page summary
-        let searchTerm = input.replacingOccurrences(of: " ", with: "_")
-        if let encoded = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-           let url = URL(string: "https://en.wikipedia.org/api/rest_v1/page/summary/\(encoded)"),
-           let result = await fetchWikiSummary(url: url, session: session) {
-            return result
-        }
-
-        // Fall back to Wikipedia search API to find the right article
-        guard let searchEncoded = input.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let searchURL = URL(string: "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=\(searchEncoded)&format=json&srlimit=1") else {
-            return nil
-        }
-
-        do {
-            let (data, _) = try await session.data(from: searchURL)
-            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let query = json["query"] as? [String: Any],
-               let search = query["search"] as? [[String: Any]],
-               let first = search.first,
-               let title = first["title"] as? String {
-                let articleTitle = title.replacingOccurrences(of: " ", with: "_")
-                guard let titleEncoded = articleTitle.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-                      let summaryURL = URL(string: "https://en.wikipedia.org/api/rest_v1/page/summary/\(titleEncoded)") else {
-                    return nil
-                }
-                return await fetchWikiSummary(url: summaryURL, session: session)
+            if type == "list", let items = json["items"] as? [String], !items.isEmpty {
+                return .list(items: items, source: json["source"] as? String ?? "Nimble")
             }
         } catch {}
-
-        return nil
-    }
-
-    private func fetchWikiSummary(url: URL, session: URLSession = .shared) async -> QueryResult? {
-        guard let url = Optional(url) else { return nil }
-
-        do {
-            let (data, response) = try await session.data(from: url)
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                return nil
-            }
-            let wiki = try JSONDecoder().decode(WikiResponse.self, from: data)
-            guard let extract = wiki.extract, !extract.isEmpty else { return nil }
-
-            return .text(
-                heading: wiki.title,
-                body: extract,
-                source: "Wikipedia",
-                sourceURL: wiki.contentUrls?.desktop?.page,
-                imageURL: wiki.thumbnail?.source
-            )
-        } catch {
-            return nil
-        }
+        return fallback
     }
 
     private static let wordNumbers: [String: String] = [
