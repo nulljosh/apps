@@ -10,6 +10,10 @@ final class CanvasModel {
 
     var grid: [[Character]] = Array(repeating: Array(repeating: " ", count: CanvasModel.cols), count: CanvasModel.rows)
     var activeTool: ComponentType? = nil
+    var cursorCol: Int = 0
+    var cursorRow: Int = 0
+    var hoveredCol: Int = -1
+    var hoveredRow: Int = -1
     var renderedText: String = ""
     private var history: [[[Character]]] = []
     private var historyIndex = -1
@@ -33,8 +37,22 @@ final class CanvasModel {
         renderedText = render()
     }
 
+    func setChar(_ ch: Character, col: Int, row: Int) {
+        guard row >= 0, row < Self.rows, col >= 0, col < Self.cols else { return }
+        saveHistory()
+        grid[row][col] = ch
+        renderedText = render()
+    }
+
+    func eraseChar(col: Int, row: Int) {
+        guard row >= 0, row < Self.rows, col >= 0, col < Self.cols else { return }
+        grid[row][col] = " "
+        renderedText = render()
+    }
+
     func pixelToGrid(x: CGFloat, y: CGFloat) -> (col: Int, row: Int) {
-        (Int(x / Self.charW), Int(y / Self.charH))
+        (col: max(0, min(Int(x / Self.charW), Self.cols - 1)),
+         row: max(0, min(Int(y / Self.charH), Self.rows - 1)))
     }
 
     func render() -> String {
@@ -61,11 +79,15 @@ final class CanvasModel {
         renderedText = render()
     }
 
+    var canUndo: Bool { historyIndex > 0 }
+    var canRedo: Bool { historyIndex < history.count - 1 }
+
     func exportText() {
         let panel = NSSavePanel()
         panel.nameFieldStringValue = "wireframe.txt"
-        panel.begin { [self] r in
-            if r == .OK, let url = panel.url {
+        panel.allowedContentTypes = [.plainText]
+        panel.begin { [self] result in
+            if result == .OK, let url = panel.url {
                 try? self.render().write(to: url, atomically: true, encoding: .utf8)
             }
         }
@@ -79,6 +101,10 @@ final class CanvasModel {
     private func saveHistory() {
         history = Array(history.prefix(historyIndex + 1))
         history.append(grid)
-        historyIndex = history.count - 1
+        if history.count > 200 {
+            history.removeFirst()
+        } else {
+            historyIndex = history.count - 1
+        }
     }
 }
