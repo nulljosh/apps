@@ -3,14 +3,14 @@ import SwiftUI
 @main
 struct DoseMacApp: App {
     @State private var store = BodyworkSessionStore()
+    @State private var dataStore = DataStore()
 
     var body: some Scene {
         WindowGroup {
             NavigationSplitView {
-                SidebarView()
+                SidebarView(dataStore: dataStore)
             } detail: {
-                Text("Select a section from the sidebar")
-                    .foregroundStyle(.secondary)
+                MacDashboardView(dataStore: dataStore)
             }
             .environment(store)
             .frame(minWidth: 800, minHeight: 550)

@@ -32,7 +32,7 @@ struct DashboardView: View {
     }
 
     private var doseCountCard: some View {
-        HStack {
+        HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Today")
                     .font(.caption2)
@@ -42,9 +42,19 @@ struct DashboardView: View {
                     .foregroundStyle(.cyan)
             }
             Spacer()
-            Image(systemName: "pill.fill")
-                .font(.title2)
-                .foregroundStyle(.cyan.opacity(0.6))
+            // Health score arc
+            ZStack {
+                Circle()
+                    .stroke(Color.white.opacity(0.15), lineWidth: 4)
+                Circle()
+                    .trim(from: 0, to: min(CGFloat(store.doseCount) / 10.0, 1.0))
+                    .stroke(.cyan, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                Image(systemName: "pill.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.cyan.opacity(0.7))
+            }
+            .frame(width: 36, height: 36)
         }
         .padding()
         .background(.cyan.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))

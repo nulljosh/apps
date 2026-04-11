@@ -30,6 +30,15 @@ const links = [
     ),
   },
   {
+    to: '/lab-results',
+    label: 'Labs',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5s-2.5-1.1-2.5-2.5V2"/><path d="M8.5 2h7"/><path d="M14.5 16h-5"/><path d="M8.5 7.5l-2 4h9l-2-4"/>
+      </svg>
+    ),
+  },
+  {
     to: '/body',
     label: 'Body',
     icon: (
@@ -51,7 +60,8 @@ export default function Nav() {
           className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
         >
           {link.icon}
-          {link.label}
+          <span className="nav-label">{link.label}</span>
+          <span className="nav-dot" />
         </NavLink>
       ))}
     </nav>

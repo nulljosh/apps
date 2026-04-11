@@ -43,6 +43,11 @@ struct DoseApp: App {
                         .tabItem {
                             Label("Body", systemImage: "figure.mind.and.body")
                         }
+
+                    LabResultsView(dataStore: dataStore)
+                        .tabItem {
+                            Label("Labs", systemImage: "cross.vial.fill")
+                        }
                 }
                 .task {
                     if HealthKitService.isAvailable {

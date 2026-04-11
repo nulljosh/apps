@@ -8,6 +8,31 @@ struct DashboardView: View {
     @State private var showReminders = false
     @State private var showSettings = false
 
+    private var topInsight: Insight? {
+        InsightEngine.topInsights(
+            doseEntries: dataStore.doseEntries,
+            biometrics: dataStore.biometricEntries,
+            labResults: dataStore.labResults,
+            getName: { dataStore.substanceName(for: $0) }
+        ).first
+    }
+
+    private var healthScore: Int? {
+        guard let latest = dataStore.biometricEntries.sorted(by: { $0.date > $1.date }).first,
+              !latest.metrics.isEmpty else { return nil }
+        let targets: [String: Double] = [
+            "sleep": 8, "steps": 10000, "heartRate": 60, "hrv": 50, "bloodOxygen": 98,
+        ]
+        var scores: [Double] = []
+        for (key, target) in targets {
+            guard let val = latest.metrics[key] as? Double else { continue }
+            let score = min(100, (val / target) * 100)
+            scores.append(score)
+        }
+        guard !scores.isEmpty else { return nil }
+        return Int(scores.reduce(0, +) / Double(scores.count))
+    }
+
     private var greeting: String {
         let hour = Calendar.current.component(.hour, from: Date())
         let timeGreeting: String
@@ -55,6 +80,59 @@ struct DashboardView: View {
                         .padding(.vertical, 12)
                         .glassCard()
                         .shadow(color: .orange.opacity(0.22), radius: 10, x: 0, y: 0)
+                    }
+
+                    // Health score ring
+                    if let score = healthScore {
+                        HStack(spacing: 14) {
+                            ZStack {
+                                Circle()
+                                    .stroke(Color(.systemFill), lineWidth: 5)
+                                Circle()
+                                    .trim(from: 0, to: CGFloat(score) / 100)
+                                    .stroke(
+                                        score >= 80 ? Color.green : score >= 50 ? Color.orange : Color.red,
+                                        style: StrokeStyle(lineWidth: 5, lineCap: .round)
+                                    )
+                                    .rotationEffect(.degrees(-90))
+                                Text("\(score)")
+                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                            }
+                            .frame(width: 48, height: 48)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Health Score")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .textCase(.uppercase)
+                                    .kerning(0.8)
+                                Text(score >= 80 ? "Looking good" : score >= 50 ? "Room to improve" : "Needs attention")
+                                    .font(.subheadline.weight(.medium))
+                            }
+                            Spacer()
+                        }
+                        .padding(14)
+                        .glassCard()
+                    }
+
+                    // Top insight card
+                    if let insight = topInsight {
+                        HStack(spacing: 10) {
+                            Image(systemName: insightIcon(insight.type))
+                                .foregroundStyle(insightColor(insight.severity))
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(insight.title)
+                                    .font(.subheadline.weight(.semibold))
+                                Text(insight.detail)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                        }
+                        .padding(14)
+                        .background(insightColor(insight.severity).opacity(0.06))
+                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(insightColor(insight.severity).opacity(0.2), lineWidth: 1))
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
 
                     VStack(alignment: .leading, spacing: 12) {
@@ -153,6 +231,23 @@ struct DashboardView: View {
             .sheet(isPresented: $showSettings) {
                 SettingsView(dataStore: dataStore, syncService: syncService)
             }
+        }
+    }
+
+    func insightIcon(_ type: InsightType) -> String {
+        switch type {
+        case .labFlag: return "flag.fill"
+        case .anomaly: return "exclamationmark.triangle.fill"
+        case .labTrend: return "chart.line.uptrend.xyaxis"
+        case .correlation: return "waveform.path.ecg"
+        }
+    }
+
+    func insightColor(_ severity: InsightSeverity) -> Color {
+        switch severity {
+        case .urgent: return .red
+        case .warning: return .orange
+        case .info: return .blue
         }
     }
 }

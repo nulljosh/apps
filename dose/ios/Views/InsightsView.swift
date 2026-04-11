@@ -92,10 +92,22 @@ struct InsightsView: View {
 
     private let dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
+    private var smartInsights: [Insight] {
+        InsightEngine.topInsights(
+            doseEntries: dataStore.doseEntries,
+            biometrics: dataStore.biometricEntries,
+            labResults: dataStore.labResults,
+            getName: { dataStore.substanceName(for: $0) }
+        )
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 24) {
+                    if !smartInsights.isEmpty {
+                        insightCardsSection
+                    }
                     statsGrid
                     top5Section
                     heatmapSection
@@ -104,6 +116,49 @@ struct InsightsView: View {
                 .padding()
             }
             .navigationTitle("Insights")
+        }
+    }
+
+    private var insightCardsSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Smart Insights")
+                .font(.headline)
+            ForEach(smartInsights) { insight in
+                HStack(spacing: 10) {
+                    Image(systemName: iconFor(insight.type))
+                        .foregroundStyle(colorFor(insight.severity))
+                        .frame(width: 20)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(insight.title)
+                            .font(.subheadline.weight(.semibold))
+                        Text(insight.detail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
+                .padding(12)
+                .background(colorFor(insight.severity).opacity(0.07))
+                .overlay(RoundedRectangle(cornerRadius: 12).stroke(colorFor(insight.severity).opacity(0.2)))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+        }
+    }
+
+    func iconFor(_ type: InsightType) -> String {
+        switch type {
+        case .labFlag: return "flag.fill"
+        case .anomaly: return "exclamationmark.triangle.fill"
+        case .labTrend: return "chart.line.uptrend.xyaxis"
+        case .correlation: return "waveform.path.ecg"
+        }
+    }
+
+    func colorFor(_ severity: InsightSeverity) -> Color {
+        switch severity {
+        case .urgent: return .red
+        case .warning: return .orange
+        case .info: return .blue
         }
     }
 

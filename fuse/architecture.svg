@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" style="background:#ffffff;font-family:-apple-system,BlinkMacSystemFont,Helvetica,sans-serif">
+
+  <!-- Title -->
+  <text x="400" y="36" text-anchor="middle" font-size="18" font-weight="700" fill="#1d1d1f">fuse — architecture</text>
+
+  <!-- Data Sources -->
+  <rect x="40" y="80" width="140" height="50" rx="10" fill="none" stroke="#1d1d1f" stroke-width="1.5"/>
+  <text x="110" y="100" text-anchor="middle" font-size="11" font-weight="600" fill="#1d1d1f">EventKit / iCal</text>
+  <text x="110" y="116" text-anchor="middle" font-size="10" fill="#6e6e73">iOS + macOS</text>
+
+  <rect x="40" y="152" width="140" height="50" rx="10" fill="none" stroke="#1d1d1f" stroke-width="1.5"/>
+  <text x="110" y="172" text-anchor="middle" font-size="11" font-weight="600" fill="#1d1d1f">Tally Payday</text>
+  <text x="110" y="188" text-anchor="middle" font-size="10" fill="#6e6e73">last Wed of month</text>
+
+  <rect x="40" y="224" width="140" height="50" rx="10" fill="none" stroke="#1d1d1f" stroke-width="1.5"/>
+  <text x="110" y="244" text-anchor="middle" font-size="11" font-weight="600" fill="#1d1d1f">Mock Events</text>
+  <text x="110" y="260" text-anchor="middle" font-size="10" fill="#6e6e73">web fallback</text>
+
+  <!-- Services -->
+  <rect x="260" y="100" width="150" height="50" rx="10" fill="none" stroke="#0071e3" stroke-width="1.5"/>
+  <text x="335" y="120" text-anchor="middle" font-size="11" font-weight="600" fill="#0071e3">CalendarService</text>
+  <text x="335" y="136" text-anchor="middle" font-size="10" fill="#6e6e73">EKEventStore reads</text>
+
+  <rect x="260" y="172" width="150" height="50" rx="10" fill="none" stroke="#0071e3" stroke-width="1.5"/>
+  <text x="335" y="192" text-anchor="middle" font-size="11" font-weight="600" fill="#0071e3">CustomSourceService</text>
+  <text x="335" y="208" text-anchor="middle" font-size="10" fill="#6e6e73">payday + custom</text>
+
+  <rect x="260" y="244" width="150" height="50" rx="10" fill="none" stroke="#0071e3" stroke-width="1.5"/>
+  <text x="335" y="264" text-anchor="middle" font-size="11" font-weight="600" fill="#0071e3">useCalendar</text>
+  <text x="335" y="280" text-anchor="middle" font-size="10" fill="#6e6e73">React hook, web</text>
+
+  <!-- Arrows: sources → services -->
+  <line x1="180" y1="105" x2="258" y2="122" stroke="#86868b" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="180" y1="177" x2="258" y2="193" stroke="#86868b" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="180" y1="249" x2="258" y2="265" stroke="#86868b" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Platforms -->
+  <!-- iOS -->
+  <rect x="490" y="60" width="130" height="90" rx="10" fill="none" stroke="#34c759" stroke-width="1.5"/>
+  <text x="555" y="83" text-anchor="middle" font-size="12" font-weight="700" fill="#34c759">iOS</text>
+  <text x="555" y="100" text-anchor="middle" font-size="10" fill="#6e6e73">TimelineView</text>
+  <text x="555" y="116" text-anchor="middle" font-size="10" fill="#6e6e73">CountdownView</text>
+  <text x="555" y="132" text-anchor="middle" font-size="10" fill="#6e6e73">EventCardView</text>
+
+  <!-- macOS -->
+  <rect x="490" y="170" width="130" height="70" rx="10" fill="none" stroke="#ff9f0a" stroke-width="1.5"/>
+  <text x="555" y="193" text-anchor="middle" font-size="12" font-weight="700" fill="#ff9f0a">macOS</text>
+  <text x="555" y="210" text-anchor="middle" font-size="10" fill="#6e6e73">MacTimelineView</text>
+  <text x="555" y="226" text-anchor="middle" font-size="10" fill="#6e6e73">split-view</text>
+
+  <!-- Web -->
+  <rect x="490" y="260" width="130" height="70" rx="10" fill="none" stroke="#0071e3" stroke-width="1.5"/>
+  <text x="555" y="283" text-anchor="middle" font-size="12" font-weight="700" fill="#0071e3">Web</text>
+  <text x="555" y="300" text-anchor="middle" font-size="10" fill="#6e6e73">Timeline.jsx</text>
+  <text x="555" y="316" text-anchor="middle" font-size="10" fill="#6e6e73">CountdownTile.jsx</text>
+
+  <!-- watchOS -->
+  <rect x="490" y="350" width="130" height="60" rx="10" fill="none" stroke="#ff3b30" stroke-width="1.5"/>
+  <text x="555" y="373" text-anchor="middle" font-size="12" font-weight="700" fill="#ff3b30">watchOS</text>
+  <text x="555" y="390" text-anchor="middle" font-size="10" fill="#6e6e73">WatchTimelineView</text>
+
+  <!-- Arrows: services → platforms -->
+  <line x1="410" y1="125" x2="488" y2="105" stroke="#86868b" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="410" y1="197" x2="488" y2="200" stroke="#86868b" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="410" y1="269" x2="488" y2="290" stroke="#86868b" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="410" y1="197" x2="488" y2="375" stroke="#86868b" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+
+  <!-- FuseEvent model -->
+  <rect x="260" y="340" width="150" height="50" rx="10" fill="none" stroke="#6e6e73" stroke-width="1" stroke-dasharray="6,3"/>
+  <text x="335" y="360" text-anchor="middle" font-size="11" font-weight="600" fill="#6e6e73">FuseEvent</text>
+  <text x="335" y="376" text-anchor="middle" font-size="10" fill="#86868b">unified model</text>
+
+  <!-- Vercel -->
+  <rect x="650" y="248" width="110" height="44" rx="10" fill="none" stroke="#1d1d1f" stroke-width="1.5"/>
+  <text x="705" y="268" text-anchor="middle" font-size="11" font-weight="600" fill="#1d1d1f">Vercel</text>
+  <text x="705" y="284" text-anchor="middle" font-size="10" fill="#6e6e73">fuse.heyitsmejosh.com</text>
+  <line x1="620" y1="295" x2="648" y2="275" stroke="#86868b" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#86868b"/>
+    </marker>
+  </defs>
+
+  <!-- Section labels -->
+  <text x="110" y="68" text-anchor="middle" font-size="9" font-weight="600" fill="#86868b" letter-spacing="1.5">SOURCES</text>
+  <text x="335" y="88" text-anchor="middle" font-size="9" font-weight="600" fill="#86868b" letter-spacing="1.5">SERVICES</text>
+  <text x="555" y="48" text-anchor="middle" font-size="9" font-weight="600" fill="#86868b" letter-spacing="1.5">PLATFORMS</text>
+</svg>

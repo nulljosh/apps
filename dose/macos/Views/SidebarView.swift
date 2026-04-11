@@ -1,6 +1,8 @@
 import SwiftUI
 
 enum SidebarItem: String, CaseIterable, Identifiable {
+    case dashboard = "Dashboard"
+    case labs = "Lab Results"
     case feet = "Feet"
     case hands = "Hands"
     case abdomen = "Abdomen"
@@ -13,32 +15,22 @@ enum SidebarItem: String, CaseIterable, Identifiable {
 
     var icon: String {
         switch self {
-        case .feet: "shoe.fill"
-        case .hands: "hand.raised.fingers.spread"
-        case .abdomen: "figure.stand"
-        case .meridians: "target"
-        case .symptoms: "cross.circle"
-        case .facemaxxing: "face.smiling"
-        case .sessions: "clock.arrow.trianglehead.counterclockwise.rotate.90"
-        }
-    }
-
-    @ViewBuilder
-    var destination: some View {
-        switch self {
-        case .feet: MacReflexologyView(mode: .feet)
-        case .hands: MacReflexologyView(mode: .hands)
-        case .abdomen: MacAbdomenView()
-        case .meridians: MacMeridianListView()
-        case .symptoms: MacSymptomFinderView()
-        case .facemaxxing: MacFacemaxxingView()
-        case .sessions: MacSessionHistoryView()
+        case .dashboard: return "house"
+        case .labs: return "cross.vial"
+        case .feet: return "shoe.fill"
+        case .hands: return "hand.raised.fingers.spread"
+        case .abdomen: return "figure.stand"
+        case .meridians: return "target"
+        case .symptoms: return "cross.circle"
+        case .facemaxxing: return "face.smiling"
+        case .sessions: return "clock.arrow.trianglehead.counterclockwise.rotate.90"
         }
     }
 }
 
 struct SidebarView: View {
-    @State private var selection: SidebarItem? = .feet
+    @Bindable var dataStore: DataStore
+    @State private var selection: SidebarItem? = .dashboard
 
     var body: some View {
         List(SidebarItem.allCases, selection: $selection) { item in
@@ -49,7 +41,17 @@ struct SidebarView: View {
         .navigationSplitViewColumnWidth(min: 180, ideal: 220)
         .navigationTitle("Dose")
         .navigationDestination(for: SidebarItem.self) { item in
-            item.destination
+            switch item {
+            case .dashboard: MacDashboardView(dataStore: dataStore)
+            case .labs: MacLabResultsView(dataStore: dataStore)
+            case .feet: MacReflexologyView(mode: .feet)
+            case .hands: MacReflexologyView(mode: .hands)
+            case .abdomen: MacAbdomenView()
+            case .meridians: MacMeridianListView()
+            case .symptoms: MacSymptomFinderView()
+            case .facemaxxing: MacFacemaxxingView()
+            case .sessions: MacSessionHistoryView()
+            }
         }
     }
 }

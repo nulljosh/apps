@@ -25,6 +25,10 @@ final class DataStore {
         didSet { guard !isLoading else { return }; saveMedications() }
     }
 
+    var labResults: [LabResult] = [] {
+        didSet { guard !isLoading else { return }; saveLabResults() }
+    }
+
     var lastError: String?
 
     var userName: String {
@@ -46,6 +50,7 @@ final class DataStore {
     private let userNameKey = "dose.userName"
     private let userEmailKey = "dose.userEmail"
     private let myMedicationsKey = "dose.myMedications"
+    private let labResultsKey = "dose.labResults"
 
     init() {
         loadAll()
@@ -200,6 +205,7 @@ final class DataStore {
         healthEntries = load([HealthEntry].self, forKey: healthEntriesKey) ?? []
         biometricEntries = load([BiometricEntry].self, forKey: biometricEntriesKey) ?? []
         myMedications = load([MyMedication].self, forKey: myMedicationsKey) ?? []
+        labResults = load([LabResult].self, forKey: labResultsKey) ?? []
     }
 
     private func seedIfNeeded() {
@@ -228,6 +234,38 @@ final class DataStore {
 
     private func saveMedications() {
         save(myMedications, forKey: myMedicationsKey)
+    }
+
+    private func saveLabResults() {
+        save(labResults, forKey: labResultsKey)
+    }
+
+    // MARK: - Lab Results
+
+    func addLabResult(_ result: LabResult) {
+        labResults.append(result)
+    }
+
+    func deleteLabResult(_ result: LabResult) {
+        labResults.removeAll { $0.id == result.id }
+    }
+
+    func labResultsByMarker(_ markerName: String) -> [(date: Date, marker: LabMarker)] {
+        var rows: [(date: Date, marker: LabMarker)] = []
+        for result in labResults {
+            if let m = result.markers.first(where: { $0.name == markerName }) {
+                rows.append((date: result.date, marker: m))
+            }
+        }
+        return rows.sorted { $0.date < $1.date }
+    }
+
+    var allMarkerNames: [String] {
+        var names = Set<String>()
+        for result in labResults {
+            result.markers.forEach { names.insert($0.name) }
+        }
+        return names.sorted()
     }
 
     private func save<T: Codable>(_ value: T, forKey key: String) {
