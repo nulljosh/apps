@@ -207,9 +207,9 @@ enum LifeData {
         StabilityPoint(year: 2001, label: "Trauma", score: 0.35, category: .crisis),
         StabilityPoint(year: 2007, label: "ADHD dx", score: 0.65, category: .event),
         StabilityPoint(year: 2008, label: "Travel", score: 0.75, category: .forward),
-        StabilityPoint(year: 2014, label: "Mikayla", score: 0.7, category: .event),
+        StabilityPoint(year: 2014, label: "First rel.", score: 0.7, category: .event),
         StabilityPoint(year: 2017, label: "Prom", score: 0.75, category: .event),
-        StabilityPoint(year: 2019, label: "Olivia", score: 0.15, category: .crisis),
+        StabilityPoint(year: 2019, label: "2nd rel.", score: 0.15, category: .crisis),
         StabilityPoint(year: 2021, label: "Breakdown", score: 0.08, category: .crisis),
         StabilityPoint(year: 2024, label: "Homeless", score: 0.18, category: .crisis),
         StabilityPoint(year: 2025, label: "Autism dx", score: 0.5, category: .event),
@@ -248,8 +248,8 @@ enum LifeData {
     ]
 
     static let relationships: [RelationshipPeriod] = [
-        RelationshipPeriod(name: "Mikayla", startYear: 2014, endYear: 2017, category: .event, detail: "prom, NYC"),
-        RelationshipPeriod(name: "Olivia", startYear: 2019, endYear: 2019, category: .crisis, detail: "9 months"),
+        RelationshipPeriod(name: "First", startYear: 2014, endYear: 2017, category: .event, detail: "prom, NYC"),
+        RelationshipPeriod(name: "Second", startYear: 2019, endYear: 2019, category: .crisis, detail: "9 months"),
         RelationshipPeriod(name: "Longest", startYear: 2021, endYear: 2023, category: .event, detail: "breakdown after"),
     ]
 
@@ -358,7 +358,7 @@ enum LifeData {
         MapLocation(name: "Vancouver Island", detail: "rehab x2, best friend, planned move", category: .event, isOffMap: false),
         MapLocation(name: "Kamloops", detail: "cousins, childhood", category: .forward, isOffMap: false),
         MapLocation(name: "Seattle", detail: "CodeDay", category: .forward, isOffMap: false),
-        MapLocation(name: "NYC", detail: "Mikayla, best week", category: .forward, isOffMap: true),
+        MapLocation(name: "NYC", detail: "best week of my life", category: .forward, isOffMap: true),
         MapLocation(name: "Florida", detail: "Disneyland, family trips", category: .forward, isOffMap: true),
         MapLocation(name: "Hawaii", detail: "family trips, Feb 2026", category: .forward, isOffMap: true),
     ]
@@ -429,9 +429,9 @@ enum LifeData {
         TimelineEntry(year: "~2001", text: "Earliest memory: dad hitting me at age 2", detail: "Physical aggression until preschool. Verbal aggression continues for years.", category: .crisis),
         TimelineEntry(year: "2007", text: "ADHD diagnosis (age 8)", detail: nil, category: .event),
         TimelineEntry(year: "2008", text: "First Disneyland trip (age 8)", detail: "Florida and Hawaii trips throughout 2010 to 2020. Hawaii again Feb 2026.", category: .forward),
-        TimelineEntry(year: "~2014", text: "Met Mikayla online. First serious relationship.", detail: nil, category: .event),
-        TimelineEntry(year: "2017", text: "Prom with Mikayla (age 18)", detail: nil, category: .event),
-        TimelineEntry(year: "2019", text: "Relationship with Olivia (Sept to Dec). Pregnancy. Abortion.", detail: "Breakup. Both moved back in with parents.", category: .crisis),
+        TimelineEntry(year: "~2014", text: "Met a girl online. First serious relationship.", detail: nil, category: .event),
+        TimelineEntry(year: "2017", text: "Prom (age 18). NYC trip.", detail: nil, category: .event),
+        TimelineEntry(year: "2019", text: "Second relationship (Sept to Dec). Pregnancy. Abortion.", detail: "Breakup. Both moved back in with parents.", category: .crisis),
         TimelineEntry(year: "~2021", text: "Fallout with dad. Verbal aggression finally stops.", detail: "Longest relationship ends (age 22 to 23). Self-harm begins. Mental breakdown.", category: .crisis),
         TimelineEntry(year: "2024", text: "Homeless for several months (summer 2024)", detail: "Lived in car until it broke down. AirBnB. Detained by police. Hospitalized. Eventually allowed back home.", category: .crisis),
         TimelineEntry(year: "Oct 2025", text: "Autism diagnosis. Applied for PWD.", detail: nil, category: .event),
@@ -526,8 +526,8 @@ enum LifeData {
 
         // 15
         LifeSection(label: "Relationships", paragraphs: [
-            "I had a few relationships in my late teens and early twenties. The first serious one was with Mikayla, who I met online around 2014 and who came to my prom in 2017. My parents flew me to NYC that same year to meet her. Probably the best week of my life. I think back on it so fondly that it makes everything else feel worse by comparison.",
-            "The one that still affects me the most is Olivia. We were together from April to December 2019. We moved in together and she got pregnant. The abortion was my decision initially. It was mutual but I pushed for it because neither of us could afford it. She developed psychosis and pulled knives on me. It broke us up. We both moved back in with our parents. The abortion is probably the second most confusing and painful thing that's happened in my life, right after what happened with my dad when I was little.",
+            "I had a few relationships in my late teens and early twenties. The first serious one was with a girl I met online around 2014 who came to my prom in 2017. My parents flew me to NYC that same year to meet her. Probably the best week of my life. I think back on it so fondly that it makes everything else feel worse by comparison.",
+            "The one that still affects me the most was someone I was with from April to December 2019. We moved in together and she got pregnant. The abortion was my decision initially. It was mutual but I pushed for it because neither of us could afford it. She developed psychosis and pulled knives on me. It broke us up. We both moved back in with our parents. The abortion is probably the second most confusing and painful thing that has happened in my life, right after what happened with my dad when I was little.",
             "My longest relationship was from roughly age 21 to 23. When that ended I had a mental breakdown and the self-harm started.",
             "I'm not in a relationship right now and I don't see myself getting into one anytime soon. Past relationships left damage that I'm still dealing with years later. I haven't been able to make one last longer than about 3 years. Right now I'd rather focus on getting my own life sorted out first.",
         ], note: nil),
