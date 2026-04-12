@@ -420,6 +420,17 @@ a.result-card:active {
   color: var(--error);
 }
 
+/* Web section label */
+.web-section-label {
+  font-size: 0.72em;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  padding: 20px 4px 8px;
+  border-bottom: 2px solid var(--accent);
+}
+
 /* No results */
 .no-results {
   text-align: center;

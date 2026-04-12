@@ -47,7 +47,7 @@ export default function App() {
 
     const encoded = encodeURIComponent(q);
     const [searchRes, instantRes] = await Promise.allSettled([
-      fetch(`/api/search?q=${encoded}&limit=20`),
+      fetch(`/api/search?q=${encoded}&limit=10`),
       !math ? fetch(`/api/instant?q=${encoded}`) : Promise.resolve(null),
     ]);
 
@@ -179,6 +179,10 @@ export default function App() {
             <div className="result-card error-card animate__animated animate__fadeInUp">
               <span className="error-text">{error}</span>
             </div>
+          )}
+
+          {results.length > 0 && (
+            <div className="web-section-label">Web</div>
           )}
 
           {results.map((r, i) => (
