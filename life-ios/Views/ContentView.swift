@@ -1,6 +1,7 @@
 import SwiftUI 
 
 struct ContentView: View {
+    var onReady: (() -> Void)? = nil
     private let s = LifeData.sections
     @State private var heroAppeared = false
     @State private var bounceChevron = false
@@ -150,6 +151,7 @@ struct ContentView: View {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                 bounceChevron = true
             }
+            onReady?()
         }
     }
 
