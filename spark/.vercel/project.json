@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_61GSpXHARQH5FFAKb4HO3hacP2n9",
+  "orgId": "team_a7aXyisxQeP3sPc8W2Ep2Uxp",
+  "projectName": "spark",
+  "settings": {
+    "createdAt": 1771532605743,
+    "framework": null,
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}

@@ -1,0 +1,49 @@
+<img src="icon.svg" width="80">
+
+# Spark
+
+![version](https://img.shields.io/badge/version-v2.0.0-blue)
+
+Idea-sharing platform with upvoting and JWT auth.
+
+[Live](https://spark.heyitsmejosh.com)
+
+## Features
+
+- Vanilla JS -- single `index.html`, no build step
+- JWT auth with sign up, login, forgot password
+- Category filters and Hot/New sorting
+- Upvoting and trending
+- Dark/light theme toggle
+- PWA with offline support
+- Vercel serverless + Supabase PostgreSQL (RLS enabled)
+- Responsive grid layout (2-col desktop, 1-col mobile)
+- Notification bell with unread badges
+- Post tags (tech, design, business, random) with filter bar
+- Curated seed ideas for new users (12 humanized posts)
+- Comment threads on posts
+
+## Run
+
+```bash
+npx serve .
+npm test
+```
+
+Deploy: push to main, Vercel deploys automatically.
+
+## Roadmap
+
+- [ ] SMTP email delivery for password reset
+- [ ] Real-time updates via Supabase Realtime
+- [ ] User profiles with post history
+- [ ] Moderation tools
+
+## Changelog
+
+- v1.3.0: Better seed ideas, RLS enabled on all Supabase tables, comment threads, iOS v2.0 (comments, profiles, sort, badges, 60+ tests), macOS + watchOS companions, WidgetKit widgets
+- v1.2.0
+
+## License
+
+MIT 2026 Joshua Trommel
