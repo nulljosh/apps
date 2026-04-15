@@ -8,6 +8,7 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 
 ### Web
 - **dose** -- Health tracker (Vite + React). Live: dose.heyitsmejosh.com. Has ios/ + watchos/.
+- **tally** -- BC Self-Serve scraper + benefits guide. Express + Puppeteer + Vercel Blob. PWA. Live: tally.heyitsmejosh.com. Has ios/, macos/, watchos/, widgets-ios/, widgets-macos/.
 - **lingo** -- Language learning (vanilla JS PWA)
 - **politics** -- Political compass (vanilla JS)
 - **nimble-web** -- Instant answers + web search with mind-map (Vite + React). Live: nimble.heyitsmejosh.com. Merged from rabbit.
