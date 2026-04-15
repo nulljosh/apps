@@ -1,0 +1,292 @@
+import SwiftUI
+import UIKit
+
+struct ContentView: View {
+    @Environment(AppState.self) private var appState
+    @State private var showSplash = true
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if appState.isAuthenticated {
+                    AuthenticatedTabShell()
+                } else {
+                    LoginScreen()
+                }
+            }
+        }
+        .overlay {
+            if showSplash {
+                SplashView()
+                    .transition(.opacity)
+            }
+        }
+        .task {
+            try? await Task.sleep(for: .milliseconds(800))
+            withAnimation(.easeOut(duration: 0.4)) {
+                showSplash = false
+            }
+        }
+        .task {
+            await appState.bootstrap()
+        }
+    }
+}
+
+private struct AuthenticatedTabShell: View {
+    @Environment(AppState.self) private var appState
+
+    var body: some View {
+        TabView(selection: Binding(
+            get: { appState.selectedTabIndex },
+            set: { appState.selectedTabIndex = $0 }
+        )) {
+            DashboardScreen()
+                .tabItem {
+                    Label("Home", systemImage: "house")
+                }
+                .tag(0)
+
+            ReportView()
+                .tabItem {
+                    Label("Reports", systemImage: "doc.text")
+                }
+                .tag(1)
+
+            BenefitsView()
+                .tabItem {
+                    Label("Benefits", systemImage: "accessibility")
+                }
+                .tag(2)
+
+            if !appState.statusMessageItems.isEmpty {
+                MessagesView()
+                    .tabItem {
+                        Label("Messages", systemImage: "envelope")
+                    }
+                    .tag(3)
+                    .badge(appState.unreadMessageCount)
+            }
+
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape")
+                }
+                .tag(4)
+        }
+        .tint(.primary)
+        .onChange(of: appState.selectedTabIndex) { _, newTab in
+            if newTab == 3, appState.unreadMessageCount > 0 {
+                Task { await appState.markAllMessagesRead() }
+            }
+        }
+    }
+}
+
+private struct LoginScreen: View {
+    @Environment(AppState.self) private var appState
+    @State private var username = ""
+    @State private var password = ""
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Spacer()
+
+            VStack(spacing: 10) {
+                Text("Tally")
+                    .font(.system(size: 42, weight: .bold))
+                Text("Sign in to see what you're owed")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            VStack(spacing: 12) {
+                TextField("Username", text: $username)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .padding()
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+
+                SecureField("Password", text: $password)
+                    .padding()
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            }
+
+            Button {
+                Task { await appState.login(username: username, password: password) }
+            } label: {
+                HStack {
+                    if appState.isLoading { ProgressView().tint(.white) }
+                    Text("Login").fontWeight(.semibold)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(Color.primary, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .foregroundStyle(Color(uiColor: .systemBackground))
+            }
+            .disabled(username.isEmpty || password.isEmpty || appState.isLoading)
+            .opacity((username.isEmpty || password.isEmpty || appState.isLoading) ? 0.6 : 1)
+
+            if let error = appState.errorMessage {
+                Text(error)
+                    .font(.caption)
+                    .foregroundStyle(.red.opacity(0.9))
+                    .multilineTextAlignment(.center)
+            }
+
+            Spacer()
+        }
+        .padding(24)
+        .navigationTitle("Sign In")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+private struct DashboardScreen: View {
+    @Environment(AppState.self) private var appState
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 18) {
+                if appState.isOffline {
+                    OfflineBanner()
+                }
+
+                paymentCard
+                paidToggle
+                dateCard
+                pwdTimeline
+
+                if !appState.statusMessages.isEmpty {
+                    messagesPreview
+                }
+            }
+            .padding()
+            .containerRelativeFrame(.vertical, alignment: .top)
+        }
+        .refreshable { await appState.refreshDashboard() }
+        .task { await appState.loadDashboardIfNeeded() }
+        .navigationTitle("Home")
+    }
+
+    private var paymentCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(appState.paymentAmountText)
+                .font(.system(size: 48, weight: .bold))
+                .minimumScaleFactor(0.7)
+                .lineLimit(1)
+                .contentTransition(.numericText())
+
+            Text("INCOME ASSISTANCE")
+                .font(.system(size: 11, weight: .semibold))
+                .tracking(1.5)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var paidToggle: some View {
+        HStack(spacing: 12) {
+            Button {
+                Task { await appState.togglePaid() }
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: appState.isPaid ? "checkmark.circle.fill" : "circle")
+                        .foregroundStyle(appState.isPaid ? .green : .secondary)
+                    Text(appState.isPaid ? "Paid" : "Paid yet?")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(appState.isPaid ? .green : .primary)
+                }
+                .padding(.horizontal, 18)
+                .padding(.vertical, 10)
+                .background(Capsule().strokeBorder(appState.isPaid ? .green.opacity(0.5) : Color.secondary.opacity(0.3), lineWidth: 1))
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var dateCard: some View {
+        VStack(spacing: 12) {
+            PaymentCalendarView(paymentDate: appState.parsedNextPaymentDate)
+
+            HStack {
+                Text(appState.nextPaymentDateText)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(appState.countdownText)
+                    .font(.subheadline.weight(.bold))
+            }
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+    }
+
+    private var pwdTimeline: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("PWD APPLICATION")
+                .font(.system(size: 11, weight: .semibold))
+                .tracking(1.5)
+                .foregroundStyle(.secondary)
+
+            ForEach(pwdSteps, id: \.label) { step in
+                HStack(alignment: .top, spacing: 12) {
+                    Circle()
+                        .fill(step.done ? Color.primary : Color.secondary.opacity(0.3))
+                        .frame(width: 10, height: 10)
+                        .padding(.top, 4)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(step.label)
+                            .font(.subheadline.weight(.medium))
+                        Text(step.date)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+    }
+
+    private var pwdSteps: [(label: String, date: String, done: Bool)] {
+        [
+            ("Application submitted", "March 4, 2026", true),
+            ("Waiting for decision", "Week 6 of ~8 -- submitted March 4", true),
+            ("Decision", "Pending", false),
+            ("Payment adjustment", "Pending", false)
+        ]
+    }
+
+    private var messagesPreview: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Status Messages")
+                .font(.headline)
+
+            ForEach(appState.statusMessageItems.prefix(3)) { message in
+                Text("-- \(message.text)")
+                    .font(.subheadline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+    }
+}
+
+private struct OfflineBanner: View {
+    var body: some View {
+        HStack {
+            Text("Offline").font(.caption.weight(.semibold))
+            Spacer()
+            Text("Showing last saved data").font(.caption).foregroundStyle(.secondary)
+        }
+        .padding(12)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+}
+
+#Preview {
+    ContentView()
+        .environment(AppState())
+}
