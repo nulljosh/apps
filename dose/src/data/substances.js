@@ -3028,6 +3028,635 @@ export const SUBSTANCES = [
     routes: ['oral', 'smoked'],
     unit: 'g',
     notes: 'Leonotis leonurus. South African traditional medicine ("wild hemp"). Leonurine has mild psychoactive and anti-inflammatory properties. Legal almost everywhere. Effects are subtle.'
+  },
+
+  // PRESCRIPTION MEDICATIONS
+  {
+    id: 'concerta',
+    name: 'Concerta (Methylphenidate ER)',
+    category: 'stimulant',
+    halfLife: '3.5 hours (OROS delivery sustains plasma levels 10–12 hours)',
+    effects: ['Focus', 'Alertness', 'Reduced appetite', 'Increased heart rate', 'Insomnia (if taken late)'],
+    interactions: ['MAOIs (hypertensive crisis — contraindicated)', 'SSRIs (mild serotonin interaction)', 'Clonidine (additive cardiovascular effects)', 'Alcohol (increased side effects)', 'Anticonvulsants (altered levels)'],
+    harmReduction: [
+      'OROS system: 22% IR coating releases immediately, 78% ER pumped over 10–12 hours',
+      'Do not crush, split, or chew — destroys ER mechanism and causes dose dumping',
+      'Swallow whole with water; empty tablet shell in stool is normal',
+      'Typical doses: 18mg, 27mg, 36mg, 54mg — titrate slowly',
+      'Take in the morning; afternoon doses cause insomnia',
+      'Cardiovascular screening before starting; monitor BP and HR'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'OROS (osmotic release oral system) extended-release methylphenidate. Concerta brand. Distinct PK from IR Ritalin — smoother plasma curve, single daily dose. Schedule II. Dopamine/norepinephrine reuptake inhibitor.'
+  },
+  {
+    id: 'zolpidem',
+    name: 'Zolpidem',
+    category: 'depressant',
+    halfLife: '1.5–2.5 hours',
+    effects: ['Sleep induction', 'Sedation', 'Anterograde amnesia', 'Muscle relaxation', 'Parasomnia (sleepwalking, sleep-eating — rare)'],
+    interactions: ['Alcohol (dangerous CNS depression)', 'Benzodiazepines (additive)', 'CNS depressants', 'CYP3A4 inhibitors (ketoconazole, itraconazole — greatly increase levels)', 'Opioids (respiratory depression)'],
+    harmReduction: [
+      'Take immediately before bed — onset 15–30 min',
+      'Do not take if you cannot get 7–8 hours of sleep',
+      'Avoid alcohol on the same night',
+      'Parasomnias (sleepwalking, eating, driving while asleep) — discontinue if these occur',
+      'Rebound insomnia common on stopping; taper or use intermittently',
+      'Lower dose for women and elderly (slower clearance)'
+    ],
+    routes: ['oral', 'sublingual'],
+    unit: 'mg',
+    notes: 'Non-benzodiazepine GABA-A agonist ("Z-drug"). Ambien brand. Schedule IV. Short half-life targets sleep onset; CR formulation available for sleep maintenance. Significant abuse/dependence potential despite non-benzo classification.'
+  },
+  {
+    id: 'lithium',
+    name: 'Lithium',
+    category: 'medication',
+    halfLife: '18–36 hours',
+    effects: ['Mood stabilization', 'Antimanic', 'Antidepressant augmentation', 'Antisuicidal (robust evidence)', 'Neuroprotective'],
+    interactions: ['NSAIDs (increase lithium levels — toxicity risk)', 'Thiazide diuretics (increase levels)', 'ACE inhibitors (increase levels)', 'SSRIs (serotonin syndrome risk)', 'Caffeine (decreases levels slightly)', 'Low-sodium diet (increases levels)'],
+    harmReduction: [
+      'Narrow therapeutic index: target 0.6–1.2 mEq/L; toxicity above 1.5 mEq/L',
+      'Regular blood monitoring (levels, creatinine, TSH) every 3–6 months',
+      'Stay hydrated — dehydration concentrates lithium and causes toxicity',
+      'Maintain consistent sodium intake — low salt raises lithium levels',
+      'Toxicity signs: tremor, confusion, vomiting, slurred speech — seek ER',
+      'Never stop abruptly — taper over months to avoid rebound mania'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Alkali metal mood stabilizer. Gold standard for bipolar disorder. Also reduces suicide risk (strongest evidence of any psychiatric medication). Mechanism not fully understood. Requires regular serum level monitoring. Lithobid/Eskalith brands.'
+  },
+  {
+    id: 'risperidone',
+    name: 'Risperidone',
+    category: 'medication',
+    halfLife: '3–20 hours (9-hydroxyrisperidone active metabolite: ~21 hours)',
+    effects: ['Antipsychotic', 'Mood stabilization', 'Reduced hallucinations/delusions', 'Sedation', 'Prolactin elevation'],
+    interactions: ['CYP2D6 inhibitors (fluoxetine, paroxetine — increase levels)', 'Carbamazepine (reduces levels by ~50%)', 'QT-prolonging drugs (additive)', 'Antihypertensives (additive hypotension)', 'CNS depressants (additive sedation)'],
+    harmReduction: [
+      'Start low and titrate slowly — 0.5–1mg initially',
+      'EPS (extrapyramidal symptoms) more common than newer antipsychotics, especially at higher doses',
+      'Metabolic monitoring: weight, glucose, lipids every 3 months',
+      'Prolactin elevation can cause sexual dysfunction and galactorrhea',
+      'Available as long-acting injectable (Risperdal Consta) for adherence',
+      'Do not stop abruptly — taper to avoid rebound psychosis'
+    ],
+    routes: ['oral', 'IM'],
+    unit: 'mg',
+    notes: 'Second-generation (atypical) antipsychotic. D2 + 5-HT2A antagonist. Risperdal brand. Schedule not controlled. FDA-approved for schizophrenia, bipolar mania, and irritability in autism. Higher EPS risk than some atypicals.'
+  },
+  {
+    id: 'olanzapine',
+    name: 'Olanzapine',
+    category: 'medication',
+    halfLife: '21–54 hours',
+    effects: ['Antipsychotic', 'Mood stabilization', 'Heavy sedation', 'Appetite stimulation', 'Antiemetic'],
+    interactions: ['Fluvoxamine (dramatically increases levels — CYP1A2 inhibition)', 'Carbamazepine (reduces levels by ~50%)', 'Smoking (induces CYP1A2 — reduces levels; stopping smoking increases levels)', 'CNS depressants (additive)', 'QT-prolonging drugs'],
+    harmReduction: [
+      'Significant metabolic risk: weight gain (average 4–12kg), glucose dysregulation, dyslipidemia',
+      'Monitor weight, fasting glucose, and lipids at baseline, 3 months, then annually',
+      'Among the most sedating antipsychotics — often used for acute agitation (IM)',
+      'Smoking status affects levels — dosing may need adjustment if patient quits',
+      'Tardive dyskinesia risk with long-term use',
+      'Zyprexa Zydis: orally disintegrating tablet for refusal/non-adherence'
+    ],
+    routes: ['oral', 'IM'],
+    unit: 'mg',
+    notes: 'Second-generation (atypical) antipsychotic. Zyprexa brand. High metabolic liability but effective. Also used for treatment-resistant depression (with fluoxetine — Symbyax). IM form used in emergency psychiatry.'
+  },
+  {
+    id: 'amitriptyline',
+    name: 'Amitriptyline',
+    category: 'medication',
+    halfLife: '9–27 hours',
+    effects: ['Antidepressant', 'Analgesic (neuropathic pain)', 'Sleep aid', 'Migraine prevention', 'Heavy sedation'],
+    interactions: ['MAOIs (fatal — serotonin syndrome/hypertensive crisis)', 'SSRIs (serotonin syndrome + increased TCA levels)', 'Anticholinergic drugs (additive toxicity)', 'Alcohol (severe CNS depression)', 'QT-prolonging drugs', 'CYP2D6 inhibitors (fluoxetine, paroxetine — greatly increase levels)'],
+    harmReduction: [
+      'Strong anticholinergic effects: dry mouth, constipation, urinary retention, blurred vision, confusion',
+      'Dangerous in overdose — cardiotoxic (wide therapeutic index but narrow safety window)',
+      'Start low (10–25mg at night); therapeutic antidepressant doses are 75–150mg',
+      'Low doses (10–50mg) often used for pain, sleep, and headache prevention',
+      'Avoid in elderly — high fall risk and anticholinergic cognitive effects',
+      'Take at bedtime due to sedation'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Tricyclic antidepressant (TCA). Elavil brand. Inhibits serotonin + norepinephrine reuptake + blocks multiple receptors (H1, muscarinic, alpha-1). Largely replaced by SSRIs for depression but still first-line for neuropathic pain and migraine prophylaxis.'
+  },
+  {
+    id: 'semaglutide',
+    name: 'Semaglutide',
+    category: 'medication',
+    halfLife: '~1 week',
+    effects: ['Weight loss', 'Blood glucose reduction', 'Appetite suppression', 'Cardiovascular protection', 'Delayed gastric emptying'],
+    interactions: ['Oral medications (delayed gastric emptying may reduce absorption)', 'Insulin/sulfonylureas (hypoglycemia risk — reduce dose)', 'Alcohol (hypoglycemia risk)'],
+    harmReduction: [
+      'Titrate slowly to minimize GI side effects: nausea, vomiting, diarrhea',
+      'Standard titration: 0.25mg/week × 4 weeks → 0.5mg → 1mg → 2mg (Wegovy: up to 2.4mg)',
+      'Inject subcutaneously (abdomen, thigh, upper arm) once weekly, any time of day',
+      'Take on empty stomach or with small meal to reduce nausea',
+      'Avoid if personal/family history of medullary thyroid cancer or MEN2',
+      'Pancreatitis has been reported — discontinue if severe abdominal pain'
+    ],
+    routes: ['subcutaneous', 'oral'],
+    unit: 'mg',
+    notes: 'GLP-1 receptor agonist. Ozempic (diabetes) / Wegovy (obesity) brands. Once-weekly injection. Oral form (Rybelsus) available for diabetes. 15–17% average weight loss in trials. Also reduces cardiovascular events. Tirzepatide (GLP-1/GIP) is the next-generation variant.'
+  },
+  {
+    id: 'naltrexone',
+    name: 'Naltrexone',
+    category: 'medication',
+    halfLife: '4 hours (6-beta-naltrexol active metabolite: 13 hours)',
+    effects: ['Opioid blockade', 'Reduced alcohol cravings', 'Mood effects (LDN)', 'Endorphin rebound (LDN mechanism)'],
+    interactions: ['Opioids (blocks effects completely; precipitates acute withdrawal if opioids in system)', 'Opioid-containing medications (cough syrups, antidiarrheal)', 'Thioridazine (hepatotoxicity)'],
+    harmReduction: [
+      'Must be opioid-free for 7–10 days (methadone: 10–14 days) before starting — naltrexone precipitates severe withdrawal',
+      'Perform naloxone challenge test to confirm opioid-free status before initiating',
+      'LDN (low-dose naltrexone 1.5–4.5mg): taken at bedtime; different mechanism for autoimmune/pain conditions',
+      'Standard doses: 50mg/day or Vivitrol 380mg IM monthly injection',
+      'Inform surgeons before any procedure — pain management requires much higher opioid doses',
+      'Hepatotoxicity at high doses — baseline LFTs recommended'
+    ],
+    routes: ['oral', 'IM'],
+    unit: 'mg',
+    notes: 'Opioid antagonist. Vivitrol brand (monthly injection). FDA-approved for opioid use disorder and alcohol use disorder. LDN (1.5–4.5mg) used off-label for fibromyalgia, Crohn\'s, multiple sclerosis, and chronic pain — different mechanism at low doses.'
+  },
+  {
+    id: 'cyclobenzaprine',
+    name: 'Cyclobenzaprine',
+    category: 'medication',
+    halfLife: '8–37 hours',
+    effects: ['Muscle spasm relief', 'Sedation', 'Pain relief (indirect — via spasm reduction)'],
+    interactions: ['MAOIs (contraindicated — serotonin syndrome/hypertensive crisis)', 'CNS depressants (additive sedation)', 'Alcohol (severe sedation)', 'TCAs (additive — structurally related)', 'Anticholinergic drugs (additive toxicity)'],
+    harmReduction: [
+      'Structurally related to TCAs — shares anticholinergic and sedating properties',
+      'Not for long-term use (>3 weeks) — limited evidence beyond acute musculoskeletal injuries',
+      'Avoid in elderly — high fall risk, anticholinergic toxicity',
+      'Not effective for fibromyalgia or central pain syndromes',
+      'Drowsiness is expected — do not drive',
+      'Standard dose: 5–10mg three times daily'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Centrally acting skeletal muscle relaxant. Flexeril/Amrix brand. Reduces muscle hyperactivity by acting on the brainstem, not directly on muscles. Primarily for acute musculoskeletal conditions (sprains, strains). Often misused recreationally for sedation.'
+  },
+  {
+    id: 'isotretinoin',
+    name: 'Isotretinoin',
+    category: 'medication',
+    halfLife: '10–20 hours (4-oxo-isotretinoin active metabolite: 17–50 hours)',
+    effects: ['Sebum suppression (up to 90%)', 'Sebaceous gland shrinkage', 'Anti-inflammatory', 'Long-term acne remission'],
+    interactions: ['Vitamin A supplements (additive toxicity — hypervitaminosis A)', 'Tetracyclines (pseudotumor cerebri — contraindicated combination)', 'Alcohol (liver stress)', 'St. John\'s Wort (reduced contraceptive efficacy)'],
+    harmReduction: [
+      'TERATOGENIC — causes severe birth defects; requires two forms of contraception and monthly pregnancy tests (iPLEDGE in US)',
+      'Baseline and monthly LFTs and lipids — can cause hepatotoxicity and hypertriglyceridemia',
+      'Cheilitis (dry cracked lips) is nearly universal — use lip balm constantly',
+      'Avoid waxing, laser, and dermabrasion during treatment and 6 months after (skin fragility)',
+      'Do not donate blood during treatment or for 1 month after',
+      'Typical course: 0.5–1mg/kg/day for 15–20 weeks; total cumulative dose targets 120–150mg/kg'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Retinoid (vitamin A derivative). Accutane/Claravis brand. Most effective acne treatment — produces permanent remission in ~85% after one course. Mechanism: dramatically shrinks sebaceous glands. Requires enrollment in iPLEDGE (US) or equivalent monitoring program.'
+  },
+  {
+    id: 'valproate',
+    name: 'Valproate (Divalproex)',
+    category: 'medication',
+    halfLife: '9–16 hours',
+    effects: ['Anticonvulsant', 'Mood stabilization', 'Antimanic', 'Migraine prevention', 'Sedation'],
+    interactions: ['Lamotrigine (valproate doubles lamotrigine levels — reduce lamotrigine dose by 50%)', 'Aspirin (increases free valproate levels)', 'Carbamazepine (lowers valproate levels)', 'Other anticonvulsants', 'CNS depressants (additive)'],
+    harmReduction: [
+      'TERATOGENIC (neural tube defects) — avoid in women of childbearing potential; use contraception',
+      'Monitor liver function — hepatotoxicity risk, especially in children under 2',
+      'Regular serum levels (50–100 mcg/mL therapeutic range) and LFTs',
+      'Pancreatitis: abdominal pain + nausea during treatment — seek evaluation',
+      'Weight gain and hair thinning common side effects',
+      'Do not stop abruptly — taper to prevent seizure rebound'
+    ],
+    routes: ['oral', 'IV'],
+    unit: 'mg',
+    notes: 'Anticonvulsant and mood stabilizer. Depakote (divalproex)/Depakene (valproic acid) brand. Mechanism: GABA enhancement + sodium channel blockade. FDA-approved for epilepsy, bipolar mania, and migraine prevention. Significant teratogenic risk.'
+  },
+  {
+    id: 'carbamazepine',
+    name: 'Carbamazepine',
+    category: 'medication',
+    halfLife: '25–65 hours initially; autoinduces to 12–17 hours with chronic use',
+    effects: ['Anticonvulsant', 'Mood stabilization', 'Trigeminal neuralgia relief', 'Sedation'],
+    interactions: ['Major CYP3A4 inducer — reduces levels of oral contraceptives, SSRIs, antipsychotics, many others', 'Valproate (lowers carbamazepine levels; valproate levels also fall)', 'Lithium (neurotoxicity risk)', 'MAOIs (contraindicated)', 'Grapefruit (increases levels)'],
+    harmReduction: [
+      'Autoinduces its own metabolism — levels fall after first few weeks; dose adjustment often needed',
+      'HLA-B*1502 genetic test before starting in patients of Asian descent — risk of Stevens-Johnson syndrome',
+      'Baseline and periodic CBC, LFTs — rare aplastic anemia and agranulocytosis',
+      'Use backup contraception — strong OCP inducer',
+      'Many drug interactions — check every new medication against carbamazepine',
+      'Therapeutic range: 4–12 mcg/mL; check levels at initiation and after dose changes'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Anticonvulsant and mood stabilizer. Tegretol/Carbatrol brand. Sodium channel blocker. FDA-approved for epilepsy, bipolar disorder, and trigeminal neuralgia. Potent CYP3A4 inducer with extensive drug-drug interactions. Autoinduction property complicates dosing.'
+  },
+  {
+    id: 'doxycycline',
+    name: 'Doxycycline',
+    category: 'medication',
+    halfLife: '15–25 hours',
+    effects: ['Broad-spectrum antibiotic', 'Anti-inflammatory (sub-antimicrobial doses)', 'Malaria prophylaxis'],
+    interactions: ['Antacids/dairy (chelation — dramatically reduces absorption; separate by 2 hours)', 'Warfarin (increases anticoagulant effect)', 'Isotretinoin (pseudotumor cerebri — contraindicated)', 'Oral contraceptives (theoretical minor interaction)', 'Rifampin (reduces doxycycline levels)'],
+    harmReduction: [
+      'Take with full glass of water and remain upright for 30 min — risk of esophageal ulceration',
+      'Photosensitivity: use sunscreen; avoid prolonged sun exposure during treatment',
+      'Do not take with dairy, calcium, magnesium, iron, or antacids — chelation severely reduces absorption',
+      'Can be taken with food (unlike other tetracyclines) to reduce GI upset',
+      'Complete the full course even if feeling better',
+      'Subantimicrobial dose (40mg modified-release) used for rosacea and periodontitis'
+    ],
+    routes: ['oral', 'IV'],
+    unit: 'mg',
+    notes: 'Second-generation tetracycline antibiotic. Vibramycin/Doryx brand. Bacteriostatic — inhibits 30S ribosomal subunit. Broad spectrum: Lyme disease, chlamydia, acne, malaria prophylaxis, community-acquired pneumonia, anthrax. Better GI tolerance and longer half-life than tetracycline.'
+  },
+  {
+    id: 'amoxicillin',
+    name: 'Amoxicillin',
+    category: 'medication',
+    halfLife: '1–1.5 hours',
+    effects: ['Broad-spectrum bactericidal antibiotic', 'Cell wall synthesis inhibition'],
+    interactions: ['Warfarin (increased INR — monitor closely)', 'Methotrexate (reduced renal elimination — toxicity risk)', 'Probenecid (increases amoxicillin levels)', 'Oral contraceptives (theoretical minor reduction in efficacy)'],
+    harmReduction: [
+      'Penicillin allergy cross-reactivity ~2% — clarify allergy type before prescribing',
+      'Complete the full course to prevent resistance',
+      'Take with or without food',
+      'Diarrhea and GI upset common — probiotics may help',
+      'Maculopapular rash in mononucleosis patients — not true allergy but avoid in EBV',
+      'C. difficile risk with any antibiotic — report severe diarrhea'
+    ],
+    routes: ['oral', 'IV'],
+    unit: 'mg',
+    notes: 'Aminopenicillin antibiotic. Amoxil brand. Most prescribed antibiotic globally. Beta-lactam; bactericidal via cell wall synthesis inhibition. Common uses: strep throat, ear infections, sinusitis, H. pylori (with clarithromycin + PPI), Lyme (early). Often combined with clavulanate (Augmentin) for resistant organisms.'
+  },
+  {
+    id: 'spironolactone',
+    name: 'Spironolactone',
+    category: 'medication',
+    halfLife: '1.5 hours (canrenone active metabolite: 13–24 hours)',
+    effects: ['Diuresis (potassium-sparing)', 'Antihypertensive', 'Antiandrogen', 'Acne reduction', 'Reduces aldosterone effects'],
+    interactions: ['ACE inhibitors/ARBs (hyperkalemia — monitor potassium)', 'Potassium supplements (hyperkalemia)', 'NSAIDs (reduce diuretic effect and worsen renal function)', 'Digoxin (spironolactone increases digoxin levels)', 'Lithium (increases lithium levels)'],
+    harmReduction: [
+      'Monitor potassium levels regularly — hyperkalemia can be life-threatening',
+      'Avoid high-potassium foods (bananas, oranges, potassium salt) when on higher doses',
+      'Take with food to reduce GI upset',
+      'Gynecomastia in males at higher doses (>100mg) due to antiandrogen effects',
+      'Menstrual irregularity common in women at doses >100mg',
+      'Start at 25–50mg/day; titrate based on potassium and response'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Aldosterone antagonist (mineralocorticoid receptor blocker). Aldactone brand. Uses: heart failure (Aldactone), hypertension, hyperaldosteronism, acne, hirsutism, gender-affirming HRT for trans women (antiandrogen). Potassium-sparing diuretic — monitor K+ closely.'
+  },
+  {
+    id: 'sildenafil',
+    name: 'Sildenafil',
+    category: 'medication',
+    halfLife: '3–5 hours',
+    effects: ['Erectile dysfunction treatment', 'Pulmonary arterial hypertension (PAH) treatment', 'Smooth muscle relaxation (penile/pulmonary vasculature)', 'Enhanced exercise capacity (PAH)'],
+    interactions: ['Nitrates (severe life-threatening hypotension — absolute contraindication)', 'Alpha-blockers (additive hypotension)', 'CYP3A4 inhibitors (ritonavir increases sildenafil levels 11×)', 'Other PDE5 inhibitors', 'Alcohol (additive hypotension)'],
+    harmReduction: [
+      'NEVER combine with nitrates (nitroglycerin, isosorbide, amyl nitrite/poppers) — fatal hypotension',
+      'Take 30–60 min before sexual activity; food (especially high-fat meal) delays onset',
+      'Common side effects: headache, flushing, nasal congestion, visual disturbances (blue tint)',
+      'Priapism (erection >4 hours) — seek ER immediately to prevent permanent damage',
+      'Start at 25mg in elderly or those on alpha-blockers',
+      'PAH dosing (Revatio): 20mg three times daily — different from ED dosing'
+    ],
+    routes: ['oral', 'IV (PAH only)'],
+    unit: 'mg',
+    notes: 'PDE5 (phosphodiesterase type 5) inhibitor. Viagra (ED) / Revatio (PAH) brand. Enhances NO-mediated vasodilation. FDA-approved for erectile dysfunction and pulmonary arterial hypertension. Tadalafil (Cialis) is longer-acting alternative (36 hours).'
+  },
+  {
+    id: 'metoprolol',
+    name: 'Metoprolol',
+    category: 'medication',
+    halfLife: '3–7 hours (IR); 7–15 hours (XL/succinate)',
+    effects: ['Heart rate reduction', 'Blood pressure reduction', 'Angina relief', 'Heart failure (Toprol-XL)', 'Migraine prevention'],
+    interactions: ['CYP2D6 inhibitors (fluoxetine, paroxetine, bupropion — dramatically increase levels)', 'Calcium channel blockers (verapamil, diltiazem — heart block risk)', 'Insulin/antidiabetics (masks hypoglycemia signs)', 'Clonidine (rebound hypertension on clonidine withdrawal)', 'NSAIDs (reduce antihypertensive effect)'],
+    harmReduction: [
+      'Beta-1 selective at normal doses; selectivity lost at high doses (avoid in severe asthma)',
+      'Do not stop abruptly — gradual taper to prevent rebound tachycardia and angina',
+      'CYP2D6 poor metabolizers have higher plasma levels — be aware if on fluoxetine/paroxetine',
+      'Take with food to improve absorption (tartrate/IR form)',
+      'Succinate (XL) can be taken without food; do not crush or chew',
+      'Masks hypoglycemia symptoms in diabetics — sweating still occurs'
+    ],
+    routes: ['oral', 'IV'],
+    unit: 'mg',
+    notes: 'Beta-1 selective adrenergic blocker. Lopressor (tartrate/IR) / Toprol-XL (succinate/ER) brand. Used for hypertension, angina, heart failure (HFrEF), post-MI, arrhythmias, and migraine prevention. One of the most prescribed medications globally.'
+  },
+  {
+    id: 'testosterone',
+    name: 'Testosterone',
+    category: 'medication',
+    halfLife: 'Varies by ester: cypionate ~8 days, enanthate ~4.5 days, propionate ~2 days, gel/topical: daily application',
+    effects: ['Muscle mass increase', 'Libido increase', 'Energy and mood elevation', 'Secondary male characteristics', 'Erythropoiesis (increased RBC production)', 'Bone density increase'],
+    interactions: ['Anticoagulants (warfarin — potentiates anticoagulation)', 'Insulin (increases insulin sensitivity — may need dose adjustment)', 'Corticosteroids (additive fluid retention)', 'Hepatotoxic drugs (oral 17-alpha-alkylated forms only)'],
+    harmReduction: [
+      'Monitor hematocrit — testosterone raises RBC production; >54% increases clot risk',
+      'Monitor PSA in men >40; testosterone may accelerate prostate issues',
+      'Aromatization to estradiol occurs — gynecomastia and mood effects; aromatase inhibitor may be needed',
+      'Inject IM or subQ (subQ slower absorption, less PIP); rotate injection sites',
+      'Gel: apply to clean dry skin; wash hands; avoid skin-to-skin contact with others for 4 hours',
+      'Testicular atrophy and reduced fertility — hCG co-administration preserves testicular function'
+    ],
+    routes: ['IM', 'subcutaneous', 'transdermal', 'oral (undecanoate)'],
+    unit: 'mg',
+    notes: 'Endogenous androgen hormone. Schedule III (US). Used for hypogonadism (TRT), gender-affirming HRT, delayed puberty. Ester form determines injection frequency. Non-injectable forms avoid first-pass metabolism. Blood donation not permitted while on TRT.'
+  },
+  {
+    id: 'buprenorphine',
+    name: 'Buprenorphine',
+    category: 'opioid',
+    halfLife: '24–42 hours',
+    effects: ['Opioid partial agonism', 'Pain relief', 'Opioid craving suppression', 'Reduced withdrawal symptoms', 'Ceiling effect on respiratory depression'],
+    interactions: ['Full opioid agonists (precipitates withdrawal if used too soon — must be in moderate withdrawal before first dose)', 'CNS depressants (additive)', 'Benzodiazepines (respiratory depression — FDA black box warning)', 'CYP3A4 inhibitors (increase buprenorphine levels)', 'MAOIs (serotonin syndrome risk)'],
+    harmReduction: [
+      'Suboxone (buprenorphine + naloxone) — naloxone deters injection; dissolves poorly if injected',
+      'Must be in moderate withdrawal (COWS score ≥8) before first dose to avoid precipitated withdrawal',
+      'Place film/tablet under tongue or between cheek and gum until dissolved; do not swallow',
+      'Partial agonist ceiling effect makes overdose less likely than full agonists — but still possible with benzos/alcohol',
+      'Film daily dosing for OUD; sublingual or buccal for pain (more frequent dosing)',
+      'Stable patients can receive 30-day prescriptions (DATA 2000 waiver eliminated in 2023 in US)'
+    ],
+    routes: ['sublingual', 'buccal', 'transdermal', 'IV (diverted use)'],
+    unit: 'mg',
+    notes: 'Partial mu-opioid receptor agonist + kappa antagonist. Suboxone (with naloxone) / Subutex (mono) / Belbuca brand. Gold standard pharmacotherapy for opioid use disorder. Also approved for pain (Butrans patch, Belbuca buccal film). Ceiling effect on respiratory depression provides safety advantage over full agonists.'
+  },
+  {
+    id: 'paroxetine',
+    name: 'Paroxetine',
+    category: 'medication',
+    halfLife: '21 hours (highly variable; autoinhibits CYP2D6 — non-linear kinetics)',
+    effects: ['Antidepressant', 'Anxiolytic', 'Anti-OCD', 'PMDD treatment', 'Sedating (more than other SSRIs)'],
+    interactions: ['MAOIs (serotonin syndrome — fatal)', 'Tramadol (serotonin syndrome)', 'Most potent CYP2D6 inhibitor of all SSRIs — greatly increases TCAs, antipsychotics, codeine (reduced analgesia), tamoxifen (reduced efficacy)', 'Thioridazine/pimozide (QT prolongation — contraindicated)'],
+    harmReduction: [
+      'Worst discontinuation syndrome of all SSRIs — taper slowly (10% per month for long-term users)',
+      'Never stop abruptly — brain zaps, dizziness, flu-like symptoms, irritability',
+      'Strong CYP2D6 inhibitor — check all medications before adding to regimen',
+      'Tamoxifen patients: paroxetine should be avoided (reduces active tamoxifen metabolite)',
+      'Most sedating and anticholinergic of the SSRIs',
+      'Avoid in pregnancy (neonatal adaptation syndrome, cardiac defects — Category D)'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'SSRI. Paxil/Pexeva brand. FDA-approved for depression, OCD, panic disorder, social anxiety, GAD, PTSD, and PMDD. Most strongly associated with discontinuation syndrome and CYP2D6 inhibition of all SSRIs. Potent anticholinergic among SSRIs.'
+  },
+  {
+    id: 'fluvoxamine',
+    name: 'Fluvoxamine',
+    category: 'medication',
+    halfLife: '15–20 hours',
+    effects: ['Anti-OCD', 'Antidepressant', 'Anti-anxiety', 'Sigma-1 receptor agonism (anti-inflammatory — COVID-19 research)'],
+    interactions: ['MAOIs (serotonin syndrome)', 'Tizanidine (contraindicated — extreme hypotension/sedation)', 'Theophylline (greatly increases levels — toxicity)', 'Warfarin (increases INR)', 'Clozapine/olanzapine (CYP1A2 inhibition — dramatically increases levels)', 'Caffeine (CYP1A2 — increases caffeine levels)'],
+    harmReduction: [
+      'Strongest CYP1A2 inhibitor — many interactions; check every new drug',
+      'Tizanidine absolutely contraindicated with fluvoxamine — severe hypotension and sedation',
+      'Smokers have lower levels (smoking induces CYP1A2) — levels rise if patient quits',
+      'First-line SSRI for OCD; less commonly used for depression than other SSRIs',
+      'More sedating than sertraline or escitalopram',
+      'Take at bedtime if sedation occurs'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'SSRI with strong sigma-1 receptor agonist activity. Luvox brand. First FDA-approved treatment for OCD (1994). Potent CYP1A2 inhibitor with extensive drug interactions. Studied for COVID-19 post-infection treatment via sigma-1 mechanism (anti-inflammatory). Less used for depression due to interaction profile.'
+  },
+  {
+    id: 'nortriptyline',
+    name: 'Nortriptyline',
+    category: 'medication',
+    halfLife: '18–44 hours',
+    effects: ['Antidepressant', 'Neuropathic pain relief', 'Migraine prevention', 'Sleep improvement', 'Moderate sedation'],
+    interactions: ['MAOIs (serotonin syndrome — fatal)', 'SSRIs (serotonin syndrome + CYP2D6 inhibitors increase nortriptyline levels)', 'CYP2D6 inhibitors (fluoxetine, paroxetine — dramatically increase levels)', 'QT-prolonging drugs', 'Anticholinergic drugs (additive)'],
+    harmReduction: [
+      'Active metabolite of amitriptyline — less sedating and less anticholinergic than parent',
+      'Therapeutic drug monitoring recommended: target 50–150 ng/mL',
+      'Dangerous in overdose — cardiotoxic (wide complex tachycardia, QRS prolongation)',
+      'Lower anticholinergic burden than amitriptyline but still present',
+      'Take at bedtime; relatively well-tolerated TCA for neuropathic pain',
+      'CYP2D6 poor metabolizers have much higher plasma levels'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Secondary amine TCA. Pamelor brand. Active metabolite of amitriptyline. Better tolerated than amitriptyline with less sedation and anticholinergic effects. Used for depression, neuropathic pain, migraine prophylaxis, and smoking cessation (adjunct). Therapeutic drug monitoring is standard practice.'
+  },
+  {
+    id: 'prednisone',
+    name: 'Prednisone',
+    category: 'medication',
+    halfLife: '3–4 hours (biological effect persists 18–36 hours)',
+    effects: ['Anti-inflammatory', 'Immunosuppressive', 'Antiallergic', 'Blood glucose elevation', 'Fluid retention'],
+    interactions: ['NSAIDs (additive GI ulcer risk — use with PPI)', 'Warfarin (variable — usually increases INR)', 'Insulin/antidiabetics (raises blood glucose)', 'Live vaccines (immunosuppression — avoid while on significant doses)', 'Rifampin (reduces prednisone effect)', 'Potassium-depleting diuretics (additive hypokalemia)'],
+    harmReduction: [
+      'Take with food or milk to reduce GI irritation',
+      'Short courses (<2 weeks) rarely require tapering; longer courses must be tapered to allow adrenal recovery',
+      'Adrenal suppression with >3 weeks of use — do not stop abruptly',
+      'Monitor blood glucose in diabetics — significant hyperglycemia can occur',
+      'Calcium + vitamin D supplementation for courses >3 months (bone density loss)',
+      'Mood changes, insomnia, and increased appetite are common, especially at higher doses'
+    ],
+    routes: ['oral', 'IV'],
+    unit: 'mg',
+    notes: 'Synthetic glucocorticoid (corticosteroid). Deltasone brand. Converted to prednisolone (active form) in the liver. Most widely prescribed corticosteroid. Used for allergic reactions, asthma, autoimmune conditions, inflammatory diseases, and immunosuppression. Long-term use causes significant side effects: Cushingoid features, osteoporosis, cataracts, adrenal suppression.'
+  },
+  {
+    id: 'furosemide',
+    name: 'Furosemide',
+    category: 'medication',
+    halfLife: '2 hours',
+    effects: ['Potent diuresis', 'Blood pressure reduction', 'Edema reduction', 'Rapid fluid removal'],
+    interactions: ['Aminoglycosides (additive ototoxicity)', 'NSAIDs (reduce diuretic efficacy; worsen renal function)', 'Lithium (reduces renal clearance — lithium toxicity risk)', 'Digoxin (hypokalemia increases digoxin toxicity)', 'ACE inhibitors (first-dose hypotension)', 'Warfarin (mild increase in anticoagulation)'],
+    harmReduction: [
+      'Monitor electrolytes regularly — hypokalemia, hyponatremia, hypomagnesemia common',
+      'Supplement potassium if levels fall below 3.5 mEq/L',
+      'Ototoxicity at high IV doses — avoid rapid IV infusion',
+      'Take in morning or early afternoon — strong diuresis disrupts sleep if taken at night',
+      'Monitor renal function (creatinine, BUN) — can cause prerenal azotemia',
+      'Volume depletion signs: dizziness, weakness, hypotension — reduce dose'
+    ],
+    routes: ['oral', 'IV', 'IM'],
+    unit: 'mg',
+    notes: 'Loop diuretic. Lasix brand. Inhibits NKCC2 in the thick ascending limb — the most potent diuretic class. Used for edema (heart failure, cirrhosis, nephrotic syndrome), hypertension, and hypercalcemia. Rapid onset (IV: 5 min; oral: 30–60 min). Electrolyte monitoring essential.'
+  },
+  {
+    id: 'warfarin',
+    name: 'Warfarin',
+    category: 'medication',
+    halfLife: '20–60 hours',
+    effects: ['Anticoagulation', 'Stroke prevention', 'DVT/PE prevention and treatment', 'Prosthetic valve protection'],
+    interactions: ['Extensive interactions — virtually everything affects INR', 'NSAIDs (bleeding risk)', 'Antibiotics (gut flora disruption elevates INR)', 'SSRIs (increased bleeding)', 'Vitamin K foods (greens reduce INR)', 'St. John\'s Wort (reduces warfarin effect)', 'Alcohol (acute: increases; chronic: decreases INR)', 'Amiodarone (dramatically increases INR)', 'Fish oil/omega-3 (mild antiplatelet, additive)'],
+    harmReduction: [
+      'Regular INR monitoring — therapeutic range 2.0–3.0 (mechanical valves: 2.5–3.5)',
+      'Maintain consistent vitamin K intake — do not eliminate leafy greens, just be consistent',
+      'Any new medication, supplement, or herbal product may affect INR — always check',
+      'Avoid contact sports and activities with bleeding risk',
+      'Carry anticoagulant card/alert — inform all healthcare providers',
+      'If dose missed: take same day if remembered; skip if next day — do not double dose'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Vitamin K antagonist anticoagulant. Coumadin brand. Inhibits VKORC1, reducing clotting factors II, VII, IX, X. Narrow therapeutic index requires INR monitoring every 1–4 weeks. Being largely replaced by direct oral anticoagulants (DOACs) but remains standard for mechanical heart valves. Rodenticide at high doses.'
+  },
+  {
+    id: 'estradiol',
+    name: 'Estradiol',
+    category: 'medication',
+    halfLife: 'Oral: 13–20 hours; transdermal: sustained; IM valerate: ~4 days; IM cypionate: ~8 days',
+    effects: ['Feminization (trans women/AMAB HRT)', 'Menopausal symptom relief', 'Bone density maintenance', 'Cardiovascular effects (complex — route dependent)', 'Mood regulation'],
+    interactions: ['CYP3A4 inducers (carbamazepine, rifampin — reduce levels)', 'CYP3A4 inhibitors (increase levels)', 'Thyroid hormones (estrogen increases TBG; may need thyroid dose increase)', 'Warfarin (variable effect on INR)', 'Antiretrovirals (many affect estradiol metabolism)'],
+    harmReduction: [
+      'Transdermal/injectable routes bypass hepatic first-pass — lower VTE risk than oral',
+      'Oral estradiol (not ethinyl estradiol) preferred over synthetic estrogens for HRT',
+      'Monitor estradiol, LH/FSH, and (if applicable) testosterone levels',
+      'VTE risk: oral > transdermal; patch or gel preferred in those with VTE history',
+      'Annual breast exam and mammography per standard screening schedules',
+      'Oral: take with food; sublingual: dissolve under tongue for higher bioavailability than oral'
+    ],
+    routes: ['oral', 'transdermal', 'IM', 'sublingual'],
+    unit: 'mg',
+    notes: 'Primary endogenous estrogen. Estrace/Climara/Divigel/Depo-Estradiol brand. Used for gender-affirming HRT, menopause, primary ovarian insufficiency, and hypogonadism. Bioidentical (identical to endogenous estradiol). Route of administration significantly affects pharmacokinetics, VTE risk, and efficacy.'
+  },
+  {
+    id: 'amlodipine',
+    name: 'Amlodipine',
+    category: 'medication',
+    halfLife: '30–50 hours',
+    effects: ['Blood pressure reduction', 'Angina relief', 'Coronary artery dilation', 'Peripheral vasodilation'],
+    interactions: ['CYP3A4 inhibitors (ketoconazole, ritonavir — increase amlodipine levels)', 'Simvastatin (amlodipine raises simvastatin levels — cap simvastatin at 20mg)', 'Cyclosporine/tacrolimus (increases immunosuppressant levels)', 'Other antihypertensives (additive hypotension)', 'Sildenafil (additive hypotension)'],
+    harmReduction: [
+      'Take once daily at same time; can be taken with or without food',
+      'Ankle/leg edema is very common — not a sign of fluid overload (peripheral vasodilation)',
+      'Do not stop abruptly — gradual taper recommended',
+      'Long half-life: effects persist days after missed doses; also means slow steady state',
+      'Simvastatin cap at 20mg when co-prescribed — use atorvastatin instead for higher statin needs',
+      'Flushing and headache common at initiation, usually resolves with time'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Dihydropyridine calcium channel blocker. Norvasc brand. Selective for vascular smooth muscle (minimal cardiac depression vs. diltiazem/verapamil). Once-daily dosing due to very long half-life. One of the most prescribed antihypertensives globally. Well-tolerated for most patients.'
+  },
+  {
+    id: 'azithromycin',
+    name: 'Azithromycin',
+    category: 'medication',
+    halfLife: '68 hours (tissue half-life; extends treatment effect beyond course)',
+    effects: ['Broad-spectrum bacteriostatic antibiotic', 'Anti-inflammatory (low-dose, chronic)'],
+    interactions: ['Warfarin (increases INR — monitor)', 'QT-prolonging drugs (additive risk)', 'Antacids with aluminum/magnesium (reduce absorption by 24%)', 'Digoxin (may increase levels)', 'Nelfinavir (increases azithromycin levels)'],
+    harmReduction: [
+      'QT prolongation risk — avoid in patients with existing QT prolongation or on other QT-prolonging drugs',
+      'Take on empty stomach or with food (food does not significantly affect tablets/capsules)',
+      'Z-pack (5-day, 500/250mg) commonly prescribed — short course but tissue levels persist',
+      'Resistance concern: overuse has led to significant macrolide resistance globally',
+      'GI side effects (nausea, diarrhea) common but usually mild',
+      'Cardiac risk in patients with existing cardiovascular disease — consider alternatives'
+    ],
+    routes: ['oral', 'IV'],
+    unit: 'mg',
+    notes: 'Macrolide/azalide antibiotic. Zithromax/Z-pack brand. Inhibits 50S ribosomal subunit. Extremely long tissue half-life enables short courses. Used for community-acquired pneumonia, STIs (chlamydia — single 1g dose), strep, otitis media, and H. pylori. QT prolongation risk has led to FDA safety communications.'
+  },
+  {
+    id: 'finasteride',
+    name: 'Finasteride',
+    category: 'medication',
+    halfLife: '5–6 hours',
+    effects: ['DHT reduction (~70%)', 'Hair loss prevention/reversal', 'BPH symptom reduction', 'Prostate size reduction'],
+    interactions: ['No major drug-drug interactions', 'Alpha-blockers (additive for BPH — tamsulosin commonly combined)', 'PSA interpretation: finasteride lowers PSA ~50% — multiply value by 2 for baseline comparison'],
+    harmReduction: [
+      'Post-finasteride syndrome (PFS): sexual dysfunction, depression, cognitive changes reported to persist after stopping — controversial, under-researched',
+      'PSA reduction (~50%) can mask prostate cancer — adjust reference ranges accordingly',
+      'Women of childbearing potential must not handle crushed/broken tablets — DHT inhibition causes fetal genital abnormalities',
+      'Effects on hair loss take 3–6 months minimum to assess; 1–2 years for full response',
+      'BPH effects take 6 months; sexual side effects typically reversible on stopping',
+      'Annual PSA monitoring recommended in patients >50'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: '5-alpha reductase inhibitor (Type II). Propecia (1mg — hair loss) / Proscar (5mg — BPH) brand. Reduces conversion of testosterone to DHT. Irreversible in BPH; hair regrowth may be permanent if maintained. Post-finasteride syndrome remains a debated post-market safety concern. Dutasteride (inhibits both Type I+II) is alternative.'
+  },
+  {
+    id: 'eszopiclone',
+    name: 'Eszopiclone',
+    category: 'depressant',
+    halfLife: '6 hours',
+    effects: ['Sleep onset and maintenance', 'Sedation', 'Anxiolytic (mild)', 'Anterograde amnesia (possible)'],
+    interactions: ['CYP3A4 inhibitors (ketoconazole, itraconazole — dramatically increase exposure)', 'CNS depressants (additive)', 'Alcohol (synergistic CNS depression)', 'CYP3A4 inducers (rifampin — reduce levels)', 'Olanzapine (additive psychomotor impairment)'],
+    harmReduction: [
+      'Longer duration than zolpidem — better for sleep maintenance, but more next-day impairment',
+      'Metallic or bitter taste is nearly universal — warn patients (use sugar-free gum after)',
+      'Take immediately before bed with 8 hours available for sleep',
+      'Avoid alcohol — CNS depression synergism',
+      'Rebound insomnia on discontinuation — taper gradually',
+      'Complex sleep behaviors (sleepwalking, sleep-driving) possible — discontinue if these occur'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Non-benzodiazepine GABA-A agonist ("Z-drug"). Lunesta brand. Schedule IV. S-isomer of zopiclone. Longer half-life than zolpidem targets both sleep onset and maintenance. Approved for chronic insomnia (unlike zolpidem which is only for short-term). Characteristic bitter metallic taste side effect.'
+  },
+  {
+    id: 'clomipramine',
+    name: 'Clomipramine',
+    category: 'medication',
+    halfLife: '19–37 hours (desmethylclomipramine active metabolite: 54–77 hours)',
+    effects: ['Anti-OCD (most effective SSRI/TCA for OCD)', 'Antidepressant', 'Antipanic', 'Anticataplexy (narcolepsy)'],
+    interactions: ['MAOIs (serotonin syndrome — fatal)', 'SSRIs (serotonin syndrome + pharmacokinetic interactions)', 'CYP2D6 inhibitors (fluoxetine, paroxetine — dramatically increase levels)', 'QT-prolonging drugs (additive)', 'Anticholinergic drugs (additive toxicity)'],
+    harmReduction: [
+      'Most serotonergic TCA — serotonin syndrome risk higher than other TCAs',
+      'Dangerous in overdose — cardiotoxic, seizures',
+      'Start at 25mg; titrate slowly to 100–250mg over weeks',
+      'Strong anticholinergic: dry mouth, constipation, urinary retention, blurred vision',
+      'Seizure threshold lowered at higher doses (>250mg)',
+      'Take with food; may split dose if GI effects occur'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'TCA with the highest serotonin reuptake inhibition of any TCA. Anafranil brand. Gold standard for OCD — often more effective than SSRIs for severe OCD. Also FDA-approved for depression and cataplexy (narcolepsy). Active metabolite desmethylclomipramine (noradrenergic) has very long half-life. High side effect burden limits use to SSRI-refractory cases.'
+  },
+  {
+    id: 'celecoxib',
+    name: 'Celecoxib',
+    category: 'medication',
+    halfLife: '11 hours',
+    effects: ['Anti-inflammatory', 'Analgesic', 'Antipyretic', 'Lower GI side effect profile vs. non-selective NSAIDs'],
+    interactions: ['Warfarin (increased bleeding — monitor INR)', 'Lithium (increases lithium levels)', 'ACE inhibitors/ARBs (reduced antihypertensive efficacy)', 'Aspirin (partially negates GI benefit of COX-2 selectivity)', 'Fluconazole (CYP2C9 inhibitor — doubles celecoxib levels)', 'Furosemide/thiazides (reduced diuretic effect)'],
+    harmReduction: [
+      'COX-2 selective — spares gastric COX-1 (gastroprotective prostaglandins) but not fully safe GI-wise',
+      'Still carry renal and cardiovascular risks similar to non-selective NSAIDs',
+      'Sulfonamide allergy: celecoxib contains a sulfonamide moiety — use caution (cross-reactivity debated but reported)',
+      'Take with food to reduce GI irritation',
+      'Avoid in last trimester of pregnancy — premature closure of ductus arteriosus',
+      'Monitor renal function and blood pressure with chronic use'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'COX-2 selective NSAID. Celebrex brand. Preferentially inhibits cyclooxygenase-2 (inflammatory) over COX-1 (gastric protection). Significantly lower risk of peptic ulcer vs. ibuprofen/naproxen — no gastroprotective benefit lost if patient is also on aspirin. Cardiovascular risk similar to non-selective NSAIDs. Sulfonamide structural component.'
+  },
+  {
+    id: 'hydroxychloroquine',
+    name: 'Hydroxychloroquine',
+    category: 'medication',
+    halfLife: '40–50 days',
+    effects: ['Antimalarial', 'Immunomodulatory', 'Anti-inflammatory', 'Glucose-lowering (mild)'],
+    interactions: ['QT-prolonging drugs (significant additive risk)', 'Tamoxifen (retinal toxicity — avoid combination)', 'Insulin/antidiabetics (hypoglycemia risk)', 'Digoxin (may increase digoxin levels)', 'Antacids (reduce absorption — separate by 4 hours)', 'Cyclosporine (increases cyclosporine levels)'],
+    harmReduction: [
+      'Retinal toxicity: annual ophthalmology exam after 5 years of use (or 1 year if risk factors)',
+      'Risk factors for retinopathy: dose >5mg/kg/day, >10 years use, renal/hepatic impairment',
+      'Take with food or milk to reduce GI upset',
+      'Very long half-life — effects persist weeks after stopping; also slow to reach therapeutic levels',
+      'Baseline and periodic ECG for QT monitoring in at-risk patients',
+      'G6PD deficiency: hemolysis risk — test in high-risk populations before starting'
+    ],
+    routes: ['oral'],
+    unit: 'mg',
+    notes: 'Aminoquinoline antimalarial and DMARD. Plaquenil brand. Used for malaria prevention/treatment, lupus (SLE), and rheumatoid arthritis. Mechanism in autoimmune: accumulates in lysosomes, raises pH, interferes with antigen presentation and TLR signaling. Extremely long half-life requires months to reach steady state. Retinal monitoring essential for long-term use.'
   }
 ];
 

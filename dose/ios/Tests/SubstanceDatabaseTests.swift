@@ -30,7 +30,7 @@ final class SubstanceDatabaseTests: XCTestCase {
     }
 
     func testAllSubstancesCountIsAtLeast200() {
-        XCTAssertGreaterThanOrEqual(SubstanceDatabase.allSubstances.count, 200)
+        XCTAssertGreaterThanOrEqual(SubstanceDatabase.allSubstances.count, 200, "Expected 200+ substances, got \(SubstanceDatabase.allSubstances.count)")
     }
 
     func testAllCategoriesHaveAtLeastOneSubstance() {
