@@ -32,6 +32,10 @@ npm test
 
 Deploy: push to main, Vercel deploys automatically.
 
+## Known Issues
+
+- Deployment went down (404: DEPLOYMENT_NOT_FOUND) on 2026-04-14. Fixed via redeploy. Portfolio screenshot pending re-add.
+
 ## Roadmap
 
 - [ ] SMTP email delivery for password reset
