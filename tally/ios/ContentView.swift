@@ -144,6 +144,30 @@ private struct LoginScreen: View {
 
 private struct DashboardScreen: View {
     @Environment(AppState.self) private var appState
+    @State private var now = Date()
+    private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    private var liveCountdownText: String {
+        guard let date = appState.parsedNextPaymentDate else { return "--" }
+        var target = date
+        var cal = Calendar.current
+        target = cal.startOfDay(for: target)
+        let diff = max(0, target.timeIntervalSince(now))
+        let days = Int(diff) / 86400
+        let hrs = (Int(diff) % 86400) / 3600
+        let mins = (Int(diff) % 3600) / 60
+        let secs = Int(diff) % 60
+        if days > 0 { return "\(days)d \(String(format: "%02d", hrs)):\(String(format: "%02d", mins)):\(String(format: "%02d", secs))" }
+        return String(format: "%02d:%02d:%02d", hrs, mins, secs)
+    }
+
+    private var earningsRateText: String? {
+        guard let date = appState.parsedNextPaymentDate, let amount = appState.parsedPaymentAmount else { return nil }
+        var target = Calendar.current.startOfDay(for: date)
+        let hoursLeft = max(0, target.timeIntervalSince(now)) / 3600
+        guard hoursLeft > 0 else { return nil }
+        return String(format: "$%.2f/hr", amount / hoursLeft)
+    }
 
     var body: some View {
         ScrollView {
@@ -166,6 +190,7 @@ private struct DashboardScreen: View {
         }
         .refreshable { await appState.refreshDashboard() }
         .task { await appState.loadDashboardIfNeeded() }
+        .onReceive(ticker) { now = $0 }
         .navigationTitle("Home")
     }
 
@@ -215,6 +240,26 @@ private struct DashboardScreen: View {
                 Spacer()
                 Text(appState.countdownText)
                     .font(.subheadline.weight(.bold))
+            }
+            HStack {
+                Text("Countdown")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(liveCountdownText)
+                    .font(.subheadline.weight(.bold).monospacedDigit())
+                    .contentTransition(.numericText())
+            }
+            if let rate = earningsRateText {
+                HStack {
+                    Text("Earning")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(rate)
+                        .font(.subheadline.weight(.bold))
+                        .contentTransition(.numericText())
+                }
             }
         }
         .padding()

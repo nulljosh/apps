@@ -257,10 +257,12 @@
     }
 
     var lastPaymentHash = '';
+    var lastPaymentAmount = 0;
     function renderPaymentCard(target, amount, designation, timeline, isApproximate) {
       var hash = amount + designation + timeline.paydayLabel;
       if (hash === lastPaymentHash) return;
       lastPaymentHash = hash;
+      lastPaymentAmount = parseFloat(amount.replace(/[^0-9.]/g, '')) || 0;
       var w = document.createElement('div');
       var amountEl = document.createElement('div'); amountEl.className = 'payment-amount'; amountEl.textContent = amount; w.appendChild(amountEl);
       var desigEl = document.createElement('div'); desigEl.className = 'payment-designation'; desigEl.textContent = designation + (isApproximate ? ' (est.)' : ''); w.appendChild(desigEl);
@@ -268,6 +270,14 @@
       function metaRow(text, countdown, cls) { var row = document.createElement('div'); row.className = 'payment-meta-row' + (cls ? ' ' + cls : ''); var span = document.createElement('span'); span.textContent = text; row.appendChild(span); var badge = document.createElement('span'); badge.className = 'countdown'; badge.textContent = countdown; row.appendChild(badge); return row; }
       meta.appendChild(metaRow(timeline.paydayDate, timeline.paydayLabel));
       meta.appendChild(metaRow('Report ' + timeline.reportDate, timeline.reportLabel, timeline.reportUrgent ? 'urgent' : ''));
+      var cdRow = document.createElement('div'); cdRow.className = 'payment-meta-row';
+      var cdLabel = document.createElement('span'); cdLabel.textContent = 'Countdown'; cdRow.appendChild(cdLabel);
+      var cdVal = document.createElement('span'); cdVal.className = 'countdown'; cdVal.id = 'live-countdown-val'; cdVal.style.fontVariantNumeric = 'tabular-nums'; cdVal.textContent = '--'; cdRow.appendChild(cdVal);
+      meta.appendChild(cdRow);
+      var erRow = document.createElement('div'); erRow.className = 'payment-meta-row';
+      var erLabel = document.createElement('span'); erLabel.textContent = 'Earning'; erRow.appendChild(erLabel);
+      var erVal = document.createElement('span'); erVal.className = 'countdown'; erVal.id = 'earnings-rate-val'; erVal.textContent = '--'; erRow.appendChild(erVal);
+      meta.appendChild(erRow);
       w.appendChild(meta);
       var checkRow = document.createElement('div'); checkRow.className = 'check-row';
       var paidLabel = document.createElement('label'); paidLabel.className = 'paid-check'; paidLabel.id = 'paid-check';
@@ -492,9 +502,24 @@
       btn.textContent = 'Connect & Scrape'; btn.disabled = false;
     }
 
+    function getNextPaydayDate() {
+      var now = new Date(); var d = PAY_DATES_2026[now.getMonth()];
+      var next; if (d && now <= new Date(now.getFullYear(), now.getMonth(), d)) { next = new Date(now.getFullYear(), now.getMonth(), d); } else { var nm = (now.getMonth() + 1) % 12; next = new Date(nm === 0 ? now.getFullYear() + 1 : now.getFullYear(), nm, PAY_DATES_2026[nm] || 25); }
+      next.setHours(0, 0, 0, 0); return next;
+    }
+    function updateLiveCountdown() {
+      var now = new Date(); var next = getNextPaydayDate(); var totalSec = Math.max(0, Math.floor((next - now) / 1000));
+      var days = Math.floor(totalSec / 86400); var hrs = Math.floor((totalSec % 86400) / 3600); var mins = Math.floor((totalSec % 3600) / 60); var secs = totalSec % 60;
+      var str = (days > 0 ? days + 'd ' : '') + String(hrs).padStart(2,'0') + ':' + String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
+      var cdEl = document.getElementById('live-countdown-val'); if (cdEl) cdEl.textContent = str;
+      var erEl = document.getElementById('earnings-rate-val');
+      if (erEl && lastPaymentAmount > 0 && totalSec > 0) { var rate = lastPaymentAmount / (totalSec / 3600); erEl.textContent = '$' + rate.toFixed(2) + '/hr'; }
+    }
+
     loadCurrentUser(); loadData();
     function visibilityInterval(fn, ms) { var id = setInterval(fn, ms); document.addEventListener('visibilitychange', function() { if (document.hidden) { clearInterval(id); id = null; } else { fn(); id = setInterval(fn, ms); } }); }
     visibilityInterval(loadData, 120000); visibilityInterval(loadCurrentUser, 120000);
+    visibilityInterval(updateLiveCountdown, 1000);
     window.addEventListener('online', function() { setOfflineBanner(false); });
     if ('serviceWorker' in navigator) window.addEventListener('load', function() { navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function(e) { console.error(e); }); });
   </script>

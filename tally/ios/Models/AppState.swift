@@ -58,6 +58,12 @@ final class AppState {
         return date.formatted(date: .abbreviated, time: .omitted)
     }
 
+    var parsedPaymentAmount: Double? {
+        let raw = dashboard?.paymentAmount ?? ""
+        let cleaned = raw.filter { $0.isNumber || $0 == "." }
+        return Double(cleaned)
+    }
+
     var countdownText: String {
         guard let date = parsedNextPaymentDate else { return "--" }
         let start = Calendar.current.startOfDay(for: Date())
