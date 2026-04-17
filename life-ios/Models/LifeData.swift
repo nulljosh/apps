@@ -501,7 +501,7 @@ enum LifeData {
 
         // 10
         LifeSection(label: "ADHD and Autism", paragraphs: [
-            "I was diagnosed with ADHD when I was 8. I was diagnosed with autism in October 2025 as an adult. My family never really suspected it and I only started figuring it out myself a few years ago. I'm currently waiting to hear back about the Persons With Disabilities (PWD) program in BC. Still waiting as of March 2026, which apparently is pretty normal given how slow the system is.",
+            "I was diagnosed with ADHD when I was 8. I was diagnosed with autism in October 2025 as an adult. My family never really suspected it and I only started figuring it out myself a few years ago. I'm currently waiting to hear back about the Persons With Disabilities (PWD) program in BC. Still waiting as of April 2026. Got a date now: should be processed by June 22. Apparently the wait is pretty normal given how slow the system is.",
         ], note: nil),
 
         // 11 - NEW: Sensory Profile
