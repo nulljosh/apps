@@ -553,8 +553,11 @@ enum LifeData {
         // 19
         LifeSection(label: "Friendships", paragraphs: [
             "I lost most of my friends around 2020. My best friend stuck around and still calls me, but he moved to Vancouver Island a year or two ago. He's visited once in two years. We've drifted apart. It felt like losing the last person who was actually around.",
-            "My oldest friend Alex and I talked for almost two hours recently about the usual stuff, the future, intelligence, how most people are not applying themselves. Then he started arguing parents should hit their kids more, that his dad throwing him on the couch at 12 was good discipline. Biggest disagreement we have ever had. Kinda bummed me out. I had to laugh a bit because what he described is nothing compared to what I went through at two, and what I went through is nothing compared to my grandpa at 80 still crying about his dad. Hard to hear someone argue it builds character.",
+            "My oldest friend Alex has been the one consistent voice. Last call we hit a wall when he argued parents should hit their kids more, that his dad throwing him on the couch at 12 was good discipline. Biggest disagreement we have ever had. What he described is nothing compared to what I went through at two, and what I went through is nothing compared to my grandpa at 80 still crying about his dad. Hard to hear someone frame that as character-building.",
+            "We talked again today. Got into the period I was kicked out and living in the car. I do remember writing mean blog posts about family and friends back then. Alex's read is that I was basically abandoned by everyone. He agrees with that even though I don't want the victim label.",
+            "Apparently Olivia, or the friend group that split off with her, started a rumour that I beat her. That is not what happened. Worth naming because it probably seeded a lot of the social withdrawal.",
             "Another friend, Ben, deactivated his Twitter recently. Was going to send him something. No way to reach him now. People just disappear.",
+            "Right now I'm mostly just studying calculus.",
         ], note: nil),
 
         // 20
