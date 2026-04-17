@@ -1377,61 +1377,46 @@ struct StatsGridView: View {
 
 // MARK: - Map
 
+import MapKit
+
 struct LifeMapView: View {
     private let bcLocations = LifeData.mapLocations.filter { !$0.isOffMap }
     private let offMapLocations = LifeData.mapLocations.filter { $0.isOffMap }
 
+    @State private var cameraPosition: MapCameraPosition = .region(
+        MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 49.3, longitude: -122.5),
+            span: MKCoordinateSpan(latitudeDelta: 6.5, longitudeDelta: 9.0)
+        )
+    )
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             chartTitle("GEOGRAPHY")
 
-            ForEach(bcLocations) { loc in
-                HStack(spacing: 14) {
-                    ZStack {
-                        Circle()
-                            .fill(loc.category.color.opacity(0.15))
-                            .frame(width: 36, height: 36)
-                        Circle()
-                            .fill(loc.category.color)
-                            .frame(width: 10, height: 10)
-                    }
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(loc.name)
-                            .font(.system(size: 14, weight: .semibold))
-                        Text(loc.detail)
-                            .font(.system(size: 11))
-                            .foregroundStyle(.secondary)
-                            .lineSpacing(2)
-                    }
+            Map(position: $cameraPosition) {
+                ForEach(LifeData.mapLocations) { loc in
+                    Marker(loc.name, coordinate: CLLocationCoordinate2D(latitude: loc.latitude, longitude: loc.longitude))
+                        .tint(loc.category.color)
                 }
             }
+            .mapStyle(.standard(elevation: .flat))
+            .frame(height: 240)
+            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
-            Rectangle()
-                .fill(.tertiary)
-                .frame(height: 0.5)
-                .padding(.vertical, 4)
-
-            Text("BEYOND BC")
+            Text("ELSEWHERE")
                 .font(.system(size: 9, weight: .medium))
                 .foregroundStyle(.tertiary)
                 .tracking(0.8)
+                .padding(.top, 4)
 
             HStack(spacing: 20) {
                 ForEach(offMapLocations) { loc in
-                    VStack(spacing: 6) {
-                        Circle()
-                            .fill(loc.category.color.opacity(0.3))
-                            .frame(width: 24, height: 24)
-                            .overlay(
-                                Circle()
-                                    .fill(loc.category.color)
-                                    .frame(width: 6, height: 6)
-                            )
+                    VStack(spacing: 4) {
                         Text(loc.name)
-                            .font(.system(size: 10, weight: .medium))
+                            .font(.system(size: 11, weight: .semibold))
                         Text(loc.detail)
-                            .font(.system(size: 8))
+                            .font(.system(size: 9))
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                             .lineLimit(2)

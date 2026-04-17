@@ -123,6 +123,8 @@ struct MapLocation: Identifiable {
     let detail: String
     let category: TimelineCategory
     let isOffMap: Bool
+    let latitude: Double
+    let longitude: Double
 }
 
 struct SensoryItem: Identifiable {
@@ -354,13 +356,13 @@ enum LifeData {
     ]
 
     static let mapLocations: [MapLocation] = [
-        MapLocation(name: "Langley", detail: "home, current", category: .forward, isOffMap: false),
-        MapLocation(name: "Vancouver Island", detail: "rehab x2, best friend, planned move", category: .event, isOffMap: false),
-        MapLocation(name: "Kamloops", detail: "cousins, childhood", category: .forward, isOffMap: false),
-        MapLocation(name: "Seattle", detail: "CodeDay", category: .forward, isOffMap: false),
-        MapLocation(name: "NYC", detail: "best week of my life", category: .forward, isOffMap: true),
-        MapLocation(name: "Florida", detail: "Disneyland, family trips", category: .forward, isOffMap: true),
-        MapLocation(name: "Hawaii", detail: "family trips, Feb 2026", category: .forward, isOffMap: true),
+        MapLocation(name: "Langley", detail: "home, current", category: .forward, isOffMap: false, latitude: 49.1044, longitude: -122.6603),
+        MapLocation(name: "Vancouver Island", detail: "rehab x2, best friend, planned move", category: .event, isOffMap: false, latitude: 49.6500, longitude: -125.4490),
+        MapLocation(name: "Kamloops", detail: "cousins, childhood", category: .forward, isOffMap: false, latitude: 50.6745, longitude: -120.3273),
+        MapLocation(name: "Seattle", detail: "CodeDay", category: .forward, isOffMap: false, latitude: 47.6062, longitude: -122.3321),
+        MapLocation(name: "NYC", detail: "best week of my life", category: .forward, isOffMap: true, latitude: 40.7128, longitude: -74.0060),
+        MapLocation(name: "Florida", detail: "Disneyland, family trips", category: .forward, isOffMap: true, latitude: 28.3852, longitude: -81.5639),
+        MapLocation(name: "Hawaii", detail: "family trips, Feb 2026", category: .forward, isOffMap: true, latitude: 20.7984, longitude: -156.3319),
     ]
 
     static let comparisonTable: [ComparisonRow] = [
