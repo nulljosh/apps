@@ -1962,7 +1962,8 @@
 <script>
 (function(){
   if (typeof L === 'undefined') return;
-  var map = L.map('life-map', { scrollWheelZoom: false, zoomControl: true }).setView([45, -110], 3);
+  var map = L.map('life-map', { scrollWheelZoom: false, zoomControl: true, attributionControl: false }).setView([45, -110], 3);
+  L.control.attribution({ prefix: false }).addAttribution('&copy; OpenStreetMap').addTo(map);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19, attribution: '&copy; OpenStreetMap'
   }).addTo(map);
