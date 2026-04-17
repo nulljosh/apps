@@ -2,7 +2,8 @@
 
 # Joshua Adam Trommel
 
-![version](https://img.shields.io/badge/version-v3.0.0-blue)
+![version](https://img.shields.io/badge/version-v3.1.0-blue)
+![updated](https://img.shields.io/badge/updated-April_2026-green)
 
 Native iOS companion for the [Life](https://github.com/nulljosh/apps/tree/main/life) therapy summary. SwiftUI, iOS 17+, static data, automatic light/dark mode.
 

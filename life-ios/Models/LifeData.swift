@@ -294,7 +294,7 @@ enum LifeData {
         SensoryItem(sense: "Tactile", detail: "hair twirling (trichotillomania)", intensity: 0.9),
         SensoryItem(sense: "Repetitive", detail: "hand washing 10+/day, feet rubbing", intensity: 0.7),
         SensoryItem(sense: "Social overload", detail: "4-5 people talking at once", intensity: 0.85),
-        SensoryItem(sense: "General", detail: "130+ IQ, everything stimulates", intensity: 1.0),
+        SensoryItem(sense: "General", detail: "everything stimulates", intensity: 1.0),
     ]
 
     static let substanceTimeline: [SubstancePoint] = [
@@ -506,7 +506,7 @@ enum LifeData {
         LifeSection(label: "Sensory Profile", paragraphs: [
             "I have trichotillomania. I twirl my hair so much I pull it out. When I was younger my mom carried me around and I'd play with her hair. Conditioner makes hair soft and apparently it's a non-sexual sensory thing. I looked it up.",
             "I don't like loud noises, never have. I get overwhelmed when four or five people are talking at once in groups. I don't know who I'm supposed to be talking to, which group I'm supposed to be part of, which thread to follow. I can do it with computer memory because it's all indexed with numbers and hashes but with humans it's exceptionally difficult.",
-            "I wash my hands a lot, always have since about age 5 to 7. Like 10+ times a day. Probably OCD. I rub my feet together when I fall asleep. I cry when I wake up and when I fall asleep. That's sort of my defining feature. I have 130+ IQ, everything stimulates me, so I smoke copious amounts of weed so nothing stimulates me. Then when it wears off I get overwhelmed.",
+            "I wash my hands a lot, always have since about age 5 to 7. Like 10+ times a day. Probably OCD. I rub my feet together when I fall asleep. I cry when I wake up and when I fall asleep. That's sort of my defining feature. Everything stimulates me, so I smoke copious amounts of weed so nothing stimulates me. Then when it wears off I get overwhelmed.",
         ], note: nil),
 
         // 12 - NEW: Masking & Burnout
@@ -597,7 +597,7 @@ enum LifeData {
         // 26
         LifeSection(label: "Current Life", paragraphs: [
             "I'm 26 and living with my parents in Langley, BC. I'm not working right now. I'm waiting on PWD and welfare. The plan is university first, then a career that actually pays well enough to justify it. I'm not interested in grinding minimum wage jobs that go nowhere. School is going well so far. Pre-Calc: Projects 88%, Unit Tests 100%, Quizzes 94%. Anatomy: Learning Guides 100%, Projects 100%, Unit Exams 97%.",
-            "Connection with people is hard for me right now. A typical day is sleeping, smoking weed, vaping, gymming, and coding. It's routine, but it's stable. Called my mom on her birthday recently. Went to a doctor's appointment, nothing major. Small stuff that feels normal.",
+            "Connection with people is hard for me right now. A typical day is sleeping, smoking weed, vaping, gymming, and coding. It's routine, but it's stable. Was at my mom's birthday recently. Cake and coffee. Went to a doctor's appointment, nothing major. Small stuff that feels normal.",
             "I'm hoping to move to Vancouver Island by the end of 2026 to start school. I spend most of my time coding and gaming. Coding is genuine satisfaction, building something real. Gaming is more escape. Both are flow states that keep me out of my head. The fastest way to not think about yourself is to build something complicated enough to require all your attention. I have done eighteen-hour sessions more than once. It works until it doesn't.",
         ], note: nil),
 
