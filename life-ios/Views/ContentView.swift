@@ -130,7 +130,7 @@ struct ContentView: View {
                 .multilineTextAlignment(.center)
                 .scaleEffect(heroAppeared ? 1.0 : 0.92)
                 .opacity(heroAppeared ? 1.0 : 0)
-            Text("Updated March 2026")
+            Text("Updated April 2026")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .padding(.top, 8)
