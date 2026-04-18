@@ -217,25 +217,26 @@ async function getHybridAuthCookies(username, password) {
 // Map internal scraper errors to user-facing messages
 function userFacingLoginError(internalError) {
   const msg = String(internalError || '').toLowerCase();
-  if (msg.includes('smsession cookie not found')) {
-    return 'BC Self-Serve is temporarily unavailable. Please try again in a few minutes.';
-  }
-  if (msg.includes('login appears to have returned to the login page')) {
+  if (msg.includes('invalid bceid credentials') ||
+      msg.includes('login appears to have returned to the login page')) {
     return 'Invalid credentials. Please check your BCeID username and password.';
   }
   if (msg.includes('session expired')) {
     return 'Session expired. Please sign in again.';
   }
+  if (msg.includes('timeout') || msg.includes('econnreset') || msg.includes('fetch failed') ||
+      msg.includes('http 50') || msg.includes('http 429')) {
+    return 'Connection to BC Self-Serve timed out. Please try again.';
+  }
   if (msg.includes('login form not found') || msg.includes('sign in link not found')) {
     return 'BC Self-Serve is temporarily unavailable. Please try again later.';
-  }
-  if (msg.includes('timeout') || msg.includes('econnreset') || msg.includes('fetch failed')) {
-    return 'Connection to BC Self-Serve timed out. Please try again.';
   }
   if (msg.includes('redirect loop')) {
     return 'BC Self-Serve login encountered an error. Please try again.';
   }
-  // Generic fallback -- never expose raw internals
+  if (msg.includes('smsession cookie not found')) {
+    return 'Invalid credentials. Please check your BCeID username and password.';
+  }
   return 'Unable to sign in. Please check your credentials and try again.';
 }
 

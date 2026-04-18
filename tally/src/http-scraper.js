@@ -610,6 +610,15 @@ async function executeLogin(username, password) {
     loginResult = await followRedirectChain(postResponse, jar, relayForm.action);
   }
 
+  const stillOnBceidLogon =
+    /logon\d*\.gov\.bc\.ca/i.test(loginResult.url) &&
+    pageLooksLikeLogin(loginResult.url, loginResult.body);
+  const failReasonBad = jar.FAILREASON && jar.FAILREASON !== '0';
+
+  if (stillOnBceidLogon || failReasonBad) {
+    throw new Error('Invalid BCeID credentials');
+  }
+
   if (!jar.SMSESSION) {
     const cookieNames = Object.keys(jar).filter(k => k !== '_domains');
     throw new Error(`SMSESSION cookie not found after login (have: ${cookieNames.join(', ') || 'none'})`);
