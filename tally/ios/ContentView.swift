@@ -150,7 +150,7 @@ private struct DashboardScreen: View {
     private var liveCountdownText: String {
         guard let date = appState.parsedNextPaymentDate else { return "--" }
         var target = date
-        var cal = Calendar.current
+        let cal = Calendar.current
         target = cal.startOfDay(for: target)
         let diff = max(0, target.timeIntervalSince(now))
         let days = Int(diff) / 86400
@@ -163,7 +163,7 @@ private struct DashboardScreen: View {
 
     private var earningsRateText: String? {
         guard let date = appState.parsedNextPaymentDate, let amount = appState.parsedPaymentAmount else { return nil }
-        var target = Calendar.current.startOfDay(for: date)
+        let target = Calendar.current.startOfDay(for: date)
         let hoursLeft = max(0, target.timeIntervalSince(now)) / 3600
         guard hoursLeft > 0 else { return nil }
         return String(format: "$%.2f/hr", amount / hoursLeft)
