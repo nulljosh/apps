@@ -142,6 +142,39 @@ private struct LoginScreen: View {
     }
 }
 
+private struct TimelineCard: View {
+    let title: String
+    let steps: [(label: String, date: String, done: Bool)]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(.system(size: 11, weight: .semibold))
+                .tracking(1.5)
+                .foregroundStyle(.secondary)
+
+            ForEach(steps, id: \.label) { step in
+                HStack(alignment: .top, spacing: 12) {
+                    Circle()
+                        .fill(step.done ? Color.primary : Color.secondary.opacity(0.3))
+                        .frame(width: 10, height: 10)
+                        .padding(.top, 4)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(step.label)
+                            .font(.subheadline.weight(.medium))
+                        Text(step.date)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+    }
+}
+
 private struct DashboardScreen: View {
     @Environment(AppState.self) private var appState
     @State private var now = Date()
