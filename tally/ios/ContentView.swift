@@ -180,6 +180,8 @@ private struct DashboardScreen: View {
                 paidToggle
                 dateCard
                 pwdTimeline
+                dtcTimeline
+                craPayments
 
                 if !appState.statusMessages.isEmpty {
                     messagesPreview
@@ -297,10 +299,75 @@ private struct DashboardScreen: View {
     private var pwdSteps: [(label: String, date: String, done: Bool)] {
         [
             ("Application submitted", "March 4, 2026", true),
-            ("Waiting for decision", "Week 6 of ~8 -- submitted March 4", true),
+            ("Sorted -- decision due", "Week 8 of ~8 -- expected by May 2026", true),
             ("Decision", "Pending", false),
             ("Payment adjustment", "Pending", false)
         ]
+    }
+
+    private var dtcTimeline: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("DTC APPLICATION")
+                .font(.system(size: 11, weight: .semibold))
+                .tracking(1.5)
+                .foregroundStyle(.secondary)
+
+            ForEach(dtcSteps, id: \.label) { step in
+                HStack(alignment: .top, spacing: 12) {
+                    Circle()
+                        .fill(step.done ? Color.primary : Color.secondary.opacity(0.3))
+                        .frame(width: 10, height: 10)
+                        .padding(.top, 4)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(step.label)
+                            .font(.subheadline.weight(.medium))
+                        Text(step.date)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+    }
+
+    private var dtcSteps: [(label: String, date: String, done: Bool)] {
+        [
+            ("Application submitted", "April 2026", true),
+            ("CRA processing", "Expected 8-12 weeks", false),
+            ("Decision", "Pending", false),
+            ("Credit applied retroactively", "Pending", false)
+        ]
+    }
+
+    private var craPayments: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("CRA BENEFITS")
+                .font(.system(size: 11, weight: .semibold))
+                .tracking(1.5)
+                .foregroundStyle(.secondary)
+
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("GST/HST Credit")
+                        .font(.subheadline.weight(.medium))
+                    Text("June 5, 2026")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Text("$174.50")
+                    .font(.subheadline.weight(.semibold))
+            }
+
+            Text("4 payments per year. Not all CRA credits shown.")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
     }
 
     private var messagesPreview: some View {

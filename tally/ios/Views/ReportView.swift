@@ -18,6 +18,12 @@ struct ReportView: View {
 
     var body: some View {
         Form {
+            Section("Timing") {
+                Text("The period opens ~21st. Don't submit until after the 28th -- forms submitted in the first week don't clear by payday.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+
             Section("Personal Information") {
                 VStack(alignment: .leading, spacing: 16) {
                     VStack(alignment: .leading, spacing: 6) {
