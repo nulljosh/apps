@@ -172,7 +172,7 @@
         <div class="card-header"><div class="card-title">Monthly Report</div><span class="status" id="mr-status">--</span></div>
         <div id="mr-content" style="font-size: 13px; color: var(--text-secondary);"></div>
       </div>
-      <div style="font-size:13px;color:var(--text-secondary);padding:10px 14px;border:1px solid var(--border);border-radius:4px;background:var(--bg-secondary);margin-bottom:8px;">
+      <div class="card" style="margin-bottom:8px;">
         Wait until after the 28th to submit. Forms submitted in the first week of the open period (~21st) don't clear by payday.
       </div>
       <div class="card" style="margin-top: 8px;">
@@ -292,7 +292,7 @@
       var row = document.createElement('div');
       row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 0;';
       var left = document.createElement('div');
-      var lbl = document.createElement('div'); lbl.style.cssText = 'font-size:14px;font-weight:500;'; lbl.textContent = 'GST/HST Credit'; left.appendChild(lbl);
+      var lbl = document.createElement('div'); lbl.className = 'step-label'; lbl.textContent = 'GST/HST Credit'; left.appendChild(lbl);
       var dt = document.createElement('div'); dt.className = 'step-date'; dt.textContent = 'June 5, 2026'; left.appendChild(dt);
       var amt = document.createElement('span'); amt.style.cssText = 'font-size:14px;font-weight:600;'; amt.textContent = '$174.50';
       row.appendChild(left); row.appendChild(amt); container.appendChild(row);
