@@ -34,13 +34,15 @@
     .container { max-width: 700px; margin: 0 auto; padding: 90px 20px 32px; padding-top: calc(90px + env(safe-area-inset-top, 0px)); }
     .offline-banner { display: none; margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-secondary); color: var(--text-secondary); font-size: 13px; text-align: center; }
     .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .tab-content.active { display: block; animation: fadeIn 0.22s ease both; }
 
     .home-top { display: grid; grid-template-columns: 1fr; gap: 12px; align-items: start; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
     @media (min-width: 601px) { .home-top { grid-template-columns: 1fr auto; gap: 24px; } }
 
     .payment-card { display: flex; flex-direction: column; justify-content: center; }
-    .payment-amount { font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 700; letter-spacing: -2px; line-height: 1; }
+    .payment-amount-wrap { display: flex; align-items: flex-start; line-height: 1; transition: opacity 0.3s ease; animation: countUp 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+    .payment-dollar { font-size: clamp(1.1rem, 2.5vw, 1.4rem); font-weight: 700; color: var(--text-primary); margin-top: 0.28em; letter-spacing: -0.5px; }
+    .payment-number { font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 700; letter-spacing: -3px; color: var(--text-primary); }
     .payment-designation { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-secondary); margin-top: 6px; }
     .payment-meta { margin-top: 8px; display: flex; flex-direction: column; gap: 1px; }
     .payment-meta-row { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
@@ -64,7 +66,8 @@
     .calendar-day { font-size: 12px; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
     .calendar-day.empty { color: transparent; }
     .calendar-day.today { border: 1px solid var(--text-primary); }
-    .calendar-day.payment-day { background: var(--text-primary); color: var(--bg-primary); font-weight: 700; }
+    .calendar-day.payment-day { background: var(--text-primary); color: var(--bg-primary); font-weight: 700; animation: pulse-ring 2.5s ease-out infinite; --pulse-c: rgba(0,0,0,0.2); }
+    [data-theme="dark"] .calendar-day.payment-day { --pulse-c: rgba(255,255,255,0.2); }
     .calendar-day.past { color: var(--text-secondary); opacity: 0.5; }
 
     .pwd-tracker { padding: 16px 0; }
@@ -74,6 +77,7 @@
     .pwd-step:last-child { padding-bottom: 0; }
     .pwd-step::before { content: ''; position: absolute; left: -22px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--border); border: 2px solid var(--bg-primary); }
     .pwd-step.completed::before, .pwd-step.current::before { background: var(--text-primary); }
+    .pwd-step.current::before { animation: breathe 2s ease-in-out infinite; }
     .step-label { font-size: 14px; font-weight: 500; }
     .step-date { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
 
@@ -101,6 +105,22 @@
     .loading { text-align: center; padding: 20px; color: var(--text-secondary); }
     .spinner { border: 2px solid var(--border); border-top-color: var(--text-primary); border-radius: 50%; width: 32px; height: 32px; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0px var(--pulse-c, rgba(0,0,0,0.3)); } 70% { box-shadow: 0 0 0 5px transparent; } 100% { box-shadow: 0 0 0 0px transparent; } }
+    @keyframes breathe { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+    @keyframes urgent-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes countUp { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .days-bar-wrap { margin-top: 14px; margin-bottom: 4px; }
+    .days-bar-track { height: 2px; background: var(--border); border-radius: 2px; position: relative; overflow: visible; }
+    .days-bar-fill { height: 100%; border-radius: 2px; background: var(--text-primary); transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+    .days-bar-dot { position: absolute; right: -3px; top: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--text-primary); animation: pulse-ring 2s ease-out infinite; --pulse-c: rgba(0,0,0,0.25); }
+    .days-bar-labels { display: flex; justify-content: space-between; margin-top: 5px; }
+    .days-bar-label { font-size: 10px; color: var(--text-secondary); }
+    .days-bar-wrap.urgent .days-bar-fill, .days-bar-wrap.urgent .days-bar-dot { background: var(--warning); }
+    .days-bar-wrap.urgent .days-bar-label-right { color: var(--warning); font-weight: 600; }
+    .urgent-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warning); flex-shrink: 0; animation: urgent-blink 1s ease-in-out infinite; display: inline-block; vertical-align: middle; }
+    [data-theme="dark"] .days-bar-dot { --pulse-c: rgba(255,255,255,0.2); }
 
     footer { text-align: center; padding: 24px 20px 16px; font-size: 11px; color: var(--text-secondary); border-top: 1px solid var(--border); margin-top: 16px; }
     footer a { color: var(--text-secondary); text-decoration: none; }
@@ -256,6 +276,36 @@
       return { paydayDate: paydayDate, paydayLabel: paydayLabel, reportDate: reportDeadline.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }), reportLabel: reportLabel, reportUrgent: daysUntilReport <= 3 };
     }
 
+    function countUpAmount(el, target, duration) {
+      if (!el) return;
+      var start = performance.now();
+      function run(now) {
+        var elapsed = now - start;
+        var p = Math.min(elapsed / duration, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var val = Math.round(target * eased);
+        el.textContent = val.toLocaleString('en-CA');
+        if (p < 1) requestAnimationFrame(run);
+        else el.textContent = Math.round(target).toLocaleString('en-CA');
+      }
+      requestAnimationFrame(run);
+    }
+    function renderDaysBar(daysUntil, urgent) {
+      var cycleDays = 30;
+      var elapsed = cycleDays - Math.min(daysUntil, cycleDays);
+      var pct = Math.max(0, Math.min(100, (elapsed / cycleDays) * 100));
+      var wrap = document.createElement('div'); wrap.className = 'days-bar-wrap' + (urgent ? ' urgent' : '');
+      var track = document.createElement('div'); track.className = 'days-bar-track';
+      var fill = document.createElement('div'); fill.className = 'days-bar-fill'; fill.style.width = pct + '%'; track.appendChild(fill);
+      var dot = document.createElement('div'); dot.className = 'days-bar-dot'; track.appendChild(dot);
+      wrap.appendChild(track);
+      var labels = document.createElement('div'); labels.className = 'days-bar-labels';
+      var left = document.createElement('span'); left.className = 'days-bar-label'; left.textContent = 'last payment';
+      var right = document.createElement('span'); right.className = 'days-bar-label days-bar-label-right'; right.textContent = daysUntil === 0 ? 'today' : daysUntil + 'd away';
+      labels.appendChild(left); labels.appendChild(right); wrap.appendChild(labels);
+      return wrap;
+    }
+
     var lastPaymentHash = '';
     var lastPaymentAmount = 0;
     function renderPaymentCard(target, amount, designation, timeline, isApproximate) {
@@ -263,12 +313,18 @@
       if (hash === lastPaymentHash) return;
       lastPaymentHash = hash;
       lastPaymentAmount = parseFloat(amount.replace(/[^0-9.]/g, '')) || 0;
+      var numVal = lastPaymentAmount;
       var w = document.createElement('div');
-      var amountEl = document.createElement('div'); amountEl.className = 'payment-amount'; amountEl.textContent = amount; w.appendChild(amountEl);
+      var amountWrap = document.createElement('div'); amountWrap.className = 'payment-amount-wrap'; amountWrap.id = 'payment-amount-wrap';
+      var dollarSpan = document.createElement('span'); dollarSpan.className = 'payment-dollar'; dollarSpan.textContent = '$'; amountWrap.appendChild(dollarSpan);
+      var numSpan = document.createElement('span'); numSpan.className = 'payment-number'; numSpan.id = 'payment-number-val'; numSpan.textContent = '0'; amountWrap.appendChild(numSpan);
+      w.appendChild(amountWrap);
       var desigEl = document.createElement('div'); desigEl.className = 'payment-designation'; desigEl.textContent = designation + (isApproximate ? ' (est.)' : ''); w.appendChild(desigEl);
+      var daysUntilNum = (timeline.paydayLabel === 'Today' ? 0 : timeline.paydayLabel === 'Tomorrow' ? 1 : parseInt(timeline.paydayLabel) || 99);
+      var paydayUrgent = daysUntilNum <= 3;
       var meta = document.createElement('div'); meta.className = 'payment-meta';
-      function metaRow(text, countdown, cls) { var row = document.createElement('div'); row.className = 'payment-meta-row' + (cls ? ' ' + cls : ''); var span = document.createElement('span'); span.textContent = text; row.appendChild(span); var badge = document.createElement('span'); badge.className = 'countdown'; badge.textContent = countdown; row.appendChild(badge); return row; }
-      meta.appendChild(metaRow(timeline.paydayDate, timeline.paydayLabel));
+      function metaRow(text, countdown, cls, withDot) { var row = document.createElement('div'); row.className = 'payment-meta-row' + (cls ? ' ' + cls : ''); if (withDot) { var dot = document.createElement('span'); dot.className = 'urgent-dot'; dot.style.marginRight = '4px'; row.appendChild(dot); } var span = document.createElement('span'); span.textContent = text; row.appendChild(span); var badge = document.createElement('span'); badge.className = 'countdown'; badge.textContent = countdown; row.appendChild(badge); return row; }
+      meta.appendChild(metaRow(timeline.paydayDate, timeline.paydayLabel, paydayUrgent ? 'urgent' : '', paydayUrgent));
       meta.appendChild(metaRow('Report ' + timeline.reportDate, timeline.reportLabel, timeline.reportUrgent ? 'urgent' : ''));
       var cdRow = document.createElement('div'); cdRow.className = 'payment-meta-row';
       var cdLabel = document.createElement('span'); cdLabel.textContent = 'Countdown'; cdRow.appendChild(cdLabel);
@@ -279,6 +335,7 @@
       var erVal = document.createElement('span'); erVal.className = 'countdown'; erVal.id = 'earnings-rate-val'; erVal.textContent = '--'; erRow.appendChild(erVal);
       meta.appendChild(erRow);
       w.appendChild(meta);
+      w.appendChild(renderDaysBar(daysUntilNum, paydayUrgent));
       var checkRow = document.createElement('div'); checkRow.className = 'check-row';
       var paidLabel = document.createElement('label'); paidLabel.className = 'paid-check'; paidLabel.id = 'paid-check';
       var cb = document.createElement('input'); cb.type = 'checkbox'; cb.id = 'paid-cb'; cb.addEventListener('change', togglePaid); paidLabel.appendChild(cb);
@@ -291,6 +348,7 @@
       w.appendChild(checkRow);
       target.textContent = '';
       target.appendChild(w);
+      if (numVal > 0) countUpAmount(document.getElementById('payment-number-val'), numVal, 600);
       loadPaidStatus(); loadReportStatus();
     }
 
@@ -320,8 +378,9 @@
         var data = await resp.json(); var pm = data.paidMonths || {}; var month = getCurrentPaymentMonth(); var ts = pm[month]; var isPaid = !!ts;
         var cb = document.getElementById('paid-cb'); var label = document.getElementById('paid-label'); var wrap = document.getElementById('paid-check'); if (!cb) return;
         cb.checked = isPaid; var undoBtn = document.getElementById('undo-paid-btn');
-        if (isPaid) { var d = new Date(ts); label.textContent = 'Paid (' + d.toLocaleDateString('en-US', { month: 'short' }) + ')'; wrap.classList.add('checked'); renderCalendar(1); if (undoBtn) undoBtn.style.display = 'inline-flex'; }
-        else { label.textContent = 'Paid yet?'; wrap.classList.remove('checked'); if (undoBtn) undoBtn.style.display = 'none'; renderCalendar(0); }
+        var amountWrapEl = document.getElementById('payment-amount-wrap');
+        if (isPaid) { var d = new Date(ts); label.textContent = 'Paid (' + d.toLocaleDateString('en-US', { month: 'short' }) + ')'; wrap.classList.add('checked'); renderCalendar(1); if (undoBtn) undoBtn.style.display = 'inline-flex'; if (amountWrapEl) amountWrapEl.style.opacity = '0.35'; }
+        else { label.textContent = 'Paid yet?'; wrap.classList.remove('checked'); if (undoBtn) undoBtn.style.display = 'none'; renderCalendar(0); if (amountWrapEl) amountWrapEl.style.opacity = '1'; }
       } catch (_) {}
     }
 
