@@ -9,14 +9,14 @@ import './Listings.css'
 
 export default function Listings() {
   const { filters } = useFilters()
-  const { favorites } = useFavorites()
+  const { favorites, favoriteSet } = useFavorites()
 
   const filtered = useMemo(() => {
     let result = listings.filter(l => {
       if (l.price < filters.priceMin || l.price > filters.priceMax) return false
       if (filters.beds > 0 && l.beds < filters.beds) return false
       if (filters.propertyType !== 'all' && l.type !== filters.propertyType) return false
-      if (filters.favoritesOnly && !favorites.includes(l.id)) return false
+      if (filters.favoritesOnly && !favoriteSet.has(l.id)) return false
       return true
     })
 
@@ -36,7 +36,7 @@ export default function Listings() {
     }
 
     return result
-  }, [filters, favorites])
+  }, [filters, favoriteSet])
 
   return (
     <div className="page">
