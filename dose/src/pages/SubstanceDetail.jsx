@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useSubstances } from '../hooks/useSubstances';
 import { useDoseLog } from '../hooks/useDoseLog';
+import { shortDate } from '../utils/date';
 import AddEntryModal from '../components/AddEntryModal';
 import { CATEGORY_COLORS } from '../constants/colors';
 
@@ -73,7 +74,7 @@ export default function SubstanceDetail() {
 
         {lastLog && (
           <div style={{ marginTop: 12, fontSize: '0.76rem', color: 'var(--text-secondary)' }}>
-            Last logged: {new Date(lastLog.timestamp).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })} &middot; {myLogs.length} total {myLogs.length === 1 ? 'entry' : 'entries'}
+            Last logged: {shortDate(lastLog.timestamp)} &middot; {myLogs.length} total {myLogs.length === 1 ? 'entry' : 'entries'}
           </div>
         )}
       </div>

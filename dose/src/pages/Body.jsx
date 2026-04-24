@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSessions } from '../context/SessionContext';
+import { shortDate } from '../utils/date';
 import Health from './Health';
 
 const bodyworkCards = [
@@ -54,7 +55,7 @@ export default function Body() {
                     <div className="log-name">{s.type === 'reflexology' ? s.zone : s.point}</div>
                     <div className="log-meta">{s.type}</div>
                   </div>
-                  <div className="log-time">{new Date(s.date).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}</div>
+                  <div className="log-time">{shortDate(s.date)}</div>
                 </div>
               ))}
             </section>

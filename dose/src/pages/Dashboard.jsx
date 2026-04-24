@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { longDate } from '../utils/date';
 import { useDoseLog } from '../hooks/useDoseLog';
 import { useSubstances } from '../hooks/useSubstances';
 import { useBiometrics } from '../hooks/useBiometrics';
@@ -116,7 +117,7 @@ export default function Dashboard() {
       <div style={{ marginBottom: 28, display: 'flex', alignItems: 'flex-start', gap: 16 }}>
         <div style={{ flex: 1 }}>
           <div className="date-label">
-            {new Date().toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric' })}
+            {longDate(new Date())}
           </div>
           <h1 className="page-title" style={{ fontSize: 'clamp(2rem, 8vw, 2.8rem)', marginBottom: 6 }}>
             {greeting}.
