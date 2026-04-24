@@ -1,4 +1,5 @@
 import { useSessions } from '../context/SessionContext';
+import { shortDate, shortTime } from '../utils/date';
 
 export default function Sessions() {
   const { sessions, deleteSession } = useSessions();
@@ -28,10 +29,10 @@ export default function Sessions() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
-                    {new Date(s.date).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}
+                    {shortDate(s.date)}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
-                    {new Date(s.date).toLocaleTimeString('en-CA', { hour: 'numeric', minute: '2-digit' })}
+                    {shortTime(s.date)}
                   </div>
                 </div>
                 <button

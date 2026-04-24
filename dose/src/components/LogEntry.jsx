@@ -1,5 +1,6 @@
 import { useSubstances } from '../hooks/useSubstances';
 import { CATEGORY_COLORS } from '../constants/colors';
+import { shortDate } from '../utils/date';
 
 function formatTime(iso) {
   try {
@@ -9,7 +10,7 @@ function formatTime(iso) {
 
     if (diffH < 1) return `${Math.round(diffMs / 60000)}m ago`;
     if (diffH < 24) return `${Math.round(diffH)}h ago`;
-    return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+    return shortDate(d);
   } catch {
     return '\u2014';
   }

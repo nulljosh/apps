@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSessions } from '../context/SessionContext';
+import { shortDate } from '../utils/date';
 
 const cards = [
   { to: '/feet', title: 'Foot Reflexology', desc: '16 pressure zones mapped to organs', icon: 'M12 21c-3 0-5-2-6-5s-1-7 1-9 5-3 5-3 3 1 5 3 2 6 1 9-3 5-6 5z' },
@@ -44,7 +45,7 @@ export default function Bodywork() {
                 <div className="log-name">{s.type === 'reflexology' ? s.zone : s.point}</div>
                 <div className="log-meta">{s.type} -- {s.area || s.meridian || ''}</div>
               </div>
-              <div className="log-time">{new Date(s.date).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}</div>
+              <div className="log-time">{shortDate(s.date)}</div>
             </div>
           ))}
         </section>
