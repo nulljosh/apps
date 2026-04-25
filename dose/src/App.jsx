@@ -17,6 +17,7 @@ import SymptomFinder from './pages/SymptomFinder';
 import Sessions from './pages/Sessions';
 import Facemaxxing from './pages/Facemaxxing';
 import LabResults from './pages/LabResults';
+import Profile from './pages/Profile';
 
 function ThemeToggle({ theme, setTheme }) {
   return (
@@ -69,6 +70,7 @@ export default function App() {
             <Route path="/sessions" element={<Sessions />} />
             <Route path="/facemaxxing" element={<Facemaxxing />} />
             <Route path="/lab-results" element={<LabResults />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<Dashboard />} />
           </Routes>
           <Nav />
