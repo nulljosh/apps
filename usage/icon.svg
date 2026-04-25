@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="32" fill="#0c1a12"/>
+  <rect x="8" y="8" width="184" height="184" rx="26" fill="none" stroke="#1a2e20" stroke-width="1.5"/>
+  <!-- Terminal frame -->
+  <rect x="30" y="30" width="140" height="140" rx="10" fill="#0f2318" stroke="#2a4a35" stroke-width="1"/>
+  <!-- Title bar dots -->
+  <circle cx="46" cy="44" r="3.5" fill="#d4a843" opacity="0.8"/>
+  <circle cx="58" cy="44" r="3.5" fill="#3d9e6a" opacity="0.8"/>
+  <circle cx="70" cy="44" r="3.5" fill="#8a9e90" opacity="0.4"/>
+  <!-- Bar chart -->
+  <rect x="50" y="120" width="14" height="35" rx="2" fill="#3d9e6a" opacity="0.6"/>
+  <rect x="72" y="100" width="14" height="55" rx="2" fill="#3d9e6a" opacity="0.75"/>
+  <rect x="94" y="85" width="14" height="70" rx="2" fill="#3d9e6a" opacity="0.9"/>
+  <rect x="116" y="70" width="14" height="85" rx="2" fill="#d4a843" opacity="0.85"/>
+  <rect x="138" y="90" width="14" height="65" rx="2" fill="#3d9e6a" opacity="0.7"/>
+  <!-- Meter line -->
+  <line x1="45" y1="60" x2="155" y2="60" stroke="#8a9e90" stroke-width="0.5" opacity="0.3"/>
+  <text x="100" y="64" text-anchor="middle" fill="#8a9e90" style="font-family:monospace;font-size:8px;" opacity="0.5">USAGE</text>
+</svg>

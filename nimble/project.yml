@@ -1,0 +1,36 @@
+name: Nimble
+options:
+  minimumXcodeGenVersion: 2.38.0
+settings:
+  DEVELOPMENT_TEAM: QMM486NPYC
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Nimble:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - Sources
+      - path: Resources
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.nimble
+        GENERATE_INFOPLIST_FILE: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_CFBundleDisplayName: Nimble
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+  NimbleTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests
+    dependencies:
+      - target: Nimble
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.nimble.tests
+        GENERATE_INFOPLIST_FILE: YES

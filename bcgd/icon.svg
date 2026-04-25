@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="32" style="fill:#1a1a1a"/>
+  <!-- Garage door frame -->
+  <rect x="38" y="40" width="124" height="126" rx="6" style="fill:none;stroke:rgba(255,255,255,0.12);stroke-width:1"/>
+  <!-- Top edge shimmer -->
+  <rect x="46" y="42" width="108" height="1" rx="0.5" style="fill:rgba(255,255,255,0.08)"/>
+  <!-- Panel 1 - top with windows -->
+  <rect x="43" y="46" width="114" height="26" rx="4" style="fill:rgba(255,255,255,0.06);stroke:rgba(255,255,255,0.1);stroke-width:0.75"/>
+  <!-- Glass window panes in top panel -->
+  <rect x="53" y="51" width="20" height="16" rx="3" style="fill:rgba(255,255,255,0.1);stroke:rgba(255,255,255,0.15);stroke-width:0.5"/>
+  <rect x="79" y="51" width="20" height="16" rx="3" style="fill:rgba(255,255,255,0.1);stroke:rgba(255,255,255,0.15);stroke-width:0.5"/>
+  <rect x="105" y="51" width="20" height="16" rx="3" style="fill:rgba(255,255,255,0.1);stroke:rgba(255,255,255,0.15);stroke-width:0.5"/>
+  <rect x="131" y="51" width="20" height="16" rx="3" style="fill:rgba(255,255,255,0.1);stroke:rgba(255,255,255,0.15);stroke-width:0.5"/>
+  <!-- Panel 2 -->
+  <rect x="43" y="76" width="114" height="26" rx="4" style="fill:rgba(255,255,255,0.05);stroke:rgba(255,255,255,0.08);stroke-width:0.75"/>
+  <rect x="50" y="78" width="100" height="1" rx="0.5" style="fill:rgba(255,255,255,0.06)"/>
+  <!-- Panel 3 -->
+  <rect x="43" y="106" width="114" height="26" rx="4" style="fill:rgba(255,255,255,0.04);stroke:rgba(255,255,255,0.07);stroke-width:0.75"/>
+  <rect x="50" y="108" width="100" height="1" rx="0.5" style="fill:rgba(255,255,255,0.05)"/>
+  <!-- Panel 4 - bottom -->
+  <rect x="43" y="136" width="114" height="26" rx="4" style="fill:rgba(255,255,255,0.03);stroke:rgba(255,255,255,0.06);stroke-width:0.75"/>
+  <!-- Handle -->
+  <rect x="92" y="146" width="16" height="3" rx="1.5" style="fill:rgba(255,255,255,0.3)"/>
+  <!-- Ground line -->
+  <line x1="28" y1="170" x2="172" y2="170" style="stroke:rgba(255,255,255,0.06);stroke-width:1"/>
+  <!-- Driveway marks -->
+  <rect x="70" y="172" width="2" height="8" rx="1" style="fill:rgba(255,255,255,0.03)"/>
+  <rect x="100" y="172" width="2" height="8" rx="1" style="fill:rgba(255,255,255,0.03)"/>
+  <rect x="130" y="172" width="2" height="8" rx="1" style="fill:rgba(255,255,255,0.03)"/>
+</svg>

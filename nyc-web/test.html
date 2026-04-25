@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>nyc-web tests</title>
+    <style>
+        body { background: #0a0a0c; color: #e5e5e7; font-family: -apple-system, sans-serif; padding: 24px; }
+        .pass { color: #30d158; }
+        .fail { color: #ff453a; }
+        .suite { margin: 16px 0; }
+        .suite-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .test { font-size: 12px; margin: 2px 0 2px 16px; font-family: 'SF Mono', monospace; }
+        #summary { margin-top: 24px; font-size: 16px; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <h1>nyc-web test suite</h1>
+    <div id="results"></div>
+    <div id="summary"></div>
+    <script type="module" src="js/tests.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <rect width="800" height="500" style="fill:#ffffff"/>
+
+  <!-- Title -->
+  <text x="400" y="40" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:18px;font-weight:600;text-anchor:middle">Apps Monorepo Architecture</text>
+
+  <!-- Monorepo root -->
+  <rect x="325" y="60" width="150" height="40" rx="8" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1.5"/>
+  <text x="400" y="85" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:13px;font-weight:500;text-anchor:middle">apps/</text>
+
+  <!-- Web Apps group -->
+  <rect x="40" y="150" width="220" height="200" rx="12" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="150" y="175" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:13px;font-weight:600;text-anchor:middle">Web Apps</text>
+  <rect x="60" y="190" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="150" y="209" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">dose (Vite + React)</text>
+  <rect x="60" y="225" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="150" y="244" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">lingo (vanilla JS PWA)</text>
+  <rect x="60" y="260" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="150" y="279" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">politics / roost / usage</text>
+  <rect x="60" y="295" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="150" y="314" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">nyc-web (Canvas)</text>
+
+  <!-- iOS Apps group -->
+  <rect x="290" y="150" width="220" height="200" rx="12" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="400" y="175" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:13px;font-weight:600;text-anchor:middle">iOS Apps (SwiftUI)</text>
+  <rect x="310" y="190" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="400" y="209" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">browser-ios / nimble-ios</text>
+  <rect x="310" y="225" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="400" y="244" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">life-ios / nyc-ios</text>
+  <rect x="310" y="260" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="400" y="279" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">lingo-ios / dashboard-ios</text>
+  <rect x="310" y="295" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="400" y="314" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">journal-ios / portfolio-ios</text>
+
+  <!-- macOS Apps group -->
+  <rect x="540" y="150" width="220" height="200" rx="12" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="650" y="175" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:13px;font-weight:600;text-anchor:middle">macOS Apps (SwiftUI)</text>
+  <rect x="560" y="190" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="650" y="209" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">browser / nimble</text>
+  <rect x="560" y="225" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="650" y="244" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">life / nyc</text>
+  <rect x="560" y="260" width="180" height="28" rx="6" style="fill:#ffffff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="650" y="279" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:11px;text-anchor:middle">dose (companion)</text>
+
+  <!-- Build Systems -->
+  <rect x="150" y="400" width="150" height="40" rx="8" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1.5"/>
+  <text x="225" y="425" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:12px;font-weight:500;text-anchor:middle">Vite / http.server</text>
+
+  <rect x="325" y="400" width="150" height="40" rx="8" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1.5"/>
+  <text x="400" y="425" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:12px;font-weight:500;text-anchor:middle">xcodegen + Xcode</text>
+
+  <rect x="500" y="400" width="150" height="40" rx="8" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1.5"/>
+  <text x="575" y="425" style="fill:#1d1d1f;font-family:-apple-system,Helvetica Neue,sans-serif;font-size:12px;font-weight:500;text-anchor:middle">xcodegen + Xcode</text>
+
+  <!-- Connector lines -->
+  <line x1="400" y1="100" x2="150" y2="150" style="stroke:#d2d2d7;stroke-width:1.5"/>
+  <line x1="400" y1="100" x2="400" y2="150" style="stroke:#d2d2d7;stroke-width:1.5"/>
+  <line x1="400" y1="100" x2="650" y2="150" style="stroke:#d2d2d7;stroke-width:1.5"/>
+  <line x1="150" y1="350" x2="225" y2="400" style="stroke:#d2d2d7;stroke-width:1.5"/>
+  <line x1="400" y1="350" x2="400" y2="400" style="stroke:#d2d2d7;stroke-width:1.5"/>
+  <line x1="650" y1="350" x2="575" y2="400" style="stroke:#d2d2d7;stroke-width:1.5"/>
+
+  <!-- Dots at connection points -->
+  <circle cx="400" cy="100" r="4" style="fill:#d2d2d7"/>
+  <circle cx="150" cy="150" r="4" style="fill:#d2d2d7"/>
+  <circle cx="400" cy="150" r="4" style="fill:#d2d2d7"/>
+  <circle cx="650" cy="150" r="4" style="fill:#d2d2d7"/>
+</svg>

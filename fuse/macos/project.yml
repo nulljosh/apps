@@ -1,0 +1,35 @@
+name: FuseMac
+options:
+  bundleIdPrefix: com.heyitsmejosh
+  deploymentTarget:
+    macOS: '14.0'
+settings:
+  SWIFT_VERSION: '6.0'
+  MARKETING_VERSION: '1.0.0'
+  CURRENT_PROJECT_VERSION: '1'
+  DEVELOPMENT_TEAM: QMM486NPYC
+  CODE_SIGN_STYLE: Automatic
+targets:
+  FuseMac:
+    type: application
+    platform: macOS
+    sources:
+      - path: .
+        excludes:
+          - '*.xcodeproj'
+          - '*.yml'
+          - README.md
+          - CLAUDE.md
+          - icon.svg
+          - architecture.svg
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.fuse.mac
+      GENERATE_INFOPLIST_FILE: YES
+      INFOPLIST_KEY_NSCalendarsUsageDescription: 'fuse reads your calendars to show upcoming events and countdowns.'
+schemes:
+  FuseMac:
+    build:
+      targets:
+        FuseMac: all
+    run:
+      config: Debug

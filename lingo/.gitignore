@@ -1,0 +1,14 @@
+*.log
+node_modules/
+.env
+.vscode/
+*.swp
+*.swo
+*~
+*.backup
+*-old.*
+*-backup.*
+.vercel
+pb_data/
+pb_data.*/
+supabase/

@@ -1,0 +1,16 @@
+{
+  "name": "Usage Tracker",
+  "short_name": "Usage",
+  "description": "AI usage tracker for Claude and ChatGPT",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c1a12",
+  "theme_color": "#0c1a12",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
