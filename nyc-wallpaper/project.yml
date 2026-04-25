@@ -1,0 +1,27 @@
+name: NYCWallpaper
+options:
+  bundleIdPrefix: com.heyitsmejosh
+  minimumXcodeGenVersion: 2.38.0
+settings:
+  DEVELOPMENT_TEAM: QMM486NPYC
+  base:
+    SWIFT_VERSION: '6.0'
+    MARKETING_VERSION: '1.0.0'
+    CURRENT_PROJECT_VERSION: '1'
+targets:
+  NYCWallpaper:
+    type: bundle
+    platform: macOS
+    deploymentTarget: '14.0'
+    sources:
+      - NYCWallpaper
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.nyc-wallpaper
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: NYCWallpaper/Info.plist
+        WRAPPER_EXTENSION: saver
+        CODE_SIGN_STYLE: Automatic
+    dependencies:
+      - sdk: ScreenSaver.framework
+      - sdk: WebKit.framework

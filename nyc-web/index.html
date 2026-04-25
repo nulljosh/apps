@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Times Square Survival</title>
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="game"></canvas>
+
+    <div id="menu">
+        <div class="menu-title">TIMES SQUARE</div>
+        <div class="menu-subtitle">SURVIVAL SIMULATOR</div>
+        <button class="menu-btn" id="menu-new">> NEW GAME</button>
+        <div class="menu-load-title">LOAD GAME</div>
+        <div id="menu-slots"></div>
+    </div>
+
+    <div id="hud">
+        <div id="resource-bar"></div>
+        <div id="build-menu"></div>
+        <div id="colonist-panel"></div>
+        <div id="game-log"></div>
+        <div id="directive-bar"></div>
+        <div id="time-display"></div>
+        <div id="minimap-container">
+            <canvas id="minimap" width="150" height="150"></canvas>
+        </div>
+    </div>
+
+    <div id="pause-overlay"><span>PAUSED</span></div>
+    <div id="save-indicator">SAVED</div>
+    <div id="settings-overlay"></div>
+    <div id="tutorial-overlay"></div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

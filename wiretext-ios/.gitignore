@@ -1,0 +1,7 @@
+build/
+*.xcuserstate
+*.xcscheme
+xcuserdata/
+DerivedData/
+*.swp
+.DS_Store

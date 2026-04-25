@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <rect width="800" height="500" fill="#fff"/>
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:18px;font-weight:600;fill:#1d1d1f;">Usage Tracker Architecture</text>
+  <!-- UI Layer -->
+  <rect x="50" y="60" width="700" height="80" rx="12" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="400" y="82" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:11px;fill:#86868b;letter-spacing:0.5px;">UI LAYER</text>
+  <rect x="80" y="95" width="120" height="32" rx="8" fill="#fff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="140" y="115" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">Dashboard</text>
+  <rect x="230" y="95" width="120" height="32" rx="8" fill="#fff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="290" y="115" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">Log Entry</text>
+  <rect x="380" y="95" width="120" height="32" rx="8" fill="#fff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="440" y="115" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">Charts</text>
+  <rect x="530" y="95" width="120" height="32" rx="8" fill="#fff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="590" y="115" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">Settings</text>
+  <!-- Arrows down -->
+  <line x1="400" y1="140" x2="400" y2="180" stroke="#86868b" stroke-width="1" marker-end="url(#arrow)"/>
+  <!-- State Layer -->
+  <rect x="150" y="180" width="500" height="70" rx="12" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="400" y="202" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:11px;fill:#86868b;letter-spacing:0.5px;">STATE MANAGEMENT</text>
+  <rect x="180" y="215" width="140" height="28" rx="8" fill="#fff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="250" y="233" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">UsageStore</text>
+  <rect x="350" y="215" width="140" height="28" rx="8" fill="#fff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="420" y="233" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">StatsEngine</text>
+  <rect x="520" y="215" width="100" height="28" rx="8" fill="#fff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="570" y="233" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">Router</text>
+  <!-- Arrows down -->
+  <line x1="400" y1="250" x2="400" y2="290" stroke="#86868b" stroke-width="1" marker-end="url(#arrow)"/>
+  <!-- Storage Layer -->
+  <rect x="150" y="290" width="500" height="70" rx="12" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="400" y="312" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:11px;fill:#86868b;letter-spacing:0.5px;">PERSISTENCE</text>
+  <rect x="220" y="325" width="160" height="28" rx="8" fill="#fff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="300" y="343" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">localStorage (JSON)</text>
+  <rect x="420" y="325" width="160" height="28" rx="8" fill="#fff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="500" y="343" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">Export / Import</text>
+  <!-- Data flow labels -->
+  <rect x="50" y="400" width="700" height="80" rx="12" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="400" y="422" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:11px;fill:#86868b;letter-spacing:0.5px;">PROVIDERS</text>
+  <rect x="120" y="435" width="160" height="32" rx="8" fill="#e8f5e9" stroke="#3d9e6a" stroke-width="1"/>
+  <text x="200" y="455" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">Claude (Max Sub)</text>
+  <rect x="320" y="435" width="160" height="32" rx="8" fill="#fff3e0" stroke="#d4a843" stroke-width="1"/>
+  <text x="400" y="455" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">ChatGPT (Plus/API)</text>
+  <rect x="520" y="435" width="160" height="32" rx="8" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="600" y="455" text-anchor="middle" style="font-family:-apple-system,Helvetica;font-size:12px;fill:#1d1d1f;">Custom Provider</text>
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#86868b"/>
+    </marker>
+  </defs>
+</svg>

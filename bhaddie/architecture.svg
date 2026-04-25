@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" style="background:#fff;font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif">
+  <!-- Title -->
+  <text x="400" y="36" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#1a1a1a">Bhaddie Architecture</text>
+
+  <!-- Client Layer -->
+  <text x="400" y="72" text-anchor="middle" style="font-size:11px;font-weight:600;fill:#6b7280;text-transform:uppercase;letter-spacing:1.5px">CLIENT LAYER</text>
+
+  <!-- Web -->
+  <rect x="80" y="90" width="180" height="70" rx="12" style="fill:none;stroke:#e5e7eb;stroke-width:1.5"/>
+  <text x="170" y="118" text-anchor="middle" style="font-size:13px;font-weight:600;fill:#1a1a1a">Web</text>
+  <text x="170" y="136" text-anchor="middle" style="font-size:10px;fill:#6b7280">MapLibre GL + Vanilla JS</text>
+  <text x="170" y="150" text-anchor="middle" style="font-size:10px;fill:#6b7280">PWA Ready</text>
+
+  <!-- iOS -->
+  <rect x="310" y="90" width="180" height="70" rx="12" style="fill:none;stroke:#e5e7eb;stroke-width:1.5"/>
+  <text x="400" y="118" text-anchor="middle" style="font-size:13px;font-weight:600;fill:#1a1a1a">iOS</text>
+  <text x="400" y="136" text-anchor="middle" style="font-size:10px;fill:#6b7280">SwiftUI + MapKit</text>
+  <text x="400" y="150" text-anchor="middle" style="font-size:10px;fill:#6b7280">iPhone + iPad</text>
+
+  <!-- macOS -->
+  <rect x="540" y="90" width="180" height="70" rx="12" style="fill:none;stroke:#e5e7eb;stroke-width:1.5"/>
+  <text x="630" y="118" text-anchor="middle" style="font-size:13px;font-weight:600;fill:#1a1a1a">macOS</text>
+  <text x="630" y="136" text-anchor="middle" style="font-size:10px;fill:#6b7280">SwiftUI + MapKit</text>
+  <text x="630" y="150" text-anchor="middle" style="font-size:10px;fill:#6b7280">NavigationSplitView</text>
+
+  <!-- Connection lines to API -->
+  <line x1="170" y1="160" x2="170" y2="220" style="stroke:#d1d5db;stroke-width:1"/>
+  <line x1="400" y1="160" x2="400" y2="220" style="stroke:#d1d5db;stroke-width:1"/>
+  <line x1="630" y1="160" x2="630" y2="220" style="stroke:#d1d5db;stroke-width:1"/>
+
+  <!-- Arrows -->
+  <polygon points="170,220 166,212 174,212" style="fill:#d1d5db"/>
+  <polygon points="400,220 396,212 404,212" style="fill:#d1d5db"/>
+  <polygon points="630,220 626,212 634,212" style="fill:#d1d5db"/>
+
+  <!-- API Layer -->
+  <text x="400" y="240" text-anchor="middle" style="font-size:11px;font-weight:600;fill:#6b7280;text-transform:uppercase;letter-spacing:1.5px">API LAYER (PLANNED)</text>
+
+  <rect x="200" y="255" width="400" height="60" rx="12" style="fill:none;stroke:#e5e7eb;stroke-width:1.5;stroke-dasharray:6,4"/>
+  <text x="400" y="280" text-anchor="middle" style="font-size:13px;font-weight:600;fill:#9ca3af">Vercel Functions</text>
+  <text x="400" y="296" text-anchor="middle" style="font-size:10px;fill:#9ca3af">Auth / Location API / Token Engine / Push</text>
+
+  <!-- Connection lines to services -->
+  <line x1="300" y1="315" x2="200" y2="370" style="stroke:#d1d5db;stroke-width:1;stroke-dasharray:4,3"/>
+  <line x1="400" y1="315" x2="400" y2="370" style="stroke:#d1d5db;stroke-width:1;stroke-dasharray:4,3"/>
+  <line x1="500" y1="315" x2="600" y2="370" style="stroke:#d1d5db;stroke-width:1;stroke-dasharray:4,3"/>
+
+  <!-- Services Layer -->
+  <text x="400" y="360" text-anchor="middle" style="font-size:11px;font-weight:600;fill:#6b7280;text-transform:uppercase;letter-spacing:1.5px">SERVICES (PLANNED)</text>
+
+  <!-- Supabase -->
+  <rect x="100" y="380" width="160" height="55" rx="10" style="fill:none;stroke:#e5e7eb;stroke-width:1.5;stroke-dasharray:6,4"/>
+  <text x="180" y="404" text-anchor="middle" style="font-size:12px;font-weight:600;fill:#9ca3af">Supabase</text>
+  <text x="180" y="420" text-anchor="middle" style="font-size:10px;fill:#9ca3af">Auth + Realtime DB</text>
+
+  <!-- MapLibre -->
+  <rect x="320" y="380" width="160" height="55" rx="10" style="fill:none;stroke:#e5e7eb;stroke-width:1.5;stroke-dasharray:6,4"/>
+  <text x="400" y="404" text-anchor="middle" style="font-size:12px;font-weight:600;fill:#9ca3af">MapLibre / Mapbox</text>
+  <text x="400" y="420" text-anchor="middle" style="font-size:10px;fill:#9ca3af">Tile Server + Geocoding</text>
+
+  <!-- Stripe -->
+  <rect x="540" y="380" width="160" height="55" rx="10" style="fill:none;stroke:#e5e7eb;stroke-width:1.5;stroke-dasharray:6,4"/>
+  <text x="620" y="404" text-anchor="middle" style="font-size:12px;font-weight:600;fill:#9ca3af">Stripe</text>
+  <text x="620" y="420" text-anchor="middle" style="font-size:10px;fill:#9ca3af">Token Purchases</text>
+
+  <!-- Features -->
+  <text x="400" y="468" text-anchor="middle" style="font-size:11px;font-weight:600;fill:#6b7280;text-transform:uppercase;letter-spacing:1.5px">CORE FEATURES</text>
+  <text x="400" y="488" text-anchor="middle" style="font-size:10px;fill:#9ca3af">Radar (Proximity Map) / Beacon (Location Sharing) / Economy (Token System) / Vibe Tags / Clout Scores</text>
+</svg>

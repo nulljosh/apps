@@ -1,0 +1,31 @@
+/* dose -- Portfolio Vibe Design Token Reference
+ *
+ * Vibed from heyitsmejosh.com (portfolio site).
+ * Applied directly to index.css variable system.
+ *
+ * Palette:
+ *   Light: --bg #fafafa, --text-primary #000, --text-secondary rgba(0,0,0,0.5)
+ *   Dark:  --bg #111, --text-primary #e8e8e8, --text-secondary rgba(255,255,255,0.5)
+ *   Borders: rgba opacity-based (0.1 / 0.06)
+ *   Accent: blue #3B82F6 / #60A5FA (dose identity, not portfolio monochrome)
+ *
+ * Typography:
+ *   Font: Geist (self-hosted woff2, Regular 400 + Medium 500)
+ *   h1: weight 200, letter-spacing -0.03em (portfolio hero style)
+ *   h2/h3: weight 500, letter-spacing -0.02em
+ *   Body: weight 400
+ *   Section labels: 0.75rem, weight 500, 0.12em spacing, uppercase, text-tertiary
+ *
+ * Interactions:
+ *   Spring easing: cubic-bezier(0.34, 1.56, 0.64, 1)
+ *   List hover: translateX(4px) + opacity fade
+ *   Card/button hover: translateY(-2px) + opacity fade
+ *   Link hover: opacity 0.5
+ *   All transitions: 0.4s ease-out (color), 0.2s spring (transform)
+ *
+ * Rules:
+ *   No box-shadow anywhere (flat design)
+ *   No gradients
+ *   No text-shadow or glow effects
+ *   Borders only via 1px solid var(--border)
+ */

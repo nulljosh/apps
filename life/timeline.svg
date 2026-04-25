@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="-apple-system, Helvetica Neue, sans-serif">
+  <style>
+    .year { font-size: 11px; fill: #6b7280; font-weight: 600; }
+    .event { font-size: 11px; fill: #1f2937; }
+    .event-sub { font-size: 10px; fill: #6b7280; }
+    .dot { fill: #3b5998; }
+    .dot-severe { fill: #dc2626; }
+    .dot-positive { fill: #16a34a; }
+    .line { stroke: #d1d5db; stroke-width: 2; }
+    .title { font-size: 16px; fill: #1f2937; font-weight: 700; }
+    .age { font-size: 9px; fill: #9ca3af; }
+  </style>
+
+  <text x="450" y="30" text-anchor="middle" class="title">Life Timeline -- 1999 to 2026</text>
+
+  <!-- Vertical line -->
+  <line x1="120" y1="55" x2="120" y2="490" class="line"/>
+
+  <!-- 1999 -->
+  <circle cx="120" cy="70" r="5" class="dot-positive"/>
+  <text x="80" y="74" text-anchor="end" class="year">1999</text>
+  <text x="140" y="74" class="event">Born</text>
+
+  <!-- ~2001 -->
+  <circle cx="120" cy="110" r="5" class="dot-severe"/>
+  <text x="80" y="114" text-anchor="end" class="year">~2001</text>
+  <text x="140" y="110" class="event">Earliest memory -- dad hitting me at age 2</text>
+  <text x="140" y="124" class="event-sub">Physical and verbal aggression begins. Continues for ~20 years.</text>
+
+  <!-- 2007 -->
+  <circle cx="120" cy="160" r="5" class="dot"/>
+  <text x="80" y="164" text-anchor="end" class="year">2007</text>
+  <text x="140" y="160" class="event">ADHD diagnosis</text>
+  <text x="140" y="174" class="event-sub">Age 8</text>
+
+  <!-- ~2014 -->
+  <circle cx="120" cy="210" r="5" class="dot"/>
+  <text x="80" y="214" text-anchor="end" class="year">~2014</text>
+  <text x="140" y="214" class="event">Met Mikayla online -- first serious relationship</text>
+
+  <!-- 2017 -->
+  <circle cx="120" cy="250" r="5" class="dot"/>
+  <text x="80" y="254" text-anchor="end" class="year">2017</text>
+  <text x="140" y="254" class="event">Prom with Mikayla</text>
+  <text x="140" y="268" class="event-sub">Age 18</text>
+
+  <!-- ~2021 -->
+  <circle cx="120" cy="300" r="5" class="dot-severe"/>
+  <text x="80" y="304" text-anchor="end" class="year">~2021</text>
+  <text x="140" y="300" class="event">Fallout with dad -- aggression stops after ~20 years</text>
+  <text x="140" y="314" class="event-sub">Relationship with Olivia. Abortion. Self-harm begins (age 22-23).</text>
+
+  <!-- 2024 -->
+  <circle cx="120" cy="360" r="5" class="dot-severe"/>
+  <text x="80" y="364" text-anchor="end" class="year">2024</text>
+  <text x="140" y="360" class="event">Briefly homeless after things got bad at home</text>
+  <text x="140" y="374" class="event-sub">Age 25</text>
+
+  <!-- Oct 2025 -->
+  <circle cx="120" cy="410" r="5" class="dot"/>
+  <text x="80" y="414" text-anchor="end" class="year">2025</text>
+  <text x="140" y="410" class="event">Autism diagnosis (October)</text>
+  <text x="140" y="424" class="event-sub">Applied for PWD program in BC</text>
+
+  <!-- 2026 -->
+  <circle cx="120" cy="470" r="5" class="dot-positive"/>
+  <text x="80" y="474" text-anchor="end" class="year">2026</text>
+  <text x="140" y="466" class="event">Age 26. Living in Langley. Started therapy with Amanda.</text>
+  <text x="140" y="480" class="event-sub">Planning move to Vancouver Island. Studying calc + bio. Aiming for fintech.</text>
+
+  <!-- Legend -->
+  <circle cx="620" cy="60" r="4" class="dot-severe"/>
+  <text x="630" y="64" class="event-sub">Traumatic / crisis</text>
+  <circle cx="620" cy="78" r="4" class="dot"/>
+  <text x="630" y="82" class="event-sub">Life event</text>
+  <circle cx="620" cy="96" r="4" class="dot-positive"/>
+  <text x="630" y="100" class="event-sub">Positive / forward</text>
+</svg>
