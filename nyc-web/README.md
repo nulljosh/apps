@@ -44,6 +44,13 @@ Open http://localhost:8080
 | Esc | Settings |
 | Shift+drag | Box select |
 
+## Roadmap
+
+- [ ] Difficulty levels — Easy / Medium / Hard selector on new game screen; controls tick rate, resource scarcity, threat frequency
+- [ ] UI accessibility — higher contrast HUD text, larger touch targets, better font sizes at small viewport
+- [ ] Platform parity — sync iOS (SpriteKit) and macOS targets to match web version feature set
+- [ ] Additional platforms — watchOS companion (colony status glance), tvOS big-screen mode
+
 ## License
 
 MIT 2026 Joshua Trommel
