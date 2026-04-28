@@ -1,4 +1,5 @@
-![wiretext](icon.svg)
+<img src="icon.svg" width="80">
+
 # wiretext
 ![version](https://img.shields.io/badge/version-v1.0.0-blue)
 
