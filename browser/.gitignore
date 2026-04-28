@@ -1,5 +1,0 @@
-*.xcodeproj
-*.xcworkspace
-DerivedData/
-build/
-.build/
