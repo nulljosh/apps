@@ -7,7 +7,7 @@ import { initClaudeBridge } from './claude.js';
 import { generateWorld, GRID_SIZE, TILE_SIZE, tileAt, worldToTile } from './world.js';
 import { Pathfinder } from './pathfinder.js';
 import { timeTick, needsTick, resourceTick, jobTick, placeBuilding, demolishBuilding,
-    autoplayTick, questTick, wallpaperCameraTick } from './systems.js';
+    autoplayTick, questTick, wallpaperCameraTick, setDifficulty } from './systems.js';
 import { Camera } from './camera.js';
 import { renderWorld, renderMinimap } from './renderer.js';
 import { setupInput } from './input.js';
@@ -15,6 +15,7 @@ import { updateHUD, checkTutorialAdvance } from './hud.js';
 import { saveGame, loadGame, listSlots, rebuildGrid } from './save.js';
 import { tickParticles, spawnBuildDust } from './particles.js';
 
+let selectedDifficulty = 'medium';
 let state = null;
 let grid = null;
 let pathfinder = null;
@@ -78,7 +79,10 @@ function showMenu() {
         slotsContainer.appendChild(btn);
     }
 
-    document.getElementById('menu-new').onclick = () => startGame(null);
+    document.getElementById('menu-new').onclick = () => {
+        setDifficulty(selectedDifficulty);
+        startGame(null);
+    };
 }
 
 function startGame(loadSlot) {
@@ -114,6 +118,8 @@ function startGame(loadSlot) {
         }
     } else {
         freshWorld();
+        const mult = selectedDifficulty === 'easy' ? 1.5 : selectedDifficulty === 'hard' ? 0.6 : 1;
+        Object.keys(state.resources).forEach(k => { state.resources[k] = Math.round((state.resources[k] || 0) * mult); });
     }
 
     // Migrate quest data from standalone Quest app
@@ -326,6 +332,15 @@ function performSave(slot) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.diff-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedDifficulty = btn.dataset.diff;
+        });
+    });
+    document.querySelector('.diff-btn[data-diff="medium"]').classList.add('selected');
+
     init();
 
     const mm = document.getElementById('minimap');
