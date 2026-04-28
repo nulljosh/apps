@@ -10,7 +10,12 @@ import { TileType, tileAt, setTile, GRID_SIZE } from './world.js';
 // TimeSystem -- uses real clock for day/night in wallpaper mode
 const TICKS_PER_DAY = 240;
 let accumulated = 0;
-const TICK_INTERVAL = 0.25;
+let TICK_INTERVAL = 0.25;
+export function setDifficulty(level) {
+    if (level === 'easy')   { TICK_INTERVAL = 0.35; }
+    if (level === 'medium') { TICK_INTERVAL = 0.25; }
+    if (level === 'hard')   { TICK_INTERVAL = 0.15; }
+}
 
 export function timeTick(dt, state) {
     if (state.isPaused) return false;
