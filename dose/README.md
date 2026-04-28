@@ -25,6 +25,9 @@ vercel --prod
 - [ ] Custom substance creation
 - [ ] Mood and sleep correlation with Apple Health sync
 - [ ] OCR pill identification
+- [ ] Lab PDF parsing — import bloodwork PDFs, parse values, flag out-of-range
+- [ ] iOS companion app — log doses, view active stack, interaction warnings natively
+- [ ] Reflexology and breathing modules (expansion from harm reduction into general wellness)
 
 ## Changelog
 v1.3.0
