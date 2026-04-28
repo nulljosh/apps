@@ -548,6 +548,7 @@ enum LifeData {
         // 18 - NEW: Boundaries
         LifeSection(label: "Boundaries", paragraphs: [
             "I absolutely cannot set boundaries. Not even a question. I have a hard time saying no. Can't set them at home either. I can't name a single boundary I've tried to set that actually worked. They mostly just get ignored.",
+            "Around 16, a year or two after we moved into this house, they took my bedroom door off. My best guess is it was because I had a girl over. I think they moved it down to the downstairs suite. So I took their door. I don't know what the right move was supposed to be -- if there were rules, tell me what they are. If I break them, tell me to leave. What they actually did was trap me between two options: comply completely or be homeless. They put me in that position and they've never once taken responsibility for it.",
         ], note: nil),
 
         // 19
