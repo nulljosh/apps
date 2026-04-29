@@ -10,7 +10,7 @@ module.exports = async function handler(req, res) {
 
   try {
     // Fetch user
-    const userRows = await supabaseRequest(`users?username=eq.${encodeURIComponent(username)}&select=id,username,created_at`);
+    const userRows = await supabaseRequest(`users?username=eq.${encodeURIComponent(username)}&select=id,username,created_at,avatar_url`);
     if (!Array.isArray(userRows) || userRows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -30,7 +30,8 @@ module.exports = async function handler(req, res) {
         userId: user.id,
         joinedAt: user.created_at,
         postCount: posts.length,
-        totalUpvotes
+        totalUpvotes,
+        avatarUrl: user.avatar_url || null,
       },
       posts
     });

@@ -393,12 +393,35 @@
                 try {
                     const user = getUser();
                     if (!user || !user.username) throw new Error('invalid user');
-                    authUI.innerHTML = `
-                        <div style="display:flex;gap:15px;align-items:center">
-                            <a href="/user/${user.username}" style="color:var(--accent);text-decoration:none;font-size:14px">@${user.username}</a>
-                            <button class="auth-btn" onclick="logout()">Logout</button>
-                        </div>
-                    `;
+                    const navDiv = document.createElement('div');
+                    navDiv.style.cssText = 'display:flex;gap:10px;align-items:center';
+                    const profileLink = document.createElement('a');
+                    profileLink.href = `/user/${user.username}`;
+                    profileLink.style.cssText = 'display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--accent);font-size:14px';
+                    if (user.avatarUrl) {
+                        const img = document.createElement('img');
+                        img.src = user.avatarUrl;
+                        img.alt = '';
+                        img.style.cssText = 'width:28px;height:28px;border-radius:50%;object-fit:cover;image-rendering:pixelated;flex-shrink:0;';
+                        img.onerror = () => img.remove();
+                        profileLink.appendChild(img);
+                    } else {
+                        const initial = document.createElement('span');
+                        initial.textContent = user.username.charAt(0).toUpperCase();
+                        initial.style.cssText = 'width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0;';
+                        profileLink.appendChild(initial);
+                    }
+                    const usernameSpan = document.createElement('span');
+                    usernameSpan.textContent = `@${user.username}`;
+                    profileLink.appendChild(usernameSpan);
+                    const logoutBtn = document.createElement('button');
+                    logoutBtn.className = 'auth-btn';
+                    logoutBtn.textContent = 'Logout';
+                    logoutBtn.onclick = logout;
+                    navDiv.appendChild(profileLink);
+                    navDiv.appendChild(logoutBtn);
+                    authUI.innerHTML = '';
+                    authUI.appendChild(navDiv);
                     newIdeaBtn.classList.remove('hidden');
                     document.getElementById('ideaBaseBtn').classList.remove('hidden');
                     document.getElementById('bellWrap').style.display = '';

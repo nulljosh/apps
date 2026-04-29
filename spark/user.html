@@ -76,6 +76,38 @@
             color: white;
             font-size: 32px;
             font-weight: bold;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            image-rendering: pixelated;
+        }
+        .avatar-wrap { position: relative; display: inline-block; }
+        .avatar-gen-btn {
+            display: none;
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg2);
+            border: 2px solid var(--border);
+            cursor: pointer;
+            font-size: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+        .avatar-wrap.is-owner .avatar-gen-btn { display: flex; }
+        .avatar-msg {
+            font-size: 11px;
+            color: var(--text3);
+            margin-top: 4px;
+            min-height: 14px;
         }
         
         .profile-info h2 { font-size: 24px; margin-bottom: 8px; }
@@ -208,16 +240,93 @@
             }
         }
         
+        function generatePixelArtSVG() {
+            const palettes = [
+                ['#e63946','#457b9d','#1d3557'],
+                ['#7b2d8b','#c77dff','#e0aaff'],
+                ['#0077b6','#00b4d8','#90e0ef'],
+                ['#d62828','#f77f00','#fcbf49'],
+                ['#2d6a4f','#52b788','#b7e4c7'],
+            ];
+            const bgs = ['#111','#0d0d0d','#1a1a1a','#0f0f1a','#0a1a0a'];
+            const palette = palettes[Math.floor(Math.random() * palettes.length)];
+            const bg = bgs[Math.floor(Math.random() * bgs.length)];
+            const px = 8, size = 8, total = size * px;
+            const grid = Array.from({length: size}, () =>
+                Array.from({length: Math.ceil(size / 2)}, () =>
+                    Math.random() > 0.45 ? Math.floor(Math.random() * 3) : -1
+                )
+            );
+            let rects = '';
+            for (let row = 0; row < size; row++) {
+                for (let col = 0; col < size; col++) {
+                    const ci = grid[row][col < size / 2 ? col : size - 1 - col];
+                    if (ci >= 0) rects += `<rect x="${col*px}" y="${row*px}" width="${px}" height="${px}" fill="${palette[ci]}"/>`;
+                }
+            }
+            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="${total}" height="${total}" shape-rendering="crispEdges"><rect width="${total}" height="${total}" fill="${bg}"/>${rects}</svg>`;
+        }
+
+        async function generateAvatar() {
+            const btn = document.getElementById('avatarGenBtn');
+            const msg = document.getElementById('avatarMsg');
+            if (!btn || btn.disabled) return;
+            btn.disabled = true;
+            btn.textContent = '...';
+            if (msg) msg.textContent = 'Generating...';
+            try {
+                const svg = generatePixelArtSVG();
+                const base64 = btoa(unescape(encodeURIComponent(svg)));
+                const token = localStorage.getItem('spark_token');
+                const res = await fetch(`${API_BASE}/api/avatar`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                    },
+                    body: JSON.stringify({ image: base64, format: 'svg' }),
+                });
+                const data = await res.json();
+                if (data.ok && data.avatarUrl) {
+                    const img = document.getElementById('avatarImg');
+                    if (img) { img.src = data.avatarUrl + '?v=' + Date.now(); img.style.display = 'block'; }
+                    const initial = document.getElementById('avatarInitial');
+                    if (initial) initial.style.display = 'none';
+                    if (msg) { msg.textContent = 'New avatar saved'; setTimeout(() => { if (msg) msg.textContent = ''; }, 3000); }
+                } else {
+                    if (msg) msg.textContent = data.error || 'Failed';
+                }
+            } catch (e) {
+                if (msg) msg.textContent = 'Failed';
+            }
+            btn.disabled = false;
+            btn.textContent = '+';
+        }
+
         function render(user, posts) {
             document.getElementById('pageTitle').textContent = `${user.username} — Spark`;
             const joined = new Date(user.joinedAt).toLocaleDateString();
-            const avatar = escapeHtml(user.username.charAt(0).toUpperCase());
             const safeUsername = escapeHtml(user.username);
+            const initial = escapeHtml(user.username.charAt(0).toUpperCase());
+
+            const storedUser = (() => { try { return JSON.parse(localStorage.getItem('spark_user') || '{}'); } catch { return {}; } })();
+            const isOwner = storedUser.username === user.username;
+
+            const avatarInner = user.avatarUrl
+                ? `<img id="avatarImg" src="${escapeHtml(user.avatarUrl)}?v=1" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;image-rendering:pixelated;" /><span id="avatarInitial" style="display:none">${initial}</span>`
+                : `<img id="avatarImg" src="" alt="" style="display:none" /><span id="avatarInitial">${initial}</span>`;
 
             let html = `
                 <div class="profile">
                     <div class="profile-header">
-                        <div class="avatar">${avatar}</div>
+                        <div>
+                            <div class="avatar-wrap${isOwner ? ' is-owner' : ''}">
+                                <div class="avatar">${avatarInner}</div>
+                                <button class="avatar-gen-btn" id="avatarGenBtn" onclick="generateAvatar()" title="Generate new pixel avatar">+</button>
+                            </div>
+                            <div class="avatar-msg" id="avatarMsg"></div>
+                        </div>
                         <div class="profile-info">
                             <h2>${safeUsername}</h2>
                             <p>Joined ${joined}</p>
