@@ -38,10 +38,10 @@ struct DashboardView: View {
                     )
                     StatCard(
                         title: "Cost",
-                        value: formatCost(store.currentMonthCost),
+                        value: formatBudget(store.currentMonthCost, budget: store.totalMonthlyBudget),
                         subtitle: store.settings.currency,
                         icon: "creditcard.fill",
-                        color: .green
+                        color: store.totalMonthlyBudget > 0 && store.currentMonthCost > store.totalMonthlyBudget ? .red : .green
                     )
                 }
 
@@ -57,6 +57,7 @@ struct DashboardView: View {
                                 conversations: item.conversations,
                                 tokens: item.tokens,
                                 cost: item.cost,
+                                budget: store.budget(for: item.provider),
                                 currency: store.settings.currency
                             )
                         }
@@ -114,6 +115,10 @@ struct DashboardView: View {
     private func formatCost(_ d: Double) -> String {
         String(format: "$%.2f", d)
     }
+
+    private func formatBudget(_ spent: Double, budget: Double) -> String {
+        budget > 0 ? String(format: "$%.2f / $%.0f", spent, budget) : String(format: "$%.2f", spent)
+    }
 }
 
 struct StatCard: View {
@@ -152,22 +157,49 @@ struct ProviderRow: View {
     let conversations: Int
     let tokens: Int
     let cost: Double
+    let budget: Double
     let currency: String
 
+    private var isOver: Bool { budget > 0 && cost > budget }
+    private var progress: Double { budget > 0 ? min(cost / budget, 1.0) : 0 }
+    private var rowColor: Color { isOver ? .red : providerColor }
+
     var body: some View {
-        HStack {
-            Circle()
-                .fill(providerColor)
-                .frame(width: 10, height: 10)
-            Text(provider.displayName)
-                .font(.subheadline.weight(.medium))
-            Spacer()
-            Text("\(conversations) convos")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text(String(format: "$%.2f", cost))
+        VStack(spacing: 6) {
+            HStack {
+                Circle()
+                    .fill(rowColor)
+                    .frame(width: 10, height: 10)
+                Text(provider.displayName)
+                    .font(.subheadline.weight(.medium))
+                Spacer()
+                Text("\(conversations) convos")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Group {
+                    if budget > 0 {
+                        Text(String(format: "$%.2f / $%.0f", cost, budget))
+                    } else {
+                        Text(String(format: "$%.2f", cost))
+                    }
+                }
                 .font(.subheadline.weight(.semibold))
-                .frame(width: 60, alignment: .trailing)
+                .foregroundStyle(isOver ? .red : .primary)
+                .frame(width: 80, alignment: .trailing)
+            }
+            if budget > 0 {
+                GeometryReader { geo in
+                    ZStack(alignment: .leading) {
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Color.secondary.opacity(0.15))
+                            .frame(height: 4)
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(rowColor)
+                            .frame(width: geo.size.width * progress, height: 4)
+                    }
+                }
+                .frame(height: 4)
+            }
         }
         .padding(.vertical, 4)
     }
