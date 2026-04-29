@@ -117,6 +117,19 @@ final class UsageStore {
         currentMonthEntries.reduce(0) { $0 + $1.costEstimate }
     }
 
+    var totalMonthlyBudget: Double {
+        settings.claudeMonthly + settings.chatgptMonthly + settings.geminiMonthly
+    }
+
+    func budget(for provider: AIProvider) -> Double {
+        switch provider {
+        case .claude: settings.claudeMonthly
+        case .chatgpt: settings.chatgptMonthly
+        case .gemini: settings.geminiMonthly
+        case .custom: 0
+        }
+    }
+
     // Per-provider breakdown for current month
     func monthlyBreakdown() -> [(provider: AIProvider, conversations: Int, tokens: Int, cost: Double)] {
         AIProvider.allCases.compactMap { provider in

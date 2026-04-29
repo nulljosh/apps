@@ -19,6 +19,7 @@ struct DashboardView: View {
                         conversations: store.currentMonthConversations,
                         tokens: store.currentMonthTokens,
                         cost: store.currentMonthCost,
+                        budget: store.totalMonthlyBudget,
                         currency: store.settings.currency
                     )
 
@@ -27,7 +28,10 @@ struct DashboardView: View {
 
                     // Provider breakdown
                     if !store.monthlyBreakdown().isEmpty {
-                        BreakdownSection(breakdown: store.monthlyBreakdown())
+                        BreakdownSection(
+                            breakdown: store.monthlyBreakdown(),
+                            budgetFor: { store.budget(for: $0) }
+                        )
                     }
 
                     // Recent entries
@@ -66,7 +70,10 @@ struct HeroCard: View {
     let conversations: Int
     let tokens: Int
     let cost: Double
+    let budget: Double
     let currency: String
+
+    private var isOver: Bool { budget > 0 && cost > budget }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -91,14 +98,36 @@ struct HeroCard: View {
                         Text("Cost (\(currency))")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
-                        Text(String(format: "$%.2f", cost))
-                            .font(.title3.weight(.semibold).monospacedDigit())
+                        Group {
+                            if budget > 0 {
+                                Text(String(format: "$%.2f / $%.0f", cost, budget))
+                            } else {
+                                Text(String(format: "$%.2f", cost))
+                            }
+                        }
+                        .font(.title3.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(isOver ? .red : .primary)
                     }
                 }
             }
             .padding(20)
+
+            if budget > 0 {
+                GeometryReader { geo in
+                    ZStack(alignment: .leading) {
+                        Rectangle()
+                            .fill(Color.secondary.opacity(0.12))
+                            .frame(height: 3)
+                        Rectangle()
+                            .fill(isOver ? Color.red : Color.accentColor)
+                            .frame(width: geo.size.width * min(cost / budget, 1.0), height: 3)
+                    }
+                }
+                .frame(height: 3)
+            }
         }
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
     private func formatTokens(_ n: Int) -> String {
@@ -142,6 +171,7 @@ struct ActivitySection: View {
 
 struct BreakdownSection: View {
     let breakdown: [(provider: AIProvider, conversations: Int, cost: Double)]
+    let budgetFor: (AIProvider) -> Double
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -154,19 +184,43 @@ struct BreakdownSection: View {
             VStack(spacing: 0) {
                 ForEach(breakdown.indices, id: \.self) { i in
                     let item = breakdown[i]
-                    HStack(spacing: 12) {
-                        Circle()
-                            .fill(item.provider.color)
-                            .frame(width: 10, height: 10)
-                        Text(item.provider.displayName)
-                            .font(.subheadline)
-                        Spacer()
-                        Text("\(item.conversations) convos")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(String(format: "$%.2f", item.cost))
+                    let budget = budgetFor(item.provider)
+                    let isOver = budget > 0 && item.cost > budget
+                    VStack(spacing: 6) {
+                        HStack(spacing: 12) {
+                            Circle()
+                                .fill(isOver ? .red : item.provider.color)
+                                .frame(width: 10, height: 10)
+                            Text(item.provider.displayName)
+                                .font(.subheadline)
+                            Spacer()
+                            Text("\(item.conversations) convos")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Group {
+                                if budget > 0 {
+                                    Text(String(format: "$%.2f / $%.0f", item.cost, budget))
+                                } else {
+                                    Text(String(format: "$%.2f", item.cost))
+                                }
+                            }
                             .font(.subheadline.weight(.semibold).monospacedDigit())
-                            .frame(width: 56, alignment: .trailing)
+                            .foregroundStyle(isOver ? .red : .primary)
+                            .frame(width: 80, alignment: .trailing)
+                        }
+                        if budget > 0 {
+                            GeometryReader { geo in
+                                ZStack(alignment: .leading) {
+                                    RoundedRectangle(cornerRadius: 1.5)
+                                        .fill(Color.secondary.opacity(0.15))
+                                        .frame(height: 3)
+                                    RoundedRectangle(cornerRadius: 1.5)
+                                        .fill(isOver ? Color.red : item.provider.color)
+                                        .frame(width: geo.size.width * min(item.cost / budget, 1.0), height: 3)
+                                }
+                            }
+                            .frame(height: 3)
+                        }
                     }
                     .padding(.vertical, 10)
 
