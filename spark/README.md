@@ -32,6 +32,14 @@ npm test
 
 Deploy: push to main, Vercel deploys automatically.
 
+## Database Setup (one-time)
+
+Run this in the [Supabase SQL editor](https://supabase.com/dashboard/project/tjsxsqlxjmanwvmywwvw/sql/new) to enable pixel avatar support:
+
+```sql
+alter table users add column if not exists avatar_url text;
+```
+
 ## Known Issues
 
 - Deployment went down (404: DEPLOYMENT_NOT_FOUND) on 2026-04-14. Fixed via redeploy. Portfolio screenshot pending re-add.
