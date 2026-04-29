@@ -8,6 +8,7 @@ const DEFAULT_PROFILE = {
     { name: 'Cannabis', frequency: 'daily', notes: 'Daily use, vaping. Started ~10 years ago.' },
     { name: 'Tobacco/Vape', frequency: 'daily', notes: 'Lung health concern. Spirometry pending.' },
     { name: 'Sertraline', frequency: 'daily', notes: '50mg nightly' },
+    { name: 'Concerta', frequency: 'daily', notes: 'Methylphenidate ER — ADHD' },
     { name: 'Psilocybin', frequency: 'microdosing', notes: 'Intermittent microdosing' },
     { name: 'L-Theanine', frequency: 'daily', notes: '200mg with coffee' },
   ],
