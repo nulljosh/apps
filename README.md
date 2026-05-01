@@ -26,6 +26,7 @@ Monorepo for standalone apps and experiments. Each subdirectory is an independen
 | **portfolio-ios** | Portfolio companion | iOS |
 | **roost** | BC real estate dashboard | Web (PWA) |
 | **spark** | Idea-sharing platform with voting | Web, iOS, macOS, watchOS |
+| **tally** | BC Self-Serve scraper + benefits dashboard | Web (PWA), iOS, watchOS |
 | **usage** | Static usage tracking dashboard | Web |
 | **wiretext** / **wiretext-ios** / **wiretext-macos** | Unicode wireframe design tool | Web, iOS, macOS |
 
