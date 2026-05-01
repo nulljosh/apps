@@ -43,6 +43,18 @@ async function addComment({ postId, content, user }) {
 
 module.exports = async function handler(req, res) {
   if (req.method === 'GET') {
+    if (req.query.post_ids) {
+      const postIds = req.query.post_ids.split(',').filter(Boolean);
+      if (postIds.length === 0) return res.status(400).json({ error: 'post_ids is required' });
+      try {
+        const counts = await getCommentCounts(postIds);
+        return res.status(200).json({ counts });
+      } catch (err) {
+        console.error('[COMMENTS] Count fetch failed:', err.message);
+        return res.status(500).json({ error: 'Failed to fetch comment counts' });
+      }
+    }
+
     const postId = req.query.post_id;
     if (!postId) return res.status(400).json({ error: 'post_id is required' });
 

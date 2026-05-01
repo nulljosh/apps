@@ -806,7 +806,7 @@
 
         async function loadCommentCounts(postIds) {
             try {
-                const res = await fetch(`${API_BASE}/api/comment-counts?post_ids=${postIds.join(',')}`);
+                const res = await fetch(`${API_BASE}/api/comments?post_ids=${postIds.join(',')}`);
                 const data = await res.json();
                 if (data.counts) {
                     window.commentCounts = data.counts;
