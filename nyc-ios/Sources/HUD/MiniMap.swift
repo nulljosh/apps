@@ -2,17 +2,20 @@ import SwiftUI
 
 struct MiniMap: View {
     var body: some View {
-        ZStack {
-            Rectangle()
-                .fill(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.85))
+        ZStack(alignment: .topLeading) {
+            RoundedRectangle(cornerRadius: Theme.radius)
+                .fill(.ultraThinMaterial)
                 .frame(width: 150, height: 150)
+
             Text("MINIMAP")
-                .font(.system(size: 10))
-                .foregroundStyle(.white.opacity(0.3))
+                .font(.system(size: 8, weight: .medium, design: .monospaced))
+                .foregroundStyle(Theme.text3)
+                .padding(6)
         }
         .overlay(
-            Rectangle()
-                .stroke(Color(red: 0.39, green: 0.82, blue: 1.0).opacity(0.4), lineWidth: 2)
+            RoundedRectangle(cornerRadius: Theme.radius)
+                .stroke(Theme.border, lineWidth: 1)
         )
+        .frame(width: 150, height: 150)
     }
 }

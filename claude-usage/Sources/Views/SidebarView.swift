@@ -21,14 +21,11 @@ struct SidebarView: View {
                     .onTapGesture { store.selectedProvider = nil }
 
                 ForEach(AIProvider.allCases) { provider in
-                    HStack {
-                        Circle()
-                            .fill(providerColor(provider))
-                            .frame(width: 8, height: 8)
-                        Text(provider.displayName)
-                    }
-                    .contentShape(Rectangle())
-                    .foregroundStyle(store.selectedProvider == provider ? .accentColor : .primary)
+                    ProviderSidebarRow(
+                        provider: provider,
+                        isSelected: store.selectedProvider == provider,
+                        color: providerColor(provider)
+                    )
                     .onTapGesture { store.selectedProvider = provider }
                 }
             }
@@ -59,5 +56,22 @@ struct SidebarView: View {
         case .gemini: Color(red: 0.26, green: 0.52, blue: 0.96)
         case .custom: Color(red: 0.55, green: 0.36, blue: 0.96)
         }
+    }
+}
+
+private struct ProviderSidebarRow: View {
+    let provider: AIProvider
+    let isSelected: Bool
+    let color: Color
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(color)
+                .frame(width: 8, height: 8)
+            Text(provider.displayName)
+        }
+        .contentShape(Rectangle())
+        .foregroundStyle(isSelected ? Color.accentColor : Color.primary)
     }
 }

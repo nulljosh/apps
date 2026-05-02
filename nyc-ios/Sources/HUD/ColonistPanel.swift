@@ -5,193 +5,181 @@ struct ColonistPanel: View {
 
     var body: some View {
         if let colonist = gameState.selectedColonist {
-            VStack(alignment: .leading, spacing: 8) {
-                // Name + state
+            VStack(alignment: .leading, spacing: 6) {
                 HStack {
                     Text(colonist.name)
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.04))
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(Theme.yellow)
                     Spacer()
                     Text("Lv.\(colonist.level)")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(Color(red: 0.39, green: 0.82, blue: 1.0))
+                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        .foregroundStyle(Theme.cyan)
                 }
 
                 Text(colonist.state.rawValue.uppercased())
-                    .font(.system(size: 11))
+                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
                     .foregroundStyle(stateColor(colonist.state))
 
-                // Trait badge
                 HStack(spacing: 4) {
                     Text(colonist.trait.displayName.uppercased())
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.22, blue: 0.37))
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundStyle(Theme.pink)
                     Text(colonist.trait.description)
                         .font(.system(size: 9))
-                        .foregroundStyle(.white.opacity(0.5))
+                        .foregroundStyle(Theme.text3)
                 }
                 .padding(.horizontal, 6)
                 .padding(.vertical, 3)
-                .background(Color(red: 1.0, green: 0.22, blue: 0.37).opacity(0.15))
+                .background(Capsule().fill(Theme.pink.opacity(0.12)))
 
-                Divider().background(Color.white.opacity(0.2))
+                Divider().background(Theme.border)
 
-                // Health + needs bars
-                needBar(label: "HP ", value: colonist.health, color: Color(red: 1.0, green: 0.27, blue: 0.23))
-                needBar(label: "HNG", value: colonist.hunger, color: Color(red: 0.19, green: 0.82, blue: 0.35))
-                needBar(label: "O2 ", value: colonist.oxygen, color: Color(red: 0.39, green: 0.82, blue: 1.0))
-                needBar(label: "STS", value: 100 - colonist.stress, color: Color(red: 1.0, green: 0.22, blue: 0.37))
-                needBar(label: "SLP", value: colonist.sleep, color: Color(red: 0.48, green: 0.47, blue: 0.95))
+                vitalBar(label: "HP",  value: colonist.health)
+                vitalBar(label: "HNG", value: colonist.hunger)
+                vitalBar(label: "O2",  value: colonist.oxygen)
+                vitalBar(label: "STS", value: 100 - colonist.stress)
+                vitalBar(label: "SLP", value: colonist.sleep)
 
-                Divider().background(Color.white.opacity(0.2))
+                Divider().background(Theme.border)
 
-                // RPG Stats
                 Text("STATS")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.white.opacity(0.6))
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundStyle(Theme.text2)
 
-                statBar(label: "STR", value: colonist.stats.str)
-                statBar(label: "INT", value: colonist.stats.int)
-                statBar(label: "AGI", value: colonist.stats.agi)
-                statBar(label: "END", value: colonist.stats.end)
-                statBar(label: "CHA", value: colonist.stats.cha)
+                statDots(label: "STR", value: colonist.stats.str)
+                statDots(label: "INT", value: colonist.stats.int)
+                statDots(label: "AGI", value: colonist.stats.agi)
+                statDots(label: "END", value: colonist.stats.end)
+                statDots(label: "CHA", value: colonist.stats.cha)
 
-                // XP progress
                 HStack(spacing: 6) {
                     Text("XP")
-                        .font(.system(size: 10))
-                        .foregroundStyle(.white.opacity(0.7))
-                        .frame(width: 30, alignment: .leading)
+                        .font(.system(size: 9, design: .monospaced))
+                        .foregroundStyle(Theme.text2)
+                        .frame(width: 28, alignment: .leading)
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
-                            Rectangle()
-                                .fill(Color.white.opacity(0.1))
-                                .frame(height: 8)
-                            Rectangle()
-                                .fill(Color(red: 1.0, green: 0.84, blue: 0.04))
-                                .frame(width: max(0, geo.size.width * colonist.xpProgress), height: 8)
+                            RoundedRectangle(cornerRadius: 2).fill(Theme.glass).frame(height: 4)
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(Theme.yellow)
+                                .frame(width: max(0, geo.size.width * colonist.xpProgress), height: 4)
                         }
                     }
-                    .frame(height: 8)
+                    .frame(height: 4)
                     Text("\(colonist.xp)/\(colonist.xpForNextLevel)")
-                        .font(.system(size: 9))
-                        .foregroundStyle(.white.opacity(0.5))
+                        .font(.system(size: 9, design: .monospaced))
+                        .foregroundStyle(Theme.text3)
                         .frame(width: 50, alignment: .trailing)
                 }
 
-                Divider().background(Color.white.opacity(0.2))
+                Divider().background(Theme.border)
 
-                // Job assignment buttons
                 Text("JOB: \(colonist.job.rawValue.uppercased())")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.white.opacity(0.6))
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundStyle(Theme.text2)
 
                 HStack(spacing: 4) {
                     ForEach(ColonistJob.allCases, id: \.self) { job in
-                        jobButton(job: job, isActive: colonist.job == job)
+                        jobPill(job: job, isActive: colonist.job == job)
                     }
                 }
 
-                Divider().background(Color.white.opacity(0.2))
+                Divider().background(Theme.border)
 
-                // Weapon
                 HStack(spacing: 4) {
                     Text("WEAPON:")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(.white.opacity(0.6))
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundStyle(Theme.text2)
                     Text(colonist.weapon.displayName)
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.62, blue: 0.04))
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundStyle(Theme.orange)
                     Spacer()
-                    Text("DMG: \(Int(colonist.weapon.damage))")
-                        .font(.system(size: 9))
-                        .foregroundStyle(.white.opacity(0.5))
-                    Text("RNG: \(colonist.weapon.range)")
-                        .font(.system(size: 9))
-                        .foregroundStyle(.white.opacity(0.5))
+                    Text("DMG:\(Int(colonist.weapon.damage)) RNG:\(colonist.weapon.range)")
+                        .font(.system(size: 9, design: .monospaced))
+                        .foregroundStyle(Theme.text3)
                 }
 
-                Text("Pos: (\(colonist.col), \(colonist.row))")
-                    .font(.system(size: 10))
-                    .foregroundStyle(.white.opacity(0.4))
+                Text("(\(colonist.col), \(colonist.row))")
+                    .font(.system(size: 9, design: .monospaced))
+                    .foregroundStyle(Theme.text3)
             }
             .padding(10)
             .frame(width: 220)
-            .background(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.9))
-            .overlay(
-                Rectangle()
-                    .stroke(Color(red: 0.39, green: 0.82, blue: 1.0).opacity(0.4), lineWidth: 2)
-            )
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: Theme.radiusLg))
+            .overlay(RoundedRectangle(cornerRadius: Theme.radiusLg).stroke(Theme.border, lineWidth: 1))
         }
     }
 
-    private func needBar(label: String, value: Double, color: Color) -> some View {
-        HStack(spacing: 6) {
+    private func vitalBar(label: String, value: Double) -> some View {
+        let v = max(0, min(100, value))
+        return HStack(spacing: 6) {
             Text(label)
-                .font(.system(size: 10))
-                .foregroundStyle(.white.opacity(0.7))
-                .frame(width: 30, alignment: .leading)
+                .font(.system(size: 9, design: .monospaced))
+                .foregroundStyle(Theme.text2)
+                .frame(width: 28, alignment: .leading)
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
-                    Rectangle()
-                        .fill(Color.white.opacity(0.1))
-                        .frame(height: 8)
-                    Rectangle()
-                        .fill(color)
-                        .frame(width: max(0, geo.size.width * value / 100), height: 8)
+                    RoundedRectangle(cornerRadius: 2).fill(Theme.glass).frame(height: 4)
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(Theme.vitalColor(v))
+                        .frame(width: max(0, geo.size.width * v / 100), height: 4)
                 }
             }
-            .frame(height: 8)
+            .frame(height: 4)
             Text("\(Int(value))")
-                .font(.system(size: 10))
-                .foregroundStyle(.white.opacity(0.5))
-                .frame(width: 25, alignment: .trailing)
+                .font(.system(size: 9, design: .monospaced))
+                .foregroundStyle(Theme.text3)
+                .frame(width: 22, alignment: .trailing)
         }
     }
 
-    private func statBar(label: String, value: Int) -> some View {
+    private func statDots(label: String, value: Int) -> some View {
         HStack(spacing: 6) {
             Text(label)
-                .font(.system(size: 10))
-                .foregroundStyle(.white.opacity(0.7))
-                .frame(width: 30, alignment: .leading)
+                .font(.system(size: 9, design: .monospaced))
+                .foregroundStyle(Theme.text2)
+                .frame(width: 28, alignment: .leading)
             HStack(spacing: 2) {
                 ForEach(0..<10, id: \.self) { i in
-                    Rectangle()
-                        .fill(i < value ? Color(red: 0.39, green: 0.82, blue: 1.0) : Color.white.opacity(0.1))
-                        .frame(width: 12, height: 8)
+                    RoundedRectangle(cornerRadius: 1)
+                        .fill(i < value ? Theme.accent.opacity(0.9) : Theme.glass)
+                        .frame(width: 10, height: 4)
                 }
             }
             Text("\(value)")
-                .font(.system(size: 10))
-                .foregroundStyle(.white.opacity(0.5))
-                .frame(width: 20, alignment: .trailing)
+                .font(.system(size: 9, design: .monospaced))
+                .foregroundStyle(Theme.text3)
+                .frame(width: 18, alignment: .trailing)
         }
     }
 
-    private func jobButton(job: ColonistJob, isActive: Bool) -> some View {
+    private func jobPill(job: ColonistJob, isActive: Bool) -> some View {
         Button(action: {
             guard let id = gameState.selectedColonistId,
                   let idx = gameState.colonists.firstIndex(where: { $0.id == id }) else { return }
             gameState.colonists[idx].job = job
         }) {
             Text(job.rawValue.prefix(4).uppercased())
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(isActive ? Color.black : Color.white.opacity(0.7))
+                .font(.system(size: 9, weight: .bold, design: .monospaced))
+                .foregroundStyle(isActive ? .white : Theme.text2)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(isActive ? Color(red: 0.39, green: 0.82, blue: 1.0) : Color.white.opacity(0.1))
+                .background(
+                    Capsule()
+                        .fill(isActive ? Theme.accent.opacity(0.35) : Theme.glass)
+                        .overlay(Capsule().stroke(isActive ? Theme.accent : Theme.border, lineWidth: 1))
+                )
         }
         .buttonStyle(.plain)
     }
 
     private func stateColor(_ state: ColonistState) -> Color {
         switch state {
-        case .healthy: Color(red: 0.19, green: 0.82, blue: 0.35)
-        case .hungry: Color(red: 1.0, green: 0.84, blue: 0.04)
-        case .suffocating: Color(red: 0.39, green: 0.82, blue: 1.0)
-        case .exhausted: Color(red: 1.0, green: 0.62, blue: 0.04)
-        case .dead: Color.gray
+        case .healthy: Theme.green
+        case .hungry: Theme.yellow
+        case .suffocating: Theme.cyan
+        case .exhausted: Theme.orange
+        case .dead: .gray
         }
     }
 }

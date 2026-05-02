@@ -2,7 +2,7 @@
 
 # nyc-ios
 
-![version](https://img.shields.io/badge/version-v0.3.1-blue)
+![version](https://img.shields.io/badge/version-v0.4.0-blue)
 
 iOS companion for Times Square Survival. SpriteKit colony sim with touch input, landscape only.
 

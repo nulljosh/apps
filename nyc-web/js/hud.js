@@ -1,6 +1,6 @@
 // HUD -- HTML overlay updates
 
-import { ResourceTypes, ResourceSymbol, BuildingType, BuildingTypes, ColonistJobs, ColonyDirectives,
+import { ResourceTypes, BuildingType, BuildingTypes, ColonistJobs, ColonyDirectives,
     Traits, WeaponTypes, selectedColonist, colonistXpForNext, colonistXpProgress,
     questLevel, questTitle, questXPProgress, activeQuests, completedQuests,
     DifficultyXP, CategoryInfo, colonistClass, DifficultyRanks, QuestCategories,
@@ -8,8 +8,16 @@ import { ResourceTypes, ResourceSymbol, BuildingType, BuildingTypes, ColonistJob
 import { listSlots } from './save.js';
 import { QUEST_WORK_TICKS } from './systems.js';
 
-const RES_COLORS = { food: '#30d158', power: '#ffd60a', materials: '#ff9f0a', oxygen: '#64d2ff', cash: '#ff375f' };
-const STATE_COLORS = { healthy: '#30d158', hungry: '#ffd60a', suffocating: '#64d2ff', exhausted: '#ff9f0a', dead: '#666' };
+const RES_COLORS = { food:'#30d158', power:'#ffd60a', materials:'#ff9f0a', oxygen:'#64d2ff', cash:'#ff375f' };
+const STATE_COLORS = { healthy:'#30d158', hungry:'#ffd60a', suffocating:'#64d2ff', exhausted:'#ff9f0a', dead:'#666' };
+
+const RESOURCE_META = {
+    food:      { icon:'⬡', label:'FOOD' },
+    power:     { icon:'◈', label:'PWR'  },
+    materials: { icon:'▪', label:'MAT'  },
+    oxygen:    { icon:'◎', label:'O₂'  },
+    cash:      { icon:'$', label:'CASH' },
+};
 
 export function updateHUD(state, callbacks) {
     const hud = document.getElementById('hud');
@@ -29,7 +37,7 @@ export function updateHUD(state, callbacks) {
     updateDirectiveBar(state, callbacks);
     updateGameLog(state);
     updateTimeDisplay(state);
-    updatePauseOverlay(state);
+    updatePauseOverlay(state, callbacks);
     updateSaveIndicator(state);
     updateSettings(state, callbacks);
     updateTutorial(state, callbacks);
@@ -70,7 +78,6 @@ function updatePlayerProfile(state) {
     const quests = document.createElement('div');
     quests.className = 'pp-quests';
     quests.textContent = `${activeQuests(state).length} active quests [Q]`;
-    quests.style.cursor = 'pointer';
     quests.onclick = () => { state.showQuestBoard = !state.showQuestBoard; };
     el.appendChild(quests);
 }
@@ -87,10 +94,8 @@ function updateQuestBoard(state) {
 
     const active = activeQuests(state);
     const done = completedQuests(state);
-
     el.textContent = '';
 
-    // Header
     const header = document.createElement('div');
     header.className = 'qb-header';
     header.textContent = 'QUEST BOARD';
@@ -101,13 +106,11 @@ function updateQuestBoard(state) {
     header.appendChild(close);
     el.appendChild(header);
 
-    // Add button
     const addBtn = document.createElement('div');
     addBtn.className = 'qb-add';
     addBtn.textContent = '+ ADD QUEST';
     el.appendChild(addBtn);
 
-    // Form (hidden)
     const form = document.createElement('div');
     form.className = 'qb-form';
     form.style.display = 'none';
@@ -160,10 +163,8 @@ function updateQuestBoard(state) {
     row2.appendChild(cancelBtn);
     form.appendChild(row2);
     el.appendChild(form);
-
     addBtn.onclick = () => { form.style.display = form.style.display === 'none' ? 'block' : 'none'; };
 
-    // Active quests
     const secActive = document.createElement('div');
     secActive.className = 'qb-section';
     secActive.textContent = `ACTIVE (${active.length})`;
@@ -173,33 +174,27 @@ function updateQuestBoard(state) {
         const cat = CategoryInfo[q.category] || {};
         const row = document.createElement('div');
         row.className = 'qb-quest';
-
         const rank = document.createElement('span');
         rank.className = 'qb-rank';
         rank.style.color = cat.color || '#fff';
         rank.textContent = q.difficulty;
         row.appendChild(rank);
-
         const name = document.createElement('span');
         name.className = 'qb-name';
         name.textContent = q.title;
         row.appendChild(name);
-
         const xp = document.createElement('span');
         xp.className = 'qb-xp';
         xp.textContent = (DifficultyXP[q.difficulty] || 50) + 'xp';
         row.appendChild(xp);
-
         const check = document.createElement('span');
         check.className = 'qb-complete';
-        check.textContent = '\u2713';
+        check.textContent = '✓';
         check.onclick = () => { window._gameCallbacks?.completeQuest(q.id); };
         row.appendChild(check);
-
         el.appendChild(row);
     }
 
-    // Completed
     if (done.length) {
         const secDone = document.createElement('div');
         secDone.className = 'qb-section';
@@ -237,18 +232,30 @@ function updateResourceBar(state) {
     const resBar = document.getElementById('resource-bar');
     resBar.textContent = '';
     for (const t of ResourceTypes) {
-        const span = document.createElement('span');
-        span.className = 'res-item';
-        const sym = document.createElement('span');
-        sym.style.cssText = `color:${RES_COLORS[t]};font-weight:bold`;
-        sym.textContent = ResourceSymbol[t];
-        span.appendChild(sym);
-        span.appendChild(document.createTextNode(` ${state.resources[t] || 0}`));
-        resBar.appendChild(span);
+        const meta = RESOURCE_META[t] || { icon:'?', label:t };
+        const pill = document.createElement('span');
+        pill.className = 'res-pill';
+
+        const icon = document.createElement('span');
+        icon.className = 'res-icon';
+        icon.style.color = RES_COLORS[t] || '#fff';
+        icon.textContent = meta.icon;
+        pill.appendChild(icon);
+
+        const val = document.createElement('span');
+        val.className = 'res-val';
+        val.textContent = state.resources[t] || 0;
+        pill.appendChild(val);
+
+        const lbl = document.createElement('span');
+        lbl.className = 'res-label';
+        lbl.textContent = meta.label;
+        pill.appendChild(lbl);
+
+        resBar.appendChild(pill);
     }
     const alive = document.createElement('span');
-    alive.className = 'res-item';
-    alive.style.cssText = 'margin-left:auto;font-weight:bold';
+    alive.style.cssText = 'margin-left:auto;font-size:11px;font-weight:700;color:rgba(255,255,255,0.7)';
     alive.textContent = `${state.colonists.filter(c => c.state !== 'dead').length} alive`;
     resBar.appendChild(alive);
 }
@@ -269,18 +276,18 @@ function updateBuildMenu(state, callbacks) {
         const sel = state.selectedBuildingType === key;
         const btn = document.createElement('button');
         btn.className = 'build-btn' + (sel ? ' selected' : '');
-
         const num = document.createElement('span');
         num.className = 'hud-pink';
         num.textContent = `${i + 1}. `;
         btn.appendChild(num);
         btn.appendChild(document.createTextNode(bt.name + ' '));
-
         const cost = document.createElement('span');
         cost.className = 'cost';
-        cost.textContent = Object.entries(bt.cost).map(([r, a]) => `${ResourceSymbol[r]}${a}`).join(' ');
+        cost.textContent = Object.entries(bt.cost).map(([r, a]) => {
+            const m = RESOURCE_META[r];
+            return m ? `${m.icon}${a}` : `${r}:${a}`;
+        }).join(' ');
         btn.appendChild(cost);
-
         btn.onclick = () => {
             state.selectedBuildingType = key;
             state.inputMode = 'build';
@@ -303,12 +310,12 @@ function updateColonistPanel(state, callbacks) {
     const col = selectedColonist(state);
     if (!col) { panel.style.display = 'none'; return; }
     panel.style.display = 'block';
+    panel.className = 'corners';
     panel.textContent = '';
 
     const trait = Traits[col.trait];
     const weapon = WeaponTypes[col.weapon];
 
-    // Header
     const header = document.createElement('div');
     header.className = 'panel-header';
     const nameEl = document.createElement('span');
@@ -321,30 +328,24 @@ function updateColonistPanel(state, callbacks) {
     header.appendChild(lvl);
     panel.appendChild(header);
 
-    // State
     const stateEl = document.createElement('div');
     stateEl.style.cssText = `color:${STATE_COLORS[col.state]};font-size:11px`;
     stateEl.textContent = col.state.toUpperCase();
     panel.appendChild(stateEl);
 
-    // Trait
     const traitEl = document.createElement('div');
     traitEl.className = 'trait-badge';
     traitEl.textContent = `${trait.name.toUpperCase()} ${trait.desc}`;
     panel.appendChild(traitEl);
 
     panel.appendChild(createHR());
-
-    // Need bars
-    panel.appendChild(createNeedBar('HP', col.health, '#ff453a'));
-    panel.appendChild(createNeedBar('HNG', col.hunger, '#30d158'));
-    panel.appendChild(createNeedBar('O2', col.oxygen, '#64d2ff'));
-    panel.appendChild(createNeedBar('STS', 100 - col.stress, '#ff375f'));
-    panel.appendChild(createNeedBar('SLP', col.sleep, '#0071e3'));
-
+    panel.appendChild(createNeedBar('HP',  col.health,         '#ff453a'));
+    panel.appendChild(createNeedBar('HNG', col.hunger,         '#30d158'));
+    panel.appendChild(createNeedBar('O2',  col.oxygen,         '#64d2ff'));
+    panel.appendChild(createNeedBar('STS', 100 - col.stress,   '#ff375f'));
+    panel.appendChild(createNeedBar('SLP', col.sleep,          '#0071e3'));
     panel.appendChild(createHR());
 
-    // Stats header
     const statsTitle = document.createElement('div');
     statsTitle.style.cssText = 'font-size:10px;color:rgba(255,255,255,0.6);font-weight:bold';
     statsTitle.textContent = 'STATS';
@@ -356,10 +357,8 @@ function updateColonistPanel(state, callbacks) {
     panel.appendChild(createStatBar('END', col.stats.end));
     panel.appendChild(createStatBar('CHA', col.stats.cha));
     panel.appendChild(createXPBar(col));
-
     panel.appendChild(createHR());
 
-    // Job
     const jobLabel = document.createElement('div');
     jobLabel.style.cssText = 'font-size:10px;color:rgba(255,255,255,0.6);font-weight:bold';
     jobLabel.textContent = `JOB: ${col.job.toUpperCase()}`;
@@ -378,28 +377,24 @@ function updateColonistPanel(state, callbacks) {
         jobBtns.appendChild(btn);
     });
     panel.appendChild(jobBtns);
-
     panel.appendChild(createHR());
 
-    // Weapon
     const weaponEl = document.createElement('div');
     weaponEl.style.fontSize = '10px';
     weaponEl.textContent = `WEAPON: ${weapon.name}  DMG:${Math.floor(weapon.damage)} RNG:${weapon.range}`;
     panel.appendChild(weaponEl);
 
-    // Position
     const posEl = document.createElement('div');
     posEl.style.cssText = 'font-size:10px;color:rgba(255,255,255,0.4)';
     posEl.textContent = `Pos: (${col.col}, ${col.row})`;
     panel.appendChild(posEl);
 
-    // Quest info section
     panel.appendChild(createHR());
-    const questTitle = document.createElement('div');
-    questTitle.style.cssText = 'font-size:10px;color:rgba(255,255,255,0.6);font-weight:bold';
+    const questTitleEl = document.createElement('div');
+    questTitleEl.style.cssText = 'font-size:10px;color:rgba(255,255,255,0.6);font-weight:bold';
     const cls = colonistClass(col);
-    questTitle.textContent = cls ? `${cls.toUpperCase()} | ${col.questsCompleted || 0} QUESTS` : `${col.questsCompleted || 0} QUESTS DONE`;
-    panel.appendChild(questTitle);
+    questTitleEl.textContent = cls ? `${cls.toUpperCase()} | ${col.questsCompleted || 0} QUESTS` : `${col.questsCompleted || 0} QUESTS DONE`;
+    panel.appendChild(questTitleEl);
 
     if (col.activeQuest) {
         const aq = document.createElement('div');
@@ -418,7 +413,6 @@ function updateColonistPanel(state, callbacks) {
         panel.appendChild(idle);
     }
 
-    // Recent quest log for this colonist
     const recentQuests = (state.questLog || []).filter(l => l.colonist === col.name).slice(-3);
     if (recentQuests.length) {
         const logTitle = document.createElement('div');
@@ -434,11 +428,15 @@ function updateColonistPanel(state, callbacks) {
     }
 }
 
-function createHR() {
-    return document.createElement('hr');
+function createHR() { return document.createElement('hr'); }
+
+function vitalColor(v) {
+    return v > 60 ? '#30d158' : v > 30 ? '#ffd60a' : '#ff453a';
 }
 
 function createNeedBar(label, value, color) {
+    const v = Math.max(0, Math.min(100, value));
+    const c = color || vitalColor(v);
     const row = document.createElement('div');
     row.className = 'need-row';
     const lbl = document.createElement('span');
@@ -448,8 +446,8 @@ function createNeedBar(label, value, color) {
     bg.className = 'bar-bg';
     const fill = document.createElement('div');
     fill.className = 'bar-fill';
-    fill.style.transform = `scaleX(${Math.max(0, Math.min(100, value)) / 100})`;
-    fill.style.background = color;
+    fill.style.transform = `scaleX(${v / 100})`;
+    fill.style.background = c;
     bg.appendChild(fill);
     const val = document.createElement('span');
     val.className = 'need-val';
@@ -509,26 +507,22 @@ function createXPBar(c) {
 function updateDirectiveBar(state, callbacks) {
     const dirBar = document.getElementById('directive-bar');
     dirBar.textContent = '';
-    const label = document.createElement('span');
-    label.style.cssText = 'font-size:10px;font-weight:bold;color:rgba(255,255,255,0.6)';
-    label.textContent = 'DIRECTIVE:';
-    dirBar.appendChild(label);
+
     ColonyDirectives.forEach(d => {
         const btn = document.createElement('button');
-        btn.className = 'dir-btn' + (state.currentDirective === d ? ' active' : '');
+        btn.className = 'directive-seg' + (state.currentDirective === d && !state.autoplay ? ' active' : '');
         btn.textContent = d.toUpperCase();
         btn.onclick = () => { state.currentDirective = d; state.autoplay = false; callbacks.onHudUpdate(); };
         dirBar.appendChild(btn);
     });
 
     const sep = document.createElement('span');
-    sep.style.cssText = 'width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 4px';
+    sep.className = 'dir-sep';
     dirBar.appendChild(sep);
 
     const autoBtn = document.createElement('button');
-    autoBtn.className = 'dir-btn' + (state.autoplay ? ' active' : '');
-    autoBtn.style.cssText += state.autoplay ? ';color:#30D158;border-color:#30D158' : '';
-    autoBtn.textContent = 'AUTOPLAY';
+    autoBtn.className = 'directive-seg' + (state.autoplay ? ' active-auto' : '');
+    autoBtn.textContent = 'AUTO';
     autoBtn.onclick = () => { state.autoplay = !state.autoplay; callbacks.onHudUpdate(); };
     dirBar.appendChild(autoBtn);
 }
@@ -536,7 +530,7 @@ function updateDirectiveBar(state, callbacks) {
 function updateGameLog(state) {
     const logEl = document.getElementById('game-log');
     logEl.textContent = '';
-    state.gameLog.slice(-5).forEach(m => {
+    state.gameLog.slice(-3).forEach(m => {
         const div = document.createElement('div');
         div.textContent = m;
         logEl.appendChild(div);
@@ -545,24 +539,55 @@ function updateGameLog(state) {
 
 const PHASE_COLORS = {
     [GamePhase.SURVIVAL]: '#ff375f',
-    [GamePhase.GROWTH]: '#ffd60a',
-    [GamePhase.MASTERY]: '#0071e3',
-    [GamePhase.VICTORY]: '#30d158',
+    [GamePhase.GROWTH]:   '#ffd60a',
+    [GamePhase.MASTERY]:  '#0071e3',
+    [GamePhase.VICTORY]:  '#30d158',
 };
 
 function updateTimeDisplay(state) {
     const phase = currentPhase(state);
     const el = document.getElementById('time-display');
     el.textContent = '';
-    el.appendChild(document.createTextNode(`Tick ${state.currentTick} | ${state.currentHour}:00 | ${state.isNight ? 'NIGHT' : 'DAY'} | `));
+    el.appendChild(document.createTextNode(`Day ${Math.floor(state.currentTick / 240) + 1} | ${state.currentHour}:00 | ${state.isNight ? 'NIGHT' : 'DAY'} | `));
     const phaseSpan = document.createElement('span');
     phaseSpan.style.cssText = `color:${PHASE_COLORS[phase] || '#fff'};font-weight:bold`;
     phaseSpan.textContent = phase;
     el.appendChild(phaseSpan);
 }
 
-function updatePauseOverlay(state) {
-    document.getElementById('pause-overlay').style.display = state.isPaused && !state.showSettings ? 'flex' : 'none';
+function updatePauseOverlay(state, callbacks) {
+    const el = document.getElementById('pause-overlay');
+    if (!state.isPaused || state.showSettings) {
+        el.style.display = 'none';
+        return;
+    }
+    el.style.display = 'flex';
+    el.textContent = '';
+
+    const card = document.createElement('div');
+    card.className = 'pause-card';
+
+    const title = document.createElement('div');
+    title.className = 'pause-title';
+    title.textContent = 'PAUSED';
+    card.appendChild(title);
+
+    const actions = [
+        { label:'RESUME',       cls:'primary', fn: () => { state.isPaused = false; callbacks.onHudUpdate(); } },
+        { label:'SAVE',         cls:'',        fn: () => { callbacks.onSaveSlot(state.lastSaveSlot || 1); } },
+        { label:'SETTINGS',     cls:'',        fn: () => { state.showSettings = true; callbacks.onHudUpdate(); } },
+        { label:'QUIT TO MENU', cls:'danger',  fn: () => { window._gameCallbacks?.quitToMenu?.() || window.location.reload(); } },
+    ];
+
+    for (const a of actions) {
+        const btn = document.createElement('button');
+        btn.className = 'pause-action-btn' + (a.cls ? ' ' + a.cls : '');
+        btn.textContent = a.label;
+        btn.onclick = a.fn;
+        card.appendChild(btn);
+    }
+
+    el.appendChild(card);
 }
 
 function updateSaveIndicator(state) {
@@ -579,24 +604,22 @@ function updateSettings(state, callbacks) {
     panel.className = 'settings-panel';
     panel.onclick = e => e.stopPropagation();
 
-    // Title
     const title = document.createElement('div');
     title.className = 'hud-big-title';
     title.textContent = 'SETTINGS';
     panel.appendChild(title);
     panel.appendChild(createHR());
 
-    // Controls
     const ctrlTitle = document.createElement('div');
     ctrlTitle.className = 'hud-section-title';
     ctrlTitle.textContent = 'CONTROLS';
     panel.appendChild(ctrlTitle);
 
     const controls = [
-        ['WASD / Arrows', 'Pan camera'], ['Scroll / Pinch', 'Zoom in/out'], ['Right-drag', 'Pan camera'],
-        ['B', 'Toggle build menu'], ['1-6', 'Select building type'], ['X', 'Toggle demolish mode'],
-        ['Space', 'Pause/resume'], ['Ctrl+S', 'Save game'], ['Esc', 'Settings / cancel'],
-        ['Shift+drag', 'Box select colonists'],
+        ['WASD / Arrows','Pan camera'], ['Scroll / Pinch','Zoom'], ['Right-drag','Pan camera'],
+        ['B','Toggle build menu'], ['1-6','Select building'], ['X','Toggle demolish'],
+        ['Space','Pause/resume'], ['Ctrl+S','Save game'], ['Esc','Settings / cancel'],
+        ['Shift+drag','Box select'],
     ];
     controls.forEach(([key, action]) => {
         const row = document.createElement('div');
@@ -604,16 +627,13 @@ function updateSettings(state, callbacks) {
         const k = document.createElement('span');
         k.className = 'ctrl-key';
         k.textContent = key;
-        const a = document.createElement('span');
-        a.textContent = action;
         row.appendChild(k);
-        row.appendChild(a);
+        row.appendChild(document.createTextNode(action));
         panel.appendChild(row);
     });
 
     panel.appendChild(createHR());
 
-    // Save/load
     const saveTitle = document.createElement('div');
     saveTitle.className = 'hud-section-title';
     saveTitle.textContent = 'SAVE / LOAD';
@@ -626,7 +646,7 @@ function updateSettings(state, callbacks) {
         row.className = 'save-row';
         const label = document.createElement('span');
         label.style.cssText = s ? 'color:#fff;font-size:12px' : 'color:rgba(255,255,255,0.4);font-size:12px';
-        label.textContent = s ? `Slot ${i + 1} -- Day ${s.dayCount}` : `Slot ${i + 1} -- Empty`;
+        label.textContent = s ? `Slot ${i + 1} — Day ${s.dayCount}` : `Slot ${i + 1} — Empty`;
         const btn = document.createElement('button');
         btn.className = 'save-btn';
         btn.textContent = 'SAVE';
@@ -655,15 +675,15 @@ function updateTutorial(state, callbacks) {
     el.textContent = '';
 
     const steps = [
-        { title: 'WELCOME', body: 'Welcome to Times Square. You control a group of survivors.', hint: 'Click to continue' },
-        { title: 'NEEDS', body: 'Your colonists have NEEDS -- hunger, oxygen, stress, sleep, health. Keep them alive.', hint: 'Click to continue' },
-        { title: 'STATS', body: 'Each colonist has RPG STATS -- STR, INT, AGI, END, CHA. Click one of the small figures walking around.', hint: 'Click a colonist' },
-        { title: 'CAMERA', body: 'WASD to pan the camera. Scroll to zoom.', hint: 'Click to continue' },
-        { title: 'BUILD', body: 'Press B to open the BUILD menu. Buildings keep your colony running.', hint: 'Press B' },
-        { title: 'SHELTER', body: 'Place a SHELTER to reduce stress and let colonists sleep.', hint: 'Place a shelter' },
-        { title: 'DIRECTIVES', body: 'Set a DIRECTIVE to auto-assign colonists. Try GATHER to start collecting resources.', hint: 'Click to continue' },
-        { title: 'COMBAT', body: 'Colonists carry weapons. Assign ATTACK jobs to fight enemies. STR boosts damage.', hint: 'Click to continue' },
-        { title: 'GOOD LUCK', body: 'Press SPACE to pause. Ctrl+S to save. Shift+drag to select multiple colonists. Good luck.', hint: 'Click to dismiss' },
+        { title:'WELCOME',   body:'Welcome to Times Square. You control a group of survivors.',                          hint:'Click to continue' },
+        { title:'NEEDS',     body:'Your colonists have NEEDS — hunger, oxygen, stress, sleep, health. Keep them alive.', hint:'Click to continue' },
+        { title:'STATS',     body:'Each colonist has RPG STATS — STR, INT, AGI, END, CHA. Click a figure.',             hint:'Click a colonist' },
+        { title:'CAMERA',    body:'WASD to pan the camera. Scroll to zoom.',                                            hint:'Click to continue' },
+        { title:'BUILD',     body:'Press B to open the BUILD menu. Buildings keep your colony running.',                hint:'Press B' },
+        { title:'SHELTER',   body:'Place a SHELTER to reduce stress and let colonists sleep.',                          hint:'Place a shelter' },
+        { title:'DIRECTIVES',body:'Set a DIRECTIVE to auto-assign colonists. Try GATHER to collect resources.',         hint:'Click to continue' },
+        { title:'COMBAT',    body:'Colonists carry weapons. Assign ATTACK jobs to fight enemies. STR boosts damage.',   hint:'Click to continue' },
+        { title:'GOOD LUCK', body:'Press SPACE to pause. Ctrl+S to save. Shift+drag to select multiple. Good luck.',   hint:'Click to dismiss' },
     ];
 
     const step = state.tutorialStep;

@@ -5,7 +5,6 @@ struct ChartsView: View {
     @Environment(UsageStore.self) private var store
 
     private var monthlyData: [(month: String, provider: String, cost: Double)] {
-        let cal = Calendar.current
         let fmt = DateFormatter()
         fmt.dateFormat = "MMM"
         var result: [(String, String, Double)] = []
