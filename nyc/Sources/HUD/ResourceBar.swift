@@ -4,36 +4,40 @@ struct ResourceBar: View {
     let gameState: GameState
 
     var body: some View {
-        HStack(spacing: 16) {
-            resourceItem(type: .food, color: Color(red: 0.19, green: 0.82, blue: 0.35))
-            resourceItem(type: .power, color: Color(red: 1.0, green: 0.84, blue: 0.04))
-            resourceItem(type: .materials, color: Color(red: 1.0, green: 0.62, blue: 0.04))
-            resourceItem(type: .oxygen, color: Color(red: 0.39, green: 0.82, blue: 1.0))
-            resourceItem(type: .cash, color: Color(red: 1.0, green: 0.22, blue: 0.37))
-
+        HStack(spacing: 4) {
+            ForEach([ResourceType.food, .power, .materials, .oxygen, .cash], id: \.self) { type in
+                resourcePill(type: type)
+            }
             Spacer()
-
             Text("\(gameState.colonists.filter { !$0.isDead }.count) alive")
-                .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(.white)
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(Theme.text2)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(Color(red: 0.04, green: 0.04, blue: 0.05).opacity(0.9))
-        .overlay(
-            Rectangle()
-                .stroke(Color(red: 0.39, green: 0.82, blue: 1.0).opacity(0.4), lineWidth: 2)
-        )
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: Theme.radiusLg))
+        .overlay(RoundedRectangle(cornerRadius: Theme.radiusLg).stroke(Theme.border, lineWidth: 1))
     }
 
-    private func resourceItem(type: ResourceType, color: Color) -> some View {
-        HStack(spacing: 4) {
-            Text(type.symbol)
-                .font(.system(size: 14, weight: .bold))
+    private func resourcePill(type: ResourceType) -> some View {
+        let meta = resourceMeta[type]
+        let color = meta?.color ?? Theme.text2
+        let label = meta?.label ?? type.rawValue.uppercased()
+        let iconName = meta?.icon ?? "circle"
+
+        return HStack(spacing: 4) {
+            Image(systemName: iconName)
+                .font(.system(size: 10, weight: .semibold))
                 .foregroundStyle(color)
             Text("\(gameState.resources[type, default: 0])")
-                .font(.system(size: 13))
-                .foregroundStyle(.white)
+                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                .foregroundStyle(Theme.text1)
+            Text(label)
+                .font(.system(size: 9, weight: .medium, design: .monospaced))
+                .foregroundStyle(Theme.text3)
         }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 3)
+        .background(Capsule().fill(Theme.glass).overlay(Capsule().stroke(Theme.border, lineWidth: 0.5)))
     }
 }
