@@ -9,13 +9,13 @@ export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError('')
     if (!email.trim()) return setError('Email is required')
     if (!password) return setError('Password is required')
 
-    const result = login(email.trim(), password)
+    const result = await login(email.trim(), password)
     if (result.error) return setError(result.error)
     navigate('/')
   }

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import bcrypt from 'bcryptjs'
 
 const AuthContext = createContext(null)
 
@@ -16,16 +17,32 @@ export function AuthProvider({ children }) {
     }
   }, [user])
 
-  function login(email, password) {
+  async function login(email, password) {
     const users = JSON.parse(localStorage.getItem('roost_users') || '[]')
-    const found = users.find(u => u.email === email && u.password === password)
+    const found = users.find(u => u.email === email)
     if (!found) return { error: 'Invalid email or password' }
+
+    const isBcrypt = found.password?.startsWith('$2')
+    const valid = isBcrypt
+      ? await bcrypt.compare(password, found.password)
+      : found.password === password
+
+    if (!valid) return { error: 'Invalid email or password' }
+
+    if (!isBcrypt) {
+      found.password = await bcrypt.hash(password, 10)
+      const allUsers = JSON.parse(localStorage.getItem('roost_users') || '[]')
+      const idx = allUsers.findIndex(u => u.email === email)
+      if (idx !== -1) allUsers[idx].password = found.password
+      localStorage.setItem('roost_users', JSON.stringify(allUsers))
+    }
+
     const { password: _, ...safe } = found
     setUser(safe)
     return { success: true }
   }
 
-  function register(name, email, password) {
+  async function register(name, email, password) {
     const users = JSON.parse(localStorage.getItem('roost_users') || '[]')
     if (users.find(u => u.email === email)) {
       return { error: 'An account with this email already exists' }
@@ -44,7 +61,8 @@ export function AuthProvider({ children }) {
       },
       createdAt: new Date().toISOString()
     }
-    users.push({ ...newUser, password })
+    const hashedPassword = await bcrypt.hash(password, 10)
+    users.push({ ...newUser, password: hashedPassword })
     localStorage.setItem('roost_users', JSON.stringify(users))
     setUser(newUser)
     return { success: true }

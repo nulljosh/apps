@@ -1,3 +1,19 @@
+const rateLimitStore = new Map();
+const RATE_WINDOW_MS = 60_000;
+const RATE_LIMIT = 20;
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const entry = rateLimitStore.get(ip);
+  if (!entry || now - entry.start > RATE_WINDOW_MS) {
+    rateLimitStore.set(ip, { start: now, count: 1 });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT) return false;
+  entry.count++;
+  return true;
+}
+
 export default async function handler(req, res) {
   const allowedOrigins = ['https://nimble.heyitsmejosh.com', 'http://localhost:3000', 'http://localhost:5173'];
   const origin = req.headers.origin;
@@ -9,6 +25,11 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
+  }
+
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: 'Too many requests' });
   }
 
   const { q, limit = '20' } = req.query;

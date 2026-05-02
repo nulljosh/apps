@@ -11,7 +11,7 @@ export default function Register() {
   const { register } = useAuth()
   const navigate = useNavigate()
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError('')
     if (!name.trim()) return setError('Name is required')
@@ -19,7 +19,7 @@ export default function Register() {
     if (password.length < 6) return setError('Password must be at least 6 characters')
     if (password !== confirm) return setError('Passwords do not match')
 
-    const result = register(name.trim(), email.trim(), password)
+    const result = await register(name.trim(), email.trim(), password)
     if (result.error) return setError(result.error)
     navigate('/')
   }

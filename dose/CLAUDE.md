@@ -1,5 +1,5 @@
 # Dose
-v2.1.0
+v2.1.1
 
 ## Rules
 - Portfolio vibe design (Geist font, flat monochrome + blue accent, no shadows/gradients)
