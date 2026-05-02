@@ -1,5 +1,5 @@
 # fuse
-v1.0.0
+v1.1.0
 
 ## What
 Timepage-style timeline with bomb-timer countdowns. EventKit/iCal integration + custom sources (Tally payday). Cross-platform: web, iOS, macOS, watchOS.
@@ -18,8 +18,12 @@ cd macos && xcodegen generate && open FuseMac.xcodeproj
 
 ## Key Files
 - `src/pages/Timeline.jsx` — main timeline view
+- `src/pages/Settings.jsx` — calendar feed management (ICS URL storage)
 - `src/components/CountdownTile.jsx` — ticking countdown display
-- `src/data/customSources.js` — payday calc + mock events
+- `src/data/customSources.js` — payday calc + custom events
+- `src/lib/parseICS.js` — lightweight ICS parser
+- `src/hooks/useCalendar.js` — fetches ICS feeds + custom sources
+- `api/ical.js` — Vercel function: CORS proxy for ICS feeds
 - `ios/Services/CalendarService.swift` — EventKit reads
 - `ios/Services/CustomSourceService.swift` — Tally payday
 - `ios/Views/TimelineView.swift` — iOS timeline
