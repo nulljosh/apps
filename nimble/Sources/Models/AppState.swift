@@ -41,12 +41,15 @@ enum QueryResult: Equatable {
     case text(heading: String?, body: String, source: String, sourceURL: String?, imageURL: String?)
     case list(items: [String], source: String)
     case error(String, searchURL: String?)
+    case color(String)
+    case convert(from: String, to: String, fromUnit: String, toUnit: String)
 
     static func == (lhs: QueryResult, rhs: QueryResult) -> Bool {
         switch (lhs, rhs) {
         case (.none, .none), (.loading, .loading): return true
         case let (.math(a), .math(b)): return a == b
         case let (.error(a, _), .error(b, _)): return a == b
+        case let (.color(a), .color(b)): return a == b
         default: return false
         }
     }
@@ -150,6 +153,8 @@ final class AppState {
         case .text(_, let body, _, _, _): text = body
         case .list(let items, _): text = items.joined(separator: "\n")
         case .error(let msg, _): text = msg
+        case .color(let hex): text = hex
+        case .convert(let from, let to, let fromUnit, let toUnit): text = "\(from) \(fromUnit) = \(to) \(toUnit)"
         default: return
         }
         NSPasteboard.general.clearContents()

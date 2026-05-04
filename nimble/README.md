@@ -2,7 +2,7 @@
 
 # Nimble
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
 A native macOS app for instant answers. Rebuilt from scratch in SwiftUI, inspired by the original [Nimble](https://github.com/Maybulb/Nimble) by [Maybulb](https://maybulb.com).
 

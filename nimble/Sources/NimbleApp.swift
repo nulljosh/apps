@@ -12,7 +12,7 @@ struct NimbleApp: App {
                 .onAppear { configureWindow() }
         }
         .windowStyle(.hiddenTitleBar)
-        .defaultSize(width: 680, height: 56)
+        .defaultSize(width: 660, height: 56)
     }
 
     private func configureWindow() {

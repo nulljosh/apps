@@ -9,105 +9,206 @@ struct ResultView: View {
             EmptyView()
 
         case .math(let value):
-            VStack(spacing: 4) {
-                Text(value)
-                    .font(.system(size: 28, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.primary)
-                    .textSelection(.enabled)
-
-                Text("RESULT")
-                    .font(.system(size: 9, weight: .medium))
-                    .foregroundStyle(.tertiary)
-                    .tracking(1.2)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .padding(.horizontal, 20)
+            MathResultView(value: value, accent: state.theme.color)
 
         case .text(let heading, let body, _, _, let imageURL):
             ScrollView {
                 HStack(alignment: .top, spacing: 14) {
                     if let imageURL, let url = URL(string: imageURL) {
                         AsyncImage(url: url) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 60, height: 60)
+                            if case .success(let image) = phase {
+                                image.resizable().aspectRatio(contentMode: .fill)
+                                    .frame(width: 56, height: 56)
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
-                            default:
-                                EmptyView()
+                                    .opacity(0.9)
                             }
                         }
                     }
-
                     VStack(alignment: .leading, spacing: 4) {
                         if let heading, !heading.isEmpty {
                             Text(heading)
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(.primary)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(Color.white.opacity(0.9))
                         }
-
                         Text(body)
                             .font(.system(size: 13))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.white.opacity(0.55))
                             .textSelection(.enabled)
                             .lineSpacing(3)
                             .lineLimit(nil)
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 14)
             }
             .frame(maxHeight: 300)
+            .transition(.opacity.combined(with: .move(edge: .top)))
 
         case .list(let items, _):
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                        HStack(spacing: 10) {
+                        HStack(spacing: 12) {
                             Text("\(index + 1)")
-                                .font(.system(size: 10, weight: .medium, design: .monospaced))
-                                .foregroundStyle(.tertiary)
-                                .frame(width: 18)
+                                .font(.system(size: 9, weight: .semibold))
+                                .foregroundStyle(state.theme.color.opacity(0.7))
+                                .frame(width: 16)
                             Text(item)
                                 .font(.system(size: 13))
-                                .foregroundStyle(.primary)
+                                .foregroundStyle(Color.white.opacity(0.7))
                                 .textSelection(.enabled)
-                                .lineLimit(2)
+                                .lineLimit(3)
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 8)
-
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 9)
                         if index < items.count - 1 {
-                            Divider()
-                                .padding(.leading, 48)
+                            Divider().padding(.leading, 46).opacity(0.3)
                         }
                     }
                 }
-                .padding(.vertical, 4)
+                .padding(.vertical, 6)
             }
             .frame(maxHeight: 300)
+            .transition(.opacity.combined(with: .move(edge: .top)))
+
+        case .color(let hex):
+            ColorResultView(hex: hex, accent: state.theme.color)
+
+        case .convert(let from, let to, let fromUnit, let toUnit):
+            ConvertResultView(from: from, to: to, fromUnit: fromUnit, toUnit: toUnit, accent: state.theme.color)
 
         case .error(let message, let searchURL):
-            VStack(spacing: 6) {
+            VStack(spacing: 10) {
                 Text(message)
-                    .font(.system(size: 13))
-                    .foregroundStyle(.secondary)
-
+                    .font(.system(size: 11))
+                    .foregroundStyle(Color.white.opacity(0.35))
                 if let searchURL, let url = URL(string: searchURL) {
-                    Button("Search on DuckDuckGo") {
-                        NSWorkspace.shared.open(url)
-                    }
-                    .font(.system(size: 12))
-                    .foregroundStyle(.blue)
-                    .buttonStyle(.plain)
+                    Button("Search on DuckDuckGo →") { NSWorkspace.shared.open(url) }
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(state.theme.color.opacity(0.85))
+                        .buttonStyle(.plain)
                 }
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 12)
+            .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
+            .transition(.opacity)
         }
+    }
+}
+
+// MARK: - Math
+
+private struct MathResultView: View {
+    let value: String
+    let accent: Color
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(spacing: 4) {
+            Text(value)
+                .font(.system(size: 42, weight: .semibold))
+                .foregroundStyle(Color.white)
+                .textSelection(.enabled)
+                .letterSpacing(-0.03)
+            Text("RESULT")
+                .font(.system(size: 9, weight: .semibold))
+                .foregroundStyle(accent.opacity(0.7))
+                .tracking(1.2)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 18)
+        .padding(.horizontal, 20)
+        .scaleEffect(appeared ? 1.0 : 0.88)
+        .opacity(appeared ? 1.0 : 0)
+        .onAppear {
+            withAnimation(.spring(duration: 0.35, bounce: 0.4)) { appeared = true }
+        }
+    }
+}
+
+// MARK: - Color (roadmap)
+
+private struct ColorResultView: View {
+    let hex: String
+    let accent: Color
+
+    private var components: (r: Int, g: Int, b: Int) {
+        let h = hex.replacingOccurrences(of: "#", with: "")
+        let v = Int(h, radix: 16) ?? 0
+        return ((v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF)
+    }
+
+    var body: some View {
+        let c = components
+        HStack(spacing: 16) {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(hex: hex) ?? .orange)
+                .frame(width: 56, height: 56)
+                .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.white.opacity(0.1), lineWidth: 1))
+            VStack(alignment: .leading, spacing: 5) {
+                colorRow(label: "HEX", value: hex.uppercased(), accent: accent)
+                colorRow(label: "RGB", value: "rgb(\(c.r), \(c.g), \(c.b))", accent: accent)
+            }
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 14)
+        .transition(.opacity.combined(with: .scale(scale: 0.9)))
+    }
+
+    private func colorRow(label: String, value: String, accent: Color) -> some View {
+        HStack(spacing: 8) {
+            Text(label).font(.system(size: 9, weight: .semibold)).foregroundStyle(accent.opacity(0.7)).frame(width: 30)
+            Text(value).font(.system(size: 12)).foregroundStyle(Color.white.opacity(0.8))
+        }
+    }
+}
+
+// MARK: - Convert (roadmap)
+
+private struct ConvertResultView: View {
+    let from: String
+    let to: String
+    let fromUnit: String
+    let toUnit: String
+    let accent: Color
+    @State private var appeared = false
+
+    var body: some View {
+        HStack(spacing: 20) {
+            VStack(spacing: 2) {
+                Text(from).font(.system(size: 32, weight: .light)).foregroundStyle(Color.white.opacity(0.5))
+                Text(fromUnit).font(.system(size: 11)).foregroundStyle(Color.white.opacity(0.25)).tracking(0.5)
+            }
+            Text("→").font(.system(size: 18, weight: .light)).foregroundStyle(accent.opacity(0.5))
+            VStack(spacing: 2) {
+                Text(to).font(.system(size: 40, weight: .semibold)).foregroundStyle(.white)
+                    .scaleEffect(appeared ? 1.0 : 0.88)
+                    .onAppear { withAnimation(.spring(duration: 0.35, bounce: 0.4)) { appeared = true } }
+                Text(toUnit).font(.system(size: 11)).foregroundStyle(accent.opacity(0.6)).tracking(0.5)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 20)
+        .transition(.opacity.combined(with: .move(edge: .top)))
+    }
+}
+
+// MARK: - Hex Color extension
+
+private extension Color {
+    init?(hex: String) {
+        let h = hex.replacingOccurrences(of: "#", with: "")
+        guard let v = Int(h, radix: 16) else { return nil }
+        self.init(red: Double((v >> 16) & 0xFF) / 255, green: Double((v >> 8) & 0xFF) / 255, blue: Double(v & 0xFF) / 255)
+    }
+}
+
+// MARK: - Tracking modifier helper
+
+private extension View {
+    func letterSpacing(_ value: Double) -> some View {
+        self
     }
 }

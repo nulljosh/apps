@@ -1,5 +1,5 @@
 # Nimble
-v1.0.0
+v1.1.0
 
 Native macOS app for instant answers. SwiftUI windowed app (menubar mode blocked by Tahoe beta).
 
