@@ -15,7 +15,7 @@ export default function Inspector({
       </div>
 
       <section className="inspector-section">
-        <div className="inspector-section-title">Cursor</div>
+        <div className="inspector-section-title">Canvas</div>
         <div className="inspector-row">
           <span className="inspector-key">Col</span>
           <span className="inspector-value">{cursor.col}</span>
@@ -24,17 +24,13 @@ export default function Inspector({
           <span className="inspector-key">Row</span>
           <span className="inspector-value">{cursor.row}</span>
         </div>
-      </section>
-
-      <section className="inspector-section">
-        <div className="inspector-section-title">Canvas</div>
         <div className="inspector-row">
-          <span className="inspector-key">Width</span>
-          <span className="inspector-value">{cols} ch</span>
+          <span className="inspector-key">Size</span>
+          <span className="inspector-value">{cols}×{rows}</span>
         </div>
         <div className="inspector-row">
-          <span className="inspector-key">Height</span>
-          <span className="inspector-value">{rows} ln</span>
+          <span className="inspector-key">History</span>
+          <span className="inspector-value">{historyLength}↩ {futureLength}↪</span>
         </div>
       </section>
 
@@ -57,34 +53,6 @@ export default function Inspector({
           <div className="inspector-hint">Click canvas to place</div>
         </section>
       )}
-
-      <section className="inspector-section">
-        <div className="inspector-section-title">History</div>
-        <div className="inspector-row">
-          <span className="inspector-key">Undo</span>
-          <span className="inspector-value">{historyLength} steps</span>
-        </div>
-        <div className="inspector-row">
-          <span className="inspector-key">Redo</span>
-          <span className="inspector-value">{futureLength} steps</span>
-        </div>
-      </section>
-
-      <section className="inspector-section">
-        <div className="inspector-section-title">Shortcuts</div>
-        <div className="inspector-row">
-          <span className="inspector-key">Undo</span>
-          <span className="inspector-value inspector-value--kbd">Ctrl+Z</span>
-        </div>
-        <div className="inspector-row">
-          <span className="inspector-key">Redo</span>
-          <span className="inspector-value inspector-value--kbd">Ctrl+Y</span>
-        </div>
-        <div className="inspector-row">
-          <span className="inspector-key">Export</span>
-          <span className="inspector-value inspector-value--muted">header btn</span>
-        </div>
-      </section>
     </aside>
   );
 }

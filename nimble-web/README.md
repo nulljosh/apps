@@ -23,6 +23,11 @@ npm install
 npm run dev
 ```
 
+## Roadmap
+- [ ] Claude design — Apple Liquid Glass aesthetic (backdrop-filter blur, -apple-system font, #0071e3)
+- [ ] Bump result quality — richer summaries, better instant answers, structured answer cards
+- [ ] iOS/macOS parity with nimble native app
+
 ## License
 
 MIT 2026 Joshua Trommel

@@ -4,9 +4,6 @@ import { PRESETS, CATEGORIES } from '../lib/presets.js';
 export default function Toolbar({ selectedPreset, onSelectPreset }) {
   return (
     <aside className="toolbar">
-      <div className="toolbar-header">
-        <span className="toolbar-label">Components</span>
-      </div>
       <div className="toolbar-body">
         {CATEGORIES.map(category => (
           <section key={category} className="toolbar-section">

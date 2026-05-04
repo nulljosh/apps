@@ -6,20 +6,6 @@
   overflow: hidden;
 }
 
-.toolbar-header {
-  padding: 10px 12px 8px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-
-.toolbar-label {
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  font-weight: 500;
-}
-
 .toolbar-body {
   overflow-y: auto;
   flex: 1;
