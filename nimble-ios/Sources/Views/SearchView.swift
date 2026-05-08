@@ -10,15 +10,15 @@ struct SearchView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    // Search bar
-                    HStack(spacing: 10) {
+                    // Search bar — transparent, accent icon, bottom divider
+                    HStack(spacing: 12) {
                         Image(systemName: "magnifyingglass")
-                            .font(.system(size: 18, weight: .light))
-                            .foregroundStyle(.tertiary)
+                            .font(.system(size: 16, weight: .light))
+                            .foregroundStyle(state.theme.color)
 
                         TextField(state.currentPlaceholder, text: $state.queryText)
                             .textFieldStyle(.plain)
-                            .font(.system(size: 17))
+                            .font(.system(size: 20, weight: .light))
                             .focused($isInputFocused)
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
@@ -33,52 +33,71 @@ struct SearchView: View {
                             Button(action: {
                                 state.queryText = ""
                                 state.result = .none
+                                state.webResults = []
                             }) {
                                 Image(systemName: "xmark.circle.fill")
-                                    .font(.system(size: 16))
+                                    .font(.system(size: 15))
                                     .foregroundStyle(.tertiary)
                             }
                         }
                     }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 11)
-                    .background(Color(.tertiarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
-                    .padding(.horizontal, 16)
-                    .padding(.top, 8)
-                    .padding(.bottom, 16)
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 13)
 
-                    // Instant result — tappable
+                    Divider().opacity(0.4)
+
+                    // History when idle
+                    if state.queryText.isEmpty && !state.history.isEmpty {
+                        historySection
+                    }
+
+                    // Loading shimmer
+                    if state.result == .loading {
+                        LoadingSkeletonView()
+                        Divider().padding(.horizontal, 18).opacity(0.3)
+                    }
+
+                    // Instant result
                     if state.result != .none && state.result != .loading {
                         NavigationLink {
                             ResultDetailView(result: state.result)
                         } label: {
                             ResultView()
                                 .environment(state)
-                                .padding(.horizontal, 16)
                                 .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .padding(.bottom, 12)
+
+                        // Source footer
+                        if let src = sourceText {
+                            HStack {
+                                Spacer()
+                                Text(src)
+                                    .font(.system(size: 10))
+                                    .foregroundStyle(.tertiary)
+                                    .onTapGesture { state.openSourceURL() }
+                            }
+                            .padding(.horizontal, 18)
+                            .padding(.bottom, 6)
+                        }
+
+                        Divider().padding(.horizontal, 18).opacity(0.3)
                     }
 
                     // Web results
                     if !state.webResults.isEmpty {
                         VStack(alignment: .leading, spacing: 0) {
                             Text("WEB")
-                                .font(.system(size: 10, weight: .medium))
+                                .font(.system(size: 10, weight: .semibold))
                                 .foregroundStyle(.tertiary)
                                 .tracking(1.2)
-                                .padding(.horizontal, 16)
-                                .padding(.top, 16)
+                                .padding(.horizontal, 18)
+                                .padding(.top, 14)
                                 .padding(.bottom, 8)
 
                             ForEach(state.webResults) { r in
                                 Button(action: {
-                                    if let url = URL(string: r.url) {
-                                        state.safariURL = url
-                                    }
+                                    if let url = URL(string: r.url) { state.safariURL = url }
                                 }) {
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(r.domain)
@@ -98,21 +117,17 @@ struct SearchView: View {
                                         }
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal, 16)
+                                    .padding(.horizontal, 18)
                                     .padding(.vertical, 12)
                                 }
                                 .buttonStyle(.plain)
 
                                 if r.id != state.webResults.last?.id {
-                                    Divider().padding(.leading, 16)
+                                    Divider().padding(.leading, 18)
                                 }
                             }
+                            .padding(.bottom, 16)
                         }
-                        .background(Color(.secondarySystemBackground))
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color(.separator), lineWidth: 0.5))
-                        .padding(.horizontal, 16)
-                        .padding(.bottom, 16)
                     }
                 }
             }
@@ -128,14 +143,75 @@ struct SearchView: View {
                 }
             }
             .sheet(isPresented: $state.showSettings) {
-                SettingsView()
-                    .environment(state)
+                SettingsView().environment(state)
             }
-            .onAppear { isInputFocused = true }
             .sheet(item: $state.safariURL) { url in
                 SafariView(url: url).ignoresSafeArea()
             }
+            .onAppear { isInputFocused = true }
         }
         .tint(state.theme.color)
+    }
+
+    @ViewBuilder
+    private var historySection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("RECENT")
+                .font(.system(size: 9, weight: .semibold))
+                .foregroundStyle(.tertiary)
+                .tracking(1.0)
+                .padding(.horizontal, 18)
+                .padding(.top, 14)
+                .padding(.bottom, 6)
+
+            ForEach(Array(state.history.enumerated()), id: \.element.id) { i, entry in
+                Button(action: {
+                    state.queryText = entry.query
+                    state.submitQuery()
+                }) {
+                    HStack(spacing: 12) {
+                        Circle()
+                            .fill(historyDotColor(entry.type))
+                            .frame(width: 5, height: 5)
+                        Text(entry.query)
+                            .font(.system(size: 13))
+                            .foregroundStyle(.primary)
+                            .lineLimit(1)
+                        Spacer()
+                        Text(entry.preview)
+                            .font(.system(size: 11))
+                            .foregroundStyle(.tertiary)
+                            .lineLimit(1)
+                    }
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 9)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+
+                if i < state.history.count - 1 {
+                    Divider().padding(.leading, 35).opacity(0.4)
+                }
+            }
+        }
+    }
+
+    private func historyDotColor(_ type: String) -> Color {
+        switch type {
+        case "math":    return Color(red: 0.96, green: 0.78, blue: 0.0)
+        case "text":    return Color(red: 0.46, green: 0.75, blue: 0.13)
+        case "convert": return Color(red: 0.16, green: 0.49, blue: 0.91)
+        case "color":   return Color(red: 0.82, green: 0.02, blue: 0.63)
+        default:        return .secondary
+        }
+    }
+
+    private var sourceText: String? {
+        switch state.result {
+        case .math: return "mathjs"
+        case .text(_, _, let source, _, _): return source
+        case .list(_, let source): return source
+        default: return nil
+        }
     }
 }

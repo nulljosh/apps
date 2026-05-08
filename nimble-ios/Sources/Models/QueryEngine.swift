@@ -1,3 +1,4 @@
+
 import Foundation
 
 struct WebResult: Identifiable {
@@ -104,6 +105,9 @@ final class QueryEngine: Sendable {
             with: "$1.0",
             options: .regularExpression
         )
+
+        guard let last = floatCleaned.trimmingCharacters(in: .whitespaces).last,
+              "0123456789.)".contains(last) else { return nil }
 
         let expression = NSExpression(format: floatCleaned)
         if let result = expression.expressionValue(with: nil, context: nil) as? NSNumber {
@@ -306,6 +310,9 @@ final class QueryEngine: Sendable {
         let floatCleaned = cleaned.replacingOccurrences(
             of: #"\b(\d+)\b"#, with: "$1.0", options: .regularExpression
         )
+
+        guard let last = floatCleaned.trimmingCharacters(in: .whitespaces).last,
+              "0123456789.)".contains(last) else { return nil }
 
         let expression = NSExpression(format: floatCleaned)
         if let result = expression.expressionValue(with: nil, context: nil) as? NSNumber {

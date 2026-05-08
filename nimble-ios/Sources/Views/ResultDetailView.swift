@@ -19,9 +19,6 @@ struct ResultDetailView: View {
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .tint(accent)
-        .sheet(item: $state.safariURL) { url in
-            SafariView(url: url).ignoresSafeArea()
-        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 copyToolbarButton
@@ -95,7 +92,7 @@ private extension ResultDetailView {
         VStack(spacing: 16) {
             Text(value)
                 .font(.system(size: 60, weight: .semibold))
-                .foregroundStyle(accent)
+                .foregroundStyle(.primary)
                 .textSelection(.enabled)
                 .multilineTextAlignment(.center)
                 .minimumScaleFactor(0.4)

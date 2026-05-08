@@ -25,10 +25,6 @@ enum NimbleTheme: String, CaseIterable, Codable {
         self == .contrast ? .white : .primary
     }
 
-    var inputTextColor: Color {
-        .white
-    }
-
     var displayName: String {
         rawValue.capitalized
     }
@@ -54,6 +50,27 @@ enum QueryResult: Equatable {
     }
 }
 
+struct HistoryEntry: Identifiable, Codable {
+    let id: UUID
+    let query: String
+    let preview: String
+    let type: String
+
+    static func from(_ query: String, result: QueryResult) -> HistoryEntry? {
+        let preview: String
+        let type: String
+        switch result {
+        case .math(let v):   preview = v;                       type = "math"
+        case .text(let h, let b, _, _, _): preview = h ?? String(b.prefix(30)); type = "text"
+        case .list(let items, _): preview = items.first ?? ""; type = "list"
+        case .color(let hex): preview = "#\(hex.uppercased())"; type = "color"
+        case .convert(_, let to, _, let tu): preview = "\(to) \(tu)";           type = "convert"
+        default: return nil
+        }
+        return HistoryEntry(id: UUID(), query: query, preview: preview, type: type)
+    }
+}
+
 @MainActor
 @Observable
 final class AppState {
@@ -68,6 +85,7 @@ final class AppState {
     var searchURL: String = ""
     var showSettings: Bool = false
     var safariURL: URL? = nil
+    var history: [HistoryEntry] = []
 
     private let queryEngine = QueryEngine()
     private let prefs = Preferences()
@@ -76,6 +94,7 @@ final class AppState {
 
     init() {
         loadPreferences()
+        loadHistory()
         rotatePlaceholder()
         startPlaceholderTimer()
     }
@@ -123,16 +142,15 @@ final class AppState {
         let encoded = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? text
         searchURL = "https://duckduckgo.com/?q=\(encoded)"
 
-        // Try math first
         if mathEnabled {
             if let mathResult = queryEngine.evaluateMath(text) {
                 result = .math(mathResult)
                 triggerHaptic(.success)
+                addToHistory(query: text, result: result)
                 return
             }
         }
 
-        // Query DDG + Wikipedia + web search in parallel
         result = .loading
         webResults = []
         let engine = queryEngine
@@ -143,8 +161,9 @@ final class AppState {
             self?.result = queryResult
             self?.webResults = results
             switch queryResult {
-            case .text, .list, .math:
+            case .text, .list, .math, .color, .convert:
                 self?.triggerHaptic(.success)
+                if let self { self.addToHistory(query: text, result: queryResult) }
             case .error:
                 self?.triggerHaptic(.error)
             default:
@@ -172,25 +191,32 @@ final class AppState {
         triggerHaptic(.success)
     }
 
-    func copySearchLink() {
-        UIPasteboard.general.string = searchURL
-        triggerHaptic(.success)
-    }
-
-    func openInDDG() {
-        guard let url = URL(string: searchURL) else { return }
-        UIApplication.shared.open(url)
-    }
-
     func openSourceURL() {
         switch result {
         case .text(_, _, _, let url, _):
-            if let url, let u = URL(string: url) {
-                UIApplication.shared.open(u)
-            }
+            if let url, let u = URL(string: url) { safariURL = u }
         default:
-            openInDDG()
+            if let url = URL(string: searchURL) { safariURL = url }
         }
+    }
+
+    private func addToHistory(query: String, result: QueryResult) {
+        guard let entry = HistoryEntry.from(query, result: result) else { return }
+        history.removeAll { $0.query == query }
+        history.insert(entry, at: 0)
+        if history.count > 10 { history.removeLast() }
+        saveHistory()
+    }
+
+    private func loadHistory() {
+        guard let data = UserDefaults.standard.data(forKey: "nimble.history"),
+              let decoded = try? JSONDecoder().decode([HistoryEntry].self, from: data) else { return }
+        history = decoded
+    }
+
+    private func saveHistory() {
+        guard let data = try? JSONEncoder().encode(history) else { return }
+        UserDefaults.standard.set(data, forKey: "nimble.history")
     }
 
     private func triggerHaptic(_ type: UINotificationFeedbackGenerator.FeedbackType) {

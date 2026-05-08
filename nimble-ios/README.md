@@ -2,7 +2,7 @@
 
 # Nimble iOS
 
-![version](https://img.shields.io/badge/version-v1.1.0-blue)
+![version](https://img.shields.io/badge/version-v1.2.0-blue)
 
 <p align="center"><img src="Resources/preview.png" width="300"></p>
 
@@ -10,12 +10,14 @@ iOS companion for [Nimble](../nimble/), the instant-answers app. SwiftUI, no API
 
 ## Features
 
-- Instant search with DuckDuckGo + Wikipedia (parallel, 5s timeout)
-- Offline math evaluation (trig, sqrt, log, powers, pi)
-- Natural language math ("whats nine plus ten" -> 19)
+- Live search with 300ms debounce — results appear as you type
+- Instant answers: DuckDuckGo + Wikipedia (parallel, 5s timeout)
+- Offline math evaluation (trig, sqrt, log, powers, pi, natural language)
+- Tap result → full detail view with copy, source link, in-app browsing
+- Web results open in SFSafariViewController (stay in app)
+- Search history (last 10, persisted to UserDefaults)
+- Shimmer loading skeleton
 - 8 color themes with haptic feedback
-- Copy result text, open in Safari
-- Rotating placeholder suggestions
 
 ## Development
 
@@ -27,34 +29,6 @@ open NimbleIOS.xcodeproj
 ```
 
 Target simulator: `iPhone 17 Pro`
-
-## Roadmap
-
-### v1.1.0 -- Polish
-- Search history with recent queries list
-- Share sheet for results
-- Haptic refinement (different patterns per result type)
-- Landscape layout optimization
-- iPad layout with wider search bar
-
-### v1.2.0 -- Smart Answers
-- Unit conversion (length, weight, temperature, volume)
-- Currency conversion via free exchange rate API
-- Timezone queries ("time in Tokyo")
-- Color preview for hex/rgb values
-- Voice input via SFSpeechRecognizer
-
-### v1.3.0 -- Widgets & Shortcuts
-- iOS widgets (small: last answer, medium: search bar)
-- Lock Screen widget with quick search
-- Siri Shortcuts integration
-- Spotlight indexing for search history
-
-### v2.0.0 -- Multi-Source
-- Pluggable answer sources (Wolfram|Alpha, OpenAI, custom)
-- Bookmarks/favorites for frequent queries
-- iCloud sync for preferences and history across macOS/iOS
-- Apple Watch companion (quick voice search)
 
 ## License
 
