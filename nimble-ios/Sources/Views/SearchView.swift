@@ -41,44 +41,29 @@ struct SearchView: View {
                     }
                     .padding(.horizontal, 14)
                     .padding(.vertical, 11)
-                    .background(.ultraThinMaterial)
+                    .background(Color(.tertiarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
                     .padding(.horizontal, 16)
                     .padding(.top, 8)
                     .padding(.bottom, 16)
 
-                    // Results
+                    // Instant result — tappable
                     if state.result != .none && state.result != .loading {
-                        VStack(spacing: 10) {
+                        NavigationLink {
+                            ResultDetailView(
+                                result: state.result,
+                                accent: state.theme.color,
+                                queryText: state.queryText
+                            )
+                        } label: {
                             ResultView()
                                 .environment(state)
+                                .padding(.horizontal, 16)
+                                .contentShape(Rectangle())
                         }
-                        .padding(.horizontal, 16)
-
-                        // Actions
-                        HStack(spacing: 20) {
-                            Button(action: { state.copyResultText() }) {
-                                Label("Copy", systemImage: "doc.on.doc")
-                                    .font(.system(size: 13, weight: .medium))
-                            }
-                            .tint(state.theme.color)
-
-                            Button(action: { state.openInDDG() }) {
-                                Label("Open in Browser", systemImage: "safari")
-                                    .font(.system(size: 13, weight: .medium))
-                            }
-                            .tint(state.theme.color)
-
-                            Spacer()
-
-                            Text(sourceText)
-                                .font(.system(size: 11))
-                                .foregroundStyle(.tertiary)
-                                .onTapGesture { state.openSourceURL() }
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.top, 14)
-                        .padding(.bottom, 8)
+                        .buttonStyle(.plain)
+                        .padding(.bottom, 12)
                     }
 
                     // Web results
@@ -126,8 +111,9 @@ struct SearchView: View {
                                 }
                             }
                         }
-                        .background(.ultraThinMaterial)
+                        .background(Color(.secondarySystemBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color(.separator), lineWidth: 0.5))
                         .padding(.horizontal, 16)
                         .padding(.bottom, 16)
                     }
@@ -151,14 +137,5 @@ struct SearchView: View {
             .onAppear { isInputFocused = true }
         }
         .tint(state.theme.color)
-    }
-
-    private var sourceText: String {
-        switch state.result {
-        case .math: return "mathjs"
-        case .text(_, _, let source, _, _): return source
-        case .list(_, let source): return source
-        default: return ""
-        }
     }
 }
