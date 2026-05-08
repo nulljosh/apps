@@ -23,7 +23,8 @@ struct SearchView: View {
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
                             .submitLabel(.search)
-                            .onSubmit { state.performQuery() }
+                            .onSubmit { state.submitQuery() }
+                            .onChange(of: state.queryText) { state.scheduleSearch() }
 
                         if state.result == .loading {
                             ProgressView()
@@ -51,11 +52,7 @@ struct SearchView: View {
                     // Instant result — tappable
                     if state.result != .none && state.result != .loading {
                         NavigationLink {
-                            ResultDetailView(
-                                result: state.result,
-                                accent: state.theme.color,
-                                queryText: state.queryText
-                            )
+                            ResultDetailView(result: state.result)
                         } label: {
                             ResultView()
                                 .environment(state)
@@ -80,7 +77,7 @@ struct SearchView: View {
                             ForEach(state.webResults) { r in
                                 Button(action: {
                                     if let url = URL(string: r.url) {
-                                        UIApplication.shared.open(url)
+                                        state.safariURL = url
                                     }
                                 }) {
                                     VStack(alignment: .leading, spacing: 4) {
@@ -135,6 +132,9 @@ struct SearchView: View {
                     .environment(state)
             }
             .onAppear { isInputFocused = true }
+            .sheet(item: $state.safariURL) { url in
+                SafariView(url: url).ignoresSafeArea()
+            }
         }
         .tint(state.theme.color)
     }

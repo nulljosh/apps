@@ -2,10 +2,13 @@ import SwiftUI
 
 struct ResultDetailView: View {
     let result: QueryResult
-    let accent: Color
-    let queryText: String
+    @Environment(AppState.self) private var state
+
+    private var accent: Color { state.theme.color }
+    private var queryText: String { state.queryText }
 
     var body: some View {
+        @Bindable var state = state
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 detail
@@ -16,6 +19,9 @@ struct ResultDetailView: View {
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .tint(accent)
+        .sheet(item: $state.safariURL) { url in
+            SafariView(url: url).ignoresSafeArea()
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 copyToolbarButton
@@ -148,7 +154,7 @@ private extension ResultDetailView {
 
             HStack {
                 if let sourceURL, let url = URL(string: sourceURL) {
-                    Button(action: { UIApplication.shared.open(url) }) {
+                    Button(action: { state.safariURL = url }) {
                         Label(source, systemImage: "arrow.up.right.square")
                             .font(.system(size: 13, weight: .medium))
                     }
@@ -161,7 +167,7 @@ private extension ResultDetailView {
                 Spacer()
                 if let encoded = queryText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
                    let ddgURL = URL(string: "https://duckduckgo.com/?q=\(encoded)") {
-                    Button(action: { UIApplication.shared.open(ddgURL) }) {
+                    Button(action: { state.safariURL = ddgURL }) {
                         Image(systemName: "safari")
                             .font(.system(size: 15))
                     }
@@ -348,7 +354,7 @@ private extension ResultDetailView {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
             if let searchURL, let url = URL(string: searchURL) {
-                Button("Search on DuckDuckGo") { UIApplication.shared.open(url) }
+                Button("Search on DuckDuckGo") { state.safariURL = url }
                     .font(.system(size: 14, weight: .medium))
                     .tint(accent)
             }

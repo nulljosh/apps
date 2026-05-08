@@ -67,10 +67,12 @@ final class AppState {
     var currentPlaceholder: String = ""
     var searchURL: String = ""
     var showSettings: Bool = false
+    var safariURL: URL? = nil
 
     private let queryEngine = QueryEngine()
     private let prefs = Preferences()
     private var placeholderTimer: Timer?
+    private var searchTask: Task<Void, Never>?
 
     init() {
         loadPreferences()
@@ -92,6 +94,26 @@ final class AppState {
             defaultSuggestions: defaultSuggestions
         )
         prefs.save(p)
+    }
+
+    func scheduleSearch() {
+        let text = queryText.trimmingCharacters(in: .whitespacesAndNewlines)
+        searchTask?.cancel()
+        guard !text.isEmpty else {
+            result = .none
+            webResults = []
+            return
+        }
+        searchTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled, let self else { return }
+            self.performQuery()
+        }
+    }
+
+    func submitQuery() {
+        searchTask?.cancel()
+        performQuery()
     }
 
     func performQuery() {
