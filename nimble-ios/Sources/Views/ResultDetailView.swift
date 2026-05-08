@@ -159,11 +159,14 @@ private extension ResultDetailView {
                         .foregroundStyle(.tertiary)
                 }
                 Spacer()
-                Button(action: { UIApplication.shared.open(URL(string: "https://duckduckgo.com/?q=\(queryText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")")!) }) {
-                    Image(systemName: "safari")
-                        .font(.system(size: 15))
+                if let encoded = queryText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                   let ddgURL = URL(string: "https://duckduckgo.com/?q=\(encoded)") {
+                    Button(action: { UIApplication.shared.open(ddgURL) }) {
+                        Image(systemName: "safari")
+                            .font(.system(size: 15))
+                    }
+                    .tint(accent)
                 }
-                .tint(accent)
             }
         }
         .padding(20)
