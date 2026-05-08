@@ -19,6 +19,7 @@
 		AF639E59421D1A12D5F4F8BC /* PreferencesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669B51D7BF328685F32A38F3 /* PreferencesTests.swift */; };
 		BA59B55D4A8851AF2A6A3B2B /* QueryEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5D07A4BE250E16BFF80245 /* QueryEngine.swift */; };
 		BD17686F13439C1ECD2C8D51 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBDB9EBBE4A860A243E5C54 /* ResultView.swift */; };
+		BF345D16593E294B5DEB5093 /* ShimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC23007E993D647A4E7ADD99 /* ShimmerView.swift */; };
 		D06B9D97135D9CB4DE6ABDF5 /* preview.png in Resources */ = {isa = PBXBuildFile; fileRef = 22D09AA35B385D03F1148F8D /* preview.png */; };
 		E4E587517F345AC93E322D54 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E213FE525331DCE183CB41 /* SettingsView.swift */; };
 		FB337CAE06979F1F5A41738E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AA7268364A784629138874C /* Assets.xcassets */; };
@@ -49,12 +50,13 @@
 		3EBDB9EBBE4A860A243E5C54 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		57E213FE525331DCE183CB41 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		669B51D7BF328685F32A38F3 /* PreferencesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesTests.swift; sourceTree = "<group>"; };
-		677C4E2F9E16FCDDA252FD29 /* NimbleIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NimbleIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		677C4E2F9E16FCDDA252FD29 /* NimbleIOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = NimbleIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DB4906D32478BFD7EFA619F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		7B3602AEAAD11AFB2D07F211 /* QueryEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryEngineTests.swift; sourceTree = "<group>"; };
 		7C2EC2B877CDC940D06969E7 /* NimbleIOSUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NimbleIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A20C50C4BC502228B969CFB /* PreviewScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewScreenshot.swift; sourceTree = "<group>"; };
 		ACD34740B53C11233B15D71C /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		CC23007E993D647A4E7ADD99 /* ShimmerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerView.swift; sourceTree = "<group>"; };
 		DCA8D0FD2B7A82057AA4AAB1 /* NimbleIOSTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NimbleIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4A73C73C254075BDEC284DB /* suggestions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = suggestions.json; sourceTree = "<group>"; };
 		E86DBBC30645347E624FFA63 /* ResultDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDetailView.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				F1184A3916359717B0770C96 /* SafariView.swift */,
 				6DB4906D32478BFD7EFA619F /* SearchView.swift */,
 				57E213FE525331DCE183CB41 /* SettingsView.swift */,
+				CC23007E993D647A4E7ADD99 /* ShimmerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				9B2642C07C6EE4DE33339907 /* SafariView.swift in Sources */,
 				64137E197D370882E1A9F165 /* SearchView.swift in Sources */,
 				E4E587517F345AC93E322D54 /* SettingsView.swift in Sources */,
+				BF345D16593E294B5DEB5093 /* ShimmerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,7 +381,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = QMM486NPYC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Nimble;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -498,7 +501,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = QMM486NPYC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Nimble;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
