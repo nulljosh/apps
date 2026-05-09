@@ -28,6 +28,7 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **nimble** / **nimble-ios** -- Instant answers (macOS/iOS). MenuBarExtra blocked (Tahoe SDK bug).
 - **nyc** / **nyc-ios** -- Times Square colony sim (SpriteKit)
 - **portfolio-ios** -- Portfolio companion
+- **school** / **school/ios** -- Grade 12 + UVic BSc CS tracker
 - **wiretext-ios** -- Unicode wireframe design tool (iOS)
 
 ### macOS (SwiftUI)
