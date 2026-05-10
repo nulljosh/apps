@@ -65,6 +65,18 @@ struct SettingsView: View {
 
             Divider()
 
+            HStack {
+                Text("Version")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
+
+            Divider()
+
             Button("Quit Nimble") {
                 NSApplication.shared.terminate(nil)
             }
