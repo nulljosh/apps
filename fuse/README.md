@@ -2,7 +2,7 @@
 
 # fuse
 
-![version](https://img.shields.io/badge/version-v1.1.0-blue)
+![version](https://img.shields.io/badge/version-v1.2.0-blue)
 
 Timeline app with bomb-timer countdowns. iCal + Google Calendar integration + custom sources.
 
@@ -19,7 +19,7 @@ Timeline app with bomb-timer countdowns. iCal + Google Calendar integration + cu
 - Live ticking countdowns (days:hours:mins:secs)
 - Urgency color shift: blue → orange → red at 72h/24h
 - Fuse progress bar depleting as event approaches
-- Google Calendar + any iCal/ICS feed via secret URL
+- Google Calendar + any iCal/ICS feed via secret URL (AES-GCM encrypted at rest)
 - EventKit integration on iOS/macOS (all native calendars)
 - Tally payday source (BC Income Assistance, last Wednesday of month)
 - Geist font
