@@ -48,6 +48,13 @@ export default function App() {
     localStorage.setItem('dose:theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    const mq = matchMedia('(prefers-color-scheme:dark)');
+    const handler = (e) => setTheme(e.matches ? 'dark' : 'light');
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   return (
     <HashRouter>
       <SessionProvider>

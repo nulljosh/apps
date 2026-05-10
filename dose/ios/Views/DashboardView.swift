@@ -18,17 +18,13 @@ struct DashboardView: View {
     }
 
     private var healthScore: Int? {
-        guard let latest = dataStore.biometricEntries.sorted(by: { $0.date > $1.date }).first,
-              !latest.metrics.isEmpty else { return nil }
-        let targets: [String: Double] = [
-            "sleep": 8, "steps": 10000, "heartRate": 60, "hrv": 50, "bloodOxygen": 98,
-        ]
+        guard let e = dataStore.biometricEntries.sorted(by: { $0.date > $1.date }).first else { return nil }
         var scores: [Double] = []
-        for (key, target) in targets {
-            guard let val = latest.metrics[key] as? Double else { continue }
-            let score = min(100, (val / target) * 100)
-            scores.append(score)
-        }
+        if let v = e.sleepHours   { scores.append(min(100, (v / 8) * 100)) }
+        if let v = e.steps        { scores.append(min(100, (Double(v) / 10000) * 100)) }
+        if let v = e.heartRate    { scores.append(min(100, (60.0 / Double(v)) * 100)) }
+        if let v = e.hrv          { scores.append(min(100, (v / 50) * 100)) }
+        if let v = e.bloodOxygen  { scores.append(min(100, (v / 98) * 100)) }
         guard !scores.isEmpty else { return nil }
         return Int(scores.reduce(0, +) / Double(scores.count))
     }
