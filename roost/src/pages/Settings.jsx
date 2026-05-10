@@ -17,9 +17,9 @@ export default function Settings() {
   const [location, setLocation] = useState(prefs.location ?? 'all')
   const [propertyType, setPropertyType] = useState(prefs.propertyType ?? 'all')
 
-  function handleSave(e) {
+  async function handleSave(e) {
     e.preventDefault()
-    updateProfile({
+    await updateProfile({
       name: name.trim(),
       email: email.trim(),
       preferences: { notifications, priceMin, priceMax, location, propertyType }
