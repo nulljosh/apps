@@ -1,43 +1,32 @@
 import { useState, useEffect } from 'react'
-
-const STORAGE_KEY = 'fuse_cal_feeds'
-
-export function getStoredFeeds() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-  } catch {
-    return []
-  }
-}
-
-function saveFeeds(feeds) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(feeds))
-}
+import { loadFeeds, saveFeeds } from '../lib/feedStorage.js'
 
 export default function Settings() {
-  const [feeds, setFeeds] = useState(getStoredFeeds)
+  const [feeds, setFeeds] = useState([])
   const [input, setInput] = useState('')
   const [label, setLabel] = useState('')
   const [error, setError] = useState('')
 
-  function add() {
+  useEffect(() => { loadFeeds().then(setFeeds) }, [])
+
+  async function add() {
     const url = input.trim()
     if (!url) return
     if (!url.startsWith('https://')) { setError('URL must start with https://'); return }
     if (feeds.some(f => f.url === url)) { setError('Already added'); return }
     const next = [...feeds, { url, label: label.trim() || 'Calendar' }]
     setFeeds(next)
-    saveFeeds(next)
+    await saveFeeds(next)
     setInput('')
     setLabel('')
     setError('')
     window.dispatchEvent(new Event('fuse-feeds-changed'))
   }
 
-  function remove(url) {
+  async function remove(url) {
     const next = feeds.filter(f => f.url !== url)
     setFeeds(next)
-    saveFeeds(next)
+    await saveFeeds(next)
     window.dispatchEvent(new Event('fuse-feeds-changed'))
   }
 

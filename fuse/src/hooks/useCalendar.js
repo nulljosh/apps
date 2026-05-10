@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getCustomEvents } from '../data/customSources.js'
 import { parseICS } from '../lib/parseICS.js'
-import { getStoredFeeds } from '../pages/Settings.jsx'
+import { loadFeeds } from '../lib/feedStorage.js'
 
 async function fetchFeed(feed) {
   const encoded = encodeURIComponent(feed.url)
@@ -16,7 +16,7 @@ export function useCalendar() {
   const [now, setNow] = useState(new Date())
 
   const refresh = useCallback(async () => {
-    const feeds = getStoredFeeds()
+    const feeds = await loadFeeds()
     const cutoff = new Date()
     cutoff.setDate(cutoff.getDate() + 180)
 
