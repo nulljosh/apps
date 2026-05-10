@@ -2,19 +2,19 @@
 
 # Nimble Web
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v3.0.0-blue)
 
-Web search engine with radial mind-map visualization. Instant answers and multi-engine web search.
+Instant answers search engine with linear results UI.
 
 ## Features
 
+- Natural language query understanding ("who is president of X", "population of X", "capital of X")
 - Cascading multi-engine search (SearXNG, DuckDuckGo, Brave)
-- Radial mind-map result visualization (React Flow)
-- Client-side math evaluation (sqrt, sin, cos, tan, log, ln, abs, pow)
+- Instant answers: DDG Answer API (direct factual answers) -> DDG Abstract -> Wikipedia
+- Client-side math evaluation (sqrt, sin, cos, tan, log, ln, abs, pow, natural language math)
 - Dark/light theme (auto-detects system preference)
 - Rotating placeholder suggestions
-- Domain deduplication
-- 5s timeout per engine with auto-fallback
+- Domain deduplication, 5s timeout per engine with auto-fallback
 
 ## Run
 

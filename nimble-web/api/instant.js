@@ -34,13 +34,14 @@ export default async function handler(req, res) {
   if (!q || !q.trim()) return res.status(400).json({ error: 'Missing query parameter q' });
 
   const query = q.trim();
+  const { ddgQuery, wikiQuery } = preprocessQuery(query);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 5000);
 
   try {
     const [ddg, wiki] = await Promise.allSettled([
-      queryDDG(query, controller.signal),
-      queryWikipedia(query, controller.signal),
+      queryDDG(ddgQuery, controller.signal),
+      queryWikipedia(wikiQuery, controller.signal),
     ]);
 
     clearTimeout(timeout);
@@ -66,17 +67,6 @@ async function queryDDG(query, signal) {
 
   const data = await res.json();
 
-  if (data.AbstractText) {
-    return {
-      type: 'text',
-      heading: data.Heading || null,
-      body: data.AbstractText,
-      source: data.AbstractSource || 'DuckDuckGo',
-      sourceURL: data.AbstractURL || null,
-      imageURL: data.Image ? `https://duckduckgo.com${data.Image}` : null,
-    };
-  }
-
   if (data.Answer) {
     const clean = data.Answer.replace(/<[^>]+>/g, '');
     if (clean) {
@@ -99,6 +89,17 @@ async function queryDDG(query, signal) {
       source: data.DefinitionSource || 'DuckDuckGo',
       sourceURL: data.DefinitionURL || null,
       imageURL: null,
+    };
+  }
+
+  if (data.AbstractText) {
+    return {
+      type: 'text',
+      heading: data.Heading || null,
+      body: data.AbstractText,
+      source: data.AbstractSource || 'DuckDuckGo',
+      sourceURL: data.AbstractURL || null,
+      imageURL: data.Image ? `https://duckduckgo.com${data.Image}` : null,
     };
   }
 
@@ -144,6 +145,36 @@ async function queryWikipedia(query, signal) {
   } catch {
     return null;
   }
+}
+
+function preprocessQuery(raw) {
+  let q = raw.trim().replace(/\?+$/, '').trim();
+
+  // "who is [the] X" / "who was [the] X"
+  let m = q.match(/^who\s+(?:is|was|are|were)\s+(?:the\s+)?(.+)$/i);
+  if (m) return { ddgQuery: m[1].trim(), wikiQuery: m[1].trim() };
+
+  // "what is [the] X" / "what's [the] X"
+  m = q.match(/^what(?:'s|\s+is|\s+was)\s+(?:the\s+)?(.+)$/i);
+  if (m) return { ddgQuery: m[1].trim(), wikiQuery: m[1].trim() };
+
+  // "where is X [located]"
+  m = q.match(/^where\s+is\s+(.+?)(?:\s+located)?$/i);
+  if (m) return { ddgQuery: `${m[1].trim()} location`, wikiQuery: m[1].trim() };
+
+  // "when was/did X [born/founded]"
+  m = q.match(/^when\s+(?:was|did|were?|is)\s+(.+?)(?:\s+born|\s+founded|\s+established)?$/i);
+  if (m) return { ddgQuery: raw, wikiQuery: m[1].trim() };
+
+  // "how [adj] is X"
+  m = q.match(/^how\s+(much|many|tall|old|big|far|long|wide|deep|large|small|fast|heavy)\s+is\s+(.+)$/i);
+  if (m) return { ddgQuery: `${m[2].trim()} ${m[1].toLowerCase()}`, wikiQuery: m[2].trim() };
+
+  // "population/capital/president/prime minister/currency/language/area of X"
+  m = q.match(/^(population|capital|president|prime\s+minister|premier|currency|language|area|gdp|timezone)\s+of\s+(.+)$/i);
+  if (m) return { ddgQuery: `${m[2].trim()} ${m[1].toLowerCase()}`, wikiQuery: `${m[1].toLowerCase()} of ${m[2].trim()}` };
+
+  return { ddgQuery: raw, wikiQuery: raw };
 }
 
 async function fetchWikiSummary(url, signal) {

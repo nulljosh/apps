@@ -7,8 +7,9 @@ Native macOS app for instant answers. SwiftUI windowed app (menubar mode blocked
 - SwiftUI, macOS 14+, @Observable
 - xcodegen for project generation
 - NSExpression + custom function evaluator for math (trig, sqrt, log, powers, pi)
-- DuckDuckGo Instant Answer API (free, no key)
+- DuckDuckGo Instant Answer API (free, no key) — Answer -> Definition -> AbstractText priority
 - Wikipedia REST API as fallback
+- Query preprocessing: NL questions stripped to entity queries before API calls
 
 ## Structure
 - `Sources/NimbleApp.swift` -- @main entry, Window scene (MenuBarExtra commented out)

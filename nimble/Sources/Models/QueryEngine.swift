@@ -261,13 +261,49 @@ final class QueryEngine: Sendable {
         static let E = 2.718281828459045
     }
 
+    private func preprocessQuery(_ raw: String) -> (ddgQuery: String, wikiQuery: String) {
+        var q = raw.trimmingCharacters(in: .whitespaces)
+        while q.hasSuffix("?") { q = String(q.dropLast()).trimmingCharacters(in: .whitespaces) }
+
+        let patterns: [(String, (String) -> (String, String)?)] = [
+            (#"(?i)^who\s+(?:is|was|are|were)\s+(?:the\s+)?(.+)$"#, { s in
+                guard let r = s.range(of: #"(?i)^who\s+(?:is|was|are|were)\s+(?:the\s+)?"#, options: .regularExpression) else { return nil }
+                let rest = String(s[r.upperBound...]).trimmingCharacters(in: .whitespaces)
+                return rest.isEmpty ? nil : (rest, rest)
+            }),
+            (#"(?i)^what(?:'s|\s+is|\s+was)\s+(?:the\s+)?(.+)$"#, { s in
+                guard let r = s.range(of: #"(?i)^what(?:'s|\s+is|\s+was)\s+(?:the\s+)?"#, options: .regularExpression) else { return nil }
+                let rest = String(s[r.upperBound...]).trimmingCharacters(in: .whitespaces)
+                return rest.isEmpty ? nil : (rest, rest)
+            }),
+            (#"(?i)^where\s+is\s+(.+?)(?:\s+located)?$"#, { s in
+                guard let r = s.range(of: #"(?i)^where\s+is\s+"#, options: .regularExpression) else { return nil }
+                var rest = String(s[r.upperBound...]).trimmingCharacters(in: .whitespaces)
+                rest = rest.replacingOccurrences(of: #"\s+located$"#, with: "", options: .regularExpression)
+                return rest.isEmpty ? nil : ("\(rest) location", rest)
+            }),
+            (#"(?i)^how\s+(much|many|tall|old|big|far|long|wide|deep|large|small|fast|heavy)\s+is\s+(.+)$"#, { s in
+                guard let m = try? NSRegularExpression(pattern: #"(?i)^how\s+(\w+)\s+is\s+(.+)$"#).firstMatch(in: s, range: NSRange(s.startIndex..., in: s)) else { return nil }
+                let adj = (s as NSString).substring(with: m.range(at: 1)).lowercased()
+                let entity = (s as NSString).substring(with: m.range(at: 2)).trimmingCharacters(in: .whitespaces)
+                return entity.isEmpty ? nil : ("\(entity) \(adj)", entity)
+            }),
+        ]
+
+        for (_, transform) in patterns {
+            if let result = transform(q) { return (ddgQuery: result.0, wikiQuery: result.1) }
+        }
+        return (ddgQuery: raw, wikiQuery: raw)
+    }
+
     func query(_ input: String) async -> QueryResult {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 5
         let session = URLSession(configuration: config)
+        let (ddgInput, wikiInput) = preprocessQuery(input)
 
-        async let ddg = queryDDG(input, session: session)
-        async let wiki = queryWikipedia(input, session: session)
+        async let ddg = queryDDG(ddgInput, session: session)
+        async let wiki = queryWikipedia(wikiInput, session: session)
 
         if let ddgResult = await ddg { return ddgResult }
         if let wikiResult = await wiki { return wikiResult }
@@ -286,21 +322,20 @@ final class QueryEngine: Sendable {
             let (data, _) = try await session.data(from: url)
             let ddg = try JSONDecoder().decode(DDGResponse.self, from: data)
 
-            if let abstract = ddg.abstractText, !abstract.isEmpty {
-                let source = ddg.abstractSource ?? "DuckDuckGo"
-                let sourceURL = ddg.abstractURL
-                let imageURL = ddg.image.flatMap { $0.isEmpty ? nil : "https://duckduckgo.com\($0)" }
-                return .text(heading: ddg.heading, body: abstract, source: source, sourceURL: sourceURL, imageURL: imageURL)
-            }
-
             if let answer = ddg.answer, !answer.isEmpty {
-                // Strip HTML tags from answer
                 let clean = answer.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
                 return .text(heading: nil, body: clean, source: "DuckDuckGo", sourceURL: nil, imageURL: nil)
             }
 
             if let definition = ddg.definition, !definition.isEmpty {
                 return .text(heading: ddg.heading, body: definition, source: ddg.definitionSource ?? "DuckDuckGo", sourceURL: ddg.definitionURL, imageURL: nil)
+            }
+
+            if let abstract = ddg.abstractText, !abstract.isEmpty {
+                let source = ddg.abstractSource ?? "DuckDuckGo"
+                let sourceURL = ddg.abstractURL
+                let imageURL = ddg.image.flatMap { $0.isEmpty ? nil : "https://duckduckgo.com\($0)" }
+                return .text(heading: ddg.heading, body: abstract, source: source, sourceURL: sourceURL, imageURL: imageURL)
             }
 
             if let topics = ddg.relatedTopics, !topics.isEmpty {

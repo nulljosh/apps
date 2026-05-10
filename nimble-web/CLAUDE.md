@@ -7,7 +7,8 @@ Instant answers search engine with linear results UI. Merged from Rabbit project
 - Vite + React 19
 - Vercel serverless functions (search + instant answers)
 - Cascading web search: SearXNG (3 instances) -> DuckDuckGo Lite -> Brave
-- Instant answers: DuckDuckGo Instant Answer API -> Wikipedia REST API
+- Instant answers: DDG Answer (direct factual) -> DDG Definition -> DDG Abstract -> Wikipedia REST API
+- Query preprocessing: NL questions rewritten to entity-focused queries before hitting APIs ("who is X of Y" -> "X of Y")
 - Client-side math evaluation with natural language parsing (ported from native Nimble)
 - Geist font, Animate.css, dark/light theme
 - Apple Liquid Glass aesthetic (frosted glass cards, backdrop-filter blur)
