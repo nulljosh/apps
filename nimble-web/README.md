@@ -2,7 +2,7 @@
 
 # Nimble Web
 
-![version](https://img.shields.io/badge/version-v3.0.0-blue)
+![version](https://img.shields.io/badge/version-v3.1.0-blue)
 
 Instant answers search engine with linear results UI.
 

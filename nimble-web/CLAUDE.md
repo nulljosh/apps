@@ -1,5 +1,5 @@
 # Nimble Web
-v3.0.0
+v3.1.0
 
 Instant answers search engine with linear results UI. Merged from Rabbit project.
 
