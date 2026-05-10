@@ -56,6 +56,7 @@ alter table users add column if not exists avatar_url text;
 
 ## Changelog
 
+- v2.0.0: JWT_SECRET rotated, Supabase RLS hardened
 - v1.3.0: Better seed ideas, RLS enabled on all Supabase tables, comment threads, iOS v2.0 (comments, profiles, sort, badges, 60+ tests), macOS + watchOS companions, WidgetKit widgets
 - v1.2.0
 
