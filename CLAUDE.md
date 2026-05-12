@@ -8,27 +8,25 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 
 ### Web
 - **cadence** -- Code progress tracker (GitHub GraphQL API). Live: cadence.heyitsmejosh.com.
-- **claude-usage** -- Claude Code usage tracker (session/weekly/extra limits).
 - **dose** -- Health/supplement tracker (Vite + React). Live: dose.heyitsmejosh.com.
 - **epiphany** -- Finance/intelligence dashboard. Vite + React. Live: epiphany.heyitsmejosh.com. Subdirs: ios/, macos/, watchos/, widgets-ios/, widgets-macos/, bank/, dashboard/, finn/, cloudflare/, tradingview/.
-- **fuse** -- Timepage-style timeline with bomb-timer countdowns. iCal + custom sources. Live: fuse.heyitsmejosh.com.
+- **grapher** -- Desmos-style graphing calculator. Live: grapher.heyitsmejosh.com.
 - **lingo** -- Language learning (vanilla JS PWA)
 - **nimble-web** -- Instant answers + web search with mind-map (Vite + React). Live: nimble.heyitsmejosh.com.
 - **nyc-web** -- Times Square colony sim (Canvas). Live: nyc.heyitsmejosh.com. Separate Vercel project — deploy with `cd apps/nyc-web && npx vercel --prod`.
-- **roost** -- BC real estate listings (Vite + React PWA). Live: roost.heyitsmejosh.com. localStorage auth only.
-- **spark** -- Idea-sharing platform with voting. Supabase. Live: spark.heyitsmejosh.com.
+- **parallax** -- Head-tracked 3D parallax via webcam + MediaPipe. Static HTML.
+- **roost** -- Zillow clone for BC real estate. Vite + React PWA + Leaflet map, price pill markers, filters, Supabase auth. Live: roost.heyitsmejosh.com. Next: real BC listings scraper, agent profiles, price history, saved searches.
+- **spark** -- Idea forum with voting, comments, JWT auth. Expanding to: law integration (entity formation, terms gen), IP/trademark filing workflow. Live: spark.heyitsmejosh.com.
 - **tally** -- BC Self-Serve scraper + benefits guide. Express + Puppeteer + Vercel Blob. PWA. Live: tally.heyitsmejosh.com.
 - **wiretext** -- Unicode wireframe design tool (Vite + React). Live: wiretext.heyitsmejosh.com.
 
 ### iOS (SwiftUI)
 - **bhaddie** -- Location-based social + creator economy
-- **claude-usage-ios** -- Claude Code usage tracker (iOS)
 - **life** / **life-ios** -- Life tracker
 - **lingo-ios** -- Language learning
 - **nimble** / **nimble-ios** -- Instant answers (macOS/iOS). MenuBarExtra blocked (Tahoe SDK bug).
 - **nyc** / **nyc-ios** -- Times Square colony sim (SpriteKit)
 - **portfolio-ios** -- Portfolio companion
-- **school** / **school/ios** -- Grade 12 + UVic BSc CS tracker
 - **wiretext-ios** -- Unicode wireframe design tool (iOS)
 
 ### macOS (SwiftUI)
