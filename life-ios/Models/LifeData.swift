@@ -251,8 +251,8 @@ enum LifeData {
 
     static let relationships: [RelationshipPeriod] = [
         RelationshipPeriod(name: "First", startYear: 2014, endYear: 2017, category: .event, detail: "prom, NYC"),
-        RelationshipPeriod(name: "Second", startYear: 2019, endYear: 2019, category: .crisis, detail: "9 months"),
-        RelationshipPeriod(name: "Longest", startYear: 2021, endYear: 2023, category: .event, detail: "breakdown after"),
+        RelationshipPeriod(name: "Second (Olivia)", startYear: 2019, endYear: 2020, category: .crisis, detail: "~8 months, pregnancy, abortion"),
+        RelationshipPeriod(name: "Longest (Natania)", startYear: 2022, endYear: 2024, category: .event, detail: "~2.5 yrs, broke up summer 2024"),
     ]
 
     static let socialCircle: [SocialPoint] = [
@@ -329,6 +329,7 @@ enum LifeData {
         FinancialPeriod(label: "Parents", years: "'99-'17", source: "Family", category: .forward),
         FinancialPeriod(label: "Jobs", years: "'17-'22", source: "Employment", category: .event),
         FinancialPeriod(label: "Fired/quit", years: "'22-'24", source: "Parents", category: .crisis),
+        FinancialPeriod(label: "ICBC", years: "2024", source: "~$50k settlement", category: .event),
         FinancialPeriod(label: "Welfare", years: "'24-now", source: "Government", category: .event),
         FinancialPeriod(label: "Planned", years: "'27+", source: "AI career 100K+", category: .forward),
     ]
@@ -433,9 +434,12 @@ enum LifeData {
         TimelineEntry(year: "2008", text: "First Disneyland trip (age 8)", detail: "Florida and Hawaii trips throughout 2010 to 2020. Hawaii again Feb 2026.", category: .forward),
         TimelineEntry(year: "~2014", text: "Met a girl online. First serious relationship.", detail: nil, category: .event),
         TimelineEntry(year: "2017", text: "Prom (age 18). NYC trip.", detail: nil, category: .event),
-        TimelineEntry(year: "2019", text: "Second relationship (Sept to Dec). Pregnancy. Abortion.", detail: "Breakup. Both moved back in with parents.", category: .crisis),
-        TimelineEntry(year: "~2021", text: "Fallout with dad. Verbal aggression finally stops.", detail: "Longest relationship ends (age 22 to 23). Self-harm begins. Mental breakdown.", category: .crisis),
-        TimelineEntry(year: "2024", text: "Homeless for several months (summer 2024)", detail: "Lived in car until it broke down. AirBnB. Detained by police. Hospitalized. Eventually allowed back home.", category: .crisis),
+        TimelineEntry(year: "Late 2019", text: "Moved to New Westminster with Olivia Evans. ~Oct: pregnancy. Abortion.", detail: "Moved back to parents'. Broke up end of 2019 / early 2020. Together ~8 months.", category: .crisis),
+        TimelineEntry(year: "~2020-04", text: "COVID. Olivia hooked up with a coworker at a party.", detail: "Drove home drunk; wrapped car around a tree. Car destroyed.", category: .crisis),
+        TimelineEntry(year: "~2021", text: "Fallout with dad. Verbal aggression finally stops.", detail: "Self-harm (hitting head) begins. Mental breakdown.", category: .crisis),
+        TimelineEntry(year: "~2021–22", text: "Started dating Natania. Lasted ~2.5 years (longest relationship).", detail: nil, category: .event),
+        TimelineEntry(year: "~2022–23", text: "Hit by a car while crossing the road. ICBC claim filed.", detail: nil, category: .crisis),
+        TimelineEntry(year: "2024", text: "~$50,000 ICBC settlement. Bought car and dog. Kicked out ~June 2024.", detail: "Lived in car ~2 months, shoplifted for food. Broke up with Natania. ~Aug 20: dad let back in. Wellness-check arrest: Lions Gate Hospital, forced antipsychotics, solitary overnight, released next morning.", category: .crisis),
         TimelineEntry(year: "Oct 2025", text: "Autism diagnosis. Applied for PWD.", detail: nil, category: .event),
         TimelineEntry(year: "2026", text: "Age 26. Living in Langley. Therapy with Amanda.", detail: "Planning move to Vancouver Island. Studying calc + bio.", category: .forward),
     ]
@@ -530,7 +534,7 @@ enum LifeData {
         LifeSection(label: "Relationships", paragraphs: [
             "I had a few relationships in my late teens and early twenties. The first serious one was with a girl I met online around 2014 who came to my prom in 2017. My parents flew me to NYC that same year to meet her. Probably the best week of my life. I think back on it so fondly that it makes everything else feel worse by comparison.",
             "The one that still affects me the most was someone I was with from April to December 2019. We moved in together and she got pregnant. The abortion was my decision initially. It was mutual but I pushed for it because neither of us could afford it. She developed psychosis and pulled knives on me. It broke us up. We both moved back in with our parents. The abortion is probably the second most confusing and painful thing that has happened in my life, right after what happened with my dad when I was little.",
-            "My longest relationship was from roughly age 21 to 23. When that ended I had a mental breakdown and the self-harm started.",
+            "My longest relationship was with Natania, from roughly 2021 or 2022 through 2024 (~2.5 years). We broke up in summer 2024 — I had been effectively living at her place and her parents didn't want that.",
             "I'm not in a relationship right now and I don't see myself getting into one anytime soon. Past relationships left damage that I'm still dealing with years later. I haven't been able to make one last longer than about 3 years. Right now I'd rather focus on getting my own life sorted out first.",
         ], note: nil),
 
@@ -570,7 +574,8 @@ enum LifeData {
         // 21
         LifeSection(label: "Mental Health", paragraphs: [
             "My depression and suicidal thoughts don't feel like something I live with constantly in the sense that I'm always visibly falling apart. They hit out of nowhere. I can get through a whole day fine, keep it together, and then fall apart at night. A lot of it has to do with masking all day, autism, emotions, everything, and then losing it when I'm alone. Sleep is inconsistent, anywhere from 4 to 8 hours.",
-            "Suicidal thoughts have been there since I was a kid, basically since I can remember. I've made a few attempts, nothing super lethal, more impulsive than planned. The self-harm started around age 22 to 23 after my longest relationship ended. Punching myself in the head. Most recent hospitalization was summer 2024, around the same time I was homeless. I also went to rehab twice in the last few years at Ravensview (Homewood) on Vancouver Island.",
+            "Suicidal thoughts have been there since I was a kid, basically since I can remember. I've made a few attempts, nothing super lethal, more impulsive than planned. The self-harm started around age 22 to 23. Punching myself in the head. I also went to rehab twice in the last few years at Ravensview (Homewood) on Vancouver Island.",
+            "The most significant hospitalization was a wellness-check incident in 2023 or 2024. I was hitting my head and my dad called police for a wellness check instead of an ambulance. Police questioned me at the door; I answered lucidly. They declared arrest without giving a reason. I tried to retreat; they chased me, I slipped in the kitchen, they arrested me there, kneeling on my back. Taken to Lions Gate Hospital psych ward. Forced antipsychotic medication. Solitary confinement overnight. Released next morning with no aftercare. I have PTSD from this — constant replays, hypervigilance, poor sleep, GI symptoms. Pursuing a civil suit.",
             "I've been smoking weed since I was a teenager. It's escalated over the years to heavy daily use, multiple times a day to suppress memory. I also vape. I drink occasionally but it's not a major thing.",
             "I gym for an hour or two almost every day and I'm hitting personal bests regularly. The discipline is compounding. I don't eat too badly either. The coping mechanisms are a mix of self-destructive and genuinely healthy. They just coexist.",
             "I don't really hate myself or anybody specifically. It's more of a general frustration. The anger goes both directions, inward as self-harm, outward as snapping at people. The root of it is frustration with how things are, not with any one person.",
@@ -610,6 +615,7 @@ enum LifeData {
         // 27 - NEW: Financial Reality
         LifeSection(label: "Financial Reality", paragraphs: [
             "I'm in 5 to 10K of debt. I live with my parents and I don't pay for anything. I couldn't give a fuck about money if I spent a million lifetimes on this planet. There are children being bombed in Gaza. OpenAI is worth 0.8 trillion dollars. Anthropic is worth half that. There are more pressing issues than making money day by day. I live off welfare. I don't care.",
+            "In 2024 I received ~$50,000 from an ICBC settlement after being hit by a car while crossing the road (~2022 or 2023). I used it to buy a car and a dog. The rest burned through the ~2-month period I was homeless in summer 2024 — living in parking lots, shoplifting from Safeway for food. No savings remain from it.",
             "I can sell B2B software. My parents will pay for my education, then I can get a job working in AI software engineering for 100K+ a year. It's not hard. I'm 26, I have time.",
         ], note: nil),
 
