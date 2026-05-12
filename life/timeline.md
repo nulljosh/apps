@@ -24,6 +24,6 @@ Merged from embedded HTML timeline and source chronology. ISO dates where known;
 | ~2024-06 | Kicked out of parents' house. Locks and codes changed. Lived in car ~2 months in parking lots. Shoplifted from Safeway for food. Burned through settlement money. | crisis |
 | 2024 (summer) | Broke up with Natania. Was effectively living at her place; her parents objected to this. | crisis |
 | ~2024-08-20 | Dad let back in around my birthday. | event |
-| ~2024-08 or 2023-08-01 | **Wellness-check incident** (date disputed — see `incidents/wellness-check.md`). Dad called police instead of ambulance. Questioned at door; answered lucidly. Police declared arrest without stating reason. Tried to retreat; chased into kitchen; arrested. Taken to Lions Gate Hospital psych ward. Forced antipsychotics. Solitary overnight. Released next morning. | crisis |
+| ~2024-08 or 2023-08-01 | **Wellness-check incident** (date disputed — see `incidents/wellness-check.md`). Dad called police instead of ambulance. Questioned at door; answered lucidly. Police declared arrest without stating reason. Tried to retreat; chased into kitchen; arrested. Taken to Langley Hospital psych ward. Forced antipsychotics. Solitary overnight. Released next morning. | crisis |
 | 2025-10 | Autism diagnosis (late, at age 26). Applied for PWD (BC). | event |
 | 2026 | Age 26. Living in Langley. Therapy with Amanda. Planning move to Vancouver Island. Studying calc + bio. | forward |

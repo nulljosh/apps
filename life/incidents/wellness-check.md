@@ -49,7 +49,7 @@ Resolve before the lawyer call on 2026-05-12.
 - Officers knelt on my back, causing inability to breathe.
 
 **Hospital:**
-- Taken to Lions Gate Hospital psych ward.
+- Taken to Langley Hospital psych ward.
 - Forced to take antipsychotic medication without consent.
 - Placed in solitary confinement overnight.
 - Released the next morning.
@@ -88,7 +88,7 @@ Key comparator: *Degen v. Ministry of Public Safety* (2023 BCSC) — RCMP excess
 - [ ] Medical records: PTSD diagnosis
 - [ ] Medical records: forced medication (drug name, who administered, date)
 - [ ] Photos of physical injuries if any
-- [ ] Discharge / release paperwork from Lions Gate Hospital
+- [ ] Discharge / release paperwork from Langley Hospital
 - [ ] Criminal charges (if none, document that)
 - [ ] Therapist letter: PTSD diagnosis + period of incapacity + causation to incident date
 - [ ] Document discovery date: when did I first understand a civil Charter claim was an appropriate remedy?
