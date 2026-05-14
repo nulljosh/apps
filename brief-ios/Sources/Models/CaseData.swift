@@ -112,13 +112,21 @@ extension Color {
     static let briefAccent = Color(red: 0, green: 0.443, blue: 0.89)
 }
 
+extension ShapeStyle where Self == Color {
+    static var briefDanger: Color { Color(red: 0.753, green: 0.224, blue: 0.169) }
+    static var briefWarn:   Color { Color(red: 0.788, green: 0.486, blue: 0.165) }
+    static var briefGreen:  Color { Color(red: 0.165, green: 0.616, blue: 0.435) }
+    static var briefAccent: Color { Color(red: 0, green: 0.443, blue: 0.89) }
+}
+
 // MARK: - Data
 
 let caseGrounds: [Ground] = [
     Ground(id: "force", number: 1, title: "Excessive Force", section: "s.7",
-           value: "$100–200k", accent: .briefDanger, openByDefault: true,
+           value: "$100–200k", accent: .briefDanger,
            description: "Officers knelt on subject's back while prone, causing respiratory distress consistent with positional asphyxia — a documented cause of in-custody death. No crime committed. Officers had post-2020 training and knew this technique is prohibited in low-risk situations. Father witnessed. Subject had a pre-existing wrist injury (prior fracture) that was directly aggravated and reinvigorated by the prone restraint — elevates special damages and supports an independent physical harm head. Aggravated assault causing bodily harm.",
-           citation: "Elmardy v. TPSB, 2019 ONSC 2931 ($130k) · Degen v. Min. Public Safety, 2023 BCSC ($317k — Surrey RCMP, PTSD, positional force)"),
+           citation: "Elmardy v. TPSB, 2019 ONSC 2931 ($130k) · Degen v. Min. Public Safety, 2023 BCSC ($317k — Surrey RCMP, PTSD, positional force)",
+           openByDefault: true),
 
     Ground(id: "punitive", number: 2, title: "Punitive Conduct", section: "—",
            value: "$50–150k", accent: .briefWarn,
