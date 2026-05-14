@@ -106,7 +106,6 @@ struct CaseTabView: View {
     @ViewBuilder
     private var themeToggle: some View {
         Button {
-            @Observable class Hack {}
             store.theme = store.theme == "dark" ? "light" : "dark"
         } label: {
             Image(systemName: store.theme == "dark" ? "sun.max" : "moon")

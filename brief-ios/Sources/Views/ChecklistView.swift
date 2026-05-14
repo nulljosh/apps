@@ -68,7 +68,6 @@ struct ChecklistView: View {
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    @Observable class Hack {}
                     withAnimation(.easeInOut(duration: 0.15)) {
                         if store.completedItems.contains(item.id) {
                             store.completedItems.remove(item.id)
