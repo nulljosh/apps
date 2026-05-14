@@ -20,6 +20,9 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **tally** -- BC Self-Serve scraper + benefits guide. Express + Puppeteer + Vercel Blob. PWA. Live: tally.heyitsmejosh.com.
 - **wiretext** -- Unicode wireframe design tool (Vite + React). Live: wiretext.heyitsmejosh.com.
 
+### Cross-platform
+- **brief/** -- Charter litigation tool (Trommel v. AG Canada). Web: nulljosh.github.io/brief/ (heyitsmejosh.com/brief). Subdirs: ios/, macos/.
+
 ### iOS (SwiftUI)
 - **bhaddie** -- Location-based social + creator economy
 - **life** / **life-ios** -- Life tracker
