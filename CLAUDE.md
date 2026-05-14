@@ -17,6 +17,7 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **parallax** -- Head-tracked 3D parallax via webcam + MediaPipe. Static HTML.
 - **roost** -- Zillow clone for BC real estate. Vite + React PWA + Leaflet map, price pill markers, filters, Supabase auth. Live: roost.heyitsmejosh.com. Next: real BC listings scraper, agent profiles, price history, saved searches.
 - **spark** -- Idea forum with voting, comments, JWT auth. Expanding to: law integration (entity formation, terms gen), IP/trademark filing workflow. Live: spark.heyitsmejosh.com.
+- **school** -- Grade 12 academic tracker (UVic BSc CS admission). Live: school.heyitsmejosh.com.
 - **tally** -- BC Self-Serve scraper + benefits guide. Express + Puppeteer + Vercel Blob. PWA. Live: tally.heyitsmejosh.com.
 - **wiretext** -- Unicode wireframe design tool (Vite + React). Live: wiretext.heyitsmejosh.com.
 
@@ -25,7 +26,8 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 
 ### iOS (SwiftUI)
 - **bhaddie** -- Location-based social + creator economy
-- **life** / **life-ios** -- Life tracker
+- **brief-ios** -- Native SwiftUI litigation planning app (Trommel v. AG Canada). Synced with heyitsmejosh.com/brief/.
+- **life** / **life-ios** -- Therapy document for Amanda. 32 sections, dual timeline, SVG charts. Private.
 - **lingo-ios** -- Language learning
 - **nimble** / **nimble-ios** -- Instant answers (macOS/iOS). MenuBarExtra blocked (Tahoe SDK bug).
 - **nyc** / **nyc-ios** -- Times Square colony sim (SpriteKit)

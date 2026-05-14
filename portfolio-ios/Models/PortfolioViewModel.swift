@@ -56,7 +56,7 @@ final class PortfolioViewModel {
 
     private func loadStaticProjects() {
         projects = [
-            Project(id: "monica", name: "Monica", summary: "Personal intelligence platform. Markets, macro, news, and daily briefs.", tags: ["web", "ios", "macos"], version: "5.0.0", urlString: "https://monica.heyitsmejosh.com", iconSystemName: "chart.line.uptrend.xyaxis"),
+            Project(id: "epiphany", name: "Epiphany", summary: "Personal intelligence platform. Markets, macro, news, and daily briefs.", tags: ["web", "ios", "macos"], version: "5.0.0", urlString: "https://epiphany.heyitsmejosh.com", iconSystemName: "chart.line.uptrend.xyaxis"),
             Project(id: "spark", name: "Spark", summary: "Idea-sharing platform with auth, posts, and voting. Supabase backend.", tags: ["web", "ios"], version: nil, urlString: "https://spark.heyitsmejosh.com", iconSystemName: "lightbulb.fill"),
             Project(id: "tally", name: "Tally", summary: "BC benefits tracker and self-serve scraper.", tags: ["web", "ios"], version: nil, urlString: "https://tally.heyitsmejosh.com", iconSystemName: "doc.text.magnifyingglass"),
             Project(id: "dose", name: "Dose", summary: "Health tracker for drugs, vitamins, and biometrics. 200+ substances, HealthKit sync.", tags: ["ios"], version: nil, urlString: "https://dose.heyitsmejosh.com", iconSystemName: "pills.fill"),

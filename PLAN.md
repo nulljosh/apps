@@ -3,7 +3,7 @@
 ## 1. Push uncommitted changes
 
 ## 2. Bump READMEs
-Apps: dose, lingo, life, nimble, roost, browser, fuse, bhaddie, wiretext, nyc
+Apps: dose, lingo, life, nimble, roost, browser, bhaddie, wiretext, nyc
 - Read each app's code, rewrite README with accurate versions/features
 
 ## 3. Auto-translate (all web apps)
