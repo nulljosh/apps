@@ -228,13 +228,16 @@ let caseChecklist: [ChecklistItem] = [
     ChecklistItem(id: 4, label: "Hospital discharge records", priority: .now),
     ChecklistItem(id: 5, label: "Pain journal — daily entries", priority: .now),
     ChecklistItem(id: 6, label: "Therapist letter confirming PTSD & causation", priority: .now),
-    ChecklistItem(id: 7, label: "OPCC complaint filed", priority: .soon),
+    ChecklistItem(id: 7, label: "CRCC complaint filed (RCMP is federal — OPCC is BC municipal only)", priority: .soon),
     ChecklistItem(id: 8, label: "Father witness statement documented", priority: .soon),
     ChecklistItem(id: 9, label: "Incident date confirmed: August 1, 2023 (File #2023-25586)", priority: .now),
     ChecklistItem(id: 10, label: "Hospital name confirmed", priority: .soon),
     ChecklistItem(id: 11, label: "Career & personality impact documented", priority: .soon),
     ChecklistItem(id: 12, label: "Therapist letter: PTSD Dx + period of incapacity re: this claim + causation to Aug 1, 2023", priority: .now),
-    ChecklistItem(id: 13, label: "Pin discovery date: when you first understood a civil Charter claim was an appropriate remedy", priority: .now)
+    ChecklistItem(id: 13, label: "Pin discovery date: when you first understood a civil Charter claim was an appropriate remedy", priority: .now),
+    ChecklistItem(id: 14, label: "ATIP filed with RCMP — officer names, notebooks (Form 1624), BWC footage, File #2023-25586", priority: .now),
+    ChecklistItem(id: 15, label: "FOI filed with E-Comm 9-1-1 BC — 911 audio + CAD notes (neutralizes Godoy scope argument)", priority: .now),
+    ChecklistItem(id: 16, label: "Email outreach sent to: Cameron Ward, Arvay Finlay, Klein Lawyers, BCCLA — email, don't call", priority: .now)
 ]
 
 let caseLawyers: [Lawyer] = [
@@ -325,7 +328,7 @@ let caseComparables: [CaseComparable] = [
 
 let caseTimeline: [TimelineStep] = [
     TimelineStep(when: "Now", title: "Call Paul Kent-Snowsell", description: "604-591-7321 (Kane Shannon & Weiler). Book appointment. In-person Surrey.", dotStyle: .now),
-    TimelineStep(when: "Month 1–2", title: "Evidence gathering", description: "Police report, hospital records, body cam, formal PTSD Dx (in progress), OPCC complaint.", dotStyle: .neutral),
+    TimelineStep(when: "Month 1–2", title: "Evidence gathering", description: "Police report, hospital records, body cam, formal PTSD Dx (in progress), CRCC complaint, ATIP + E-Comm FOI.", dotStyle: .neutral),
     TimelineStep(when: "Month 2–4", title: "Claim filed", description: "Basic deadline expired Aug 1, 2025. If discoverability argument succeeds, file immediately — every day increases risk.", dotStyle: .neutral),
     TimelineStep(when: "Month 6–18", title: "Discovery & negotiation", description: "Evidence exchanged. Settlement talks begin. Federal AG typically prefers quiet settlement.", dotStyle: .warn),
     TimelineStep(when: "Month 12–24", title: "Settlement", description: "~80% of cases settle before trial. Lump sum + confidentiality.", dotStyle: .good),
@@ -363,16 +366,20 @@ SUBSTANTIVE QUESTIONS:
 Core facts (30-second version):
 August 1, 2023, Langley, ~11am. Wellness call. I answered the door, walked away — my right. Officers entered without warrant, restrained me prone (knelt on back — positional asphyxia risk; also aggravated pre-existing wrist fracture), arrested me, forcibly medicated, held overnight in solitary, released with no aftercare. No crime committed. PTSD since. Father witnessed. File #2023-25586.
 
-CALL ORDER:
-1. Paul Kent-Snowsell — Kane Shannon & Weiler — 604-591-7321
-2. DLA Law (Ingrid) — Police Misconduct — 604-327-6381 / Ingrid@dlalaw.ca
-3. McQuarrie Hunter LLP — Limitation Act — 604-581-7001
-4. Sean Hern Law Corp — 604-684-9151
-5. Cameron Ward — cameronward.com
-6. Arvay Finlay LLP — 604-696-9828
-7. Klein Lawyers — callkleinlawyers.com
-8. Pivot Legal — 604-255-9700 (referrals)
-9. BCCLA Referral — 604-687-2919
+OUTREACH — VOICEMAILS NOT WORKING, SWITCH TO EMAIL:
+
+Email first:
+1. Cameron Ward — cameronward.com — EMAIL — he is the Ward in Ward v. Vancouver
+2. DLA Law — Ingrid@dlalaw.ca — EMAIL — follow up
+3. Arvay Finlay — arvayfinlay.ca — EMAIL
+4. Klein Lawyers — callkleinlawyers.com — EMAIL
+
+Call also viable:
+5. Paul Kent-Snowsell — KSW — 604-591-7321
+6. McQuarrie Hunter LLP — 604-581-7001
+7. Sean Hern Law Corp — 604-684-9151
+8. BCCLA Referral Line — 604-687-2919
+9. Pivot Legal — 604-255-9700
 10. CBA BC — 604-687-3221 / info@cbabc.org
 """
 
@@ -383,7 +390,7 @@ Hi [Name],
 
 My name is Joshua Trommel. I'm reaching out because I have a potential civil claim arising from a warrantless wellness-call entry by Langley RCMP (Brookswood detachment) in August 2023.
 
-The incident involved unlawful entry into my home, excessive force, arbitrary detention, forced antipsychotic medication, and overnight solitary confinement, all without charge. I have been in therapy since and am pursuing a formal PTSD diagnosis. The August 2026 limitation deadline is approaching.
+The incident involved unlawful entry into my home, excessive force, arbitrary detention, forced antipsychotic medication, and overnight solitary confinement, all without charge. I have been in therapy since May 2026 and am pursuing a formal PTSD diagnosis. The basic 2-year limitation expired August 2025; the claim survives on discoverability and PTSD-based incapacity under the BC Limitation Act.
 
 I've put together a detailed case brief here for your review:
 https://heyitsmejosh.com/brief

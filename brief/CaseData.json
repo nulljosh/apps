@@ -1,0 +1,208 @@
+{
+  "_meta": {
+    "case": "Trommel v. Attorney General of Canada",
+    "file": "2023-25586",
+    "incident_date": "2023-08-01",
+    "location": "Langley, BC — Langley RCMP, Brookswood detachment",
+    "defendant": "Attorney General of Canada",
+    "plaintiff": "Joshua Trommel",
+    "status": "Pre-litigation",
+    "basic_limit_expired": "2025-08-01",
+    "ultimate_limit": "2038-08-01",
+    "discovery_date": "2026-05-11",
+    "web": "https://heyitsmejosh.com/brief",
+    "note": "This is the canonical data source. Edit here, then sync to ios/Sources/Models/CaseData.swift (macOS symlinks it) and nulljosh.github.io/brief/script.js."
+  },
+
+  "facts": [
+    { "key": "Date", "value": "August 1, 2023" },
+    { "key": "Time", "value": "~11:00 AM" },
+    { "key": "Location", "value": "Langley, BC" },
+    { "key": "Department", "value": "Langley RCMP, Brookswood" },
+    { "key": "Defendant", "value": "AG of Canada" },
+    { "key": "Officers", "value": "Daryl + D. Ryl" },
+    { "key": "Witness", "value": "Father, in kitchen" },
+    { "key": "Status", "value": "Pre-litigation" },
+    { "key": "Wrist injury", "value": "Pre-existing fracture aggravated by prone restraint — additional physical harm head", "fullWidth": true }
+  ],
+
+  "grounds": [
+    {
+      "id": "force", "number": 1, "title": "Excessive Force", "section": "s.7", "value": "$100–200k",
+      "description": "Officers knelt on subject's back while prone, causing respiratory distress consistent with positional asphyxia — a documented cause of in-custody death. No crime committed. Father witnessed. Pre-existing wrist fracture directly aggravated by prone restraint — elevates special damages and supports an independent physical harm head.",
+      "citation": "Elmardy v. TPSB, 2019 ONSC 2931 ($130k) · Degen v. Min. Public Safety, 2023 BCSC ($317k — Surrey RCMP, PTSD, positional force)"
+    },
+    {
+      "id": "punitive", "number": 2, "title": "Punitive Conduct", "section": "—", "value": "$50–150k",
+      "description": "Sustained 7-step cascade of misconduct: unlawful entry, physical assault, arrest without grounds, forced medication, solitary confinement, overnight hold, discharge with no aftercare. Each step a choice. Officers responded to a psychiatric wellness call with zero psychiatric support.",
+      "citation": "Ward v. Vancouver [2010] SCC 27"
+    },
+    {
+      "id": "ptsd", "number": 3, "title": "PTSD General", "section": "—", "value": "$75–150k",
+      "description": "Every day affected since August 1, 2023. No good days. Formal PTSD assessment underway May 2026. Causation to incident to be confirmed by treating therapist. Separate from future earning capacity head.",
+      "citation": "Non-pecuniary damages — pain, suffering, loss of dignity"
+    },
+    {
+      "id": "meds", "number": 4, "title": "Forced Medication", "section": "s.7", "value": "$30–75k",
+      "description": "Involuntary antipsychotics administered without consent. s.7 Charter breach (security of the person) + battery tort. Crown defense under MHA s.31 'deemed consent' is under active constitutional challenge (CCD v. AG BC, BCSC trial May 2025, decision pending).",
+      "citation": "Fleming v. Ontario [2019] SCC 45 · CCD v. AG BC (BCSC 2025, pending)"
+    },
+    {
+      "id": "entry", "number": 5, "title": "Unlawful Entry", "section": "s.8", "value": "$25–60k",
+      "description": "No Feeney warrant. No genuine exigent circumstances — subject answered door, spoke coherently, exercised right to walk away. Highest-tier s.8 breach. Root violation that enabled the chain of events.",
+      "citation": "R. v. Feeney [1997] 2 SCR 13"
+    },
+    {
+      "id": "detain", "number": 6, "title": "Arbitrary Detention", "section": "s.9", "value": "$20–50k",
+      "description": "Walking away during a non-arrest wellness call is not flight — it is a legal right. Detention began at physical restraint with no lawful authority. Overnight hold with no charge.",
+      "citation": "R. v. Grant [2009] 2 SCR 353"
+    },
+    {
+      "id": "solitary", "number": 7, "title": "Solitary Confinement", "section": "ss.7,12", "value": "$15–40k",
+      "description": "Overnight solitary confinement with no charge. Subject in mental health crisis — isolation is the clinical opposite of appropriate care. Released with no aftercare plan, no referral, no follow-up.",
+      "citation": "Ward v. Vancouver [2010] SCC 27"
+    },
+    {
+      "id": "counsel", "number": 8, "title": "Denial of Counsel", "section": "s.10(b)", "value": "$15–35k",
+      "description": "Upon detention, s.10(b) requires immediate notification of right to counsel and a reasonable opportunity to exercise it. Detention established at moment of physical restraint. Crown must demonstrate compliance — no compliance = automatic breach.",
+      "citation": "R. v. Bartle [1994] 3 SCR 173 · R. v. Sinclair [2010] 2 SCR 310"
+    }
+  ],
+
+  "checklist": [
+    { "id": 0, "label": "Call Paul Kent-Snowsell — book appointment", "priority": "now" },
+    { "id": 1, "label": "PTSD assessment started (therapy) — get Dx letter", "priority": "now", "done": true },
+    { "id": 2, "label": "Body cam footage requested from RCMP", "priority": "now" },
+    { "id": 3, "label": "Police report — both Daryls full names", "priority": "now" },
+    { "id": 4, "label": "Hospital discharge records", "priority": "now" },
+    { "id": 5, "label": "Pain journal — daily entries", "priority": "now" },
+    { "id": 6, "label": "Therapist letter confirming PTSD & causation", "priority": "now" },
+    { "id": 7, "label": "CRCC complaint filed (RCMP is federal — OPCC is BC municipal only)", "priority": "soon" },
+    { "id": 8, "label": "Father witness statement documented", "priority": "soon", "done": true },
+    { "id": 9, "label": "Incident date confirmed: August 1, 2023 (File #2023-25586)", "priority": "now", "done": true },
+    { "id": 10, "label": "Hospital name confirmed", "priority": "soon" },
+    { "id": 11, "label": "Career & personality impact documented", "priority": "soon" },
+    { "id": 12, "label": "Therapist letter: PTSD Dx + period of incapacity re: this claim + causation to Aug 1, 2023", "priority": "now" },
+    { "id": 13, "label": "Pin discovery date: when you first understood a civil Charter claim was an appropriate remedy", "priority": "now", "done": true },
+    { "id": 14, "label": "ATIP filed with RCMP — officer names, notebooks (Form 1624), BWC footage, File #2023-25586", "priority": "now" },
+    { "id": 15, "label": "FOI filed with E-Comm 9-1-1 BC — 911 audio + CAD notes (neutralizes Godoy scope argument)", "priority": "now" },
+    { "id": 16, "label": "Email outreach sent to: Cameron Ward, Arvay Finlay, Klein Lawyers, BCCLA — email, don't call", "priority": "now" }
+  ],
+
+  "lawyers": [
+    {
+      "initials": "PK", "name": "Paul G. Kent-Snowsell",
+      "firm": "Kane Shannon & Weiler (KSW)", "location": "Surrey BC",
+      "tags": ["33 yrs trial", "Sued RCMP", "Voicemail left"],
+      "phone": "6045917321", "email": "pgkent@kswlawyers.ca",
+      "outreach_method": "call", "status": "voicemail_left"
+    },
+    {
+      "initials": "CW", "name": "Cameron Ward",
+      "firm": "Cameron Ward Law", "location": "Vancouver BC",
+      "tags": ["Ward v. Vancouver SCC", "Charter & police misconduct"],
+      "website": "cameronward.com",
+      "outreach_method": "email", "status": "not_contacted",
+      "priority_note": "He IS the Ward in Ward v. Vancouver (2010 SCC) — highest-value target"
+    },
+    {
+      "initials": "DL", "name": "DLA Law (Dosanjh Ladner Arora)",
+      "firm": "DLA Law", "location": "Vancouver BC",
+      "tags": ["Police Misconduct", "Wrongful arrest", "Email sent"],
+      "phone": "6043276381", "email": "Ingrid@dlalaw.ca",
+      "outreach_method": "email", "status": "email_sent_follow_up"
+    },
+    {
+      "initials": "AF", "name": "Arvay Finlay LLP",
+      "firm": "Arvay Finlay", "location": "Vancouver BC",
+      "tags": ["Fairy Creek RCMP class action", "Charter ss.2/7/8/9"],
+      "phone": "6046969828", "website": "arvayfinlay.ca",
+      "outreach_method": "email", "status": "not_contacted"
+    },
+    {
+      "initials": "KL", "name": "Klein Lawyers",
+      "firm": "Klein Lawyers", "location": "Vancouver BC",
+      "tags": ["RCMP class actions", "Federal court"],
+      "website": "callkleinlawyers.com",
+      "outreach_method": "email", "status": "not_contacted"
+    },
+    {
+      "initials": "BC", "name": "BCCLA Referral Line",
+      "firm": "BC Civil Liberties Association", "location": "Vancouver BC",
+      "tags": ["Free referrals", "Civil rights"],
+      "phone": "6046872919", "phone_note": "referral line", "website": "bccla.org",
+      "outreach_method": "call", "status": "not_contacted"
+    },
+    {
+      "initials": "MH", "name": "McQuarrie Hunter LLP",
+      "firm": "McQuarrie Hunter", "location": "Surrey BC",
+      "tags": ["BC Limitation Act", "Discoverability / s.18", "Voicemail left"],
+      "phone": "6045817001",
+      "outreach_method": "call", "status": "voicemail_left"
+    },
+    {
+      "initials": "SH", "name": "Sean Hern Law Corporation",
+      "firm": "Sean Hern Law Corp", "location": "Vancouver BC",
+      "tags": ["Commercial litigation", "Pro bono", "BC FOI/Privacy Assoc."],
+      "phone": "6046849151",
+      "outreach_method": "call", "status": "not_contacted"
+    },
+    {
+      "initials": "PL", "name": "Pivot Legal",
+      "firm": "Pivot Legal", "location": "Vancouver BC",
+      "tags": ["Referral source"],
+      "phone": "6042559700",
+      "outreach_method": "call", "status": "not_contacted"
+    },
+    {
+      "initials": "AR", "name": "Aitken Robertson",
+      "firm": "Aitken Robertson", "location": "Vancouver BC",
+      "tags": ["Police negligence", "Charter civil", "Phone out of order"],
+      "phone": "6043251155", "phone_note": "out of order",
+      "outreach_method": "call", "status": "blocked"
+    },
+    {
+      "initials": "CB", "name": "Canadian Bar Association BC",
+      "firm": "CBA BC", "location": "Vancouver BC",
+      "tags": ["Free referrals", "No answer"],
+      "phone": "6046873221", "email": "info@cbabc.org",
+      "outreach_method": "call", "status": "no_answer"
+    }
+  ],
+
+  "damages": {
+    "conservative_total": "$1.14M",
+    "strong_total": "$2.25M",
+    "trial_ceiling": "$3M",
+    "likely_settlement": "$1,000,000",
+    "heads": [
+      { "head": "s.8 dwelling entry (Feeney)", "range": "$150–300k", "note": "Highest-tier warrant breach" },
+      { "head": "s.9 arbitrary detention", "range": "$75–150k", "note": "No lawful MHA s.28 threshold" },
+      { "head": "s.7 forced medication (Fleming)", "range": "$100–200k", "note": "Consent violated" },
+      { "head": "s.7 positional asphyxia risk", "range": "$75–150k", "note": "Respiratory distress documented" },
+      { "head": "PTSD general (Degen floor $317k)", "range": "$317–500k", "note": "This head alone exceeds Degen" },
+      { "head": "Future earning capacity (age 26, SWE)", "range": "$200–400k+", "note": "Vocational economist required" },
+      { "head": "Punitive (bad-faith state action)", "range": "$100–300k", "note": "No underlying crime" },
+      { "head": "Aggravated", "range": "$75–150k", "note": "Deliberate, concurrent violations" },
+      { "head": "Special", "range": "$50–100k", "note": "Treatment, meds, lost income, wrist" }
+    ]
+  },
+
+  "limitation": {
+    "basic_expired": "2025-08-01",
+    "ultimate": "2038-08-01",
+    "argument_1": "Discoverability s.8(1)(d) — clock runs from when plaintiff knew a civil proceeding was appropriate, not from the harm. Discovery date: May 11, 2026.",
+    "argument_2": "Mental incapacity s.18 — PTSD constituted domain-specific incapacity re: this claim. Therapy began May 10, 2026.",
+    "crown_dilemma": "Crown cannot simultaneously argue PTSD was not severe enough for s.18 (to defeat limitation) and argue no permanent injury (to limit damages). Same PTSD. Same severity standard."
+  },
+
+  "journal_seed": [
+    { "date": "2026-05-11", "text": "Discovery date established. Formally confirmed RCMP file #2023-25586 (August 1, 2023), began active legal research, retained a lawyer for consultation, and first understood that a civil proceeding under Ward v. Vancouver (City) [2010] 2 SCR 27 — a s.24(1) Charter damages claim — is an available and appropriate remedy. This constitutes discovery under BC Limitation Act s.8(1)(d). Called Paul Kent-Snowsell 3x; callback confirmed May 12. Contemporaneous record created." },
+    { "date": "2026-05-10", "text": "Started PTSD therapy today. Formal assessment underway — building the clinical paper trail. First session directly connected current symptoms to the August 1, 2023 incident." },
+    { "date": "2026-05-06", "text": "No good days since August 1, 2023. Every day is affected without exception." },
+    { "date": "2026-05-05", "text": "Wakes with stomach aches and night sweats daily. Coping mechanisms developed in direct response to the trauma." },
+    { "date": "2026-05-03", "text": "Nightmares with recurring themes. Worsened in intensity since the incident." },
+    { "date": "2026-05-01", "text": "Incident replays on loop daily. Functioning prior to August 1, 2023. Significantly affected since." },
+    { "date": "2026-04-28", "text": "Family relationships permanently damaged as a direct result of how police handled the incident." }
+  ]
+}
