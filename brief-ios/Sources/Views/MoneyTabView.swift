@@ -72,6 +72,34 @@ struct MoneyTabView: View {
                         }
                     }
 
+                    // Comparable cases
+                    SectionCard("Comparable cases · Canada") {
+                        VStack(spacing: 0) {
+                            ForEach(caseComparables) { c in
+                                HStack(alignment: .top, spacing: 10) {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(c.label)
+                                            .font(.system(size: 11))
+                                            .foregroundStyle(c.highlight ? Color.primary : Color.secondary)
+                                        if let note = c.note {
+                                            Text(note)
+                                                .font(.system(size: 9, design: .monospaced))
+                                                .foregroundStyle(.secondary)
+                                                .lineSpacing(2)
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    Text(c.award)
+                                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                                        .foregroundStyle(c.highlight ? Color.briefWarn : Color.secondary)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                                .padding(.vertical, 8)
+                                Divider()
+                            }
+                        }
+                    }
+
                     // Ward framework
                     SectionCard("Ward framework") {
                         Text("Vancouver (City) v. Ward, 2010 SCC 27: Charter damages under s.24(1) serve three functions — compensation, vindication, and deterrence.\n\nThis fact pattern triggers all three maximally: no underlying crime, dwelling entry, forced medication, prolonged detention, documented PTSD.\n\nWhen all three Ward functions are engaged at maximum, courts assess damages globally rather than per-head (indivisible injury). Global assessment routinely exceeds the arithmetic sum of stacked heads.")

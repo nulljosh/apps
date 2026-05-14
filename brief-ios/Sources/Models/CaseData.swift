@@ -88,6 +88,15 @@ struct DamageHead: Identifiable {
     let note: String
 }
 
+struct CaseComparable: Identifiable {
+    let id = UUID()
+    let label: String
+    let year: String
+    let award: String
+    let note: String?
+    var highlight: Bool = false
+}
+
 struct CaseFact: Identifiable {
     let id = UUID()
     let key: String
@@ -302,6 +311,16 @@ let damageHeads: [DamageHead] = [
     DamageHead(head: "Punitive (bad-faith state action)", range: "$100–300k", note: "No underlying crime"),
     DamageHead(head: "Aggravated", range: "$75–150k", note: "Deliberate, concurrent violations"),
     DamageHead(head: "Special", range: "$50–100k", note: "Treatment, meds, lost income, wrist")
+]
+
+let caseComparables: [CaseComparable] = [
+    CaseComparable(label: "Ward v. Vancouver City (2010 SCC)", year: "2010", award: "$5k", note: "Charter framework — damages minimal"),
+    CaseComparable(label: "Joseph v. Meier (BCSC)", year: "—", award: "$55k", note: "BC wrongful detention, RCMP"),
+    CaseComparable(label: "Elmardy v. TPSB (ONSC)", year: "2019", award: "$130k", note: nil),
+    CaseComparable(label: "Degen v. Min. Public Safety (BCSC)", year: "2023", award: "$317k", note: "Canadian floor — Surrey RCMP, PTSD", highlight: true),
+    CaseComparable(label: "Wang v. AG Canada (BC RCMP)", year: "2021", award: "Confidential", note: "Kelowna wellness call, dragged/assaulted, officer convicted — RCMP chose to settle", highlight: true),
+    CaseComparable(label: "This case (estimated)", year: "—", award: "$500k–$800k", note: "5 Charter breaches, forced med, solitary, age 26", highlight: true),
+    CaseComparable(label: "Henry v. BC (BCSC)", year: "2016", award: "$8.1M", note: "Largest Canadian single-plaintiff Charter award — wrongful conviction")
 ]
 
 let caseTimeline: [TimelineStep] = [
