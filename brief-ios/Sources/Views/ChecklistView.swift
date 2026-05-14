@@ -61,9 +61,7 @@ struct ChecklistView: View {
                             Text("soon")
                                 .font(.system(size: 9, weight: .bold))
                                 .foregroundStyle(.briefWarn)
-                        case .none:
-                            EmptyView()
-                        }
+}
                     }
                 }
                 .contentShape(Rectangle())

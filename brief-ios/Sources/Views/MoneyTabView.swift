@@ -46,7 +46,7 @@ struct MoneyTabView: View {
                     .onAppear { barsVisible = true }
 
                     // Damage stack
-                    sectionCard("Per-head damages stack") {
+                    SectionCard("Per-head damages stack") {
                         VStack(spacing: 0) {
                             HStack { Text("Head").frame(maxWidth:.infinity,alignment:.leading); Text("Range"); Text("Note").frame(width:100,alignment:.leading) }
                                 .font(.system(size: 9, design: .monospaced)).foregroundStyle(.secondary).padding(.bottom,8)
@@ -73,19 +73,19 @@ struct MoneyTabView: View {
                     }
 
                     // Ward framework
-                    sectionCard("Ward framework") {
+                    SectionCard("Ward framework") {
                         Text("Vancouver (City) v. Ward, 2010 SCC 27: Charter damages under s.24(1) serve three functions — compensation, vindication, and deterrence.\n\nThis fact pattern triggers all three maximally: no underlying crime, dwelling entry, forced medication, prolonged detention, documented PTSD.\n\nWhen all three Ward functions are engaged at maximum, courts assess damages globally rather than per-head (indivisible injury). Global assessment routinely exceeds the arithmetic sum of stacked heads.")
                             .font(.system(size:12)).foregroundStyle(.secondary).lineSpacing(4)
                     }
 
                     // Silence premium
-                    sectionCard("Silence premium") {
+                    SectionCard("Silence premium") {
                         Text("The AG settles confidentially to suppress precedent, avoid press, kill discovery, and resolve before trial. Each press-capable lawyer contact, each documented evidence piece, each Charter ground formally pleaded increases the AG's internal cost of keeping this quiet.\n\nBaseline: Mona Wang v. AG Canada (2021) — BC RCMP wellness check, settled confidentially.\nThis case: Mona Wang + no underlying crime + dwelling entry + forced antipsychotic medication.")
                             .font(.system(size:12)).foregroundStyle(.secondary).lineSpacing(4)
                     }
 
                     // Damages claimed
-                    sectionCard("Damages claimed") {
+                    SectionCard("Damages claimed") {
                         VStack(spacing: 0) {
                             ForEach([("General (non-pecuniary)","Pain, suffering, loss of dignity, PTSD"),("Charter damages s.24(1)","Compensatory deterrence per breach"),("Punitive","Egregious, bad-faith state action"),("Future earning capacity","Age 26, 35+ working years. Vocational economist required."),("Special","Treatment, medications, lost income, wrist"),("Aggravated","Deliberate nature of violations")], id:\.0) { k,v in
                                 HStack(alignment:.top,spacing:12) {
@@ -108,13 +108,4 @@ struct MoneyTabView: View {
         }
     }
 
-    @ViewBuilder
-    private func sectionCard<C:View>(_ label:String, @ViewBuilder content:()->C) -> some View {
-        VStack(alignment:.leading,spacing:12) {
-            Text(label).font(.system(size:10,weight:.bold)).tracking(1.4).textCase(.uppercase).foregroundStyle(.secondary)
-            content()
-        }
-        .padding(18)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius:16))
-    }
 }

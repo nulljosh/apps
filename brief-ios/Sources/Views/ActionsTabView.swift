@@ -8,7 +8,7 @@ struct ActionsTabView: View {
                     lawyersSection
                     strategySection
                     timelineSection
-                    sectionCard("Evidence checklist") { ChecklistView() }
+                    SectionCard("Evidence checklist") { ChecklistView() }
                     CallScriptView(text: callScript, title: "Callback prep")
                     CallScriptView(text: outreachEmail, title: "Outreach email")
                     risksSection
@@ -30,7 +30,7 @@ struct ActionsTabView: View {
     }
 
     private var strategySection: some View {
-        sectionCard("Strategy") {
+        SectionCard("Strategy") {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Contact at least 3 lawyers before committing to any one. Compare retainer structures — contingency terms vary significantly. Do not sign until all consultations are complete.")
                     .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
@@ -45,7 +45,7 @@ struct ActionsTabView: View {
     }
 
     private var timelineSection: some View {
-        sectionCard("Timeline") {
+        SectionCard("Timeline") {
             VStack(spacing: 0) {
                 ForEach(caseTimeline) { step in
                     HStack(alignment: .top, spacing: 14) {
@@ -72,7 +72,7 @@ struct ActionsTabView: View {
     }
 
     private var risksSection: some View {
-        sectionCard("Risks — what AG will attack") {
+        SectionCard("Risks — what AG will attack") {
             VStack(alignment:.leading,spacing:10) {
                 risk("Limitation (kill shot).", "Rule 9-5 strike likely. s.8(1)(d) discoverability + s.18 incapacity must both be argued. Anything showing 2023–2025 functional capacity (taxes, leases, employment, banking, driving) hurts s.18.", .briefDanger)
                 risk("Godoy doorway.", "R v. Godoy [1999] 1 SCR 311 gives 911-wellness entry authority. Counter-attack is scope — entry to verify safety, not detain/medicate. The 911 call audio defines the doorway size.", .briefWarn)
@@ -84,14 +84,14 @@ struct ActionsTabView: View {
     }
 
     private var evidenceGapsSection: some View {
-        sectionCard("Evidence gaps — not yet on checklist") {
+        SectionCard("Evidence gaps — not yet on checklist") {
             Text("· 911 call audio + CAD notes (E-Comm 9-1-1 BC FOI)\n· RCMP officer notebooks Form 1624 (ATIP)\n· BCEHS paramedic ePCR\n· Mental Health Act Form 4 / Form 1 (hospital)\n· Pharmacy records post-incident\n· Pre-incident GP records 2022 – Jul 2023 (baseline)\n· Income records / T4s 2022–2026\n· Photos — injuries, dwelling damage\n· Pre-retainer comms audit (admissions check)\n\nNote: existing checklist item \"OPCC complaint\" should be CRCC. RCMP is federal — OPCC handles BC municipal only.")
                 .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(4)
         }
     }
 
     private var draftsSection: some View {
-        sectionCard("Drafts") {
+        SectionCard("Drafts") {
             VStack(alignment:.leading,spacing:8) {
                 Text("CRCC complaint skeleton, FOI/ATIP requests, demand letter skeleton, extra questions for Paul — see heyitsmejosh.com/brief for full drafts.\n\nNothing here sent without Paul's sign-off.")
                     .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(4)
@@ -100,7 +100,7 @@ struct ActionsTabView: View {
     }
 
     private var callbackLogSection: some View {
-        sectionCard("Callback log") {
+        SectionCard("Callback log") {
             Text("Record after each lawyer call:\n— Limitation verdict (viable / not viable / needs more info)\n— Fee structure (contingency % / hourly rate)\n— Their assessment of May 11, 2026 as s.8(d) discovery date\n— Next step they recommended\n— Will they take the case? (Y / N / maybe)\n— Referral to another lawyer?")
                 .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(4)
         }
@@ -110,7 +110,7 @@ struct ActionsTabView: View {
     private func risk(_ bold: String, _ text: String, _ color: Color) -> some View {
         Text("\(bold) \(text)")
             .font(.system(size:12)).lineSpacing(3)
-            .foregroundStyle(.primary)
+            .foregroundStyle(color)
             .environment(\.font, .system(size:12))
     }
 
@@ -118,13 +118,4 @@ struct ActionsTabView: View {
         switch s { case .now: return .briefDanger; case .warn: return .briefWarn; case .good: return .briefGreen; case .danger: return .briefDanger; case .neutral: return .secondary }
     }
 
-    @ViewBuilder
-    private func sectionCard<C:View>(_ label:String, @ViewBuilder content:()->C) -> some View {
-        VStack(alignment:.leading,spacing:12) {
-            Text(label).font(.system(size:10,weight:.bold)).tracking(1.4).textCase(.uppercase).foregroundStyle(.secondary)
-            content()
-        }
-        .padding(18)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius:16))
-    }
 }

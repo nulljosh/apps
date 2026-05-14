@@ -41,7 +41,7 @@ struct ChecklistItem: Identifiable {
     let id: Int
     let label: String
     let priority: Priority
-    enum Priority { case now, soon, none }
+    enum Priority { case now, soon }
 }
 
 enum TagStyle { case good, urgent, fail, neutral }
@@ -86,14 +86,6 @@ struct DamageHead: Identifiable {
     let head: String
     let range: String
     let note: String
-}
-
-struct ComparableCase: Identifiable {
-    let id = UUID()
-    let label: String
-    let value: String
-    let note: String?
-    let accentColor: Color
 }
 
 struct CaseFact: Identifiable {
