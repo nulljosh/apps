@@ -1,0 +1,130 @@
+import SwiftUI
+
+struct ActionsTabView: View {
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 22) {
+                    lawyersSection
+                    strategySection
+                    timelineSection
+                    sectionCard("Evidence checklist") { ChecklistView() }
+                    CallScriptView(text: callScript, title: "Callback prep")
+                    CallScriptView(text: outreachEmail, title: "Outreach email")
+                    risksSection
+                    evidenceGapsSection
+                    draftsSection
+                    callbackLogSection
+                }
+                .padding(.horizontal, 16).padding(.bottom, 32)
+            }
+            .navigationTitle("Actions")
+        }
+    }
+
+    private var lawyersSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Lawyers").font(.system(size:10,weight:.bold)).tracking(1.4).textCase(.uppercase).foregroundStyle(.secondary).padding(.horizontal,4)
+            ForEach(caseLawyers) { LawyerCardView(lawyer: $0) }
+        }
+    }
+
+    private var strategySection: some View {
+        sectionCard("Strategy") {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Contact at least 3 lawyers before committing to any one. Compare retainer structures — contingency terms vary significantly. Do not sign until all consultations are complete.")
+                    .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
+                Text("Basic 2-yr limit expired Aug 1, 2025 — claim survives on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Therapy start May 2026 supports both. Ultimate deadline: Aug 1, 2038. File as soon as counsel confirms.")
+                    .font(.system(size:11,design:.monospaced)).foregroundStyle(.briefWarn).lineSpacing(3).fontWeight(.bold)
+                Text("Call order:\n1. Paul Kent-Snowsell — Kane Shannon & Weiler — 604-591-7321\n2. DLA Law (Ingrid) — Police Misconduct — 604-327-6381\n3. McQuarrie Hunter LLP — Limitation Act — 604-581-7001\n4. Sean Hern Law Corp — 604-684-9151\n5. Cameron Ward — cameronward.com\n6. Arvay Finlay LLP — 604-696-9828\n7. Klein Lawyers — callkleinlawyers.com\n8. Pivot Legal — 604-255-9700 (referrals)\n9. BCCLA Referral — 604-687-2919\n10. CBA BC — 604-687-3221 / info@cbabc.org")
+                    .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+                Text("Be expensive to fight quietly. Each press-capable lawyer contact, each documented evidence piece, each Charter ground formally pleaded raises the AG's internal cost of suppressing this case publicly.")
+                    .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+            }
+        }
+    }
+
+    private var timelineSection: some View {
+        sectionCard("Timeline") {
+            VStack(spacing: 0) {
+                ForEach(caseTimeline) { step in
+                    HStack(alignment: .top, spacing: 14) {
+                        VStack(spacing: 0) {
+                            Circle()
+                                .fill(dotColor(step.dotStyle))
+                                .frame(width: 9, height: 9)
+                                .padding(.top, 4)
+                                .overlay(step.dotStyle == .now ? Circle().stroke(dotColor(step.dotStyle).opacity(0.3), lineWidth: 4) : nil)
+                            if step.id != caseTimeline.last?.id {
+                                Rectangle().fill(Color.secondary.opacity(0.2)).frame(width:1).frame(minHeight:20)
+                            }
+                        }
+                        VStack(alignment:.leading,spacing:3) {
+                            Text(step.when).font(.system(size:9,weight:.bold)).tracking(1).textCase(.uppercase).foregroundStyle(.secondary)
+                            Text(step.title).font(.system(size:13,weight:.semibold))
+                            Text(step.description).font(.system(size:12)).foregroundStyle(.secondary).lineSpacing(2)
+                        }
+                        .padding(.bottom, 18)
+                    }
+                }
+            }
+        }
+    }
+
+    private var risksSection: some View {
+        sectionCard("Risks — what AG will attack") {
+            VStack(alignment:.leading,spacing:10) {
+                risk("Limitation (kill shot).", "Rule 9-5 strike likely. s.8(1)(d) discoverability + s.18 incapacity must both be argued. Anything showing 2023–2025 functional capacity (taxes, leases, employment, banking, driving) hurts s.18.", .briefDanger)
+                risk("Godoy doorway.", "R v. Godoy [1999] 1 SCR 311 gives 911-wellness entry authority. Counter-attack is scope — entry to verify safety, not detain/medicate. The 911 call audio defines the doorway size.", .briefWarn)
+                risk("MHA s.28 apprehension.", "If lawful, forced-medication ground weakens. Father's 'answering well… not violent' testimony is the linchpin against s.28 threshold.", .briefWarn)
+                risk("Causation / baseline.", "AG hires their own forensic psychiatrist; will subpoena pre-2023 GP records looking for alternative causes.", .briefWarn)
+                risk("Self-rep admissions.", "Audit every email, complaint, social post you wrote pre-retainer for inconsistencies before disclosure.", .briefWarn)
+            }
+        }
+    }
+
+    private var evidenceGapsSection: some View {
+        sectionCard("Evidence gaps — not yet on checklist") {
+            Text("· 911 call audio + CAD notes (E-Comm 9-1-1 BC FOI)\n· RCMP officer notebooks Form 1624 (ATIP)\n· BCEHS paramedic ePCR\n· Mental Health Act Form 4 / Form 1 (hospital)\n· Pharmacy records post-incident\n· Pre-incident GP records 2022 – Jul 2023 (baseline)\n· Income records / T4s 2022–2026\n· Photos — injuries, dwelling damage\n· Pre-retainer comms audit (admissions check)\n\nNote: existing checklist item \"OPCC complaint\" should be CRCC. RCMP is federal — OPCC handles BC municipal only.")
+                .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(4)
+        }
+    }
+
+    private var draftsSection: some View {
+        sectionCard("Drafts") {
+            VStack(alignment:.leading,spacing:8) {
+                Text("CRCC complaint skeleton, FOI/ATIP requests, demand letter skeleton, extra questions for Paul — see heyitsmejosh.com/brief for full drafts.\n\nNothing here sent without Paul's sign-off.")
+                    .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(4)
+            }
+        }
+    }
+
+    private var callbackLogSection: some View {
+        sectionCard("Callback log") {
+            Text("Record after each lawyer call:\n— Limitation verdict (viable / not viable / needs more info)\n— Fee structure (contingency % / hourly rate)\n— Their assessment of May 11, 2026 as s.8(d) discovery date\n— Next step they recommended\n— Will they take the case? (Y / N / maybe)\n— Referral to another lawyer?")
+                .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(4)
+        }
+    }
+
+    @ViewBuilder
+    private func risk(_ bold: String, _ text: String, _ color: Color) -> some View {
+        Text("\(bold) \(text)")
+            .font(.system(size:12)).lineSpacing(3)
+            .foregroundStyle(.primary)
+            .environment(\.font, .system(size:12))
+    }
+
+    private func dotColor(_ s: TimelineStep.DotStyle) -> Color {
+        switch s { case .now: return .briefDanger; case .warn: return .briefWarn; case .good: return .briefGreen; case .danger: return .briefDanger; case .neutral: return .secondary }
+    }
+
+    @ViewBuilder
+    private func sectionCard<C:View>(_ label:String, @ViewBuilder content:()->C) -> some View {
+        VStack(alignment:.leading,spacing:12) {
+            Text(label).font(.system(size:10,weight:.bold)).tracking(1.4).textCase(.uppercase).foregroundStyle(.secondary)
+            content()
+        }
+        .padding(18)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius:16))
+    }
+}
