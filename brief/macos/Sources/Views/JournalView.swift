@@ -67,8 +67,9 @@ struct JournalView: View {
                         Button("Save") {
                             guard !newText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
                             let fmt = DateFormatter(); fmt.dateFormat = "yyyy-MM-dd"
-                            store.addJournalEntry(date: fmt.string(from: newDate), text: newText)
+                            let d = fmt.string(from: newDate); let t = newText
                             newText = ""; showingForm = false
+                            Task { await store.addJournalEntry(date: d, text: t) }
                         }
                     }
                 }

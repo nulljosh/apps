@@ -66,13 +66,7 @@ struct ChecklistView: View {
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    withAnimation(.easeInOut(duration: 0.15)) {
-                        if store.completedItems.contains(item.id) {
-                            store.completedItems.remove(item.id)
-                        } else {
-                            store.completedItems.insert(item.id)
-                        }
-                    }
+                    Task { await store.toggleItem(item.id) }
                 }
                 .padding(.vertical, 10)
                 if item.id < caseChecklist.count - 1 {

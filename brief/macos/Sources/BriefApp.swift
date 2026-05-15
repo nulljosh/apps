@@ -6,9 +6,18 @@ struct BriefApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(store)
-                .preferredColorScheme(store.theme == "dark" ? .dark : .light)
+            Group {
+                if store.needsSignIn {
+                    SignInView()
+                } else {
+                    ContentView()
+                }
+            }
+            .environment(store)
+            .preferredColorScheme(store.theme == "dark" ? .dark : .light)
+            .onOpenURL { url in
+                Task { await store.handleURL(url) }
+            }
         }
         .defaultSize(width: 1100, height: 750)
         .commands {
