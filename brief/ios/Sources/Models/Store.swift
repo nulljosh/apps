@@ -33,6 +33,7 @@ private struct LawyerUpsert: Encodable {
 
 // MARK: - Store
 
+@MainActor
 @Observable
 final class Store {
     var theme: String {
@@ -54,7 +55,6 @@ final class Store {
 
     init() {
         theme = UserDefaults.standard.string(forKey: "brief.theme") ?? "dark"
-        Task { await checkSession() }
     }
 
     @MainActor func checkSession() async {

@@ -18,6 +18,7 @@ struct BriefApp: App {
             .onOpenURL { url in
                 Task { await store.handleURL(url) }
             }
+            .task { await store.checkSession() }
         }
         .defaultSize(width: 1100, height: 750)
         .commands {
