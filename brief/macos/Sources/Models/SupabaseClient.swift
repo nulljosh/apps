@@ -1,3 +1,4 @@
+import Foundation
 import Supabase
 
 let sbClient = SupabaseClient(
