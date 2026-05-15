@@ -1,5 +1,6 @@
 const { parseCookie, resolveSession, verifyToken } = require('./_lib/store');
 const { supabaseRequest, supabaseRpc } = require('./_lib/supabase');
+const { getIp, checkRateLimit } = require('./_lib/ratelimit');
 
 // Minimal seed data kept only as offline fallback when Supabase is unreachable.
 // The canonical seed data lives in schema.sql. This array is never written to the DB.
@@ -131,6 +132,10 @@ module.exports = async function handler(req, res) {
     const user = parseToken(req.headers.authorization, req.headers.cookie);
     if (!user) {
       return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    if (!checkRateLimit('post:' + getIp(req), 10, 60_000)) {
+      return res.status(429).json({ error: 'Too many requests' });
     }
 
     const { title, content, category, linked_repo } = req.body || {};

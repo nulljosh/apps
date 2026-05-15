@@ -1,5 +1,6 @@
 const { parseToken } = require('./posts');
 const { supabaseRequest } = require('./_lib/supabase');
+const { getIp, checkRateLimit } = require('./_lib/ratelimit');
 
 async function getComments(postId) {
   const rows = await supabaseRequest(
@@ -70,6 +71,9 @@ module.exports = async function handler(req, res) {
   if (req.method === 'POST') {
     const user = parseToken(req.headers.authorization, req.headers.cookie);
     if (!user) return res.status(401).json({ error: 'Authentication required' });
+    if (!checkRateLimit('comment:' + getIp(req), 10, 60_000)) {
+      return res.status(429).json({ error: 'Too many requests' });
+    }
 
     const { post_id, content } = req.body || {};
     if (!post_id || !content) return res.status(400).json({ error: 'post_id and content are required' });

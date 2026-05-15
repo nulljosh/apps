@@ -3,6 +3,7 @@
 const { supabaseRequest } = require('./_lib/supabase');
 const { isDaemon } = require('./_lib/store');
 const { parseToken } = require('./posts');
+const { getIp, checkRateLimit } = require('./_lib/ratelimit');
 
 // --- enrich ---
 
@@ -19,6 +20,9 @@ async function handleEnrich(req, res) {
   if (req.method === 'POST') {
     const user = parseToken(req.headers.authorization, req.headers.cookie);
     if (!user) return res.status(401).json({ error: 'Authentication required' });
+    if (!checkRateLimit('enrich:' + getIp(req), 5, 60_000)) {
+      return res.status(429).json({ error: 'Too many requests' });
+    }
     const { id } = req.body || {};
     if (!id) return res.status(400).json({ error: 'id required' });
     await supabaseRequest(`posts?id=eq.${encodeURIComponent(id)}`, {
@@ -68,6 +72,9 @@ async function handleIdeaBase(req, res) {
   if (req.method === 'POST') {
     const user = parseToken(req.headers.authorization, req.headers.cookie);
     if (!user) return res.status(401).json({ error: 'Authentication required' });
+    if (!checkRateLimit('ideabase:' + getIp(req), 5, 60_000)) {
+      return res.status(429).json({ error: 'Too many requests' });
+    }
     const { topic, description } = req.body || {};
     if (!topic || typeof topic !== 'string' || topic.length > 200) {
       return res.status(400).json({ error: 'topic required (max 200 chars)' });
