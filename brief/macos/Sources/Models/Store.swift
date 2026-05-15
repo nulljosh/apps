@@ -108,7 +108,7 @@ final class Store {
 
     @MainActor func addJournalEntry(date: String, text: String) async {
         guard let uid = userId else { return }
-        try? await sbClient.from("brief_journal")
+        _ = try? await sbClient.from("brief_journal")
             .upsert(JournalUpsert(user_id: uid, date: date, text: text))
             .execute()
         await loadJournal()
@@ -126,7 +126,7 @@ final class Store {
         guard let uid = userId else { return }
         let nowDone = !completedItems.contains(index)
         if nowDone { completedItems.insert(index) } else { completedItems.remove(index) }
-        try? await sbClient.from("brief_checklist")
+        _ = try? await sbClient.from("brief_checklist")
             .upsert(ChecklistUpsert(user_id: uid, item_index: index, completed: nowDone))
             .execute()
     }
@@ -145,7 +145,7 @@ final class Store {
         let idx = statusCycle.firstIndex(of: cur) ?? 0
         let next = statusCycle[(idx + 1) % statusCycle.count]
         lawyerStatuses[lawyerId] = next
-        try? await sbClient.from("brief_lawyer_status")
+        _ = try? await sbClient.from("brief_lawyer_status")
             .upsert(LawyerUpsert(user_id: uid, lawyer_id: lawyerId, status: next))
             .execute()
     }

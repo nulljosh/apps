@@ -10,9 +10,10 @@ Native iOS litigation planning app for *Trommel v. AG Canada*. SwiftUI port of [
 
 ## Features
 
-- Case tab: facts, witness statements with legal annotations, 8 Charter grounds accordion, pain journal (persistent)
+- Case tab: facts, witness statements with legal annotations, 8 Charter grounds accordion, pain journal (synced via Supabase)
 - Money tab: outcome scenarios, per-head damage stack, Ward framework, comparable awards
-- Actions tab: lawyer contacts with call/email, evidence checklist (persistent), call script + email template with copy/share, timeline, risks, drafts
+- Actions tab: lawyer contacts with tap-to-cycle status (synced), evidence checklist (synced), call script + email template with copy/share, timeline, risks, drafts
+- Auth: Supabase magic link (email OTP, persistent session, deep link via brief:// URL scheme)
 
 ## Build
 

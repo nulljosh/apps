@@ -6,7 +6,9 @@ Native iOS app for *Trommel v. AG Canada* litigation planning. SwiftUI port of h
 
 ## Key files
 - `Sources/Models/CaseData.swift` — all hardcoded data (grounds, witnesses, journal seed, lawyers, checklist, call script, email template)
-- `Sources/Models/Store.swift` — @Observable UserDefaults wrapper (journal, checklist, theme)
+- `Sources/Models/Store.swift` — @MainActor @Observable Store; Supabase auth + DB sync (journal, checklist, lawyer statuses, theme)
+- `Sources/Models/SupabaseClient.swift` — sbClient singleton (spark project, emitLocalSessionAsInitialSession: true)
+- `Sources/Views/SignInView.swift` — magic link email form (OTP flow, brief://login-callback redirect)
 - `Sources/Views/CaseTabView.swift` — Case tab (facts, witnesses, grounds accordion, journal)
 - `Sources/Views/MoneyTabView.swift` — Money tab (scenarios, damage stack, Ward framework)
 - `Sources/Views/ActionsTabView.swift` — Actions tab (lawyers, timeline, checklist, scripts, risks)
