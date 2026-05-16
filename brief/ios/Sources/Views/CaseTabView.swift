@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct CaseTabView: View {
-    @Environment(Store.self) private var store
     @State private var expandedGround: String? = "force"
 
     var body: some View {
@@ -74,11 +73,6 @@ struct CaseTabView: View {
             }
             .navigationTitle("Trommel v. AG Canada")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    themeToggle
-                }
-            }
         }
     }
 
@@ -103,12 +97,4 @@ struct CaseTabView: View {
         }
     }
 
-    @ViewBuilder
-    private var themeToggle: some View {
-        Button {
-            store.theme = store.theme == "dark" ? "light" : store.theme == "light" ? "auto" : "dark"
-        } label: {
-            Image(systemName: store.theme == "dark" ? "sun.max" : store.theme == "light" ? "circle.lefthalf.filled" : "moon")
-        }
-    }
 }
