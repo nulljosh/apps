@@ -68,7 +68,7 @@ struct BeaconView: View {
 
                     // Baddie Hours grid
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("BADDIE HOURS")
+                        Text("LIVE HOURS")
                             .font(.system(size: 10.5, weight: .bold))
                             .tracking(1)
                             .foregroundStyle(.secondary)

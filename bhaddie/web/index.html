@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0a0a0f" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f8f8fc" media="(prefers-color-scheme: light)">
-  <title>bhaddie</title>
+  <title>pulse</title>
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css">
@@ -644,7 +644,7 @@
 
 <!-- ═══ HEADER ═══ -->
 <header class="hdr">
-  <div class="wmark">bhad<b>die</b></div>
+  <div class="wmark"><b>pulse</b></div>
   <div class="hdr-r">
     <button class="hdr-btn" id="authBtn" aria-label="Account">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -696,8 +696,8 @@
       <div class="streak-track"><div class="streak-fill" id="pcSf"></div></div>
     </div>
     <div class="pcard-btns">
-      <button class="pbtn pbtn-dm">DM</button>
-      <button class="pbtn pbtn-block">Block</button>
+      <button class="pbtn pbtn-dm" id="pcUpvote">Upvote</button>
+      <button class="pbtn pbtn-block" id="pcClose">Close</button>
     </div>
   </div>
 </div>
@@ -736,10 +736,10 @@
     <div class="slbl anim d5">Active Followers</div>
     <div class="flist anim d5" id="fList"></div>
 
-    <div class="slbl anim d6">Baddie Hours</div>
+    <div class="slbl anim d6">Live Hours</div>
     <div class="hgrid anim d7" id="hGrid"></div>
     <footer class="app-footer">
-      <a href="https://github.com/nulljosh/bhaddie" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/nulljosh/pulse" target="_blank" rel="noopener">GitHub</a>
       <span>MIT 2026 Joshua Trommel</span>
     </footer>
   </div>
@@ -764,7 +764,7 @@
     <div class="slbl anim d3">Leaderboard</div>
     <div class="lboard anim d4" id="lBoard"></div>
     <footer class="app-footer">
-      <a href="https://github.com/nulljosh/bhaddie" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/nulljosh/pulse" target="_blank" rel="noopener">GitHub</a>
       <span>MIT 2026 Joshua Trommel</span>
     </footer>
   </div>
@@ -774,7 +774,7 @@
 <div class="modal-overlay" id="authModal">
   <div class="modal">
     <div class="modal-title" id="authTitle">Sign In</div>
-    <div class="modal-sub" id="authSub">Drop pins, earn tokens, track baddies.</div>
+    <div class="modal-sub" id="authSub">Drop scenes, earn signal, read the city.</div>
     <input class="modal-input" id="authUser" type="text" placeholder="Username" autocomplete="username">
     <input class="modal-input" id="authEmail" type="email" placeholder="Email" autocomplete="email">
     <input class="modal-input" id="authPass" type="password" placeholder="Password" autocomplete="current-password">
@@ -831,7 +831,7 @@
 </nav>
 
 <script type="module">
-import { supabase, isDemoMode, signUp, signIn, signOut, getUser, fetchSightings, submitSighting, upvoteSighting, onAuthChange } from './src/supabase.js';
+import { supabase, isDemoMode, signUp, signIn, signOut, getUser, fetchSightings, submitSighting, upvoteSighting, onAuthChange, fetchProfile, updateBeacon, fetchBroadcasters, fetchLeaderboard, saveLiveHours, subscribeToDrops } from './src/supabase.js';
 
 /* ═══ VIBE COLORS (meaningful mapping) ═══ */
 const VIBE_COLORS = {
@@ -959,7 +959,7 @@ const FEED = [
   { ico:'\u{1F464}', bg:'var(--cyan-soft)', t:'New follower: <strong>kira.glow</strong>', tm:'15m ago' },
   { ico:'\u{1F4B0}', bg:'var(--green-soft)', t:'<strong>mira.wav</strong> tipped 200 tokens', tm:'22m ago' },
   { ico:'\u{1F4CD}', bg:'var(--accent-soft)', t:'<strong>sage.xo</strong> unlocked your location', tm:'35m ago' },
-  { ico:'\u26A1', bg:'var(--violet-soft)', t:'Baddie Hours bonus <strong>+100 tokens</strong>', tm:'1h ago' },
+  { ico:'\u26A1', bg:'var(--violet-soft)', t:'Live Hours bonus <strong>+100 tokens</strong>', tm:'1h ago' },
   { ico:'\u{1F464}', bg:'var(--cyan-soft)', t:'New follower: <strong>val.jpeg</strong>', tm:'1h ago' },
   { ico:'\u{1F3C6}', bg:'var(--amber-soft)', t:'You reached <strong>Top 50</strong> in Vancouver', tm:'2h ago' },
 ];
@@ -1077,6 +1077,7 @@ function initMap() {
     const venues = await fetchVenues(center);
     BADDIES = venues || generateFallback(center);
     addBlipsToMap(map);
+    addBroadcasters(map);
   });
 
   map.on('click', () => { if (selId) desel(); });
@@ -1087,6 +1088,7 @@ function initMap() {
 function sel(b, el) {
   desel();
   selId = b.id;
+  selectedSightingId = b.sightingId || null;
   el.classList.add('sel');
   document.getElementById('pcAv').style.background = b.c;
   document.getElementById('pcAv').textContent = b.name[0].toUpperCase();
@@ -1126,10 +1128,25 @@ function desel() {
 /* ═══ BEACON ═══ */
 const bTog = document.getElementById('bTog');
 const bSub = document.getElementById('bSub');
-bTog.onclick = () => { bTog.classList.toggle('on'); bSub.textContent = bTog.classList.contains('on') ? 'You are visible' : 'You are hidden'; };
+
+bTog.onclick = async () => {
+  bTog.classList.toggle('on');
+  const isOn = bTog.classList.contains('on');
+  bSub.textContent = isOn ? 'You are visible' : 'You are hidden';
+  if (!isDemoMode) {
+    const mode = document.querySelector('.smode.on')?.dataset.m || 'fuzzy';
+    updateBeacon({ on: isOn, mode, lat: userCenter?.lat ?? null, lng: userCenter?.lng ?? null }).catch(() => {});
+  }
+};
 
 document.querySelectorAll('.smode').forEach(m => {
-  m.onclick = () => { document.querySelectorAll('.smode').forEach(x => x.classList.remove('on')); m.classList.add('on'); };
+  m.onclick = () => {
+    document.querySelectorAll('.smode').forEach(x => x.classList.remove('on'));
+    m.classList.add('on');
+    if (!isDemoMode && bTog.classList.contains('on')) {
+      updateBeacon({ on: true, mode: m.dataset.m, lat: userCenter?.lat ?? null, lng: userCenter?.lng ?? null }).catch(() => {});
+    }
+  };
 });
 
 const fList = document.getElementById('fList');
@@ -1150,7 +1167,13 @@ HOURS.forEach((h, i) => {
   const s = document.createElement('div');
   s.className = 'hslot' + (ACTIVE_H.includes(i) ? ' on' : '');
   s.textContent = h;
-  s.onclick = () => s.classList.toggle('on');
+  s.onclick = () => {
+    s.classList.toggle('on');
+    if (!isDemoMode) {
+      const active = [...document.querySelectorAll('.hslot')].map((el, idx) => el.classList.contains('on') ? idx : -1).filter(x => x >= 0);
+      saveLiveHours(active);
+    }
+  };
   hGrid.appendChild(s);
 });
 
@@ -1197,18 +1220,108 @@ function animateCounter(el, target, duration) {
 }
 
 let balAnimated = false;
+let profileData = null;
+let realtimeSubscribed = false;
 const balEl = document.querySelector('.wbal');
 const origNav = document.querySelectorAll('.bnav-item');
+
+async function loadLeaderboard() {
+  const data = await fetchLeaderboard(10);
+  if (!data || data.length === 0) return;
+  const lb = document.getElementById('lBoard');
+  lb.replaceChildren();
+  data.forEach((l, i) => {
+    const rClass = i === 0 ? 'g' : i === 1 ? 's' : i === 2 ? 'b' : '';
+    const d = document.createElement('div'); d.className = 'litem';
+    const rk = document.createElement('div'); rk.className = 'lrank ' + rClass; rk.textContent = i + 1;
+    const av = document.createElement('div'); av.className = 'lav';
+    av.style.background = l.avatar_color || '#8b5cf6';
+    av.textContent = l.username[0].toUpperCase();
+    const info = document.createElement('div'); info.className = 'linfo';
+    const nm = document.createElement('div'); nm.className = 'lname'; nm.textContent = l.username;
+    const cl = document.createElement('div'); cl.className = 'lclout'; cl.textContent = 'Clout score';
+    info.appendChild(nm); info.appendChild(cl);
+    const sc = document.createElement('div'); sc.className = 'lscore'; sc.textContent = l.clout.toLocaleString();
+    d.appendChild(rk); d.appendChild(av); d.appendChild(info); d.appendChild(sc);
+    lb.appendChild(d);
+  });
+}
+
+function setupRealtime() {
+  if (!userCenter || isDemoMode) return;
+  realtimeSubscribed = true;
+  subscribeToDrops(userCenter, newDrop => {
+    const feed = document.getElementById('aFeed');
+    const d = document.createElement('div'); d.className = 'afitem';
+    const ico = document.createElement('div'); ico.className = 'aficon';
+    ico.style.background = 'var(--accent-soft)'; ico.textContent = '\u{1F4CD}';
+    const body = document.createElement('div'); body.className = 'afbody';
+    const txt = document.createElement('div'); txt.className = 'aftxt';
+    const strong = document.createElement('strong'); strong.textContent = newDrop.username;
+    txt.appendChild(strong);
+    txt.appendChild(document.createTextNode(' dropped a ' + newDrop.vibe + ' scene nearby'));
+    const tm = document.createElement('div'); tm.className = 'aftime'; tm.textContent = 'just now';
+    body.appendChild(txt); body.appendChild(tm);
+    d.appendChild(ico); d.appendChild(body);
+    feed.insertBefore(d, feed.firstChild);
+  });
+}
+
+async function loadProfile() {
+  if (isDemoMode) return;
+  profileData = await fetchProfile();
+  if (!profileData) return;
+  bTog.classList.toggle('on', profileData.beacon_on);
+  bSub.textContent = profileData.beacon_on ? 'You are visible' : 'You are hidden';
+  const mode = profileData.beacon_mode || 'fuzzy';
+  document.querySelectorAll('.smode').forEach(m => m.classList.toggle('on', m.dataset.m === mode));
+  if (profileData.live_hours?.length > 0) {
+    document.querySelectorAll('.hslot').forEach((s, i) => s.classList.toggle('on', profileData.live_hours.includes(i)));
+  }
+}
+
+async function addBroadcasters(map) {
+  if (isDemoMode) return;
+  const center = userCenter || DEFAULT_CENTER;
+  const broadcasters = await fetchBroadcasters(center);
+  if (!broadcasters?.length) return;
+  broadcasters.forEach(b => {
+    if (!b.lat || !b.lng) return;
+    const el = document.createElement('div');
+    el.className = 'blip';
+    el.style.background = b.avatar_color || '#ff2d78';
+    el.style.border = '3px solid #fff';
+    new maplibregl.Marker({ element: el }).setLngLat([b.lng, b.lat]).addTo(map);
+  });
+}
+
 origNav.forEach(item => {
   const origClick = item.onclick;
   item.onclick = function() {
     origClick && origClick.call(this);
-    if (item.dataset.v === 'economy' && !balAnimated) {
-      balAnimated = true;
-      animateCounter(balEl, 2847, 800);
+    if (item.dataset.v === 'economy') {
+      const target = profileData?.tokens ?? 2847;
+      if (!balAnimated) { balAnimated = true; animateCounter(balEl, target, 800); }
+      loadLeaderboard();
+      if (!realtimeSubscribed) setupRealtime();
     }
   };
 });
+
+/* ═══ PROFILE CARD ACTIONS ═══ */
+let selectedSightingId = null;
+
+document.getElementById('pcUpvote').onclick = async () => {
+  if (!selectedSightingId) return;
+  try {
+    await upvoteSighting(selectedSightingId);
+    const btn = document.getElementById('pcUpvote');
+    btn.textContent = 'Upvoted!';
+    setTimeout(() => { btn.textContent = 'Upvote'; }, 1500);
+  } catch (_) {}
+};
+
+document.getElementById('pcClose').onclick = () => desel();
 
 /* ═══ ARIA ═══ */
 document.querySelectorAll('.chip').forEach(c => c.setAttribute('role', 'button'));
@@ -1240,13 +1353,13 @@ function showAuth(mode) {
   authUser.value = ''; authEmail.value = ''; authPass.value = '';
   if (authMode === 'signup') {
     authTitle.textContent = 'Sign Up';
-    authSub.textContent = 'Create your baddie account.';
+    authSub.textContent = 'Join the scene.';
     authSubmit.textContent = 'Sign Up';
     authToggle.textContent = 'Already have an account? Sign in';
     authUser.style.display = '';
   } else {
     authTitle.textContent = 'Sign In';
-    authSub.textContent = 'Drop pins, earn tokens, track baddies.';
+    authSub.textContent = 'Drop scenes, earn signal, read the city.';
     authSubmit.textContent = 'Sign In';
     authToggle.textContent = 'Need an account? Sign up';
     authUser.style.display = 'none';
@@ -1305,7 +1418,10 @@ function updateAuthUI() {
 onAuthChange(session => {
   currentUser = session?.user ?? null;
   updateAuthUI();
-  if (currentUser && window._map) refreshSightings();
+  if (currentUser) {
+    loadProfile();
+    if (window._map) refreshSightings();
+  }
 });
 
 /* ═══ PIN DROP ═══ */
@@ -1389,6 +1505,7 @@ async function boot() {
   if (!isDemoMode) {
     currentUser = await getUser();
     updateAuthUI();
+    if (currentUser) await loadProfile();
   } else {
     dropBar.classList.add('show');
   }

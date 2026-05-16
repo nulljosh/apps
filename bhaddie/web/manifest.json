@@ -1,7 +1,7 @@
 {
-  "name": "Bhaddie",
-  "short_name": "bhaddie",
-  "description": "Location-based social + creator economy",
+  "name": "Pulse",
+  "short_name": "pulse",
+  "description": "Real-time scene radar + creator economy",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0f",

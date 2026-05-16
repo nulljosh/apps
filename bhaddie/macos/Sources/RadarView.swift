@@ -2,246 +2,227 @@ import SwiftUI
 import MapKit
 
 struct RadarView: View {
-    @State private var selectedBaddie: Baddie?
-    @State private var activeVibe: String = "all"
-    @State private var position: MapCameraPosition = .region(
+    @State private var selectedVibe = "all"
+    @State private var selectedScene: Scene?
+    @State private var cameraPosition: MapCameraPosition = .region(
         MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 49.2827, longitude: -123.1207),
-            span: MKCoordinateSpan(latitudeDelta: 0.025, longitudeDelta: 0.025)
+            span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
         )
     )
 
-    private let allVibes = ["all", "alt", "artsy", "gym", "downtown", "night-owl"]
-
-    private var filteredBaddies: [Baddie] {
-        if activeVibe == "all" {
-            return sampleBaddies
+    private var filteredScenes: [Scene] {
+        if selectedVibe == "all" {
+            return SampleData.scenes
         }
-        return sampleBaddies.filter { $0.vibes.contains(activeVibe) }
+        return SampleData.scenes.filter { $0.vibes.contains(selectedVibe) }
     }
 
     var body: some View {
-        HSplitView {
-            VStack(spacing: 0) {
-                // Vibe filter chips
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 6) {
-                        ForEach(allVibes, id: \.self) { vibe in
-                            Button {
-                                activeVibe = vibe
-                            } label: {
-                                Text(vibe)
-                                    .font(.system(size: 11, weight: .semibold))
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 5)
-                                    .background(activeVibe == vibe ? Theme.accent : Theme.card)
-                                    .foregroundStyle(activeVibe == vibe ? .white : Theme.textSecondary)
-                                    .clipShape(Capsule())
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                }
-                .background(Theme.bg)
-
-                // Map
-                Map(position: $position, selection: $selectedBaddie) {
-                    ForEach(filteredBaddies) { baddie in
-                        Annotation(baddie.name, coordinate: baddie.coordinate, anchor: .bottom) {
-                            BaddieMarker(baddie: baddie, isSelected: selectedBaddie?.id == baddie.id)
-                                .onTapGesture {
-                                    selectedBaddie = baddie
+        ZStack(alignment: .top) {
+            Map(position: $cameraPosition) {
+                ForEach(filteredScenes) { scene in
+                    Annotation(scene.name, coordinate: scene.coordinate) {
+                        BlipMarker(scene: scene, isSelected: selectedScene?.id == scene.id)
+                            .onTapGesture {
+                                withAnimation(.spring(duration: 0.3, bounce: 0.4)) {
+                                    selectedScene = scene
                                 }
-                        }
-                        .tag(baddie)
+                            }
                     }
                 }
-                .mapStyle(.standard(pointsOfInterest: .excludingAll))
             }
+            .mapStyle(.standard(pointsOfInterest: .excludingAll))
 
-            // Detail sidebar
-            if let baddie = selectedBaddie {
-                BaddieDetailPanel(baddie: baddie) {
-                    selectedBaddie = nil
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 7) {
+                    ForEach(SampleData.vibes, id: \.self) { vibe in
+                        VibeChip(title: vibe, isSelected: selectedVibe == vibe) {
+                            selectedVibe = vibe
+                        }
+                    }
                 }
-                .frame(width: 260)
+                .padding(.horizontal, 14)
             }
+            .padding(.top, 10)
         }
-        .navigationTitle("Radar")
+        .sheet(item: $selectedScene) { scene in
+            ProfileCardSheet(scene: scene)
+                .presentationDetents([.height(340)])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(22)
+        }
     }
 }
 
-// MARK: - Baddie Map Marker
+// MARK: - Blip Marker
 
-struct BaddieMarker: View {
-    let baddie: Baddie
+struct BlipMarker: View {
+    let scene: Scene
     let isSelected: Bool
 
     var body: some View {
-        VStack(spacing: 2) {
-            ZStack {
+        Circle()
+            .fill(scene.color)
+            .frame(width: isSelected ? 20 : 14, height: isSelected ? 20 : 14)
+            .overlay(
                 Circle()
-                    .fill(Color(hex: baddie.color))
-                    .frame(width: isSelected ? 32 : 24, height: isSelected ? 32 : 24)
-                if baddie.verified {
-                    Image(systemName: "checkmark.seal.fill")
-                        .font(.system(size: 10))
-                        .foregroundStyle(.white)
-                }
-            }
-            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isSelected)
-
-            if isSelected {
-                Text(baddie.name)
-                    .font(.system(size: 9, weight: .bold))
-                    .foregroundStyle(.primary)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 1)
-                    .background(.ultraThinMaterial)
-                    .clipShape(Capsule())
-            }
-        }
+                    .stroke(isSelected ? Color.white : Color.white.opacity(0.25), lineWidth: 2)
+            )
+            .overlay(
+                Circle()
+                    .fill(scene.color.opacity(0.3))
+                    .frame(width: 30, height: 30)
+            )
+            .scaleEffect(isSelected ? 1.3 : 1.0)
+            .animation(.spring(duration: 0.2, bounce: 0.5), value: isSelected)
     }
 }
 
-// MARK: - Detail Panel
+// MARK: - Vibe Chip
 
-struct BaddieDetailPanel: View {
-    let baddie: Baddie
-    let onClose: () -> Void
+struct VibeChip: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 12.5, weight: .semibold))
+                .padding(.horizontal, 15)
+                .padding(.vertical, 7)
+                .background(isSelected ? Theme.accent : Color(.secondarySystemBackground).opacity(0.9))
+                .foregroundStyle(isSelected ? .white : .secondary)
+                .clipShape(Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(isSelected ? Color.clear : Color(.separator), lineWidth: 1)
+                )
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+// MARK: - Profile Card Sheet
+
+struct ProfileCardSheet: View {
+    let scene: Scene
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 13) {
+                Circle()
+                    .fill(scene.color)
+                    .frame(width: 50, height: 50)
+                    .overlay(
+                        Text(String(scene.name.prefix(2)).uppercased())
+                            .font(.system(size: 17, weight: .heavy))
+                            .foregroundStyle(.white)
+                    )
+
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 5) {
+                        Text(scene.name)
+                            .font(.system(size: 16, weight: .bold))
+                        if scene.verified {
+                            Image(systemName: "checkmark.seal.fill")
+                                .font(.system(size: 14))
+                                .foregroundStyle(Theme.cyan)
+                        }
+                    }
+                    HStack(spacing: 3) {
+                        Text("Clout:")
+                            .foregroundStyle(.secondary)
+                        Text(formatClout(scene.clout))
+                            .foregroundStyle(Theme.violet)
+                            .fontWeight(.bold)
+                    }
+                    .font(.system(size: 12.5))
+                }
+
                 Spacer()
-                Button { onClose() } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 16))
-                        .foregroundStyle(Theme.textMuted)
-                }
-                .buttonStyle(.plain)
             }
 
-            // Name and verified badge
-            HStack(spacing: 6) {
-                Text(baddie.name)
-                    .font(.system(size: 18, weight: .bold))
-                if baddie.verified {
-                    Image(systemName: "checkmark.seal.fill")
-                        .foregroundStyle(Theme.accent)
-                        .font(.system(size: 14))
-                }
-            }
-
-            // Vibes
-            HStack(spacing: 4) {
-                ForEach(baddie.vibes, id: \.self) { vibe in
+            HStack(spacing: 5) {
+                ForEach(scene.vibes, id: \.self) { vibe in
                     Text(vibe)
-                        .font(.system(size: 10, weight: .semibold))
-                        .padding(.horizontal, 8)
+                        .font(.system(size: 10.5, weight: .semibold))
+                        .padding(.horizontal, 9)
                         .padding(.vertical, 3)
-                        .background(Theme.violet.opacity(0.15))
-                        .foregroundStyle(Theme.violet)
-                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(Color(.separator), lineWidth: 1)
+                        )
+                        .foregroundStyle(.secondary)
                 }
             }
 
-            // Stats
-            VStack(spacing: 10) {
-                StatRow(label: "Clout", value: baddie.clout.formatted(), color: Theme.violet)
-                StatRow(label: "Streak", value: "\(baddie.streak) days", color: Theme.amber)
+            VStack(spacing: 5) {
+                HStack {
+                    Text("Streak")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text("\(scene.streak)/\(scene.maxStreak)")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                }
 
-                // Streak progress
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 3)
-                            .fill(Theme.border)
-                            .frame(height: 5)
+                            .fill(Color(.separator).opacity(0.3))
                         RoundedRectangle(cornerRadius: 3)
                             .fill(Theme.accent)
-                            .frame(width: geo.size.width * Double(baddie.streak) / Double(baddie.maxStreak), height: 5)
+                            .frame(width: geo.size.width * (Double(scene.streak) / Double(scene.maxStreak)))
                     }
                 }
                 .frame(height: 5)
-
-                HStack {
-                    Text("\(baddie.streak)/\(baddie.maxStreak)")
-                        .font(.system(size: 10))
-                        .foregroundStyle(Theme.textMuted)
-                    Spacer()
-                }
             }
-            .padding(12)
-            .background(Theme.card)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
 
-            // Action buttons
             HStack(spacing: 8) {
                 Button {
-                    // DM action placeholder
+                    // upvote action
                 } label: {
-                    Label("DM", systemImage: "paperplane.fill")
-                        .font(.system(size: 12, weight: .semibold))
+                    Text("Upvote")
+                        .font(.system(size: 13.5, weight: .bold))
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, 10)
                         .background(Theme.accent)
                         .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-                .buttonStyle(.plain)
 
                 Button {
-                    // Block action placeholder
+                    // close
                 } label: {
-                    Label("Block", systemImage: "hand.raised.fill")
-                        .font(.system(size: 12, weight: .semibold))
+                    Text("Close")
+                        .font(.system(size: 13.5, weight: .bold))
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .background(Theme.card)
-                        .foregroundStyle(Theme.textSecondary)
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(Theme.border, lineWidth: 1)
-                        )
+                        .padding(.vertical, 10)
+                        .background(Color(.secondarySystemBackground))
+                        .foregroundStyle(.secondary)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-                .buttonStyle(.plain)
             }
-
-            Spacer()
         }
-        .padding(16)
-        .background(Theme.bg)
+        .padding(.horizontal, 18)
+        .padding(.top, 14)
+    }
+
+    private func formatClout(_ value: Int) -> String {
+        if value >= 1000 {
+            let k = Double(value) / 1000.0
+            return String(format: "%.1fk", k)
+        }
+        return "\(value)"
     }
 }
 
-struct StatRow: View {
-    let label: String
-    let value: String
-    let color: Color
-
-    var body: some View {
-        HStack {
-            Text(label)
-                .font(.system(size: 11, weight: .medium))
-                .foregroundStyle(Theme.textMuted)
-            Spacer()
-            Text(value)
-                .font(.system(size: 13, weight: .bold))
-                .foregroundStyle(color)
-        }
-    }
-}
-
-extension Baddie: Hashable {
-    static func == (lhs: Baddie, rhs: Baddie) -> Bool {
-        lhs.id == rhs.id
-    }
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
+extension Scene: Hashable {
+    static func == (lhs: Scene, rhs: Scene) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
 
 #Preview {

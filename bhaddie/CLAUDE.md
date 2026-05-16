@@ -1,7 +1,7 @@
-# Bhaddie
+# Pulse
 
 ## What
-Location-based social + creator economy app. Users sign up and drop pins to report baddie sightings with vibe tags. Falls back to OpenStreetMap venue data when no user data exists.
+Location-based social + creator economy app. Users drop scene reports at real locations with vibe tags. Real-time radar of active scenes near you. Falls back to OpenStreetMap venue data when no user data exists.
 
 ## Core Concepts
 - **Radar** -- map with user-submitted sightings (Supabase) + venue blips (Overpass API fallback)

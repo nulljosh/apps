@@ -3,7 +3,7 @@ import MapKit
 
 struct RadarView: View {
     @State private var selectedVibe = "all"
-    @State private var selectedBaddie: Baddie?
+    @State private var selectedScene: Scene?
     @State private var cameraPosition: MapCameraPosition = .region(
         MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 49.2827, longitude: -123.1207),
@@ -11,22 +11,22 @@ struct RadarView: View {
         )
     )
 
-    private var filteredBaddies: [Baddie] {
+    private var filteredScenes: [Scene] {
         if selectedVibe == "all" {
-            return SampleData.baddies
+            return SampleData.scenes
         }
-        return SampleData.baddies.filter { $0.vibes.contains(selectedVibe) }
+        return SampleData.scenes.filter { $0.vibes.contains(selectedVibe) }
     }
 
     var body: some View {
         ZStack(alignment: .top) {
             Map(position: $cameraPosition) {
-                ForEach(filteredBaddies) { baddie in
-                    Annotation(baddie.name, coordinate: baddie.coordinate) {
-                        BlipMarker(baddie: baddie, isSelected: selectedBaddie?.id == baddie.id)
+                ForEach(filteredScenes) { scene in
+                    Annotation(scene.name, coordinate: scene.coordinate) {
+                        BlipMarker(scene: scene, isSelected: selectedScene?.id == scene.id)
                             .onTapGesture {
                                 withAnimation(.spring(duration: 0.3, bounce: 0.4)) {
-                                    selectedBaddie = baddie
+                                    selectedScene = scene
                                 }
                             }
                     }
@@ -34,7 +34,6 @@ struct RadarView: View {
             }
             .mapStyle(.standard(pointsOfInterest: .excludingAll))
 
-            // Vibe filter chips
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 7) {
                     ForEach(SampleData.vibes, id: \.self) { vibe in
@@ -47,8 +46,8 @@ struct RadarView: View {
             }
             .padding(.top, 10)
         }
-        .sheet(item: $selectedBaddie) { baddie in
-            ProfileCardSheet(baddie: baddie)
+        .sheet(item: $selectedScene) { scene in
+            ProfileCardSheet(scene: scene)
                 .presentationDetents([.height(340)])
                 .presentationDragIndicator(.visible)
                 .presentationCornerRadius(22)
@@ -59,12 +58,12 @@ struct RadarView: View {
 // MARK: - Blip Marker
 
 struct BlipMarker: View {
-    let baddie: Baddie
+    let scene: Scene
     let isSelected: Bool
 
     var body: some View {
         Circle()
-            .fill(baddie.color)
+            .fill(scene.color)
             .frame(width: isSelected ? 20 : 14, height: isSelected ? 20 : 14)
             .overlay(
                 Circle()
@@ -72,7 +71,7 @@ struct BlipMarker: View {
             )
             .overlay(
                 Circle()
-                    .fill(baddie.color.opacity(0.3))
+                    .fill(scene.color.opacity(0.3))
                     .frame(width: 30, height: 30)
             )
             .scaleEffect(isSelected ? 1.3 : 1.0)
@@ -108,26 +107,25 @@ struct VibeChip: View {
 // MARK: - Profile Card Sheet
 
 struct ProfileCardSheet: View {
-    let baddie: Baddie
+    let scene: Scene
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Avatar + Name row
             HStack(spacing: 13) {
                 Circle()
-                    .fill(baddie.color)
+                    .fill(scene.color)
                     .frame(width: 50, height: 50)
                     .overlay(
-                        Text(String(baddie.name.prefix(2)).uppercased())
+                        Text(String(scene.name.prefix(2)).uppercased())
                             .font(.system(size: 17, weight: .heavy))
                             .foregroundStyle(.white)
                     )
 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 5) {
-                        Text(baddie.name)
+                        Text(scene.name)
                             .font(.system(size: 16, weight: .bold))
-                        if baddie.verified {
+                        if scene.verified {
                             Image(systemName: "checkmark.seal.fill")
                                 .font(.system(size: 14))
                                 .foregroundStyle(Theme.cyan)
@@ -136,7 +134,7 @@ struct ProfileCardSheet: View {
                     HStack(spacing: 3) {
                         Text("Clout:")
                             .foregroundStyle(.secondary)
-                        Text(formatClout(baddie.clout))
+                        Text(formatClout(scene.clout))
                             .foregroundStyle(Theme.violet)
                             .fontWeight(.bold)
                     }
@@ -146,9 +144,8 @@ struct ProfileCardSheet: View {
                 Spacer()
             }
 
-            // Vibe tags
             HStack(spacing: 5) {
-                ForEach(baddie.vibes, id: \.self) { vibe in
+                ForEach(scene.vibes, id: \.self) { vibe in
                     Text(vibe)
                         .font(.system(size: 10.5, weight: .semibold))
                         .padding(.horizontal, 9)
@@ -161,14 +158,13 @@ struct ProfileCardSheet: View {
                 }
             }
 
-            // Streak progress
             VStack(spacing: 5) {
                 HStack {
                     Text("Streak")
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Text("\(baddie.streak)/\(baddie.maxStreak)")
+                    Text("\(scene.streak)/\(scene.maxStreak)")
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.secondary)
                 }
@@ -179,18 +175,17 @@ struct ProfileCardSheet: View {
                             .fill(Color(.separator).opacity(0.3))
                         RoundedRectangle(cornerRadius: 3)
                             .fill(Theme.accent)
-                            .frame(width: geo.size.width * (Double(baddie.streak) / Double(baddie.maxStreak)))
+                            .frame(width: geo.size.width * (Double(scene.streak) / Double(scene.maxStreak)))
                     }
                 }
                 .frame(height: 5)
             }
 
-            // Action buttons
             HStack(spacing: 8) {
                 Button {
-                    // DM action
+                    // upvote action
                 } label: {
-                    Text("DM")
+                    Text("Upvote")
                         .font(.system(size: 13.5, weight: .bold))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
@@ -200,9 +195,9 @@ struct ProfileCardSheet: View {
                 }
 
                 Button {
-                    // Block action
+                    // close
                 } label: {
-                    Text("Block")
+                    Text("Close")
                         .font(.system(size: 13.5, weight: .bold))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
@@ -225,8 +220,8 @@ struct ProfileCardSheet: View {
     }
 }
 
-extension Baddie: Hashable {
-    static func == (lhs: Baddie, rhs: Baddie) -> Bool { lhs.id == rhs.id }
+extension Scene: Hashable {
+    static func == (lhs: Scene, rhs: Scene) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
 
