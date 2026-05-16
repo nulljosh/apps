@@ -106,9 +106,9 @@ struct CaseTabView: View {
     @ViewBuilder
     private var themeToggle: some View {
         Button {
-            store.theme = store.theme == "dark" ? "light" : "dark"
+            store.theme = store.theme == "dark" ? "light" : store.theme == "light" ? "auto" : "dark"
         } label: {
-            Image(systemName: store.theme == "dark" ? "sun.max" : "moon")
+            Image(systemName: store.theme == "dark" ? "sun.max" : store.theme == "light" ? "circle.lefthalf.filled" : "moon")
         }
     }
 }

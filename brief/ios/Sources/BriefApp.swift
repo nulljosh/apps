@@ -14,7 +14,7 @@ struct BriefApp: App {
                 }
             }
             .environment(store)
-            .preferredColorScheme(store.theme == "dark" ? .dark : .light)
+            .preferredColorScheme(store.theme == "dark" ? .dark : store.theme == "light" ? .light : nil)
             .onOpenURL { url in
                 Task { await store.handleURL(url) }
             }

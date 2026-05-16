@@ -3,6 +3,9 @@ import SwiftUI
 struct LawyerCardView: View {
     let lawyer: Lawyer
     @Environment(\.openURL) private var openURL
+    @Environment(Store.self) private var store
+
+    private var status: String { store.lawyerStatuses[lawyer.id] ?? "none" }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -17,8 +20,22 @@ struct LawyerCardView: View {
                         .foregroundStyle(.primary)
                 }
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(lawyer.name)
-                        .font(.system(size: 15, weight: .semibold))
+                    HStack(alignment: .firstTextBaseline) {
+                        Text(lawyer.name)
+                            .font(.system(size: 15, weight: .semibold))
+                        Spacer()
+                        Button {
+                            Task { await store.cycleLawyerStatus(lawyer.id) }
+                        } label: {
+                            Text(store.statusLabel[status] ?? "Not contacted")
+                                .font(.system(size: 10, weight: .semibold))
+                                .foregroundStyle(statusColor(status))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(statusColor(status).opacity(0.12), in: Capsule())
+                        }
+                        .buttonStyle(.plain)
+                    }
                     Text(lawyer.subtitle)
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
@@ -109,6 +126,15 @@ struct LawyerCardView: View {
         case .urgent: return .briefWarn
         case .fail: return .briefDanger
         case .neutral: return .secondary
+        }
+    }
+
+    private func statusColor(_ s: String) -> Color {
+        switch s {
+        case "voicemail", "emailed": return .briefWarn
+        case "callback": return .briefAccent
+        case "retained": return .briefGreen
+        default: return .secondary
         }
     }
 

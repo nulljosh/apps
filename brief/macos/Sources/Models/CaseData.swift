@@ -1,1 +1,1 @@
-../../../../ios/Sources/Models/CaseData.swift
+../../../ios/Sources/Models/CaseData.swift

@@ -54,7 +54,7 @@ final class Store {
     ]
 
     init() {
-        theme = UserDefaults.standard.string(forKey: "brief.theme") ?? "dark"
+        theme = UserDefaults.standard.string(forKey: "brief.theme") ?? "auto"
     }
 
     @MainActor func checkSession() async {
