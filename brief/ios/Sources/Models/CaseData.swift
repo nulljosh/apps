@@ -243,57 +243,57 @@ let caseChecklist: [ChecklistItem] = [
 let caseLawyers: [Lawyer] = [
     Lawyer(id: "pk", initials: "PK", name: "Paul G. Kent-Snowsell",
            subtitle: "Kane Shannon & Weiler (KSW) · Surrey BC · Of Counsel",
-           tags: [LawyerTag(label: "33 yrs trial", style: .good), LawyerTag(label: "Sued RCMP", style: .good), LawyerTag(label: "Voicemail left", style: .good)],
+           tags: [LawyerTag(label: "33 yrs trial", style: .good), LawyerTag(label: "Sued RCMP", style: .good)],
            phone: "6045917321", phoneNote: nil, email: "pgkent@kswlawyers.ca", website: nil),
 
     Lawyer(id: "dl", initials: "DL", name: "DLA Law (Dosanjh Ladner Arora)",
            subtitle: "Vancouver BC",
-           tags: [LawyerTag(label: "Police Misconduct", style: .good), LawyerTag(label: "Wrongful arrest", style: .good), LawyerTag(label: "Email sent", style: .good)],
+           tags: [LawyerTag(label: "Police Misconduct", style: .good), LawyerTag(label: "Wrongful arrest", style: .good)],
            phone: "6043276381", phoneNote: nil, email: "Ingrid@dlalaw.ca", website: nil),
 
     Lawyer(id: "mh", initials: "MH", name: "McQuarrie Hunter LLP",
            subtitle: "Surrey BC",
-           tags: [LawyerTag(label: "BC Limitation Act", style: .good), LawyerTag(label: "Discoverability / s.18", style: .good), LawyerTag(label: "Voicemail left", style: .good)],
+           tags: [LawyerTag(label: "BC Limitation Act", style: .good), LawyerTag(label: "Discoverability / s.18", style: .good)],
            phone: "6045817001", phoneNote: nil, email: nil, website: nil),
 
     Lawyer(id: "sh", initials: "SH", name: "Sean Hern Law Corporation",
            subtitle: "Vancouver BC · formerly Farris LLP",
-           tags: [LawyerTag(label: "Commercial litigation", style: .good), LawyerTag(label: "Pro bono", style: .good), LawyerTag(label: "BC FOI/Privacy Assoc.", style: .good), LawyerTag(label: "Not yet contacted", style: .neutral)],
+           tags: [LawyerTag(label: "Commercial litigation", style: .good), LawyerTag(label: "Pro bono", style: .good), LawyerTag(label: "BC FOI/Privacy Assoc.", style: .good)],
            phone: "6046849151", phoneNote: nil, email: nil, website: nil),
 
     Lawyer(id: "cw", initials: "CW", name: "Cameron Ward",
            subtitle: "Vancouver BC · 40+ yrs",
-           tags: [LawyerTag(label: "Ward v. Vancouver SCC", style: .good), LawyerTag(label: "Charter & police misconduct", style: .good), LawyerTag(label: "Not yet contacted", style: .neutral)],
+           tags: [LawyerTag(label: "Ward v. Vancouver SCC", style: .good), LawyerTag(label: "Charter & police misconduct", style: .good)],
            phone: nil, phoneNote: nil, email: nil, website: "cameronward.com"),
 
     Lawyer(id: "af", initials: "AF", name: "Arvay Finlay LLP",
            subtitle: "Vancouver BC",
-           tags: [LawyerTag(label: "Fairy Creek RCMP class action", style: .good), LawyerTag(label: "Charter ss.2/7/8/9", style: .good), LawyerTag(label: "Not yet contacted", style: .neutral)],
+           tags: [LawyerTag(label: "Fairy Creek RCMP class action", style: .good), LawyerTag(label: "Charter ss.2/7/8/9", style: .good)],
            phone: "6046969828", phoneNote: nil, email: nil, website: "arvayfinlay.ca"),
 
     Lawyer(id: "kl", initials: "KL", name: "Klein Lawyers",
            subtitle: "Vancouver BC",
-           tags: [LawyerTag(label: "RCMP class actions", style: .good), LawyerTag(label: "Federal court", style: .good), LawyerTag(label: "Not yet contacted", style: .neutral)],
+           tags: [LawyerTag(label: "RCMP class actions", style: .good), LawyerTag(label: "Federal court", style: .good)],
            phone: nil, phoneNote: nil, email: nil, website: "callkleinlawyers.com"),
 
     Lawyer(id: "pl", initials: "PL", name: "Pivot Legal",
            subtitle: "Vancouver BC · Backup / referrals",
-           tags: [LawyerTag(label: "Referral source", style: .good), LawyerTag(label: "Not yet contacted", style: .neutral)],
+           tags: [LawyerTag(label: "Referral source", style: .good)],
            phone: "6042559700", phoneNote: nil, email: nil, website: nil),
 
     Lawyer(id: "bc", initials: "BC", name: "BCCLA Referral Line",
            subtitle: "BC Civil Liberties Association",
-           tags: [LawyerTag(label: "Free referrals", style: .good), LawyerTag(label: "Civil rights", style: .good), LawyerTag(label: "Not yet contacted", style: .neutral)],
+           tags: [LawyerTag(label: "Free referrals", style: .good), LawyerTag(label: "Civil rights", style: .good)],
            phone: "6046872919", phoneNote: "referral line", email: nil, website: "bccla.org"),
 
     Lawyer(id: "ar", initials: "AR", name: "Aitken Robertson",
            subtitle: "Vancouver BC",
-           tags: [LawyerTag(label: "Police negligence", style: .good), LawyerTag(label: "Charter civil", style: .good), LawyerTag(label: "Phone out of order", style: .fail)],
+           tags: [LawyerTag(label: "Police negligence", style: .good), LawyerTag(label: "Charter civil", style: .good)],
            phone: "6043251155", phoneNote: "out of order", email: nil, website: nil),
 
     Lawyer(id: "cb", initials: "CB", name: "Canadian Bar Association BC",
            subtitle: "Lawyer Referral Service",
-           tags: [LawyerTag(label: "Free referrals", style: .good), LawyerTag(label: "No answer", style: .urgent)],
+           tags: [LawyerTag(label: "Free referrals", style: .good)],
            phone: "6046873221", phoneNote: nil, email: "info@cbabc.org", website: nil)
 ]
 

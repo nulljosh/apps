@@ -36,9 +36,6 @@ private struct LawyerUpsert: Encodable {
 @MainActor
 @Observable
 final class Store {
-    var theme: String {
-        didSet { UserDefaults.standard.set(theme, forKey: "brief.theme") }
-    }
     var needsSignIn = true
     var magicLinkSent = false
     var signInError: String?
@@ -53,9 +50,7 @@ final class Store {
         "emailed": "Email sent", "callback": "Callback received", "retained": "Retained"
     ]
 
-    init() {
-        theme = UserDefaults.standard.string(forKey: "brief.theme") ?? "auto"
-    }
+    init() {}
 
     @MainActor func checkSession() async {
         do {
@@ -110,6 +105,14 @@ final class Store {
         guard let uid = userId else { return }
         _ = try? await sbClient.from("brief_journal")
             .upsert(JournalUpsert(user_id: uid, date: date, text: text))
+            .execute()
+        await loadJournal()
+    }
+
+    @MainActor func deleteJournalEntry(date: String) async {
+        guard let uid = userId else { return }
+        _ = try? await sbClient.from("brief_journal")
+            .delete().eq("user_id", value: uid).eq("date", value: date)
             .execute()
         await loadJournal()
     }

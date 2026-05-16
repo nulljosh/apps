@@ -3,8 +3,11 @@ import SwiftUI
 struct JournalView: View {
     @Environment(Store.self) private var store
     @State private var showingForm = false
+    @State private var editingEntry: JournalEntry? = nil
     @State private var newDate = Date.now
     @State private var newText = ""
+
+    private let seedDates: Set<String> = Set(journalSeed.map(\.date))
 
     private func fmt(_ iso: String) -> String {
         let f = DateFormatter(); f.dateFormat = "yyyy-MM-dd"
@@ -39,14 +42,32 @@ struct JournalView: View {
                         .lineSpacing(3)
                 }
                 .padding(.vertical, 14)
-                if idx < store.journalEntries.count - 1 {
-                    Divider()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    if !seedDates.contains(entry.date) {
+                        Button(role: .destructive) {
+                            Task { await store.deleteJournalEntry(date: entry.date) }
+                        } label: { Label("Delete", systemImage: "trash") }
+
+                        Button {
+                            editingEntry = entry
+                            newDate = {
+                                let f = DateFormatter(); f.dateFormat = "yyyy-MM-dd"
+                                return f.date(from: entry.date) ?? Date.now
+                            }()
+                            newText = entry.text
+                            showingForm = true
+                        } label: { Label("Edit", systemImage: "pencil") }
+                            .tint(.briefAccent)
+                    }
                 }
+                if idx < store.journalEntries.count - 1 { Divider() }
             }
         }
         .padding(18)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
-        .sheet(isPresented: $showingForm) {
+        .sheet(isPresented: $showingForm, onDismiss: { editingEntry = nil; newText = "" }) {
             NavigationStack {
                 Form {
                     Section("Date") {
@@ -58,18 +79,18 @@ struct JournalView: View {
                             .frame(minHeight: 100)
                     }
                 }
-                .navigationTitle("New Entry")
+                .navigationTitle(editingEntry == nil ? "New Entry" : "Edit Entry")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { showingForm = false; newText = "" }
+                        Button("Cancel") { showingForm = false }
                     }
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Save") {
                             guard !newText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-                            let fmt = DateFormatter(); fmt.dateFormat = "yyyy-MM-dd"
-                            let d = fmt.string(from: newDate); let t = newText
-                            newText = ""; showingForm = false
+                            let f = DateFormatter(); f.dateFormat = "yyyy-MM-dd"
+                            let d = f.string(from: newDate); let t = newText
+                            showingForm = false
                             Task { await store.addJournalEntry(date: d, text: t) }
                         }
                     }

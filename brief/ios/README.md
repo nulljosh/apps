@@ -2,7 +2,7 @@
 
 # brief-ios
 
-![v1.0.0](https://img.shields.io/badge/version-1.0.0-blue) ![iOS 17](https://img.shields.io/badge/iOS-17%2B-black) ![Swift 6](https://img.shields.io/badge/Swift-6-orange)
+![v1.1.0](https://img.shields.io/badge/version-1.1.0-blue) ![iOS 17](https://img.shields.io/badge/iOS-17%2B-black) ![Swift 6](https://img.shields.io/badge/Swift-6-orange)
 
 Native iOS litigation planning app for *Trommel v. AG Canada*. SwiftUI port of [heyitsmejosh.com/brief](https://heyitsmejosh.com/brief).
 
@@ -10,17 +10,18 @@ Native iOS litigation planning app for *Trommel v. AG Canada*. SwiftUI port of [
 
 ## Features
 
-- Case tab: facts, witness statements with legal annotations, 8 Charter grounds accordion, pain journal (synced via Supabase)
-- Money tab: outcome scenarios, per-head damage stack, Ward framework, comparable awards
-- Actions tab: lawyer contacts with tap-to-cycle status (synced), evidence checklist (synced), call script + email template with copy/share, timeline, risks, drafts
-- Auth: Supabase magic link (email OTP, persistent session, deep link via brief:// URL scheme)
+- **Case tab:** facts grid, witness statements with legal annotations, 8 Charter grounds accordion, pain journal with add/edit/delete (Supabase-synced)
+- **Money tab:** outcome scenarios with animated probability bars, per-head damage stack, Ward framework, comparable awards
+- **Actions tab:** 11 lawyer contacts with tap-to-cycle outreach status (synced), evidence checklist (synced), call script + outreach email, timeline, risk analysis, evidence gaps, drafts
+- **Auth:** Supabase magic link OTP, persistent session, deep link via `brief://` URL scheme
+- **Theme:** follows system dark/light automatically
 
 ## Build
 
 ```bash
-cd apps/brief-ios
+cd apps/brief/ios
 xcodegen generate
 open Brief.xcodeproj
 ```
 
-Run on iPhone simulator (iOS 17+).
+Run on iPhone simulator (iOS 17+). Bundle: `com.nulljosh.brief` · Team: `QMM486NPYC`
