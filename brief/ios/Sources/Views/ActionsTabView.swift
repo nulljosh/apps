@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct ActionsTabView: View {
+    @Environment(Store.self) private var store
+    private var rcmp: Bool { store.activeCase == .rcmp }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -9,12 +12,18 @@ struct ActionsTabView: View {
                     strategySection
                     timelineSection
                     SectionCard("Evidence checklist") { ChecklistView() }
-                    CallScriptView(text: callScript, title: "Callback prep")
-                    CallScriptView(text: outreachEmail, title: "Outreach email")
-                    risksSection
-                    evidenceGapsSection
-                    draftsSection
-                    callbackLogSection
+                    if rcmp {
+                        CallScriptView(text: callScript, title: "Callback prep")
+                        CallScriptView(text: outreachEmail, title: "Outreach email")
+                        risksSection
+                        evidenceGapsSection
+                        draftsSection
+                        callbackLogSection
+                    } else {
+                        CallScriptView(text: familyCallScript, title: "Outreach script")
+                        familyRisksSection
+                        familyEvidenceSection
+                    }
                 }
                 .padding(.horizontal, 16).padding(.bottom, 32)
             }
@@ -25,21 +34,30 @@ struct ActionsTabView: View {
     private var lawyersSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Lawyers").font(.system(size:10,weight:.bold)).tracking(1.4).textCase(.uppercase).foregroundStyle(.secondary).padding(.horizontal,4)
-            ForEach(caseLawyers) { LawyerCardView(lawyer: $0) }
+            ForEach(rcmp ? caseLawyers : familyCaseLawyers) { LawyerCardView(lawyer: $0) }
         }
     }
 
     private var strategySection: some View {
         SectionCard("Strategy") {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Contact at least 3 lawyers before committing to any one. Compare retainer structures — contingency terms vary significantly. Do not sign until all consultations are complete.")
-                    .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
-                Text("Basic 2-yr limit expired Aug 1, 2025 — claim survives on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Therapy start May 2026 supports both. Ultimate deadline: Aug 1, 2038. File as soon as counsel confirms.")
-                    .font(.system(size:11,design:.monospaced)).foregroundStyle(.briefWarn).lineSpacing(3).fontWeight(.bold)
-                Text("Call order:\n1. Paul Kent-Snowsell — Kane Shannon & Weiler — 604-591-7321\n2. DLA Law (Ingrid) — Police Misconduct — 604-327-6381\n3. McQuarrie Hunter LLP — Limitation Act — 604-581-7001\n4. Sean Hern Law Corp — 604-684-9151\n5. Cameron Ward — cameronward.com\n6. Arvay Finlay LLP — 604-696-9828\n7. Klein Lawyers — callkleinlawyers.com\n8. Pivot Legal — 604-255-9700 (referrals)\n9. BCCLA Referral — 604-687-2919\n10. CBA BC — 604-687-3221 / info@cbabc.org")
-                    .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
-                Text("Be expensive to fight quietly. Each press-capable lawyer contact, each documented evidence piece, each Charter ground formally pleaded raises the AG's internal cost of suppressing this case publicly.")
-                    .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+                if rcmp {
+                    Text("Contact at least 3 lawyers before committing to any one. Compare retainer structures — contingency terms vary significantly. Do not sign until all consultations are complete.")
+                        .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
+                    Text("Basic 2-yr limit expired Aug 1, 2025 — claim survives on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Therapy start May 2026 supports both. Ultimate deadline: Aug 1, 2038. File as soon as counsel confirms.")
+                        .font(.system(size:11,design:.monospaced)).foregroundStyle(.briefWarn).lineSpacing(3).fontWeight(.bold)
+                    Text("Call order:\n1. Paul Kent-Snowsell — Kane Shannon & Weiler — 604-591-7321\n2. DLA Law (Ingrid) — Police Misconduct — 604-327-6381\n3. McQuarrie Hunter LLP — Limitation Act — 604-581-7001\n4. Sean Hern Law Corp — 604-684-9151\n5. Cameron Ward — cameronward.com\n6. Arvay Finlay LLP — 604-696-9928\n7. Klein Lawyers — callkleinlawyers.com\n8. Pivot Legal — 604-255-9700 (referrals)\n9. BCCLA Referral — 604-687-2919\n10. CBA BC — 604-687-3221 / info@cbabc.org")
+                        .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+                    Text("Be expensive to fight quietly. Each press-capable lawyer contact, each documented evidence piece, each Charter ground formally pleaded raises the AG's internal cost of suppressing this case publicly.")
+                        .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+                } else {
+                    Text("Contact a civil litigation lawyer specializing in intentional torts and/or appropriation of personality. Call Law Society BC referral first — 1-800-663-1919.")
+                        .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
+                    Text("Basic 2-yr limit expires May 1, 2028 (discovery May 2026). Appropriation of personality is the cleanest limitation story — ongoing if still in commercial use. Lead with that. File before May 2028.")
+                        .font(.system(size:11,design:.monospaced)).foregroundStyle(.briefWarn).lineSpacing(3).fontWeight(.bold)
+                    Text("Asset enforcement: parents own $1M+ Langley home. BC has no homestead exemption — a registered judgment can force a sale. Defendants are ~60, retired. Private defendants settle faster than government.")
+                        .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+                }
             }
         }
     }
@@ -47,7 +65,8 @@ struct ActionsTabView: View {
     private var timelineSection: some View {
         SectionCard("Timeline") {
             VStack(spacing: 0) {
-                ForEach(caseTimeline) { step in
+                let timeline = rcmp ? caseTimeline : familyCaseTimeline
+                ForEach(timeline) { step in
                     HStack(alignment: .top, spacing: 14) {
                         VStack(spacing: 0) {
                             Circle()
@@ -55,7 +74,7 @@ struct ActionsTabView: View {
                                 .frame(width: 9, height: 9)
                                 .padding(.top, 4)
                                 .overlay(step.dotStyle == .now ? Circle().stroke(dotColor(step.dotStyle).opacity(0.3), lineWidth: 4) : nil)
-                            if step.id != caseTimeline.last?.id {
+                            if step.id != timeline.last?.id {
                                 Rectangle().fill(Color.secondary.opacity(0.2)).frame(width:1).frame(minHeight:20)
                             }
                         }
@@ -83,6 +102,17 @@ struct ActionsTabView: View {
         }
     }
 
+    private var familyRisksSection: some View {
+        SectionCard("Risks — what defendants will attack") {
+            VStack(alignment:.leading,spacing:10) {
+                risk("Limitation (primary risk).", "Defendants will move to strike childhood claims immediately. Must document May 2026 discoverability in writing now. Appropriation survives if ongoing commercial use continues.", .briefDanger)
+                risk("Causation separation.", "PTSD must be partitioned between RCMP claim and family claim — two cases, two defendants, two expert witnesses. Failure to separate weakens both.", .briefWarn)
+                risk("Family dispute framing.", "Defendants will characterize as family conflict, not a tort. Counsel must anchor in commercial exploitation and documented pattern conduct — not emotion.", .briefWarn)
+                risk("Novel battery claim.", "No BC appellate authority on circumcision as battery. Include as supplementary only — don't let it distract from stronger heads.", .briefWarn)
+            }
+        }
+    }
+
     private var evidenceGapsSection: some View {
         SectionCard("Evidence gaps — not yet on checklist") {
             Text("· 911 call audio + CAD notes (E-Comm 9-1-1 BC FOI)\n· RCMP officer notebooks Form 1624 (ATIP)\n· BCEHS paramedic ePCR\n· Mental Health Act Form 4 / Form 1 (hospital)\n· Pharmacy records post-incident\n· Pre-incident GP records 2022 – Jul 2023 (baseline)\n· Income records / T4s 2022–2026\n· Photos — injuries, dwelling damage\n· Pre-retainer comms audit (admissions check)\n\nNote: existing checklist item \"OPCC complaint\" should be CRCC. RCMP is federal — OPCC handles BC municipal only.")
@@ -90,12 +120,17 @@ struct ActionsTabView: View {
         }
     }
 
+    private var familyEvidenceSection: some View {
+        SectionCard("Evidence priorities") {
+            Text("· Photograph all vehicles and materials using your likeness — timestamped\n· Screenshot online presence: website, Google My Business, social media\n· Write precise homelessness timeline (dates, locations, witnesses)\n· Preserve all texts, emails, voicemails from Brian + Christine\n· Find or reconstruct the Yelp review and any parental response\n· Document police call dates from childhood (ages 10, 15) — any incident numbers\n· Therapy records separating family PTSD from RCMP PTSD\n· BC Registry search on family business (bcregistry.gov.bc.ca)\n· Written memo: May 2026 = date you understood these as legal claims")
+                .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(4)
+        }
+    }
+
     private var draftsSection: some View {
         SectionCard("Drafts") {
-            VStack(alignment:.leading,spacing:8) {
-                Text("CRCC complaint skeleton, FOI/ATIP requests, demand letter skeleton, extra questions for Paul — see heyitsmejosh.com/brief for full drafts.\n\nNothing here sent without Paul's sign-off.")
-                    .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(4)
-            }
+            Text("CRCC complaint skeleton, FOI/ATIP requests, demand letter skeleton, extra questions for Paul — see heyitsmejosh.com/brief for full drafts.\n\nNothing here sent without Paul's sign-off.")
+                .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(4)
         }
     }
 
@@ -117,5 +152,4 @@ struct ActionsTabView: View {
     private func dotColor(_ s: TimelineStep.DotStyle) -> Color {
         switch s { case .now: return .briefDanger; case .warn: return .briefWarn; case .good: return .briefGreen; case .danger: return .briefDanger; case .neutral: return .secondary }
     }
-
 }

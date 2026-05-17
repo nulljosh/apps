@@ -39,6 +39,7 @@ final class Store {
     var needsSignIn = true
     var magicLinkSent = false
     var signInError: String?
+    var activeCase: CaseID = .rcmp
     private(set) var journalEntries: [JournalEntry] = []
     private(set) var completedItems: Set<Int> = [1, 8, 9, 10, 13]
     private(set) var lawyerStatuses: [String: String] = [:]

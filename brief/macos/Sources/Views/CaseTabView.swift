@@ -4,6 +4,15 @@ struct CaseTabView: View {
     @Environment(Store.self) private var store
     @State private var expandedGround: String? = "force"
 
+    private var rcmp: Bool { store.activeCase == .rcmp }
+    var facts:     [CaseFact] { rcmp ? caseFacts       : familyCaseFacts }
+    var witnesses: [Witness]  { rcmp ? caseWitnesses   : familyCaseWitnesses }
+    var grounds:   [Ground]   { rcmp ? caseGrounds     : familyCaseGrounds }
+
+    var settlementLabel: String { rcmp ? "$1,000,000"     : "$300k–$600k" }
+    var settlementRange: String { rcmp ? "$800k–$1.5M with full leverage · $2–3M trial ceiling" : "$300k–$600k most likely · $1.5–2M trial ceiling" }
+    var navTitle:        String { rcmp ? "Trommel v. AG Canada" : "Trommel v. Trommel" }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 22) {
@@ -15,9 +24,9 @@ struct CaseTabView: View {
                         .tracking(1.2)
                         .textCase(.uppercase)
                         .foregroundStyle(.secondary)
-                    Text("$1,000,000")
+                    Text(settlementLabel)
                         .font(.system(size: 28, weight: .bold, design: .rounded))
-                    Text("$800k–$1.5M with full leverage · $2–3M trial ceiling")
+                    Text(settlementRange)
                         .font(.system(size: 11, design: .monospaced))
                         .foregroundStyle(.secondary)
                 }
@@ -27,7 +36,7 @@ struct CaseTabView: View {
 
                 section("Facts") {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 14) {
-                        ForEach(caseFacts) { fact in
+                        ForEach(facts) { fact in
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(fact.key)
                                     .font(.system(size: 9, weight: .bold))
@@ -45,15 +54,17 @@ struct CaseTabView: View {
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
                 }
 
-                section("Witnesses") {
-                    ForEach(caseWitnesses) { witness in
-                        WitnessCardView(witness: witness)
+                if !witnesses.isEmpty {
+                    section("Witnesses") {
+                        ForEach(witnesses) { witness in
+                            WitnessCardView(witness: witness)
+                        }
                     }
                 }
 
                 section("Legal grounds", hint: "click to expand") {
                     VStack(spacing: 6) {
-                        ForEach(caseGrounds) { ground in
+                        ForEach(grounds) { ground in
                             GroundRowView(ground: ground, expandedId: $expandedGround)
                         }
                     }
@@ -66,7 +77,7 @@ struct CaseTabView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 32)
         }
-        .navigationTitle("Trommel v. AG Canada")
+        .navigationTitle(navTitle)
     }
 
     @ViewBuilder

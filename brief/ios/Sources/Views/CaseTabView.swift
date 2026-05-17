@@ -1,7 +1,16 @@
 import SwiftUI
 
 struct CaseTabView: View {
-    @State private var expandedGround: String? = "force"
+    @Environment(Store.self) private var store
+    @State private var expandedGround: String? = nil
+
+    var facts:     [CaseFact]  { store.activeCase == .rcmp ? caseFacts      : familyCaseFacts }
+    var witnesses: [Witness]   { store.activeCase == .rcmp ? caseWitnesses  : familyCaseWitnesses }
+    var grounds:   [Ground]    { store.activeCase == .rcmp ? caseGrounds    : familyCaseGrounds }
+
+    var settlementLabel: String { store.activeCase == .rcmp ? "$1,000,000"          : "$300k–$600k" }
+    var settlementRange: String { store.activeCase == .rcmp ? "$800k–$1.5M full leverage · $2–3M trial ceiling" : "$300k–600k most likely · $1.5–2M trial ceiling" }
+    var navTitle:        String { store.activeCase == .rcmp ? "Trommel v. AG Canada" : "Trommel v. Trommel" }
 
     var body: some View {
         NavigationStack {
@@ -9,16 +18,15 @@ struct CaseTabView: View {
                 VStack(spacing: 22) {
                     LimitationBannerView()
 
-                    // Settlement stat
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Likely settlement")
                             .font(.system(size: 10, weight: .bold))
                             .tracking(1.2)
                             .textCase(.uppercase)
                             .foregroundStyle(.secondary)
-                        Text("$1,000,000")
+                        Text(settlementLabel)
                             .font(.system(size: 28, weight: .bold, design: .rounded))
-                        Text("$800k–$1.5M with full leverage · $2–3M trial ceiling")
+                        Text(settlementRange)
                             .font(.system(size: 11, design: .monospaced))
                             .foregroundStyle(.secondary)
                     }
@@ -26,10 +34,9 @@ struct CaseTabView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
 
-                    // Facts
                     section("Facts") {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 14) {
-                            ForEach(caseFacts) { fact in
+                            ForEach(facts) { fact in
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(fact.key)
                                         .font(.system(size: 9, weight: .bold))
@@ -47,23 +54,22 @@ struct CaseTabView: View {
                         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
                     }
 
-                    // Witnesses
-                    section("Witnesses") {
-                        ForEach(caseWitnesses) { witness in
-                            WitnessCardView(witness: witness)
+                    if !witnesses.isEmpty {
+                        section("Witnesses") {
+                            ForEach(witnesses) { witness in
+                                WitnessCardView(witness: witness)
+                            }
                         }
                     }
 
-                    // Grounds
                     section("Legal grounds", hint: "tap to expand") {
                         VStack(spacing: 6) {
-                            ForEach(caseGrounds) { ground in
+                            ForEach(grounds) { ground in
                                 GroundRowView(ground: ground, expandedId: $expandedGround)
                             }
                         }
                     }
 
-                    // Journal
                     section("Pain journal") {
                         JournalView()
                     }
@@ -71,7 +77,7 @@ struct CaseTabView: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 32)
             }
-            .navigationTitle("Trommel v. AG Canada")
+            .navigationTitle(navTitle)
             .navigationBarTitleDisplayMode(.large)
         }
     }
@@ -96,5 +102,4 @@ struct CaseTabView: View {
             content()
         }
     }
-
 }

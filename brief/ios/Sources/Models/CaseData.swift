@@ -104,6 +104,24 @@ struct CaseFact: Identifiable {
     var fullWidth: Bool = false
 }
 
+enum CaseID: String, CaseIterable, Identifiable {
+    case rcmp   = "CASE-0001"
+    case family = "CASE-0002"
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .rcmp:   return "Trommel v. AG Canada"
+        case .family: return "Trommel v. Trommel"
+        }
+    }
+    var subtitle: String {
+        switch self {
+        case .rcmp:   return "Charter civil · RCMP · Aug 2023"
+        case .family: return "Family tort · appropriation, IIMS"
+        }
+    }
+}
+
 // MARK: - Colors
 
 extension Color {
