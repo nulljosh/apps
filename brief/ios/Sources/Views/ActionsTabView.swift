@@ -33,7 +33,8 @@ struct ActionsTabView: View {
                     Menu {
                         ForEach(CaseID.allCases) { c in
                             Button { store.activeCase = c } label: {
-                                Label(c.title, systemImage: store.activeCase == c ? "checkmark" : "")
+                                if store.activeCase == c { Label(c.title, systemImage: "checkmark") }
+                                else { Text(c.title) }
                             }
                         }
                     } label: {
