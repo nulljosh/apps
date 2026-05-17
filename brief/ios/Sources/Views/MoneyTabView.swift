@@ -167,6 +167,25 @@ struct MoneyTabView: View {
                 .padding(.horizontal,16).padding(.bottom,32)
             }
             .navigationTitle("Money")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        ForEach(CaseID.allCases) { c in
+                            Button { store.activeCase = c } label: {
+                                Label(c.title, systemImage: store.activeCase == c ? "checkmark" : "")
+                            }
+                        }
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text(store.activeCase.rawValue)
+                                .font(.system(size: 11, weight: .bold, design: .monospaced))
+                            Image(systemName: "chevron.up.chevron.down")
+                                .font(.system(size: 10))
+                        }
+                        .foregroundStyle(.secondary)
+                    }
+                }
+            }
         }
     }
 }

@@ -1,15 +1,25 @@
 import SwiftUI
 
 struct LimitationBannerView: View {
+    @Environment(Store.self) private var store
+    private var rcmp: Bool { store.activeCase == .rcmp }
+
+    private var basicDeadline: Date {
+        rcmp
+            ? Calendar.current.date(from: DateComponents(year: 2025, month: 8, day: 1))!
+            : Calendar.current.date(from: DateComponents(year: 2028, month: 5, day: 1))!
+    }
+    private var incidentDate: Date {
+        rcmp
+            ? Calendar.current.date(from: DateComponents(year: 2023, month: 8, day: 1))!
+            : Calendar.current.date(from: DateComponents(year: 2026, month: 5, day: 11))!
+    }
     private var daysLeft: Int {
-        let deadline = Calendar.current.date(from: DateComponents(year: 2025, month: 8, day: 1))!
-        return Calendar.current.dateComponents([.day], from: .now, to: deadline).day ?? -1
+        Calendar.current.dateComponents([.day], from: .now, to: basicDeadline).day ?? -1
     }
     private var isExpired: Bool { daysLeft < 0 }
     private var progress: Double {
-        let incident = Calendar.current.date(from: DateComponents(year: 2023, month: 8, day: 1))!
-        let deadline = Calendar.current.date(from: DateComponents(year: 2025, month: 8, day: 1))!
-        let p = Date.now.timeIntervalSince(incident) / deadline.timeIntervalSince(incident)
+        let p = Date.now.timeIntervalSince(incidentDate) / basicDeadline.timeIntervalSince(incidentDate)
         return min(1, max(0, p))
     }
 
@@ -22,7 +32,9 @@ struct LimitationBannerView: View {
                         .tracking(1.4)
                         .textCase(.uppercase)
                         .foregroundStyle(.briefDanger)
-                    Text("Basic limit: Aug 1, 2025 · Ultimate: Aug 1, 2038")
+                    Text(rcmp
+                         ? "Basic limit: Aug 1, 2025 · Ultimate: Aug 1, 2038"
+                         : "Basic limit: May 1, 2028 · Pin discoverability now")
                         .font(.system(size: 10, design: .monospaced))
                         .foregroundStyle(.secondary)
                 }
@@ -47,9 +59,9 @@ struct LimitationBannerView: View {
             }
             .frame(height: 11)
             HStack {
-                Text("Incident · Aug 2023")
+                Text(rcmp ? "Incident · Aug 2023" : "Discovery · May 2026")
                 Spacer()
-                Text("Ultimate: Aug 2038")
+                Text(rcmp ? "Ultimate: Aug 2038" : "Deadline: May 2028")
             }
             .font(.system(size: 9, design: .monospaced))
             .foregroundStyle(.secondary)
