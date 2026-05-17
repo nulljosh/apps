@@ -262,19 +262,19 @@ let caseLawyers: [Lawyer] = [
            phone: "6046849151", phoneNote: nil, email: nil, website: nil),
 
     Lawyer(id: "cw", initials: "CW", name: "Cameron Ward",
-           subtitle: "Vancouver BC · 40+ yrs",
+           subtitle: "Cameron Ward & Co · Gastown, Vancouver BC · 40+ yrs",
            tags: [LawyerTag(label: "Ward v. Vancouver SCC", style: .good), LawyerTag(label: "Charter & police misconduct", style: .good)],
-           phone: nil, phoneNote: nil, email: nil, website: "cameronward.com"),
+           phone: "6046886881", phoneNote: nil, email: "cward@cameronward.com", website: "cameronward.com"),
 
     Lawyer(id: "af", initials: "AF", name: "Arvay Finlay LLP",
            subtitle: "Vancouver BC",
            tags: [LawyerTag(label: "Fairy Creek RCMP class action", style: .good), LawyerTag(label: "Charter ss.2/7/8/9", style: .good)],
-           phone: "6046969828", phoneNote: nil, email: nil, website: "arvayfinlay.ca"),
+           phone: "6046969928", phoneNote: nil, email: nil, website: "arvayfinlay.ca"),
 
     Lawyer(id: "kl", initials: "KL", name: "Klein Lawyers",
-           subtitle: "Vancouver BC",
-           tags: [LawyerTag(label: "RCMP class actions", style: .good), LawyerTag(label: "Federal court", style: .good)],
-           phone: nil, phoneNote: nil, email: nil, website: "callkleinlawyers.com"),
+           subtitle: "1385 W 8th Ave #400 · Vancouver BC · Free consult · Contingency",
+           tags: [LawyerTag(label: "RCMP class actions", style: .good), LawyerTag(label: "Federal court", style: .good), LawyerTag(label: "Contingency", style: .good)],
+           phone: "6048747171", phoneNote: nil, email: nil, website: "callkleinlawyers.com"),
 
     Lawyer(id: "pl", initials: "PL", name: "Pivot Legal",
            subtitle: "Vancouver BC · Backup / referrals",

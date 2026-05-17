@@ -112,15 +112,15 @@ const LAWYERS = [
   { id:'paul-kent',        init:'PK', name:'Paul G. Kent-Snowsell', sub:'Kane Shannon & Weiler - Surrey BC - Of Counsel',
     tags:[{t:'33 yrs trial',c:'good'},{t:'Sued RCMP',c:'good'}], status:'voicemail', fit:4,
     contacts:[{label:'604-591-7321',href:'tel:6045917321',kind:'tel',primary:true},{label:'pgkent@kswlawyers.ca',href:'mailto:pgkent@kswlawyers.ca',kind:'email'}] },
-  { id:'cameron-ward',     init:'CW', name:'Cameron Ward', sub:'Vancouver BC - 40+ yrs',
+  { id:'cameron-ward',     init:'CW', name:'Cameron Ward', sub:'Cameron Ward & Co - Gastown, Vancouver BC - 40+ yrs',
     tags:[{t:'Ward v. Vancouver SCC',c:'good'},{t:'Charter & police',c:'good'}], status:'emailed', fit:5,
-    contacts:[{label:'cameronward.com',href:'https://cameronward.com',kind:'web'}] },
+    contacts:[{label:'604-688-6881',href:'tel:6046886881',kind:'tel',primary:true},{label:'cward@cameronward.com',href:'mailto:cward@cameronward.com',kind:'email'},{label:'cameronward.com',href:'https://cameronward.com',kind:'web'}] },
   { id:'arvay-finlay',     init:'AF', name:'Arvay Finlay LLP', sub:'Vancouver BC',
-    tags:[{t:'Fairy Creek RCMP class',c:'good'},{t:'Charter ss.2/7/8/9',c:'good'}], status:'emailed', fit:4,
-    contacts:[{label:'604-696-9828',href:'tel:6046969828',kind:'tel'},{label:'arvayfinlay.ca',href:'https://arvayfinlay.ca',kind:'web'}] },
-  { id:'klein-lawyers',    init:'KL', name:'Klein Lawyers', sub:'Vancouver BC',
-    tags:[{t:'RCMP class actions',c:'good'},{t:'Federal court',c:'good'}], status:'emailed', fit:3,
-    contacts:[{label:'callkleinlawyers.com',href:'https://callkleinlawyers.com',kind:'web'}] },
+    tags:[{t:'Fairy Creek RCMP class',c:'good'},{t:'Charter ss.2/7/8/9',c:'good'}], status:'voicemail', fit:4,
+    contacts:[{label:'604-696-9928',href:'tel:6046969928',kind:'tel'},{label:'arvayfinlay.ca',href:'https://arvayfinlay.ca',kind:'web'}] },
+  { id:'klein-lawyers',    init:'KL', name:'Klein Lawyers', sub:'1385 W 8th Ave #400 - Vancouver BC - free consult, contingency',
+    tags:[{t:'RCMP class actions',c:'good'},{t:'Federal court',c:'good'},{t:'Contingency',c:'good'}], status:'emailed', fit:3,
+    contacts:[{label:'604-874-7171',href:'tel:6048747171',kind:'tel',primary:true},{label:'callkleinlawyers.com',href:'https://callkleinlawyers.com',kind:'web'}] },
   { id:'dla-law',          init:'DL', name:'DLA Law', sub:'Dosanjh Ladner Arora - Vancouver BC',
     tags:[{t:'Police misconduct',c:'good'},{t:'Wrongful arrest',c:'good'}], status:'emailed', fit:3,
     contacts:[{label:'604-327-6381',href:'tel:6043276381',kind:'tel'},{label:'Ingrid@dlalaw.ca',href:'mailto:Ingrid@dlalaw.ca',kind:'email'}] },
@@ -173,7 +173,7 @@ const JOURNAL_SEED = [
   { date:'2026-04-22', text:'Entries are sourced from the brief_journal table.' },
 ];
 
-const CALL_SCRIPT = 'Call script - read before each lawyer consultation.\n\nIntroduction: "My name is Joshua Trommel. I am following up on my email about a civil claim arising from a warrantless RCMP wellness-call entry in August 2023."\n\nKey facts (30 seconds):\n- Date: August 1, 2023, approx 11:00 AM, Langley BC (Brookswood detachment)\n- No underlying crime. Father present. I was sitting at kitchen table.\n- RCMP entered without warrant, restrained me within 30 seconds (prone, knee on back).\n- Transported to hospital, overnight hold, forced antipsychotic injection.\n- No s.10(b) caution at any point. File: 2023-25586.\n\nCharter grounds: ss. 7, 8, 9, 10(b), 12 + battery + false imprisonment.\n\nLimitation: Basic 2-year expired Aug 2025. Survived on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Discovery date: May 11, 2026.\n\nDefendant: Attorney General of Canada (RCMP is federal).\n\nDamages ask: $800k-1.2M settlement; $2-3M trial ceiling.\n\nQuestions for counsel:\n1. Do you take civil rights / Charter police misconduct cases?\n2. Retainer structure - flat or contingency?\n3. Have you acted against the AG / RCMP specifically?\n4. Are you press-capable if the AG stonewalls?\n5. When can we meet in person?';
+const CALL_SCRIPT = '30-SECOND COLD CALL — use verbatim:\n"Hi, my name is Josh Trommel. I have a Charter damages claim against the Attorney General of Canada — warrantless RCMP entry during a wellness call in Langley, August 2023, forced hospitalisation, forced antipsychotic medication, documented PTSD. I\'m looking to retain counsel. The basic two-year limit has passed but I have strong discoverability and incapacity arguments. I\'d like to book a consultation."\n\n---\n\nFULL CONSULTATION PREP:\n\nIntroduction: "My name is Joshua Trommel. I am following up on my email about a civil claim arising from a warrantless RCMP wellness-call entry in August 2023."\n\nKey facts (30 seconds):\n- Date: August 1, 2023, approx 11:00 AM, Langley BC (Brookswood detachment)\n- No underlying crime. Father present. I was sitting at kitchen table.\n- RCMP entered without warrant, restrained me within 30 seconds (prone, knee on back).\n- Transported to hospital, overnight hold, forced antipsychotic injection.\n- No s.10(b) caution at any point. File: 2023-25586.\n\nCharter grounds: ss. 7, 8, 9, 10(b), 12 + battery + false imprisonment.\n\nLimitation: Basic 2-year expired Aug 2025. Survived on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Discovery date: May 11, 2026.\n\nDefendant: Attorney General of Canada (RCMP is federal).\n\nDamages ask: $800k-1.2M settlement; $2-3M trial ceiling.\n\nQuestions for counsel:\n1. Do you take civil rights / Charter police misconduct cases?\n2. Retainer structure - flat or contingency?\n3. Have you acted against the AG / RCMP specifically?\n4. Are you press-capable if the AG stonewalls?\n5. When can we meet in person?';
 
 // ===== LEVERAGE =====
 const LAWYER_LEVERAGE = { none:0, voicemail:5, emailed:15, callback:40, retained:180 };

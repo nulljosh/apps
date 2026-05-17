@@ -99,9 +99,9 @@
     },
     {
       "initials": "CW", "name": "Cameron Ward",
-      "firm": "Cameron Ward Law", "location": "Vancouver BC",
+      "firm": "Cameron Ward & Co", "location": "Gastown, Vancouver BC",
       "tags": ["Ward v. Vancouver SCC", "Charter & police misconduct"],
-      "website": "cameronward.com",
+      "phone": "6046886881", "email": "cward@cameronward.com", "website": "cameronward.com",
       "outreach_method": "email", "status": "not_contacted",
       "priority_note": "He IS the Ward in Ward v. Vancouver (2010 SCC) — highest-value target"
     },
@@ -116,14 +116,14 @@
       "initials": "AF", "name": "Arvay Finlay LLP",
       "firm": "Arvay Finlay", "location": "Vancouver BC",
       "tags": ["Fairy Creek RCMP class action", "Charter ss.2/7/8/9"],
-      "phone": "6046969828", "website": "arvayfinlay.ca",
-      "outreach_method": "email", "status": "not_contacted"
+      "phone": "6046969928", "website": "arvayfinlay.ca",
+      "outreach_method": "call", "status": "voicemail_left"
     },
     {
       "initials": "KL", "name": "Klein Lawyers",
-      "firm": "Klein Lawyers", "location": "Vancouver BC",
-      "tags": ["RCMP class actions", "Federal court"],
-      "website": "callkleinlawyers.com",
+      "firm": "Klein Lawyers", "location": "1385 W 8th Ave #400, Vancouver BC",
+      "tags": ["RCMP class actions", "Federal court", "Free consult", "Contingency"],
+      "phone": "6048747171", "website": "callkleinlawyers.com",
       "outreach_method": "email", "status": "not_contacted"
     },
     {
