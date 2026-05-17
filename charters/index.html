@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charters — Constitutional Rights Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+:root{
+  --bg:#0c1220;--surface:#111c2e;--s2:#172237;--border:#1f3050;
+  --cream:#e8e4da;--muted:#7a8e9e;--m2:#4a6070;
+  --b1:#1a5a96;--b2:#2472b2;--b3:#4e9cd7;
+  --f1:'Fraunces',Georgia,serif;--f2:'DM Sans',system-ui,sans-serif;
+  --sp:cubic-bezier(0.34,1.56,0.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--cream);font-family:var(--f2);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden;position:relative;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+body::after{content:'';position:fixed;top:-80px;left:50%;transform:translateX(-50%);width:900px;height:480px;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 0%,rgba(26,90,150,.18) 0%,transparent 70%);}
+header{position:relative;z-index:50;padding:26px 40px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:rgba(12,18,32,.8);backdrop-filter:blur(8px);}
+.wm{font-family:var(--f1);font-size:1.7rem;font-weight:900;letter-spacing:-.03em;line-height:1;}
+.wm em{font-style:normal;color:var(--b3);}
+.tg{font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-top:3px;}
+.sw{flex:1;max-width:380px;position:relative;}
+.sw svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--muted);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
+#gs{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:8px 14px 8px 36px;color:var(--cream);font-family:var(--f2);font-size:.82rem;outline:none;transition:border-color .2s,box-shadow .2s;}
+#gs::placeholder{color:var(--muted);}
+#gs:focus{border-color:var(--b2);box-shadow:0 0 0 3px rgba(36,114,178,.12);}
+.vt{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:3px;gap:2px;margin-left:auto;}
+.vb{background:none;border:none;color:var(--muted);font-family:var(--f2);font-size:.78rem;font-weight:500;padding:5px 14px;border-radius:100px;cursor:pointer;transition:all .2s var(--sp);}
+.vb.on{background:var(--b1);color:var(--cream);}
+.vb:hover:not(.on){color:var(--cream);background:var(--s2);}
+.filters{position:relative;z-index:40;padding:9px 40px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:rgba(12,18,32,.7);backdrop-filter:blur(6px);}
+.fl{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--m2);margin-right:2px;}
+.fb{background:none;border:1px solid var(--border);border-radius:100px;color:var(--muted);font-family:var(--f2);font-size:.72rem;font-weight:500;padding:3px 12px;cursor:pointer;transition:all .18s var(--sp);}
+.fb:hover{border-color:var(--b2);color:var(--cream);transform:translateY(-1px);}
+.fb.on{background:var(--b1);border-color:var(--b1);color:var(--cream);}
+#mv{position:relative;width:100%;}
+#mv.h{display:none;}
+.mw{width:100%;overflow:hidden;background:#060e18;}
+.wm-svg{width:100%;height:auto;display:block;cursor:crosshair;}
+.wm-svg .ct{fill:#0f1e30;stroke:#162540;stroke-width:.4;}
+.wm-svg .co{fill:var(--b1);stroke:#0c1220;stroke-width:.8;cursor:pointer;opacity:.82;transition:fill .18s,opacity .18s,filter .18s;}
+.wm-svg .co:hover{fill:var(--b2);opacity:1;}
+.wm-svg .co.sel{fill:var(--b3);opacity:1;filter:drop-shadow(0 0 5px rgba(78,156,215,.55));}
+.wm-svg .eu{fill:rgba(78,156,215,.04);stroke:var(--b2);stroke-width:1;stroke-dasharray:4 3;cursor:pointer;transition:fill .18s,stroke .18s;}
+.wm-svg .eu:hover{fill:rgba(78,156,215,.1);stroke:var(--b3);}
+.wm-svg .eu.sel{fill:rgba(78,156,215,.15);stroke:var(--b3);}
+.ml{fill:rgba(232,228,218,.55);font-family:var(--f2);font-size:7.5px;font-weight:500;pointer-events:none;text-anchor:middle;dominant-baseline:middle;}
+.ml.b{font-size:8.5px;fill:rgba(232,228,218,.75);}
+.mleg{position:absolute;bottom:14px;right:20px;display:flex;gap:12px;background:rgba(12,18,32,.88);border:1px solid var(--border);border-radius:8px;padding:7px 12px;}
+.li{display:flex;align-items:center;gap:6px;font-size:.67rem;color:var(--muted);}
+.ls{width:13px;height:8px;border-radius:2px;}
+.ls.d{background:var(--b1);}
+.ls.l{background:#101d2e;border:1px solid #162540;}
+.mh{position:absolute;bottom:14px;left:20px;font-size:.67rem;color:var(--m2);pointer-events:none;}
+#tip{position:fixed;background:var(--s2);border:1px solid var(--b2);border-radius:6px;padding:5px 11px;font-size:.78rem;color:var(--cream);pointer-events:none;white-space:nowrap;opacity:0;transition:opacity .12s;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+#lv{padding:26px 40px;}
+#lv.h{display:none;}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:13px;}
+.cc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:17px;cursor:pointer;transition:all .22s var(--sp);position:relative;overflow:hidden;}
+.cc::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,90,150,.07) 0%,transparent 55%);opacity:0;transition:opacity .2s;}
+.cc:hover{border-color:var(--b2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.35);}
+.cc:hover::after{opacity:1;}
+.cc.sel{border-color:var(--b3);box-shadow:0 0 0 1px var(--b3),0 8px 28px rgba(0,0,0,.35);}
+.cc.h{display:none;}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px;gap:8px;}
+.cn{font-family:var(--f1);font-size:1.05rem;font-weight:700;color:var(--cream);line-height:1.2;}
+.cr{font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:2px;}
+.cb{font-size:.66rem;color:var(--b3);background:rgba(78,156,215,.1);border:1px solid rgba(78,156,215,.22);padding:2px 8px;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+.cd{display:flex;flex-direction:column;gap:4px;}
+.dr{font-size:.75rem;color:var(--muted);display:flex;align-items:flex-start;gap:7px;}
+.dr::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--b2);flex-shrink:0;margin-top:6px;}
+.dy{color:var(--b3);font-size:.7rem;margin-left:auto;flex-shrink:0;padding-left:4px;}
+.tgs{margin-top:9px;display:flex;flex-wrap:wrap;gap:4px;}
+.tag{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:100px;border:1px solid;}
+.tag.civil{border-color:#4e9cd7;color:#4e9cd7;background:rgba(78,156,215,.07);}
+.tag.political{border-color:#6a9fcf;color:#6a9fcf;background:rgba(106,159,207,.07);}
+.tag.economic{border-color:#7aab7a;color:#7aab7a;background:rgba(122,171,122,.07);}
+.tag.social{border-color:#c4956a;color:#c4956a;background:rgba(196,149,106,.07);}
+.tag.cultural{border-color:#a07bc8;color:#a07bc8;background:rgba(160,123,200,.07);}
+#pan{position:fixed;top:0;right:0;width:460px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:300;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .32s var(--sp);overflow:hidden;}
+#pan.op{transform:translateX(0);box-shadow:-20px 0 60px rgba(0,0,0,.55);}
+.pt{padding:20px 18px 13px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+#pc{font-family:var(--f1);font-size:1.5rem;font-weight:900;color:var(--cream);line-height:1.1;}
+#pr{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-top:4px;}
+.pcl{background:var(--s2);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--cream);font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s var(--sp);}
+.pcl:hover{background:var(--border);transform:scale(1.1);}
+.psw{padding:9px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.psw input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 11px;color:var(--cream);font-family:var(--f2);font-size:.8rem;outline:none;transition:border-color .18s;}
+.psw input:focus{border-color:var(--b2);}
+.psw input::placeholder{color:var(--muted);}
+#pb{flex:1;overflow-y:auto;padding:13px 14px 22px;}
+#pb::-webkit-scrollbar{width:5px;}
+#pb::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.db{margin-bottom:20px;}
+.dt{font-family:var(--f1);font-size:1rem;font-weight:700;color:var(--b3);margin-bottom:2px;}
+.dm{font-size:.7rem;color:var(--muted);display:flex;gap:12px;margin-bottom:11px;}
+.dy2{color:var(--b2);font-weight:500;}
+.al{display:flex;flex-direction:column;gap:6px;}
+.ar{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;transition:border-color .18s;}
+.ar:hover{border-color:var(--b1);}
+.ar.h{display:none;}
+.aref{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--b2);font-weight:500;margin-bottom:2px;}
+.atit{font-family:var(--f1);font-size:.87rem;font-weight:700;color:var(--cream);margin-bottom:3px;}
+.atxt{font-size:.74rem;color:var(--muted);line-height:1.55;}
+.atgs{margin-top:6px;display:flex;flex-wrap:wrap;gap:3px;}
+#sd{position:fixed;top:72px;left:50%;transform:translateX(-50%);width:min(560px,90vw);background:var(--surface);border:1px solid var(--border);border-radius:12px;z-index:600;max-height:370px;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);display:none;}
+#sd.op{display:block;}
+#sd::-webkit-scrollbar{width:5px;}
+#sd::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.sri{padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;}
+.sri:last-child{border-bottom:none;}
+.sri:hover{background:var(--s2);}
+.src{font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--b3);margin-bottom:2px;}
+.srt{font-family:var(--f1);font-size:.88rem;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.srx{font-size:.73rem;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.sre{padding:18px;text-align:center;font-size:.82rem;color:var(--muted);}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:250;opacity:0;pointer-events:none;transition:opacity .25s;}
+#ov.on{opacity:1;pointer-events:all;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.fu{animation:fadeUp .42s ease both;}
+.cc:nth-child(1){animation-delay:.04s}.cc:nth-child(2){animation-delay:.08s}.cc:nth-child(3){animation-delay:.12s}
+.cc:nth-child(4){animation-delay:.16s}.cc:nth-child(5){animation-delay:.20s}.cc:nth-child(6){animation-delay:.24s}
+.cc:nth-child(7){animation-delay:.28s}.cc:nth-child(8){animation-delay:.32s}.cc:nth-child(9){animation-delay:.36s}
+.cc:nth-child(10){animation-delay:.40s}.cc:nth-child(11){animation-delay:.44s}
+@media(max-width:768px){
+  header{padding:14px;gap:10px;}
+  .wm{font-size:1.3rem;}.tg{display:none;}
+  .sw{max-width:100%;flex-basis:100%;order:3;}
+  .vt{margin-left:0;}
+  .filters{padding:7px 14px;}
+  #lv{padding:14px;}
+  #pan{width:100%;height:80vh;top:auto;bottom:0;border-left:none;border-top:1px solid var(--border);border-radius:14px 14px 0 0;transform:translateY(100%);}
+  #pan.op{transform:translateY(0);}
+}
+</style>
+</head>
+<body>
+<div id="ov"></div>
+<div id="tip"></div>
+<div id="sd"></div>
+
+<header class="animate__animated animate__fadeIn">
+  <div>
+    <div class="wm">CHART<em>ERS</em></div>
+    <div class="tg">Constitutional Rights Reference</div>
+  </div>
+  <div class="sw">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="search" id="gs" placeholder="Search rights across all constitutions..." autocomplete="off">
+  </div>
+  <div class="vt">
+    <button class="vb on" id="bm">Map</button>
+    <button class="vb" id="bl">List</button>
+  </div>
+</header>
+
+<div class="filters animate__animated animate__fadeIn" style="animation-delay:.08s">
+  <span class="fl">Filter:</span>
+  <button class="fb on" data-f="all">All</button>
+  <button class="fb" data-f="civil">Civil</button>
+  <button class="fb" data-f="political">Political</button>
+  <button class="fb" data-f="economic">Economic</button>
+  <button class="fb" data-f="social">Social</button>
+  <button class="fb" data-f="cultural">Cultural</button>
+</div>
+
+<main>
+<div id="mv">
+  <div class="mw">
+  <svg id="wsvg" class="wm-svg" viewBox="0 0 960 500" xmlns="http://www.w3.org/2000/svg">
+    <rect width="960" height="500" fill="#060e18"/>
+    <!-- Continents -->
+    <path class="ct" d="M27,28 L110,17 L267,19 L340,119 L321,131 L305,162 L287,213 L264,226 L247,247 L230,268 L215,290 L199,313 L184,342 L168,372 L154,395 L143,412 L130,420 L117,416 L105,405 L95,390 L88,370 L85,348 L87,325 L90,305 L87,285 L77,270 L63,263 L48,267 L36,278 L28,293 L27,310 L30,327 L29,341 L22,349 L11,347 L3,337 L0,323 L0,28 Z"/>
+    <path class="ct" d="M265,228 L348,244 L388,265 L392,307 L372,353 L336,402 L300,420 L267,417 L237,397 L217,370 L212,338 L217,305 L238,270 L254,248 Z"/>
+    <path class="ct" d="M436,53 L576,50 L597,117 L562,130 L532,117 L512,122 L490,122 L467,127 L452,148 L432,153 L420,133 L437,90 Z"/>
+    <path class="ct" d="M424,157 L490,141 L548,140 L603,148 L628,222 L613,293 L592,350 L560,385 L527,397 L495,388 L466,362 L444,325 L426,283 L415,238 L419,200 Z"/>
+    <path class="ct" d="M295,0 L375,0 L378,30 L350,68 L308,78 L282,58 L282,28 Z"/>
+    <path class="ct" d="M555,56 L560,97 L596,117 L640,100 L680,155 L650,196 L614,225 L596,228 L580,200 L597,165 L597,117 L640,97 L775,110 L825,130 L875,130 L920,155 L960,175 L960,30 L555,56 Z"/>
+    <path class="ct" d="M597,165 L640,155 L680,155 L700,195 L690,225 L660,240 L625,235 L600,218 L597,195 Z"/>
+    <path class="ct" d="M680,155 L775,110 L825,130 L875,140 L920,160 L920,180 L875,195 L830,195 L800,215 L780,235 L760,250 L740,258 L720,255 L700,245 L700,225 L690,225 Z"/>
+    <!-- Featured countries -->
+    <path class="co" id="m-CA" data-id="CA" d="M107,83 L128,56 L160,33 L213,17 L267,19 L307,75 L325,89 L335,106 L340,119 L321,119 L310,128 L302,119 L275,128 L257,119 L224,114 L187,114 L149,114 L149,122 L138,114 L127,100 Z"/>
+    <text class="ml b" x="218" y="76" data-id="CA">Canada</text>
+    <path class="co" id="m-US" data-id="US" d="M149,114 L224,114 L257,119 L275,128 L281,144 L278,153 L265,162 L262,181 L249,168 L241,170 L222,178 L214,173 L195,163 L177,162 L169,160 L161,156 L156,145 L149,122 Z"/>
+    <text class="ml" x="213" y="148" data-id="US">United States</text>
+    <path class="co" id="m-GB" data-id="GB" d="M464,111 L484,109 L484,104 L476,96 L475,88 L467,88 L466,94 L466,100 Z"/>
+    <text class="ml" x="471" y="101" data-id="GB">UK</text>
+    <path class="co" id="m-FR" data-id="FR" d="M468,117 L468,115 L476,114 L485,109 L507,117 L506,129 L489,130 L476,130 L475,121 Z"/>
+    <text class="ml" x="487" y="122" data-id="FR">France</text>
+    <path class="co" id="m-DE" data-id="DE" d="M506,117 L502,108 L502,103 L506,98 L523,100 L524,108 L521,116 Z"/>
+    <text class="ml" x="512" y="108" data-id="DE">Germany</text>
+    <path class="eu" id="m-EU" data-id="EU" d="M452,100 L483,88 L530,88 L553,103 L553,133 L535,148 L505,152 L475,150 L452,140 L440,122 Z"/>
+    <text class="ml" x="498" y="138" data-id="EU" style="font-size:6.5px;fill:rgba(78,156,215,.6)">EU</text>
+    <path class="co" id="m-IN" data-id="IN" d="M662,147 L689,150 L740,172 L712,212 L694,228 L688,228 L686,218 L673,190 L662,183 Z"/>
+    <text class="ml" x="699" y="191" data-id="IN">India</text>
+    <path class="co" id="m-ZA" data-id="ZA" d="M524,311 L565,311 L568,327 L562,342 L547,347 L531,346 L516,335 L514,320 Z"/>
+    <text class="ml" x="541" y="330" data-id="ZA">S. Africa</text>
+    <path class="co" id="m-JP" data-id="JP" d="M829,157 L843,154 L848,150 L857,136 L857,144 L844,155 L835,157 L829,164 Z M857,136 L862,128 L867,129 L863,135 Z"/>
+    <text class="ml" x="848" y="148" data-id="JP">Japan</text>
+    <path class="co" id="m-AU" data-id="AU" d="M784,311 L829,284 L853,292 L854,306 L840,306 L840,292 L880,280 L884,321 L893,355 L877,375 L843,381 L811,375 L784,355 L772,337 L772,317 Z"/>
+    <text class="ml" x="830" y="336" data-id="AU">Australia</text>
+    <path class="co" id="m-BR" data-id="BR" d="M342,244 L388,265 L388,278 L379,292 L366,314 L341,342 L286,306 L289,262 L316,247 Z"/>
+    <text class="ml" x="335" y="297" data-id="BR">Brazil</text>
+  </svg>
+  </div>
+  <div class="mh">Click a highlighted country to view its constitutional documents</div>
+  <div class="mleg">
+    <div class="li"><div class="ls d"></div>Has data</div>
+    <div class="li"><div class="ls l"></div>No data</div>
+  </div>
+</div>
+
+<div id="lv" class="h">
+  <div id="cg" class="cg"></div>
+</div>
+</main>
+
+<aside id="pan">
+  <div class="pt">
+    <div><div id="pc"></div><div id="pr"></div></div>
+    <button class="pcl" id="pcl">&#x2715;</button>
+  </div>
+  <div class="psw"><input type="search" id="ps" placeholder="Search within this constitution..."></div>
+  <div id="pb"></div>
+</aside>
+
+<script>
+const D=[
+{id:'CA',name:'Canada',region:'North America',docs:[
+{id:'charter',title:'Canadian Charter of Rights and Freedoms',year:1982,parent:'Constitution Act, 1982',arts:[
+{ref:'Section 2',title:'Fundamental Freedoms',tags:['civil','political'],text:'Everyone has the following fundamental freedoms: (a) freedom of conscience and religion; (b) freedom of thought, belief, opinion and expression, including freedom of the press; (c) freedom of peaceful assembly; and (d) freedom of association.'},
+{ref:'Section 3',title:'Right to Vote',tags:['political'],text:'Every citizen of Canada has the right to vote in an election of members of the House of Commons or of a legislative assembly and to be qualified for membership therein.'},
+{ref:'Section 6',title:'Mobility Rights',tags:['civil'],text:'Every citizen of Canada has the right to enter, remain in and leave Canada. Every citizen and permanent resident has the right to move and take up residence in any province and to pursue the gaining of a livelihood in any province.'},
+{ref:'Section 7',title:'Life, Liberty and Security',tags:['civil'],text:'Everyone has the right to life, liberty and security of the person and the right not to be deprived thereof except in accordance with the principles of fundamental justice.'},
+{ref:'Section 8',title:'Search and Seizure',tags:['civil'],text:'Everyone has the right to be secure against unreasonable search or seizure.'},
+{ref:'Section 9',title:'Arbitrary Detention',tags:['civil'],text:'Everyone has the right not to be arbitrarily detained or imprisoned.'},
+{ref:'Section 10',title:'Rights on Arrest',tags:['civil'],text:'Everyone has the right on arrest or detention to be informed promptly of the reasons therefor; to retain and instruct counsel without delay; and to have the validity of the detention determined.'},
+{ref:'Section 11',title:'Criminal Proceedings',tags:['civil'],text:'Any person charged with an offence has the right to be informed without unreasonable delay; to be tried within a reasonable time; not to be compelled to be a witness against oneself; to be presumed innocent until proven guilty.'},
+{ref:'Section 12',title:'Cruel and Unusual Treatment',tags:['civil'],text:'Everyone has the right not to be subjected to any cruel and unusual treatment or punishment.'},
+{ref:'Section 15',title:'Equality Rights',tags:['civil','political'],text:'Every individual is equal before and under the law and has the right to equal protection and benefit of the law without discrimination based on race, national or ethnic origin, colour, religion, sex, age or mental or physical disability.'},
+{ref:'Section 23',title:'Minority Language Education',tags:['cultural'],text:'Citizens of Canada whose first language is that of the English or French linguistic minority of a province have the right to have their children receive primary and secondary school instruction in that language.'},
+]},
+{id:'const1867',title:'Constitution Act',year:1867,parent:'British North America Acts',arts:[
+{ref:'Section 91',title:'Federal Legislative Powers',tags:['political'],text:'It shall be lawful for the Queen to make Laws for the Peace, Order, and good Government of Canada, in relation to all Matters not coming within the Classes of Subjects assigned exclusively to the Legislatures of the Provinces.'},
+{ref:'Section 133',title:'Use of English and French',tags:['cultural'],text:'Either the English or the French Language may be used by any Person in the Debates of the Houses of the Parliament of Canada and of the Houses of the Legislature of Quebec.'},
+]}
+]},
+{id:'US',name:'United States',region:'North America',docs:[
+{id:'amendments',title:'Bill of Rights and Amendments',year:1791,parent:'United States Constitution (1787)',arts:[
+{ref:'1st Amendment (1791)',title:'Religion, Speech, Press, Assembly',tags:['civil','political'],text:'Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof; or abridging the freedom of speech, or of the press; or the right of the people peaceably to assemble, and to petition the Government for a redress of grievances.'},
+{ref:'2nd Amendment (1791)',title:'Right to Bear Arms',tags:['civil'],text:'A well regulated Militia, being necessary to the security of a free State, the right of the people to keep and bear Arms, shall not be infringed.'},
+{ref:'4th Amendment (1791)',title:'Search and Seizure',tags:['civil'],text:'The right of the people to be secure in their persons, houses, papers, and effects, against unreasonable searches and seizures, shall not be violated, and no Warrants shall issue, but upon probable cause.'},
+{ref:'5th Amendment (1791)',title:'Due Process, Self-Incrimination',tags:['civil'],text:'No person shall be held to answer for a capital crime unless on indictment of a Grand Jury; nor shall any person be subject for the same offence to be twice put in jeopardy; nor shall be compelled in any criminal case to be a witness against himself; nor be deprived of life, liberty, or property, without due process of law.'},
+{ref:'6th Amendment (1791)',title:'Right to Speedy Trial',tags:['civil'],text:'In all criminal prosecutions, the accused shall enjoy the right to a speedy and public trial, by an impartial jury; to be informed of the nature of the accusation; to be confronted with witnesses against him; and to have the Assistance of Counsel for his defence.'},
+{ref:'8th Amendment (1791)',title:'Cruel and Unusual Punishment',tags:['civil'],text:'Excessive bail shall not be required, nor excessive fines imposed, nor cruel and unusual punishments inflicted.'},
+{ref:'13th Amendment (1865)',title:'Abolition of Slavery',tags:['civil'],text:'Neither slavery nor involuntary servitude, except as punishment for crime whereof the party shall have been duly convicted, shall exist within the United States, or any place subject to their jurisdiction.'},
+{ref:'14th Amendment (1868)',title:'Equal Protection and Due Process',tags:['civil','political'],text:'All persons born or naturalized in the United States are citizens. No State shall make or enforce any law which shall abridge the privileges or immunities of citizens; nor shall any State deprive any person of life, liberty, or property, without due process of law; nor deny to any person within its jurisdiction the equal protection of the laws.'},
+{ref:'15th Amendment (1870)',title:'Voting Rights - Race',tags:['political'],text:'The right of citizens of the United States to vote shall not be denied or abridged by the United States or by any State on account of race, color, or previous condition of servitude.'},
+{ref:'19th Amendment (1920)',title:"Women's Suffrage",tags:['political'],text:'The right of citizens of the United States to vote shall not be denied or abridged by the United States or by any State on account of sex.'},
+{ref:'24th Amendment (1964)',title:'No Poll Tax',tags:['political'],text:'The right of citizens of the United States to vote in any primary or other election for President, Vice President, or Senator or Representative in Congress, shall not be denied by reason of failure to pay any poll tax or other tax.'},
+{ref:'26th Amendment (1971)',title:'Voting Age 18',tags:['political'],text:'The right of citizens of the United States, who are eighteen years of age or older, to vote shall not be denied or abridged by the United States or by any State on account of age.'},
+]}
+]},
+{id:'GB',name:'United Kingdom',region:'Europe',docs:[
+{id:'mc',title:'Magna Carta',year:1215,parent:'Foundational constitutional document',arts:[
+{ref:'Clause 39',title:'Lawful Judgment of Peers',tags:['civil'],text:'No free man shall be seized or imprisoned, or stripped of his rights or possessions, or outlawed or exiled, or deprived of his standing in any way, nor will we proceed with force against him, except by the lawful judgment of his equals or by the law of the land.'},
+{ref:'Clause 40',title:'Right to Justice',tags:['civil'],text:'To no one will we sell, to no one deny or delay right or justice.'},
+]},
+{id:'bor',title:'Bill of Rights',year:1689,parent:'English Bill of Rights',arts:[
+{ref:'Article 1',title:'Parliamentary Sovereignty',tags:['political'],text:'The pretended power of suspending of laws or the execution of laws by regal authority without consent of Parliament is illegal.'},
+{ref:'Article 9',title:'No Cruel Punishment',tags:['civil'],text:'Excessive bail ought not to be required, nor excessive fines imposed, nor cruel and unusual punishments inflicted.'},
+{ref:'Article 13',title:'Freedom of Parliamentary Speech',tags:['political'],text:'The freedom of speech and debates or proceedings in Parliament ought not to be impeached or questioned in any court or place out of Parliament.'},
+]},
+{id:'hra',title:'Human Rights Act',year:1998,parent:'European Convention on Human Rights (incorporated)',arts:[
+{ref:'Article 2',title:'Right to Life',tags:['civil'],text:"Everyone's right to life shall be protected by law. No one shall be deprived of his life intentionally save in the execution of a sentence of a court following his conviction of a crime for which this penalty is provided by law."},
+{ref:'Article 3',title:'Prohibition of Torture',tags:['civil'],text:'No one shall be subjected to torture or to inhuman or degrading treatment or punishment.'},
+{ref:'Article 5',title:'Right to Liberty',tags:['civil'],text:'Everyone has the right to liberty and security of person. No one shall be deprived of his liberty save in specific lawful cases such as lawful detention after conviction or lawful arrest.'},
+{ref:'Article 6',title:'Right to Fair Trial',tags:['civil'],text:'In the determination of his civil rights and obligations or of any criminal charge against him, everyone is entitled to a fair and public hearing within a reasonable time by an independent and impartial tribunal established by law.'},
+{ref:'Article 8',title:'Right to Privacy',tags:['civil'],text:'Everyone has the right to respect for his private and family life, his home and his correspondence. There shall be no interference by a public authority with this right except as prescribed by law.'},
+{ref:'Article 9',title:'Freedom of Thought and Religion',tags:['civil'],text:'Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief and freedom to manifest his religion or belief in worship, teaching, practice and observance.'},
+{ref:'Article 10',title:'Freedom of Expression',tags:['civil','political'],text:'Everyone has the right to freedom of expression. This right shall include freedom to hold opinions and to receive and impart information and ideas without interference by public authority.'},
+{ref:'Article 11',title:'Freedom of Assembly',tags:['civil','political'],text:'Everyone has the right to freedom of peaceful assembly and to freedom of association with others, including the right to form and to join trade unions for the protection of his interests.'},
+{ref:'Article 14',title:'Prohibition of Discrimination',tags:['civil'],text:'The enjoyment of the rights and freedoms set forth in this Convention shall be secured without discrimination on any ground such as sex, race, colour, language, religion, political or other opinion, national or social origin, property, birth or other status.'},
+]}
+]},
+{id:'FR',name:'France',region:'Europe',docs:[
+{id:'droits',title:'Declaration of the Rights of Man and of the Citizen',year:1789,parent:'French Republic - Preamble to 1958 Constitution',arts:[
+{ref:'Article 1',title:'Liberty and Equality',tags:['civil'],text:'Men are born and remain free and equal in rights. Social distinctions may be based only on considerations of the common good.'},
+{ref:'Article 2',title:'Natural Rights',tags:['civil'],text:'The goal of any political association is the conservation of the natural and imprescriptible rights of man. These rights are liberty, property, safety and resistance against oppression.'},
+{ref:'Article 3',title:'National Sovereignty',tags:['political'],text:'The principle of any sovereignty resides essentially in the Nation. No body, no individual may exercise any authority which does not proceed directly from the Nation.'},
+{ref:'Article 4',title:'Definition of Liberty',tags:['civil'],text:'Liberty consists of being able to do anything that does not harm others: thus, the exercise of the natural rights of every man has no bounds other than those that guarantee other members of society the enjoyment of these same rights.'},
+{ref:'Article 6',title:'Law as General Will',tags:['political'],text:'The law is the expression of the general will. All citizens have the right to take part, personally or through their representatives, in its making. It must be the same for all, whether it protects or punishes.'},
+{ref:'Article 7',title:'No Arbitrary Arrest',tags:['civil'],text:'No man may be accused, arrested or detained except in the cases determined by law, and following the procedures that it has prescribed.'},
+{ref:'Article 10',title:'Freedom of Opinion',tags:['civil'],text:'No one may be disturbed for his opinions, even religious ones, provided that their manifestation does not trouble the public order established by the law.'},
+{ref:'Article 11',title:'Free Communication of Ideas',tags:['civil','political'],text:'The free communication of ideas and of opinions is one of the most precious rights of man. Any citizen may therefore speak, write and publish freely, except what is tantamount to the abuse of this liberty in the cases determined by law.'},
+{ref:'Article 17',title:'Right of Property',tags:['economic'],text:'Property being an inviolable and sacred right, no one may be deprived of it, unless legally established public necessity obviously requires it, and upon condition of a just and previously determined indemnity.'},
+]}
+]},
+{id:'DE',name:'Germany',region:'Europe',docs:[
+{id:'gg',title:'Basic Law (Grundgesetz)',year:1949,parent:'Federal Republic of Germany',arts:[
+{ref:'Article 1',title:'Human Dignity',tags:['civil'],text:'Human dignity shall be inviolable. To respect and protect it shall be the duty of all state authority. The German people therefore acknowledge inviolable and inalienable human rights as the basis of every community, of peace, and of justice in the world.'},
+{ref:'Article 2',title:'Personal Freedoms',tags:['civil'],text:'Every person shall have the right to free development of his personality insofar as he does not violate the rights of others. Every person shall have the right to life and physical integrity. Freedom of the person shall be inviolable.'},
+{ref:'Article 3',title:'Equality before the Law',tags:['civil'],text:'All persons shall be equal before the law. Men and women shall have equal rights. No person shall be favoured or disfavoured because of sex, parentage, race, language, homeland and origin, faith, or religious or political opinions.'},
+{ref:'Article 4',title:'Freedom of Faith and Conscience',tags:['civil'],text:'Freedom of faith and of conscience, and freedom to profess a religious or philosophical creed, shall be inviolable. The undisturbed practice of religion shall be guaranteed.'},
+{ref:'Article 5',title:'Freedom of Expression and Press',tags:['civil','political'],text:'Every person shall have the right freely to express and disseminate his opinions in speech, writing, and pictures. Freedom of the press and freedom of reporting by means of broadcasts and films shall be guaranteed.'},
+{ref:'Article 8',title:'Freedom of Assembly',tags:['civil','political'],text:'All Germans shall have the right to assemble peacefully and unarmed without prior notification or permission.'},
+{ref:'Article 9',title:'Freedom of Association',tags:['civil','political','economic'],text:'All Germans shall have the right to form corporations and other associations. The right to form associations to safeguard and improve working and economic conditions shall be guaranteed to every individual and to every occupation or profession.'},
+{ref:'Article 12',title:'Freedom of Occupation',tags:['economic'],text:'All Germans shall have the right freely to choose their occupation or profession, their place of work, and their place of training. The practice of an occupation or profession may be regulated by or pursuant to a law.'},
+{ref:'Article 14',title:'Property',tags:['economic'],text:'Property and the right of inheritance shall be guaranteed. Their content and limits shall be defined by the laws. Property entails obligations. Its use shall also serve the public good.'},
+{ref:'Article 16a',title:'Right of Asylum',tags:['civil'],text:'Persons persecuted on political grounds shall have the right of asylum.'},
+]}
+]},
+{id:'JP',name:'Japan',region:'Asia',docs:[
+{id:'jp46',title:'Constitution of Japan - Chapter III',year:1946,parent:'Promulgated under Emperor Showa',arts:[
+{ref:'Article 11',title:'Fundamental Human Rights',tags:['civil'],text:'The people shall not be prevented from enjoying any of the fundamental human rights. These fundamental human rights guaranteed to the people by this Constitution shall be conferred upon the people of this and future generations as eternal and inviolate rights.'},
+{ref:'Article 13',title:'Right to Life, Liberty, Pursuit of Happiness',tags:['civil'],text:'All of the people shall be respected as individuals. Their right to life, liberty, and the pursuit of happiness shall, to the extent that it does not interfere with the public welfare, be the supreme consideration in legislation and in other governmental affairs.'},
+{ref:'Article 14',title:'Equality under the Law',tags:['civil'],text:'All of the people are equal under the law and there shall be no discrimination in political, economic or social relations because of race, creed, sex, social status or family origin.'},
+{ref:'Article 15',title:'Right to Vote and Public Office',tags:['political'],text:'The people have the inalienable right to choose their public officials and to dismiss them. Universal adult suffrage is guaranteed with regard to the election of public officials.'},
+{ref:'Article 19',title:'Freedom of Thought and Conscience',tags:['civil'],text:'Freedom of thought and conscience shall not be violated.'},
+{ref:'Article 20',title:'Freedom of Religion',tags:['civil'],text:'Freedom of religion is guaranteed to all. No religious organization shall receive any privileges from the State, nor exercise any political authority. No compulsion shall operate in religious matters.'},
+{ref:'Article 21',title:'Freedom of Assembly and Expression',tags:['civil','political'],text:'Freedom of assembly and association as well as speech, press and all other forms of expression are guaranteed. No censorship shall be maintained, nor shall the secrecy of any means of communication be violated.'},
+{ref:'Article 22',title:'Freedom of Residence and Occupation',tags:['civil','economic'],text:'Every person shall have freedom to choose and change his residence and to choose his occupation to the extent that it does not interfere with the public welfare.'},
+{ref:'Article 25',title:'Right to Minimum Living Standards',tags:['social'],text:'All people shall have the right to maintain the minimum standards of wholesome and cultured living. In all spheres of life, the State shall use its endeavors for the promotion and extension of social welfare and security, and of public health.'},
+{ref:'Article 28',title:'Right to Organize and Bargain',tags:['economic'],text:'The right of workers to organize and to bargain and act collectively is guaranteed.'},
+]}
+]},
+{id:'AU',name:'Australia',region:'Oceania',docs:[
+{id:'au01',title:'Australian Constitution',year:1901,parent:'Commonwealth of Australia Constitution Act (UK)',arts:[
+{ref:'Section 80',title:'Trial by Jury',tags:['civil'],text:'The trial on indictment of any offence against any law of the Commonwealth shall be by jury, and every such trial shall be held in the State where the offence was committed.'},
+{ref:'Section 92',title:'Freedom of Interstate Trade',tags:['economic'],text:'On the imposition of uniform duties of customs, trade, commerce, and intercourse among the States shall be absolutely free.'},
+{ref:'Section 116',title:'No Established Religion',tags:['civil'],text:'The Commonwealth shall not make any law for establishing any religion, or for imposing any religious observance, or for prohibiting the free exercise of any religion, and no religious test shall be required as a qualification for any office or public trust under the Commonwealth.'},
+{ref:'Section 117',title:'No Discrimination Between States',tags:['civil'],text:'A subject of the Queen, resident in any State, shall not be subject in any other State to any disability or discrimination which would not be equally applicable to him if he were a subject of the Queen resident in such other State.'},
+{ref:'Implied Right (1997)',title:'Freedom of Political Communication',tags:['political'],text:'The Constitution contains an implied freedom of political communication, derived from the system of representative and responsible government it establishes. This prohibits laws that unduly burden freedom of communication on matters of government and politics. (Lange v Australian Broadcasting Corporation, 1997)'},
+]}
+]},
+{id:'EU',name:'European Union',region:'Europe (Supranational)',docs:[
+{id:'eu00',title:'Charter of Fundamental Rights of the European Union',year:2009,parent:'Treaty of Lisbon - Legally binding since 2009',arts:[
+{ref:'Article 1',title:'Human Dignity',tags:['civil'],text:'Human dignity is inviolable. It must be respected and protected.'},
+{ref:'Article 2',title:'Right to Life',tags:['civil'],text:'Everyone has the right to life. No one shall be condemned to the death penalty, or executed.'},
+{ref:'Article 4',title:'Prohibition of Torture',tags:['civil'],text:'No one shall be subjected to torture or to inhuman or degrading treatment or punishment.'},
+{ref:'Article 6',title:'Right to Liberty and Security',tags:['civil'],text:'Everyone has the right to liberty and security of person.'},
+{ref:'Article 7',title:'Respect for Private and Family Life',tags:['civil'],text:'Everyone has the right to respect for his or her private and family life, home and communications.'},
+{ref:'Article 8',title:'Protection of Personal Data',tags:['civil'],text:'Everyone has the right to the protection of personal data concerning him or her. Such data must be processed fairly for specified purposes and on the basis of the consent of the person concerned or some other legitimate basis laid down by law.'},
+{ref:'Article 10',title:'Freedom of Thought, Conscience and Religion',tags:['civil'],text:'Everyone has the right to freedom of thought, conscience and religion. This right includes freedom to change religion or belief and freedom, either alone or in community with others and in public or in private, to manifest religion or belief.'},
+{ref:'Article 11',title:'Freedom of Expression and Information',tags:['civil','political'],text:'Everyone has the right to freedom of expression. This right shall include freedom to hold opinions and to receive and impart information and ideas without interference by public authority. The freedom and pluralism of the media shall be respected.'},
+{ref:'Article 12',title:'Freedom of Assembly and Association',tags:['civil','political'],text:'Everyone has the right to freedom of peaceful assembly and to freedom of association at all levels, in particular in political, trade union and civic matters.'},
+{ref:'Article 21',title:'Non-discrimination',tags:['civil'],text:'Any discrimination based on any ground such as sex, race, colour, ethnic or social origin, genetic features, language, religion or belief, political or any other opinion, membership of a national minority, property, birth, disability, age or sexual orientation shall be prohibited.'},
+{ref:'Article 31',title:'Fair and Just Working Conditions',tags:['economic'],text:'Every worker has the right to working conditions which respect his or her health, safety and dignity. Every worker has the right to limitation of maximum working hours, to daily and weekly rest periods and to an annual period of paid leave.'},
+{ref:'Article 47',title:'Right to an Effective Remedy',tags:['civil'],text:'Everyone whose rights and freedoms guaranteed by the law of the Union are violated has the right to an effective remedy before a tribunal. Everyone is entitled to a fair and public hearing within a reasonable time by an independent and impartial tribunal.'},
+]}
+]},
+{id:'ZA',name:'South Africa',region:'Africa',docs:[
+{id:'bor96',title:'Bill of Rights - Chapter 2',year:1996,parent:'Constitution of the Republic of South Africa',arts:[
+{ref:'Section 9',title:'Equality',tags:['civil'],text:'Everyone is equal before the law and has the right to equal protection and benefit of the law without discrimination. The state may not unfairly discriminate against anyone on grounds including race, gender, sex, pregnancy, marital status, ethnic or social origin, colour, sexual orientation, age, disability, religion, conscience, belief, culture, language and birth.'},
+{ref:'Section 10',title:'Human Dignity',tags:['civil'],text:'Everyone has inherent dignity and the right to have their dignity respected and protected.'},
+{ref:'Section 11',title:'Life',tags:['civil'],text:'Everyone has the right to life.'},
+{ref:'Section 12',title:'Freedom and Security of the Person',tags:['civil'],text:'Everyone has the right to freedom and security of the person, which includes the right not to be deprived of freedom arbitrarily or without just cause; not to be detained without trial; to be free from all forms of violence; not to be tortured; not to be treated or punished in a cruel, inhuman or degrading way.'},
+{ref:'Section 14',title:'Privacy',tags:['civil'],text:'Everyone has the right to privacy, which includes the right not to have their person or home searched; their property searched; their possessions seized; or the privacy of their communications infringed.'},
+{ref:'Section 16',title:'Freedom of Expression',tags:['civil','political'],text:'Everyone has the right to freedom of expression, which includes freedom of the press and other media; freedom to receive or impart information or ideas; freedom of artistic creativity; and academic freedom and freedom of scientific research.'},
+{ref:'Section 18',title:'Freedom of Association',tags:['civil','political'],text:'Everyone has the right to freedom of association.'},
+{ref:'Section 23',title:'Labour Rights',tags:['economic'],text:'Everyone has the right to fair labour practices. Every worker has the right to form and join a trade union; to participate in the activities and programmes of a trade union; and to strike.'},
+{ref:'Section 24',title:'Environment',tags:['social'],text:'Everyone has the right to an environment that is not harmful to their health or wellbeing; and to have the environment protected, for the benefit of present and future generations, through reasonable legislative and other measures.'},
+{ref:'Section 26',title:'Access to Housing',tags:['social'],text:'Everyone has the right to have access to adequate housing. The state must take reasonable legislative and other measures, within its available resources, to achieve the progressive realisation of this right.'},
+{ref:'Section 27',title:'Health Care, Food, Water and Social Security',tags:['social'],text:'Everyone has the right to have access to health care services, including reproductive health care; sufficient food and water; and social security, including appropriate social assistance if they are unable to support themselves and their dependants.'},
+{ref:'Section 29',title:'Education',tags:['social','cultural'],text:'Everyone has the right to a basic education, including adult basic education; and to further education, which the state must make progressively available and accessible. Everyone has the right to receive education in the official language or languages of their choice in public educational institutions where that education is reasonably practicable.'},
+]}
+]},
+{id:'IN',name:'India',region:'Asia',docs:[
+{id:'in50',title:'Fundamental Rights - Part III',year:1950,parent:'Constitution of India',arts:[
+{ref:'Article 14',title:'Equality before Law',tags:['civil'],text:'The State shall not deny to any person equality before the law or the equal protection of the laws within the territory of India.'},
+{ref:'Article 15',title:'Prohibition of Discrimination',tags:['civil'],text:'The State shall not discriminate against any citizen on grounds only of religion, race, caste, sex, place of birth or any of them.'},
+{ref:'Article 17',title:'Abolition of Untouchability',tags:['civil'],text:'"Untouchability" is abolished and its practice in any form is forbidden. The enforcement of any disability arising out of "Untouchability" shall be an offence punishable in accordance with law.'},
+{ref:'Article 19',title:'Six Fundamental Freedoms',tags:['civil','political','economic'],text:'All citizens shall have the right to freedom of speech and expression; to assemble peaceably and without arms; to form associations or unions; to move freely throughout the territory of India; to reside and settle in any part of India; and to practise any profession, or to carry on any occupation, trade or business.'},
+{ref:'Article 20',title:'Protection in Criminal Prosecution',tags:['civil'],text:'No person shall be convicted of any offence except for violation of a law in force at the time of the commission of the act. No person shall be prosecuted and punished for the same offence more than once. No person accused of any offence shall be compelled to be a witness against himself.'},
+{ref:'Article 21',title:'Right to Life and Personal Liberty',tags:['civil'],text:'No person shall be deprived of his life or personal liberty except according to procedure established by law.'},
+{ref:'Article 21A',title:'Right to Education',tags:['social'],text:'The State shall provide free and compulsory education to all children of the age of six to fourteen years in such manner as the State may, by law, determine. (86th Amendment, 2002)'},
+{ref:'Article 23',title:'Prohibition of Human Trafficking',tags:['civil'],text:'Traffic in human beings and begar and other similar forms of forced labour are prohibited and any contravention of this provision shall be an offence punishable in accordance with law.'},
+{ref:'Article 25',title:'Freedom of Conscience and Religion',tags:['civil'],text:'Subject to public order, morality and health, all persons are equally entitled to freedom of conscience and the right freely to profess, practise and propagate religion.'},
+{ref:'Article 29',title:'Protection of Minority Interests',tags:['cultural'],text:'Any section of the citizens residing in the territory of India having a distinct language, script or culture of its own shall have the right to conserve the same.'},
+{ref:'Article 32',title:'Right to Constitutional Remedies',tags:['civil'],text:'The right to move the Supreme Court by appropriate proceedings for the enforcement of the rights conferred by this Part is guaranteed. The Supreme Court shall have power to issue directions or orders or writs for the enforcement of any of the rights conferred by this Part.'},
+]}
+]},
+{id:'BR',name:'Brazil',region:'South America',docs:[
+{id:'br88',title:'Federal Constitution - Fundamental Rights',year:1988,parent:'Constituicao da Republica Federativa do Brasil',arts:[
+{ref:'Art. 5 (caput)',title:'Equality and Legal Security',tags:['civil'],text:'All persons are equal before the law, without any distinction whatsoever, Brazilians and foreigners residing in the country being ensured of inviolability of the right to life, to liberty, to equality, to security and to property.'},
+{ref:'Art. 5, IV',title:'Freedom of Thought',tags:['civil'],text:'Freedom of thought is assured, and anonymity is forbidden.'},
+{ref:'Art. 5, IX',title:'Freedom of Expression and Artistic Activity',tags:['civil'],text:'Expression of intellectual, artistic, scientific and communications activity is free, independently of censorship or licensing.'},
+{ref:'Art. 5, XV',title:'Freedom of Movement',tags:['civil'],text:'Freedom of movement throughout national territory is assured in peacetime, and any person may enter, remain or leave it with his assets.'},
+{ref:'Art. 5, XLVII',title:'No Death Penalty',tags:['civil'],text:'There shall be no death penalty, save in the event of declared war against a foreign nation; permanent imprisonment; forced labor; banishment; confiscation.'},
+{ref:'Art. 6',title:'Social Rights',tags:['social'],text:'The following are social rights: education, health, food, work, housing, transportation, leisure, security, social security, protection of motherhood and childhood, and assistance to the destitute, as established by this Constitution.'},
+{ref:'Art. 7',title:'Rights of Workers',tags:['economic'],text:'The following are rights of urban and rural workers: employment protection against arbitrary dismissal; unemployment insurance; minimum wage; thirteenth salary; overtime pay; annual paid vacation; maternity and paternity leave.'},
+]}
+]}
+];
+
+let AF='all',AC=null,CV='map';
+function cTags(c){const s=new Set();c.docs.forEach(d=>d.arts.forEach(a=>a.tags.forEach(t=>s.add(t))));return[...s];}
+function docCt(c){return c.docs.length===1?'1 document':c.docs.length+' documents';}
+function artMatch(a){return AF==='all'||a.tags.includes(AF);}
+function cMatch(c){return AF==='all'||c.docs.some(d=>d.arts.some(a=>a.tags.includes(AF)));}
+
+function renderList(){
+  const g=document.getElementById('cg');
+  g.innerHTML='';
+  D.forEach(c=>{
+    const el=document.createElement('div');
+    el.className='cc fu'+(cMatch(c)?'':' h')+(AC===c.id?' sel':'');
+    el.dataset.id=c.id;
+    const tags=cTags(c);
+    const docsHtml=c.docs.map(d=>`<div class="dr"><span>${d.title}</span><span class="dy">${d.year}</span></div>`).join('');
+    const tagsHtml=tags.map(t=>`<span class="tag ${t}">${t}</span>`).join('');
+    el.innerHTML=`<div class="ch"><div><div class="cn">${c.name}</div><div class="cr">${c.region}</div></div><div class="cb">${docCt(c)}</div></div><div class="cd">${docsHtml}</div><div class="tgs">${tagsHtml}</div>`;
+    el.addEventListener('click',()=>openPanel(c.id));
+    g.appendChild(el);
+  });
+}
+
+function openPanel(id){
+  const c=D.find(x=>x.id===id);if(!c)return;
+  AC=id;
+  document.querySelectorAll('.co,.eu').forEach(e=>e.classList.remove('sel'));
+  const m=document.getElementById('m-'+id);if(m)m.classList.add('sel');
+  document.querySelectorAll('.cc').forEach(e=>e.classList.toggle('sel',e.dataset.id===id));
+  document.getElementById('pc').textContent=c.name;
+  document.getElementById('pr').textContent=c.region;
+  document.getElementById('ps').value='';
+  renderPanel(c,'');
+  document.getElementById('pan').classList.add('op');
+  document.getElementById('ov').classList.add('on');
+}
+
+function closePanel(){
+  document.getElementById('pan').classList.remove('op');
+  document.getElementById('ov').classList.remove('on');
+  document.querySelectorAll('.co,.eu').forEach(e=>e.classList.remove('sel'));
+  document.querySelectorAll('.cc').forEach(e=>e.classList.remove('sel'));
+  AC=null;
+}
+
+function renderPanel(c,q){
+  const ql=q.toLowerCase().trim();
+  let html='';
+  c.docs.forEach(d=>{
+    const fa=d.arts.filter(a=>{
+      if(AF!=='all'&&!a.tags.includes(AF))return false;
+      if(!ql)return true;
+      return a.title.toLowerCase().includes(ql)||a.text.toLowerCase().includes(ql)||a.ref.toLowerCase().includes(ql);
+    });
+    if(!fa.length)return;
+    const artsHtml=fa.map(a=>`<div class="ar"><div class="aref">${a.ref}</div><div class="atit">${a.title}</div><div class="atxt">${a.text}</div><div class="atgs">${a.tags.map(t=>`<span class="tag ${t}">${t}</span>`).join('')}</div></div>`).join('');
+    html+=`<div class="db"><div class="dt">${d.title}</div><div class="dm"><span class="dy2">${d.year}</span><span>${d.parent}</span></div><div class="al">${artsHtml}</div></div>`;
+  });
+  document.getElementById('pb').innerHTML=html||'<div style="padding:18px;text-align:center;color:var(--muted);font-size:.82rem">No articles match the current filter.</div>';
+}
+
+// Map init
+function initMap(){
+  const tip=document.getElementById('tip');
+  document.querySelectorAll('.co,.eu').forEach(el=>{
+    const id=el.dataset.id;
+    const c=D.find(x=>x.id===id);if(!c)return;
+    el.addEventListener('mouseenter',e=>{tip.textContent=c.name+' - '+c.docs.length+' document'+(c.docs.length>1?'s':'');tip.style.opacity='1';});
+    el.addEventListener('mousemove',e=>{tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-8)+'px';});
+    el.addEventListener('mouseleave',()=>{tip.style.opacity='0';});
+    el.addEventListener('click',()=>{tip.style.opacity='0';openPanel(id);});
+  });
+  document.querySelectorAll('text[data-id]').forEach(el=>{
+    el.style.cursor='pointer';
+    el.addEventListener('click',()=>openPanel(el.dataset.id));
+  });
+}
+
+// Search
+const gs=document.getElementById('gs'),sd=document.getElementById('sd');
+gs.addEventListener('input',()=>{
+  const q=gs.value.toLowerCase().trim();
+  if(!q){sd.classList.remove('op');return;}
+  const res=[];
+  D.forEach(c=>c.docs.forEach(d=>d.arts.forEach(a=>{
+    if(a.title.toLowerCase().includes(q)||a.text.toLowerCase().includes(q))
+      res.push({c,a});
+  })));
+  if(!res.length){
+    sd.innerHTML='<div class="sre">No results found.</div>';
+  } else {
+    sd.innerHTML=res.slice(0,16).map(r=>`<div class="sri" data-id="${r.c.id}"><div class="src">${r.c.name}</div><div class="srt">${r.a.ref} - ${r.a.title}</div><div class="srx">${r.a.text}</div></div>`).join('');
+    sd.querySelectorAll('.sri').forEach(e=>e.addEventListener('click',()=>{gs.value='';sd.classList.remove('op');openPanel(e.dataset.id);}));
+  }
+  sd.classList.add('op');
+});
+document.addEventListener('click',e=>{if(!gs.contains(e.target)&&!sd.contains(e.target))sd.classList.remove('op');});
+
+// View toggle
+document.getElementById('bm').addEventListener('click',()=>{CV='map';document.getElementById('mv').classList.remove('h');document.getElementById('lv').classList.add('h');document.getElementById('bm').classList.add('on');document.getElementById('bl').classList.remove('on');});
+document.getElementById('bl').addEventListener('click',()=>{CV='list';document.getElementById('lv').classList.remove('h');document.getElementById('mv').classList.add('h');document.getElementById('bl').classList.add('on');document.getElementById('bm').classList.remove('on');renderList();});
+
+// Filters
+document.querySelectorAll('.fb').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');AF=b.dataset.f;
+  if(CV==='list')renderList();
+  if(AC){const c=D.find(x=>x.id===AC);if(c)renderPanel(c,document.getElementById('ps').value);}
+}));
+
+// Panel search
+document.getElementById('ps').addEventListener('input',e=>{if(!AC)return;const c=D.find(x=>x.id===AC);if(c)renderPanel(c,e.target.value);});
+
+// Close
+document.getElementById('pcl').addEventListener('click',closePanel);
+document.getElementById('ov').addEventListener('click',closePanel);
+
+initMap();
+</script>
+</body>
+</html>
