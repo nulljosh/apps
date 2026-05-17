@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="32" fill="#f5f5f7" stroke="#d1d5db" stroke-width="1"/>
+  <!-- Scales of justice -->
+  <!-- Center pillar -->
+  <line x1="100" y1="40" x2="100" y2="150" stroke="#a16207" stroke-width="2.5"/>
+  <!-- Base -->
+  <rect x="70" y="148" width="60" height="6" rx="3" fill="#a16207"/>
+  <!-- Beam -->
+  <line x1="45" y1="65" x2="155" y2="55" stroke="#a16207" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Top finial -->
+  <circle cx="100" cy="40" r="5" fill="#a16207"/>
+  <!-- Left pan -->
+  <line x1="45" y1="65" x2="30" y2="105" stroke="#a16207" stroke-width="1.5"/>
+  <line x1="45" y1="65" x2="60" y2="105" stroke="#a16207" stroke-width="1.5"/>
+  <path d="M28 105 Q45 118 62 105" fill="none" stroke="#a16207" stroke-width="2"/>
+  <!-- Right pan -->
+  <line x1="155" y1="55" x2="140" y2="95" stroke="#a16207" stroke-width="1.5"/>
+  <line x1="155" y1="55" x2="170" y2="95" stroke="#a16207" stroke-width="1.5"/>
+  <path d="M138 95 Q155 108 172 95" fill="none" stroke="#a16207" stroke-width="2"/>
+  <!-- Gavel accent -->
+  <rect x="60" y="165" width="22" height="7" rx="2" fill="#a16207" opacity="0.3" transform="rotate(-20,71,168)"/>
+  <rect x="76" y="160" width="8" height="18" rx="2" fill="#a16207" opacity="0.3" transform="rotate(-20,80,169)"/>
+</svg>

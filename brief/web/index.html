@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Brief — Trommel v. AG Canada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=3">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+</head>
+<body data-theme="dark" data-accent="red">
+
+<!-- Auth overlay -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card">
+    <div class="auth-title">Brief<span style="color:var(--muted)">·</span></div>
+    <div class="auth-sub">Trommel v. AG Canada &middot; private</div>
+    <div id="authStepEmail">
+      <form id="authForm">
+        <input class="auth-input" id="authEmail" type="email" placeholder="Email" autocomplete="email">
+        <button class="auth-btn" type="submit">Send sign-in link</button>
+        <div class="auth-err" id="authErr"></div>
+      </form>
+    </div>
+    <div id="authStepSent" style="display:none">
+      <div class="auth-sent">Link sent</div>
+      <div class="auth-sent-sub">Check your email and click the link to sign in.</div>
+    </div>
+    <div class="auth-footer">not legal advice</div>
+  </div>
+</div>
+
+<!-- Tweaks panel (Shift+T to open) -->
+<div class="tw-panel" id="twPanel" hidden>
+  <div class="tw-head">
+    <div class="tw-title">Tweaks</div>
+    <button class="tw-close" id="twClose">&#x2715;</button>
+  </div>
+  <div class="tw-body">
+    <div class="tw-sec">
+      <div class="tw-lbl">Theme</div>
+      <div class="tw-seg" data-key="theme">
+        <button data-v="auto">Auto</button>
+        <button data-v="dark">Dark</button>
+        <button data-v="white">White</button>
+      </div>
+    </div>
+    <div class="tw-sec">
+      <div class="tw-lbl">Accent</div>
+      <div class="tw-swatches" data-key="accent">
+        <button data-v="red"   style="background:#d24a3a" title="Red"></button>
+        <button data-v="amber" style="background:#d18a3a" title="Amber"></button>
+        <button data-v="ink"   style="background:#c9c2b1" title="Ink"></button>
+      </div>
+    </div>
+    <div class="tw-sec">
+      <div class="tw-lbl">Hero scale <span id="twHeroVal" class="tw-val">1.0&times;</span></div>
+      <input type="range" class="tw-slider" id="twHero" min="60" max="140" step="5" value="100">
+    </div>
+    <div class="tw-sec">
+      <div class="tw-lbl">Density</div>
+      <div class="tw-seg" data-key="density">
+        <button data-v="comfortable">Comfortable</button>
+        <button data-v="compact">Compact</button>
+      </div>
+    </div>
+    <div class="tw-sec">
+      <div class="tw-lbl">Witness annotations</div>
+      <label class="tw-toggle"><input type="checkbox" id="twAnnot" checked><span></span></label>
+    </div>
+    <div class="tw-sec">
+      <div class="tw-lbl">Decay curve</div>
+      <label class="tw-toggle"><input type="checkbox" id="twDecay" checked><span></span></label>
+    </div>
+  </div>
+</div>
+
+<!-- Sticky strip -->
+<div class="strip">
+  <div class="brand">Brief<span style="color:var(--muted)">&#xB7;</span></div>
+  <div class="meta">
+    <span>FILE <b>CASE-0001</b></span>
+    <span>JURISDICTION <b>BC, Canada</b></span>
+    <span>STATUS <b>Pre-litigation</b></span>
+    <span class="pulse">Active outreach</span>
+  </div>
+  <div class="strip-pill" id="stripPill" title="Live settlement projection">
+    <span id="pillVal">$&mdash;</span>
+    <svg id="pillSpark" width="36" height="12" viewBox="0 0 36 12" style="vertical-align:middle;margin-left:6px"><polyline fill="none" stroke="currentColor" stroke-width="1.4" points=""/></svg>
+  </div>
+  <div style="font-family:var(--mono);font-size:10.5px;color:var(--muted)">TODAY <span style="color:var(--ink)" id="todayStr">&mdash;</span></div>
+  <button class="strip-btn" id="tweaksBtn" title="Shift+T">&#9881;</button>
+</div>
+
+<div class="page">
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-marks">
+    <div class="l">Case Brief &middot; Volume I</div>
+    <div class="r">Charter ss. 7 &middot; 8 &middot; 9 &middot; 10(b) &middot; 12</div>
+  </div>
+  <h1 class="hero-title">
+    Trommel <span class="v">v.</span> Attorney General of Canada
+  </h1>
+  <p class="hero-sub">Charter violations arising from a warrantless wellness-call entry. Langley, British Columbia &mdash; August 1, 2023, ~11:00 AM. Two RCMP officers, one dwelling, no underlying crime.</p>
+
+  <div class="clock">
+    <div class="clock-hd">
+      <div>
+        <div class="lbl">Limitation Clock &middot; Discoverability + s.18 Active</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--mid);margin-top:6px;letter-spacing:0.04em">Basic 2-yr limit expired Aug 1, 2025 &mdash; claim survives</div>
+      </div>
+      <div class="days tnum" id="daysOut">&mdash;</div>
+    </div>
+    <div class="clock-now-row" id="clockNowRow"></div>
+    <div class="clock-track" id="clockTrack"></div>
+    <div class="clock-labels" id="clockLabels"></div>
+    <div class="clock-caption">
+      <span class="clock-cap-key"><span class="swatch warn"></span>Discovery-window strength</span>
+      <span>peaks May 2026 &middot; decays toward ultimate &middot; <b>time is an enemy</b></span>
+    </div>
+  </div>
+
+  <div class="tristat">
+    <div class="col">
+      <div class="lbl">Floor</div>
+      <div class="val tnum">$317<span style="font-size:0.55em;color:var(--muted)">k</span></div>
+      <div class="sub">Degen 2023 BCSC &middot; force + PTSD</div>
+    </div>
+    <div class="col likely" id="triLive">
+      <div class="lbl">Today&rsquo;s projection &middot; live</div>
+      <div class="val tnum" id="triLiveVal">$&mdash;</div>
+      <div class="sub" id="triLiveSub">leverage based on evidence + counsel</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Trial ceiling</div>
+      <div class="val tnum">$2.25<span style="font-size:0.55em;color:var(--muted)">M</span></div>
+      <div class="sub">Ward maxed &middot; punitive granted</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="case"><span class="n">I.</span>The Case</button>
+    <button class="tab-btn" data-tab="money"><span class="n">II.</span>The Number</button>
+    <button class="tab-btn" data-tab="actions"><span class="n">III.</span>The Moves</button>
+  </div>
+</header>
+
+<main>
+
+<!-- CASE TAB -->
+<div class="tab-panel active" id="panel-case">
+
+  <div class="next-action">
+    <div class="na-lbl">Next action</div>
+    <div class="na-body">
+      <div class="na-title">Active outreach &mdash; awaiting callbacks</div>
+      <div class="na-note">Email-first strategy. Voicemail unreliable. 4 firms emailed.</div>
+    </div>
+    <a class="na-call" href="tel:6045917321">604-591-7321 &rarr;</a>
+  </div>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Facts</b> &middot; cover sheet</div><div class="hint">filed pre-litigation</div></div>
+    <div class="facts">
+      <div class="row"><div class="k">Date</div><div class="v">August 1, 2023 <em>&middot; ~11:00 AM</em></div></div>
+      <div class="row"><div class="k">Location</div><div class="v">Langley, BC <em>&middot; private dwelling, plaintiff&rsquo;s home</em></div></div>
+      <div class="row"><div class="k">Department</div><div class="v">Langley RCMP <em>&middot; Brookswood detachment</em></div></div>
+      <div class="row"><div class="k">Officers</div><div class="v">Cst. Daryl + Cst. D. Ryl <em>&middot; full names pending ATIP</em></div></div>
+      <div class="row"><div class="k">Defendant</div><div class="v">Attorney General of Canada <em>&middot; RCMP is federal</em></div></div>
+      <div class="row"><div class="k">Witness</div><div class="v">Father <em>&middot; present in kitchen, willing to provide statement</em></div></div>
+      <div class="row"><div class="k">File no.</div><div class="v" style="font-family:var(--mono)">#2023-25586</div></div>
+      <div class="row"><div class="k">Status</div><div class="v danger">Pre-litigation &middot; counsel selection</div></div>
+      <div class="row"><div class="k">Wrist injury</div><div class="v">Pre-existing fracture <em>aggravated by prone restraint &mdash; supports additional physical harm head</em></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Witness</b> &middot; statement on file</div></div>
+    <div class="witness">
+      <div class="witness-hd">
+        <div class="witness-av">F</div>
+        <div>
+          <div class="witness-name">Father</div>
+          <div class="witness-role">Present in kitchen &middot; Aug 1, 2023</div>
+        </div>
+        <div class="witness-stamp">On record</div>
+      </div>
+      <div class="witness-stmt">He was answering well, sitting at the kitchen table with me. He wasn&rsquo;t violent. He wasn&rsquo;t threatening anyone. They came in without warning, asked nothing, and they were on him within thirty seconds.</div>
+      <div class="witness-ann">
+        <div class="a"><div class="q">&ldquo;answering well&hellip; not violent&rdquo;</div><div class="defeats">Defeats <em>MHA s.28 apprehension</em></div><div class="n">Directly contradicts the threshold (officer must believe person has mental disorder &amp; acting in manner likely to endanger self/others). Linchpin testimony against the s.28 affirmative defence.</div></div>
+        <div class="a"><div class="q">&ldquo;without warning, asked nothing&rdquo;</div><div class="defeats">Defeats <em>Godoy scope</em></div><div class="n">Refutes the argument that entry was bounded by safety verification. No verification was attempted before physical contact.</div></div>
+        <div class="a"><div class="q">&ldquo;on him within thirty seconds&rdquo;</div><div class="defeats">Defeats <em>de-escalation narrative</em></div><div class="n">Supports excessive force / battery; closes the door on any de-escalation story the AG will construct from officer notebooks.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Legal grounds</b> &middot; 08 stacked breaches</div><div class="hint">tap to expand</div></div>
+    <div class="grounds" id="grounds-case"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Pain journal</b> &middot; contemporaneous</div></div>
+    <div class="journal-controls">
+      <div class="hint" style="font-family:var(--mono);font-size:11px;color:var(--mid)">Daily entries support continuity, causation, and damages quantum.</div>
+      <button class="journal-add" id="jAddBtn">+ Entry</button>
+    </div>
+    <div class="journal-form" id="jForm">
+      <input type="date" id="jDate">
+      <textarea id="jText" placeholder="What happened today&hellip;"></textarea>
+      <div class="row">
+        <button class="save" id="jSave">Save</button>
+        <button class="cancel" id="jCancel">Cancel</button>
+      </div>
+    </div>
+    <div class="journal-list" id="journalList"></div>
+  </section>
+
+</div>
+
+<!-- MONEY TAB -->
+<div class="tab-panel" id="panel-money">
+
+  <section class="section" id="leverage-widget" style="margin-top:32px"></section>
+  <section class="section" id="trajectory" style="margin-top:48px"></section>
+
+  <section class="section" style="margin-top:32px">
+    <div class="section-hd"><div class="lbl"><b>Outcome scenarios</b> &middot; probability-weighted</div></div>
+    <div id="scenarios"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Damages stack</b> &middot; per-head, conservative or strong</div></div>
+    <div class="stack-tot">
+      <div>
+        <div class="l-lbl">Stacked total</div>
+        <div class="l-val tnum" id="stackTot">$2.25M</div>
+      </div>
+      <div class="r">
+        <div>Settlement median <b>$800k &ndash; $1.2M</b></div>
+        <div>Trial ceiling <b>$2 &ndash; $3M</b></div>
+        <div>Floor <b>$317k</b> &middot; Degen 2023 BCSC</div>
+      </div>
+    </div>
+    <div class="stack-toggle">
+      <button data-m="conservative">Conservative</button>
+      <button class="active" data-m="strong">Strong</button>
+    </div>
+    <div class="stack-rows" id="stackRows"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Comparable awards</b> &middot; Canadian &amp; global scale</div></div>
+    <div id="scaleBands"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Ward framework</b> &middot; s.24(1) damages doctrine</div></div>
+    <div class="prose">
+      <p><em>Vancouver (City) v. Ward, 2010 SCC 27</em>: Charter damages serve three functions &mdash; <span class="warn">compensation</span>, <span class="warn">vindication</span>, and <span class="warn">deterrence</span>.</p>
+      <p>This fact pattern triggers all three maximally: no underlying crime, dwelling entry, forced antipsychotic medication, prolonged detention, documented PTSD. When all three Ward functions engage at maximum, courts assess damages globally rather than per-head &mdash; and global assessment routinely exceeds the arithmetic sum of stacked heads.</p>
+      <p style="color:var(--mid);font-style:italic">cf. <em>Henry v. BC</em>, indivisible injury doctrine.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Silence premium</b> &middot; why the AG settles</div></div>
+    <div class="prose">
+      <p>The AG settles confidentially to suppress precedent, avoid press, kill discovery, and resolve before trial. This is a <em>structural</em> incentive &mdash; not just case-strength pricing.</p>
+      <p>Each public-ready evidence piece raises the premium. Every press-capable lawyer contact, every ATIP disclosure, every Charter ground formally pleaded increases the AG&rsquo;s internal cost of keeping this quiet.</p>
+      <p><span class="warn">Baseline:</span> <em>Mona Wang v. AG Canada</em> (2021) &mdash; BC RCMP wellness check, settled confidentially. <span class="good">This case:</span> Wang + no underlying crime + dwelling entry + forced antipsychotic medication. Silence premium stacks accordingly.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Per-violation value</b> &middot; grounds expanded</div></div>
+    <div class="grounds" id="grounds-money"></div>
+  </section>
+
+</div>
+
+<!-- ACTIONS TAB -->
+<div class="tab-panel" id="panel-actions">
+
+  <div class="next-action">
+    <div class="na-lbl">Next action</div>
+    <div class="na-body">
+      <div class="na-title">Active outreach &mdash; awaiting callbacks</div>
+      <div class="na-note">9 firms in queue &middot; 5 contacted &middot; 4 pending</div>
+    </div>
+    <a class="na-call" href="tel:6045917321">604-591-7321 &rarr;</a>
+  </div>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Counsel</b> &middot; prospects ranked</div><div class="hint">tap status to cycle</div></div>
+    <div id="lawyers"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Strategy</b> &middot; pre-retainer</div></div>
+    <div class="prose">
+      <p>Contact at least 3 lawyers before committing to any one. Compare retainer structures &mdash; contingency terms vary significantly. Do not sign until all consultations are complete.</p>
+      <p style="color:var(--warn);font-family:var(--mono);font-size:13px;font-style:normal;line-height:1.7"><strong>Voicemails not working &mdash; switch to EMAIL.</strong> Cameron Ward, Arvay Finlay, Klein Lawyers, DLA Law all received outreach. Follow up in 5 business days if no response.</p>
+      <p style="color:var(--mid);font-style:italic">Be expensive to fight quietly. Each press-capable lawyer contact, each documented evidence piece, each Charter ground formally pleaded raises the AG&rsquo;s internal cost of suppressing this case publicly.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Timeline</b> &middot; expected horizon</div></div>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Evidence</b> &middot; before retainer</div></div>
+    <div class="cl-hd">
+      <div class="l">Build the file before sign-up. Each item compounds leverage.</div>
+      <div class="c"><span id="clCount">&mdash;</span> / <span id="clTotal">&mdash;</span></div>
+    </div>
+    <div class="cl-bar"><div id="clBar"></div></div>
+    <div class="cl-list" id="checklist"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Risks</b> &middot; what AG will attack</div></div>
+    <div class="risks">
+      <div class="risk high"><div class="k">Kill shot</div><div class="v"><strong>Limitation</strong>. Rule 9-5 strike likely. s.8(1)(d) discoverability + s.18 incapacity must <em>both</em> be argued. Anything showing 2023&ndash;2025 functional capacity (taxes, leases, employment, banking, driving) hurts s.18.</div></div>
+      <div class="risk med"><div class="k">Doorway</div><div class="v"><strong>Godoy</strong>. <em>R v. Godoy</em> [1999] 1 SCR 311 gives 911-wellness entry authority. Counter-attack is scope &mdash; entry to verify safety, not detain/medicate. The 911 call audio defines the doorway size.</div></div>
+      <div class="risk med"><div class="k">MHA s.28</div><div class="v">If apprehension was lawful, forced-medication ground weakens. Father&rsquo;s &ldquo;answering well&hellip; not violent&rdquo; testimony is the linchpin against s.28 threshold.</div></div>
+      <div class="risk med"><div class="k">Causation</div><div class="v">AG hires their own forensic psychiatrist; will subpoena pre-2023 GP records looking for alternative causes for PTSD.</div></div>
+      <div class="risk med"><div class="k">Self-rep</div><div class="v">Audit every email, complaint, social post written pre-retainer for inconsistencies &mdash; they will all be disclosed.</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Call script</b> &middot; callback prep</div></div>
+    <div class="script-hd">
+      <div class="hint" style="font-family:var(--mono);font-size:11px;color:var(--mid)">Read once before each consultation.</div>
+      <button class="copy-btn" id="copyScript">Copy</button>
+    </div>
+    <div class="script" id="scriptText"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-hd"><div class="lbl"><b>Drafts</b> &middot; ready for review</div></div>
+    <details class="draft">
+      <summary><div class="d-title">Outreach email &middot; standard template</div><div class="d-kind">to counsel</div></summary>
+      <div class="d-body">Subject: Civil Consultation &mdash; Wellness Call / RCMP Charter Claim &mdash; Trommel
+
+Hi [Name],
+
+My name is Joshua Trommel. I&rsquo;m reaching out because I have a potential civil claim arising from a warrantless wellness-call entry by Langley RCMP in August 2023.
+
+The incident involved unlawful entry into my home, excessive force, arbitrary detention, forced antipsychotic medication, and overnight solitary confinement &mdash; all without charge. The basic 2-year limitation expired August 2025; the claim survives on discoverability and PTSD-based incapacity under the BC Limitation Act.
+
+Full case brief: https://brief.heyitsmejosh.com
+
+It covers the alleged Charter breaches (ss. 7, 8, 9, 12), relevant case law, estimated damages, and a full timeline. Based on your background, I believe you&rsquo;d be well-suited for this matter.
+
+I&rsquo;d like to book an in-person consultation at your earliest convenience.
+
+Thank you,
+Joshua Trommel</div>
+    </details>
+    <details class="draft">
+      <summary><div class="d-title">CRCC complaint &middot; skeleton</div><div class="d-kind">to commission</div></summary>
+      <div class="d-body">To: Civilian Review and Complaints Commission for the RCMP
+Re: Langley RCMP (Brookswood), File #2023-25586
+
+Conduct complained of:
+1. Warrantless entry into private dwelling on non-criminal wellness call.
+2. Prone restraint by kneeling on back &mdash; respiratory distress.
+3. Apprehension absent lawful MHA s.28 grounds.
+4. No s.10(b) Charter caution.
+5. Forcible antipsychotic medication without consent.
+6. Overnight solitary confinement, no charge.
+7. Discharge with no aftercare, no family notification.
+
+Strategic: file AFTER counsel reviews. CRCC findings non-binding but persuasive. Does NOT toll limitation.</div>
+    </details>
+    <details class="draft">
+      <summary><div class="d-title">FOI / ATIP &middot; 4 requests</div><div class="d-kind">to crown</div></summary>
+      <div class="d-body">1. RCMP ATIP &mdash; officer names + badges, notebooks (Form 1624), GO Report, BWC, PRIME-BC entries, MHA forms generated. File #2023-25586.
+
+2. E-Comm 9-1-1 BC FOI &mdash; 911 audio, CAD notes, RCMP&harr;dispatch comms for Aug 1, 2023.
+
+3. BCEHS Privacy Office &mdash; ePCR, dispatch logs, paramedic narratives.
+
+4. Hospital ROI &mdash; full chart Aug 1&ndash;2, 2023: ER triage, admission, MD orders, MAR, restraint records, MHA Form 4/Form 1, nursing notes, discharge.</div>
+    </details>
+    <details class="draft">
+      <summary><div class="d-title">Demand letter &middot; skeleton</div><div class="d-kind">without prejudice</div></summary>
+      <div class="d-body">Without prejudice &mdash; settlement purposes only
+
+1. Parties: Trommel v. Crown in right of Canada (RCMP).
+2. Facts: 2-paragraph summary.
+3. Causes: Charter ss.7, 8, 9, 10(b), 12; battery; false imprisonment; IIMS; negligent investigation (Hill v. Hamilton-Wentworth 2007 SCC 41).
+4. Damages: general, Charter (Ward), aggravated, punitive, future earning capacity, special. Range $X&ndash;$Y.
+5. Limitation: discovery May 11, 2026 (s.8(1)(d)); alt. s.18.
+6. Offer: open 30 days. 70&ndash;80% of mid-case estimate. Then file.
+7. Confidentiality: standard on terms; resist NDA on underlying facts (cf. Mona Wang).</div>
+    </details>
+  </section>
+
+</div>
+
+</main>
+
+<footer>
+  <div>BRIEF &middot; NOT LEGAL ADVICE &middot; v3.0.0</div>
+  <div>VOLUME I &middot; BC, CANADA</div>
+</footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js?v=3"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
