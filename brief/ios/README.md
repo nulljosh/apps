@@ -25,3 +25,7 @@ open Brief.xcodeproj
 ```
 
 Run on iPhone simulator (iOS 17+). Bundle: `com.nulljosh.brief` · Team: `QMM486NPYC`
+
+## Roadmap
+
+- **Move case data behind Supabase auth** — `CaseData.swift` still hardcodes all case data (grounds, witnesses, lawyers, checklist, scripts). Migrate to `brief_config` table (already seeded). Add `BriefConfigDTOs.swift`, extend `Store.loadConfig()`, update all views to use `store.*` instead of globals. Matches web security model.

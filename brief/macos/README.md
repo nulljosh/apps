@@ -29,3 +29,7 @@ Bundle: `com.nulljosh.brief-macos` · Team: `QMM486NPYC`
 - Web: [heyitsmejosh.com/brief](https://heyitsmejosh.com/brief)
 - iOS: `apps/brief/ios/`
 - macOS: `apps/brief/macos/`
+
+## Roadmap
+
+- **Move case data behind Supabase auth** — `CaseData.swift` still hardcodes all case data. Migrate to `brief_config` table (already seeded). Add `BriefConfigDTOs.swift`, extend `Store.loadConfig()`, update all views to use `store.*`. Matches web security model.
