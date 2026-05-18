@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct BriefApp: App {
     @State private var store = Store()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
@@ -16,10 +17,13 @@ struct BriefApp: App {
                 }
             }
             .environment(store)
-.onOpenURL { url in
+            .onOpenURL { url in
                 Task { await store.handleURL(url) }
             }
             .task { await store.checkSession() }
+            .onChange(of: scenePhase) { _, new in
+                if new == .background { store.biometricLocked = true }
+            }
         }
     }
 }

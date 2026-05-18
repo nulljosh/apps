@@ -92,18 +92,18 @@ let familyCaseTimeline: [TimelineStep] = [
 ]
 
 let familyCaseChecklist: [ChecklistItem] = [
-    ChecklistItem(id: 0, label: "Photograph all vehicles / materials with your likeness — timestamp every photo", priority: .now),
-    ChecklistItem(id: 1, label: "Screenshot online presence (website, social, Google My Business) using your image", priority: .now),
-    ChecklistItem(id: 2, label: "Write precise timeline of the homelessness period (dates, locations, anyone who saw it)", priority: .now),
-    ChecklistItem(id: 3, label: "Preserve texts, emails, voicemails from parents re: eviction, parking lot, Yelp", priority: .now),
-    ChecklistItem(id: 4, label: "Find or reconstruct the Yelp review and any response from your father", priority: .now),
-    ChecklistItem(id: 5, label: "Document approximate dates of police calls at ages 10 and 15 (any incident numbers)", priority: .soon),
-    ChecklistItem(id: 6, label: "Identify witnesses to the homelessness period or parking lot confrontation", priority: .soon),
-    ChecklistItem(id: 7, label: "Get therapy records documenting psychological harm from family (separate from RCMP)", priority: .soon),
-    ChecklistItem(id: 8, label: "Research family business: name, registration, revenue (bcregistry.gov.bc.ca)", priority: .soon),
-    ChecklistItem(id: 9, label: "Pin discoverability date: formal written record — May 2026 = when you understood these as legal claims", priority: .now),
-    ChecklistItem(id: 10, label: "Contact Law Society BC referral (1-800-663-1919) — ask for civil tort specialist", priority: .now),
-    ChecklistItem(id: 11, label: "Audit digital footprint (social media, public posts) — anything that could be used against you", priority: .soon)
+    ChecklistItem(id: 100, label: "Photograph all vehicles / materials with your likeness — timestamp every photo", priority: .now),
+    ChecklistItem(id: 101, label: "Screenshot online presence (website, social, Google My Business) using your image", priority: .now),
+    ChecklistItem(id: 102, label: "Write precise timeline of the homelessness period (dates, locations, anyone who saw it)", priority: .now),
+    ChecklistItem(id: 103, label: "Preserve texts, emails, voicemails from parents re: eviction, parking lot, Yelp", priority: .now),
+    ChecklistItem(id: 104, label: "Find or reconstruct the Yelp review and any response from your father", priority: .now),
+    ChecklistItem(id: 105, label: "Document approximate dates of police calls at ages 10 and 15 (any incident numbers)", priority: .soon),
+    ChecklistItem(id: 106, label: "Identify witnesses to the homelessness period or parking lot confrontation", priority: .soon),
+    ChecklistItem(id: 107, label: "Get therapy records documenting psychological harm from family (separate from RCMP)", priority: .soon),
+    ChecklistItem(id: 108, label: "Research family business: name, registration, revenue (bcregistry.gov.bc.ca)", priority: .soon),
+    ChecklistItem(id: 109, label: "Pin discoverability date: formal written record — May 2026 = when you understood these as legal claims", priority: .now),
+    ChecklistItem(id: 110, label: "Contact Law Society BC referral (1-800-663-1919) — ask for civil tort specialist", priority: .now),
+    ChecklistItem(id: 111, label: "Audit digital footprint (social media, public posts) — anything that could be used against you", priority: .soon)
 ]
 
 let familyCaseScenarios: [Scenario] = [
