@@ -1,17 +1,19 @@
 # brief/ios
 
-Native iOS app for *Trommel v. AG Canada* litigation planning. SwiftUI port of heyitsmejosh.com/brief.
+Native iOS app for *Trommel v. AG Canada* and *Trommel v. Trommel* litigation planning. SwiftUI port of heyitsmejosh.com/brief.
 
 ## Stack: SwiftUI, iOS 17+, Swift 6, xcodegen
 
 ## Key files
-- `Sources/Models/CaseData.swift` — all hardcoded data (grounds, witnesses, journal seed, lawyers, checklist, call script, email template)
-- `Sources/Models/Store.swift` — @MainActor @Observable Store; Supabase auth + DB sync (journal, checklist, lawyer statuses, theme)
+- `Sources/Models/CaseData.swift` — CASE-0001 data (grounds, witnesses, journal seed, lawyers, checklist, call script, email template)
+- `Sources/Models/FamilyCaseData.swift` — CASE-0002 data (Trommel v. Trommel family tort case)
+- `Sources/Models/Store.swift` — @MainActor @Observable Store; Supabase auth + DB sync; Face ID unlock (`biometricLocked`, `authenticateWithBiometrics()`)
 - `Sources/Models/SupabaseClient.swift` — sbClient singleton (spark project, emitLocalSessionAsInitialSession: true)
 - `Sources/Views/SignInView.swift` — magic link email form (OTP flow, brief://login-callback redirect)
-- `Sources/Views/CaseTabView.swift` — Case tab (facts, witnesses, grounds accordion, journal)
-- `Sources/Views/MoneyTabView.swift` — Money tab (scenarios, damage stack, Ward framework)
-- `Sources/Views/ActionsTabView.swift` — Actions tab (lawyers, timeline, checklist, scripts, risks)
+- `Sources/Views/BiometricLockView.swift` — Face ID / Touch ID lock screen (auto-prompts on appear, retry button)
+- `Sources/Views/CaseTabView.swift` — Case tab (facts, witnesses, grounds accordion, journal) — branches on activeCase
+- `Sources/Views/MoneyTabView.swift` — Money tab (scenarios, damage stack, Ward framework) — branches on activeCase
+- `Sources/Views/ActionsTabView.swift` — Actions tab (lawyers, timeline, checklist, scripts, risks) — branches on activeCase
 
 ## Build
 ```

@@ -1,6 +1,7 @@
 import SwiftUI
 import Observation
 import Supabase
+import LocalAuthentication
 
 // MARK: - DB row types
 
@@ -37,6 +38,7 @@ private struct LawyerUpsert: Encodable {
 @Observable
 final class Store {
     var needsSignIn = true
+    var biometricLocked = true
     var magicLinkSent = false
     var signInError: String?
     var activeCase: CaseID = .rcmp
@@ -58,10 +60,26 @@ final class Store {
             let session = try await sbClient.auth.session
             userId = session.user.id.uuidString
             needsSignIn = false
-            await loadAll()
+            Task { await loadAll() }
+            await authenticateWithBiometrics()
         } catch {
             needsSignIn = true
+            biometricLocked = false
         }
+    }
+
+    @MainActor func authenticateWithBiometrics() async {
+        let ctx = LAContext()
+        var error: NSError?
+        guard ctx.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
+            biometricLocked = false
+            return
+        }
+        let success = (try? await ctx.evaluatePolicy(
+            .deviceOwnerAuthenticationWithBiometrics,
+            localizedReason: "Unlock Brief"
+        )) ?? false
+        if success { biometricLocked = false }
     }
 
     @MainActor func signIn(email: String) async {
@@ -82,6 +100,7 @@ final class Store {
             let session = try await sbClient.auth.session(from: url)
             userId = session.user.id.uuidString
             needsSignIn = false
+            biometricLocked = false
             await loadAll()
         } catch {}
     }

@@ -9,6 +9,8 @@ struct BriefApp: App {
             Group {
                 if store.needsSignIn {
                     SignInView()
+                } else if store.biometricLocked {
+                    BiometricLockView()
                 } else {
                     ContentView()
                 }

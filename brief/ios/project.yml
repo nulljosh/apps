@@ -41,3 +41,4 @@ targets:
         CFBundleURLTypes:
           - CFBundleURLSchemes:
               - brief
+        NSFaceIDUsageDescription: "Brief uses Face ID to protect your case data."

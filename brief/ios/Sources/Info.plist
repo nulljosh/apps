@@ -27,5 +27,7 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Brief uses Face ID to protect your case data.</string>
 </dict>
 </plist>
