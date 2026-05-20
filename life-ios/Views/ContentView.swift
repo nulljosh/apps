@@ -72,9 +72,13 @@ struct ContentView: View {
                 // Mental Health (long section, own page)
                 sectionPage([s[21]])
 
-                // Substances Expanded + Pull Quote + Substance Chart
-                sectionWithVisual([s[22]]) {
+                // Choices & Conscience
+                sectionPage([s[22]])
+
+                // Substances Expanded + Pull Quotes + Substance Chart
+                sectionWithVisual([s[23]]) {
                     PullQuoteView(text: LifeData.pullQuotes[3])
+                    PullQuoteView(text: LifeData.pullQuotes[4])
                     SubstanceChart()
                 }
 
@@ -85,25 +89,25 @@ struct ContentView: View {
                 }
 
                 // Physical Health & Body + Body Chart
-                sectionWithVisual([s[23]]) { BodyChart() }
+                sectionWithVisual([s[24]]) { BodyChart() }
 
                 // Identity & Worldview, Screen Time + Stats
-                sectionWithVisual([s[24], s[25]]) { StatsGridView() }
+                sectionWithVisual([s[25], s[26]]) { StatsGridView() }
 
                 // Current Life + Daily Routine + Progress Trackers
-                sectionWithVisual([s[26]]) {
+                sectionWithVisual([s[27]]) {
                     DailyRoutineChart()
                     ProgressTrackersView()
                 }
 
                 // Financial Reality + Financial Timeline Chart
-                sectionWithVisual([s[27]]) { FinancialTimelineChart() }
+                sectionWithVisual([s[28]]) { FinancialTimelineChart() }
 
                 // Work History, Career & Projects + Map
-                sectionWithVisual([s[28], s[29]]) { LifeMapView() }
+                sectionWithVisual([s[29], s[30]]) { LifeMapView() }
 
                 // Strengths & What Keeps Me Going + Strengths Chart
-                sectionWithVisual([s[30]]) { StrengthsChart() }
+                sectionWithVisual([s[31]]) { StrengthsChart() }
 
                 // Then vs Now + Radar Self-Assessment
                 combinedPage {
@@ -112,7 +116,7 @@ struct ContentView: View {
                 }
 
                 // What I Want from Therapy
-                sectionPage([s[31]])
+                sectionPage([s[32]])
 
                 footerPage
             }

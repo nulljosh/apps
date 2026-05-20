@@ -247,6 +247,7 @@ enum LifeData {
         DiagnosisMilestone(age: 8, label: "ADHD meds (brief)", category: .event),
         DiagnosisMilestone(age: 25, label: "Autism dx", category: .event),
         DiagnosisMilestone(age: 26, label: "Sertraline", category: .forward),
+        DiagnosisMilestone(age: 26, label: "Concerta", category: .forward),
         DiagnosisMilestone(age: 26, label: "Amanda", category: .forward),
         DiagnosisMilestone(age: 26, label: "PWD pending", category: .event),
     ]
@@ -347,7 +348,7 @@ enum LifeData {
         StatItem(number: "5+", label: "bong tokes\nper day"),
         StatItem(number: "130+", label: "IQ"),
         StatItem(number: "50/50", label: "help vs.\nhurt"),
-        StatItem(number: "17", label: "age first\nsmoked weed"),
+        StatItem(number: "16-17", label: "age first\nsmoked weed"),
         StatItem(number: "0", label: "boundaries\nthat worked"),
         StatItem(number: "50%", label: "time spent\nmasking"),
     ]
@@ -357,6 +358,7 @@ enum LifeData {
         "I don't know why I was kicked out. I don't know what made them let me back in.",
         "The coping mechanisms are a mix of self-destructive and genuinely healthy. They just coexist.",
         "It half-deactivated my autism and helped me just relax and stop thinking.",
+        "I smoke weed every day, most of the day. I function.",
     ]
 
     static let mapLocations: [MapLocation] = [
@@ -587,10 +589,11 @@ enum LifeData {
             "I don't really hate myself or anybody specifically. It's more of a general frustration. The anger goes both directions, inward as self-harm, outward as snapping at people. The root of it is frustration with how things are, not with any one person.",
         ], note: nil),
 
-        // 22 - NEW: Choices & Conscience
+        // 22 - Choices & Conscience
         LifeSection(label: "Choices & Conscience", paragraphs: [
             "There are things I've done where I knew, in the moment, that I was crossing a line I'd set for myself. Not rules someone else made. My own. Getting involved with people I knew were bad news. Going along with situations because stopping felt harder than continuing.",
             "Some of the drug stuff fits here. Not because I think there's anything wrong with it on principle, but because the way it started wasn't really deliberate. A friend introduced me to weed around 16. A girl I was with introduced me to Molly. I went along. Both of those happened before I had any real sense of who I was or what I wanted. The question of how much was peer pressure and how much was actually me is impossible to answer cleanly. Being 16, autistic, socially isolated, and raised in a house where I had to sneak around to have any normal experiences at all -- that context matters. But I was there. I made the calls.",
+            "There are specifics. The DUI: drove drunk, wrapped a car around a tree, knew what I was doing. The period I was homeless: shoplifted from Safeway because there was no other option, but I still knew it was wrong. The blog posts I wrote about family and friends when I was living in the car -- Alex confirmed they were mean. I wasn't wrong that I was abandoned, but the way I handled it wasn't clean. None of this is catastrophic. But these are the moments I'm talking about.",
             "I don't think I'm a bad person. I've never done anything to anyone that I'd be ashamed to name out loud. The guilt I carry is less about specific acts and more about a general sense that some of the ways I've moved through the world have been reactive rather than chosen. That's probably the ADHD and the autism and the circumstances, not a character flaw. But it's still mine to sit with.",
         ], note: nil),
 
@@ -601,56 +604,56 @@ enum LifeData {
             "MDMA came in around the same time, through the girl I was with at 16. I've taken it more times than I can count. Same with LSD. Neither escalated the way weed did -- they stayed recreational and occasional rather than daily -- but I've taken both a lot. I'm on sertraline and Concerta now. I miss most doses of both.",
         ], note: nil),
 
-        // 23 - NEW: Physical Health & Body
+        // 24 - Physical Health & Body
         LifeSection(label: "Physical Health & Body", paragraphs: [
             "I feel fine about my body, just tired. Self-harm was because the world is messed up and I had to deal with it. I got hit by a car, couldn't work for years, stole from my family, was kicked out, lived in my car. It was a very weird situation that's hard to explain years later. It's certainly not solely my fault. I was born like this and have not gotten along great with my family for years.",
             "I love myself. I wouldn't hurt myself on purpose. People around me obviously hurt me very badly. I didn't intentionally hurt myself. I gym every single day and go as hard as I possibly can about 75% of the time. I'm not the problem.",
         ], note: nil),
 
-        // 24
+        // 25
         LifeSection(label: "Identity & Worldview", paragraphs: [
             "If someone asks me who I am, I honestly don't have a clear answer. I'm still figuring that out. I know what I'm good at and what I care about, but the bigger picture is still blurry. I recently changed my portfolio from old interests to the work I actually want to do now. Small edit, weirdly personal. It made me admit the center of gravity has moved.",
             "I have read a lot of Jung and some Freud. The dream stuff, the shadow, the idea that you are running from parts of yourself. It resonates more than I expected it to. I did not go looking for it to validate anything. I just kept finding my own patterns described in their work.",
             "My earliest good memories are playing N64 (Diddy Kong Racing, Excitebike), playing at my cousins' house in Kamloops on their Super Nintendo, and playing on our PC when I was very young, before age 10. Screens were the first place I felt safe.",
         ], note: nil),
 
-        // 25 - NEW: Screen Time & Digital Life
+        // 26 - Screen Time & Digital Life
         LifeSection(label: "Screen Time & Digital Life", paragraphs: [
             "Screens are still my safe place, no question. The line between coding as real work and coding as avoidance is 50/50, like anything else. Social media is about 40 minutes a day. Whether it helps or hurts is also 50/50.",
         ], note: nil),
 
-        // 26
+        // 27
         LifeSection(label: "Current Life", paragraphs: [
             "I'm 26 and living with my parents in Langley, BC. I'm not working right now. I'm waiting on PWD and welfare. The plan is university first, then a career that actually pays well enough to justify it. I'm not interested in grinding minimum wage jobs that go nowhere. School is going well so far. Pre-Calc: most assignments and projects done, one of a few tests finished. Anatomy: fully done, redid every test twice, probably landed a mid grade but got through everything.",
             "Connection with people is hard for me right now. A typical day is sleeping, smoking weed, vaping, gymming, and coding. It's routine, but it's stable. Was at my mom's birthday recently. Cake and coffee. Went to a doctor's appointment, nothing major. Small stuff that feels normal.",
             "I'm hoping to move to Vancouver Island by the end of 2026 to start school. I spend most of my time coding and gaming. Coding is genuine satisfaction, building something real. Gaming is more escape. Both are flow states that keep me out of my head. The fastest way to not think about yourself is to build something complicated enough to require all your attention. I have done eighteen-hour sessions more than once. It works until it doesn't.",
         ], note: nil),
 
-        // 27 - NEW: Financial Reality
+        // 28 - Financial Reality
         LifeSection(label: "Financial Reality", paragraphs: [
             "I'm in 5 to 10K of debt. I live with my parents and I don't pay for anything. I couldn't give a fuck about money if I spent a million lifetimes on this planet. There are children being bombed in Gaza. OpenAI is worth 0.8 trillion dollars. Anthropic is worth half that. There are more pressing issues than making money day by day. I live off welfare. I don't care.",
             "In 2024 I received ~$50,000 from an ICBC settlement after being hit by a car while crossing the road (~2022 or 2023). I used it to buy a car and a dog. The rest burned through the ~2-month period I was homeless in summer 2024 — living in parking lots, shoplifting from Safeway for food. No savings remain from it.",
             "I can sell B2B software. My parents will pay for my education, then I can get a job working in AI software engineering for 100K+ a year. It's not hard. I'm 26, I have time.",
         ], note: nil),
 
-        // 28
+        // 29
         LifeSection(label: "Work History", paragraphs: [
             "I've had more jobs than I can count. Mix of getting fired, quitting, and burning out. Nothing lasted longer than about 3 years. The pattern is the same every time: start strong, can't sustain it. I've done Apple licensed tech support at Macinhome and Simply Computing, worked at a few restaurants, among other things.",
         ], note: nil),
 
-        // 29
+        // 30
         LifeSection(label: "Career & Projects", paragraphs: [
             "I want to work in fintech or AI. Wealthsimple and Anthropic are what I'm aiming for. I'm studying calculus and biology and I tend to have a pretty strong memory for things I actually care about.",
             "I've built lots of projects I'm proud of. Around age 16, I co-founded Maybulb (maybulb.com) with some internet friends and built Nimble, a Wolfram Alpha menubar app for macOS. We almost sold it for $10K. The ideas and the building aren't the problem. It's getting the motivation to start in the first place, and then figuring out what's next afterwards.",
         ], note: nil),
 
-        // 30 - NEW: Strengths & What Keeps Me Going
+        // 31 - Strengths & What Keeps Me Going
         LifeSection(label: "Strengths & What Keeps Me Going", paragraphs: [
             "I'm genuinely good at STEM. Science, technology, engineering, mathematics. What's kept me alive through the worst of it is my resiliency, my mom, and my possessions. Material stuff matters when everything else is gone.",
             "People who actually know me say I'm kind, benevolent, smart, intelligent, and funny. I'll take it.",
         ], note: nil),
 
-        // 31
+        // 32
         LifeSection(label: "What I Want from Therapy", paragraphs: [
             "Work through what happened growing up. Get the intrusive memories and nightmares to ease up. Understand how all of it affects my relationships. And figure out how to build a more stable life.",
         ], note: nil),
