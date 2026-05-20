@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500" style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;background:#fff">
+  <!-- Title -->
+  <text x="450" y="32" style="font-size:13px;font-weight:600;fill:#1d1d1f;text-anchor:middle;letter-spacing:-.02em">Charters — Architecture</text>
+
+  <!-- Data Layer -->
+  <rect x="340" y="56" width="220" height="64" rx="12" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1.5"/>
+  <text x="450" y="82" style="font-size:11px;font-weight:600;fill:#1d1d1f;text-anchor:middle">Constitutional Data</text>
+  <text x="450" y="98" style="font-size:9.5px;fill:#6e6e73;text-anchor:middle">15 countries · 23 documents · 146 articles</text>
+  <text x="450" y="111" style="font-size:9px;fill:#8e8e93;text-anchor:middle">Static — JS array / Swift struct array</text>
+
+  <!-- Vertical connector down -->
+  <line x1="350" y1="120" x2="230" y2="175" style="stroke:#c7c7cc;stroke-width:1.5;stroke-dasharray:4 3"/>
+  <line x1="550" y1="120" x2="670" y2="175" style="stroke:#c7c7cc;stroke-width:1.5;stroke-dasharray:4 3"/>
+
+  <!-- Web App box -->
+  <rect x="100" y="175" width="260" height="72" rx="12" style="fill:#f5f5f7;stroke:#0071e3;stroke-width:1.5"/>
+  <text x="230" y="200" style="font-size:11px;font-weight:600;fill:#0071e3;text-anchor:middle">Web App</text>
+  <text x="230" y="215" style="font-size:9.5px;fill:#1d1d1f;text-anchor:middle">index.html — Single-file static app</text>
+  <text x="230" y="228" style="font-size:9px;fill:#6e6e73;text-anchor:middle">Vercel · charters.heyitsmejosh.com</text>
+
+  <!-- iOS App box -->
+  <rect x="540" y="175" width="260" height="72" rx="12" style="fill:#f5f5f7;stroke:#0071e3;stroke-width:1.5"/>
+  <text x="670" y="200" style="font-size:11px;font-weight:600;fill:#0071e3;text-anchor:middle">iOS App</text>
+  <text x="670" y="215" style="font-size:9.5px;fill:#1d1d1f;text-anchor:middle">SwiftUI · Universal (iPhone + iPad)</text>
+  <text x="670" y="228" style="font-size:9px;fill:#6e6e73;text-anchor:middle">iOS 17+ · xcodegen</text>
+
+  <!-- Web features connectors -->
+  <line x1="160" y1="247" x2="130" y2="310" style="stroke:#c7c7cc;stroke-width:1.2"/>
+  <line x1="195" y1="247" x2="196" y2="310" style="stroke:#c7c7cc;stroke-width:1.2"/>
+  <line x1="230" y1="247" x2="260" y2="310" style="stroke:#c7c7cc;stroke-width:1.2"/>
+  <line x1="265" y1="247" x2="322" y2="310" style="stroke:#c7c7cc;stroke-width:1.2"/>
+
+  <!-- Web feature nodes -->
+  <rect x="80" y="310" width="96" height="36" rx="8" style="fill:#fff;stroke:#d2d2d7;stroke-width:1.2"/>
+  <text x="128" y="329" style="font-size:9px;font-weight:500;fill:#1d1d1f;text-anchor:middle">Map View</text>
+  <text x="128" y="340" style="font-size:8px;fill:#8e8e93;text-anchor:middle">SVG world map</text>
+
+  <rect x="148" y="310" width="96" height="36" rx="8" style="fill:#fff;stroke:#d2d2d7;stroke-width:1.2"/>
+  <text x="196" y="329" style="font-size:9px;font-weight:500;fill:#1d1d1f;text-anchor:middle">List View</text>
+  <text x="196" y="340" style="font-size:8px;fill:#8e8e93;text-anchor:middle">Country grid</text>
+
+  <rect x="216" y="310" width="96" height="36" rx="8" style="fill:#fff;stroke:#d2d2d7;stroke-width:1.2"/>
+  <text x="264" y="329" style="font-size:9px;font-weight:500;fill:#1d1d1f;text-anchor:middle">Compare View</text>
+  <text x="264" y="340" style="font-size:8px;fill:#8e8e93;text-anchor:middle">Side-by-side</text>
+
+  <rect x="284" y="310" width="96" height="36" rx="8" style="fill:#fff;stroke:#d2d2d7;stroke-width:1.2"/>
+  <text x="332" y="329" style="font-size:9px;font-weight:500;fill:#1d1d1f;text-anchor:middle">Search + Filter</text>
+  <text x="332" y="340" style="font-size:8px;fill:#8e8e93;text-anchor:middle">5 categories</text>
+
+  <!-- iOS features connectors -->
+  <line x1="600" y1="247" x2="570" y2="310" style="stroke:#c7c7cc;stroke-width:1.2"/>
+  <line x1="640" y1="247" x2="638" y2="310" style="stroke:#c7c7cc;stroke-width:1.2"/>
+  <line x1="700" y1="247" x2="706" y2="310" style="stroke:#c7c7cc;stroke-width:1.2"/>
+  <line x1="740" y1="247" x2="774" y2="310" style="stroke:#c7c7cc;stroke-width:1.2"/>
+
+  <!-- iOS feature nodes -->
+  <rect x="522" y="310" width="96" height="36" rx="8" style="fill:#fff;stroke:#d2d2d7;stroke-width:1.2"/>
+  <text x="570" y="329" style="font-size:9px;font-weight:500;fill:#1d1d1f;text-anchor:middle">CountryList</text>
+  <text x="570" y="340" style="font-size:8px;fill:#8e8e93;text-anchor:middle">Search + filter</text>
+
+  <rect x="590" y="310" width="96" height="36" rx="8" style="fill:#fff;stroke:#d2d2d7;stroke-width:1.2"/>
+  <text x="638" y="329" style="font-size:9px;font-weight:500;fill:#1d1d1f;text-anchor:middle">CountryDetail</text>
+  <text x="638" y="340" style="font-size:8px;fill:#8e8e93;text-anchor:middle">Docs + articles</text>
+
+  <rect x="658" y="310" width="96" height="36" rx="8" style="fill:#fff;stroke:#d2d2d7;stroke-width:1.2"/>
+  <text x="706" y="329" style="font-size:9px;font-weight:500;fill:#1d1d1f;text-anchor:middle">ArticleDetail</text>
+  <text x="706" y="340" style="font-size:8px;fill:#8e8e93;text-anchor:middle">Full text + tags</text>
+
+  <rect x="726" y="310" width="96" height="36" rx="8" style="fill:#fff;stroke:#d2d2d7;stroke-width:1.2"/>
+  <text x="774" y="329" style="font-size:9px;font-weight:500;fill:#1d1d1f;text-anchor:middle">Compare</text>
+  <text x="774" y="340" style="font-size:8px;fill:#8e8e93;text-anchor:middle">Two-column view</text>
+
+  <!-- Shared badge -->
+  <rect x="360" y="400" width="180" height="32" rx="8" style="fill:#e8f0fe;stroke:#0071e3;stroke-width:1.2"/>
+  <text x="450" y="420" style="font-size:9.5px;font-weight:500;fill:#0071e3;text-anchor:middle">Shared static data · No network required</text>
+
+  <!-- Legend -->
+  <rect x="32" y="454" width="12" height="12" rx="3" style="fill:#f5f5f7;stroke:#0071e3;stroke-width:1.5"/>
+  <text x="50" y="464" style="font-size:9px;fill:#6e6e73">Primary layer</text>
+  <rect x="130" y="454" width="12" height="12" rx="3" style="fill:#fff;stroke:#d2d2d7;stroke-width:1.2"/>
+  <text x="148" y="464" style="font-size:9px;fill:#6e6e73">Feature</text>
+  <rect x="210" y="454" width="20" height="2" rx="1" style="fill:#c7c7cc"/>
+  <text x="236" y="464" style="font-size:9px;fill:#6e6e73">Data flow</text>
+</svg>

@@ -33,11 +33,15 @@ private struct LawyerUpsert: Encodable {
 
 // MARK: - Store
 
+private let ALLOWED_EMAIL = "jatrommel@gmail.com"
+
+enum AuthStep { case email, password }
+
 @MainActor
 @Observable
 final class Store {
     var needsSignIn = true
-    var magicLinkSent = false
+    var authStep: AuthStep = .email
     var signInError: String?
     var activeCase: CaseID = .rcmp
     private(set) var journalEntries: [JournalEntry] = []
@@ -64,26 +68,28 @@ final class Store {
         }
     }
 
-    @MainActor func signIn(email: String) async {
+    @MainActor func confirmEmail(email: String) {
+        guard email == ALLOWED_EMAIL else { signInError = "Access restricted."; return }
+        signInError = nil
+        authStep = .password
+    }
+
+    @MainActor func resetAuthStep() {
+        authStep = .email
+        signInError = nil
+    }
+
+    @MainActor func signIn(email: String, password: String) async {
         signInError = nil
         do {
-            try await sbClient.auth.signInWithOTP(
-                email: email,
-                redirectTo: URL(string: "brief://login-callback")
-            )
-            magicLinkSent = true
+            try await sbClient.auth.signIn(email: email, password: password)
+            let session = try await sbClient.auth.session
+            userId = session.user.id.uuidString
+            needsSignIn = false
+            Task { await loadAll() }
         } catch {
             signInError = error.localizedDescription
         }
-    }
-
-    @MainActor func handleURL(_ url: URL) async {
-        do {
-            let session = try await sbClient.auth.session(from: url)
-            userId = session.user.id.uuidString
-            needsSignIn = false
-            await loadAll()
-        } catch {}
     }
 
     @MainActor func loadAll() async {

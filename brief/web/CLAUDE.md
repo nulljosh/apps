@@ -11,9 +11,10 @@ Vanilla JS PWA for *Trommel v. AG Canada* litigation planning. Live at heyitsmej
 - `CaseData.json` — NOT used by web (data is hardcoded in script.js); canonical source is per-platform
 
 ## Auth
-- Magic link OTP via Supabase (`jatrommel@gmail.com` only — hard-checked client-side before sending)
+- Email + password, two-step flow (`jatrommel@gmail.com` only — hard-checked before advancing to password step)
 - Supabase project: `spark` (shared with spark app) — `tjsxsqlxjmanwvmywwvw.supabase.co`
 - Anon key is in `script.js` (public, RLS enforces user_id isolation)
+- First login: set password via Supabase dashboard > Auth > Users > jatrommel@gmail.com > Send password reset
 
 ## Supabase tables
 - `brief_journal` — `{ user_id, date, text }`

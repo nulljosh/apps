@@ -32,6 +32,10 @@ private struct LawyerUpsert: Encodable {
     let user_id: String; let lawyer_id: String; let status: String
 }
 
+private let ALLOWED_EMAIL = "jatrommel@gmail.com"
+
+enum AuthStep { case email, password }
+
 // MARK: - Store
 
 @MainActor
@@ -39,7 +43,7 @@ private struct LawyerUpsert: Encodable {
 final class Store {
     var needsSignIn = true
     var biometricLocked = true
-    var magicLinkSent = false
+    var authStep: AuthStep = .email
     var signInError: String?
     var activeCase: CaseID = .rcmp
     private(set) var journalEntries: [JournalEntry] = []
@@ -82,27 +86,29 @@ final class Store {
         if success { biometricLocked = false }
     }
 
-    @MainActor func signIn(email: String) async {
+    @MainActor func confirmEmail(email: String) {
+        guard email == ALLOWED_EMAIL else { signInError = "Access restricted."; return }
         signInError = nil
-        do {
-            try await sbClient.auth.signInWithOTP(
-                email: email,
-                redirectTo: URL(string: "brief://login-callback")
-            )
-            magicLinkSent = true
-        } catch {
-            signInError = error.localizedDescription
-        }
+        authStep = .password
     }
 
-    @MainActor func handleURL(_ url: URL) async {
+    @MainActor func resetAuthStep() {
+        authStep = .email
+        signInError = nil
+    }
+
+    @MainActor func signIn(email: String, password: String) async {
+        signInError = nil
         do {
-            let session = try await sbClient.auth.session(from: url)
+            try await sbClient.auth.signIn(email: email, password: password)
+            let session = try await sbClient.auth.session
             userId = session.user.id.uuidString
             needsSignIn = false
             biometricLocked = false
-            await loadAll()
-        } catch {}
+            Task { await loadAll() }
+        } catch {
+            signInError = error.localizedDescription
+        }
     }
 
     @MainActor func loadAll() async {

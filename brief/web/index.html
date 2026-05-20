@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<base href="/brief/">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Brief — Trommel v. AG Canada</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
@@ -18,16 +19,24 @@
   <div class="auth-card">
     <div class="auth-title">Brief<span style="color:var(--muted)">·</span></div>
     <div class="auth-sub">Trommel v. AG Canada &middot; private</div>
-    <div id="authStepEmail">
-      <form id="authForm">
+    <div id="authStep1">
+      <form id="authFormEmail">
         <input class="auth-input" id="authEmail" type="email" placeholder="Email" autocomplete="email">
-        <button class="auth-btn" type="submit">Send sign-in link</button>
-        <div class="auth-err" id="authErr"></div>
+        <button class="auth-btn" type="submit">Continue</button>
+        <div class="auth-err" id="authErrEmail"></div>
       </form>
     </div>
-    <div id="authStepSent" style="display:none">
-      <div class="auth-sent">Link sent</div>
-      <div class="auth-sent-sub">Check your email and click the link to sign in.</div>
+    <div id="authStep2" style="display:none">
+      <div class="auth-who">
+        <div class="auth-avatar">J</div>
+        <div class="auth-confirmed" id="authConfirmedEmail"></div>
+      </div>
+      <form id="authFormPass">
+        <input class="auth-input" id="authPassword" type="password" placeholder="Password" autocomplete="current-password">
+        <button class="auth-btn" type="submit">Sign in</button>
+        <div class="auth-err" id="authErrPass"></div>
+      </form>
+      <button class="auth-back" id="authBack" type="button">Back</button>
     </div>
     <div class="auth-footer">not legal advice</div>
   </div>
@@ -421,7 +430,7 @@ Strategic: file AFTER counsel reviews. CRCC findings non-binding but persuasive.
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js?v=3"></script>
+<script src="script.js?v=4"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');

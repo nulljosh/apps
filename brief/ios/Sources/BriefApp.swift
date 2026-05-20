@@ -17,9 +17,6 @@ struct BriefApp: App {
                 }
             }
             .environment(store)
-            .onOpenURL { url in
-                Task { await store.handleURL(url) }
-            }
             .task { await store.checkSession() }
             .onChange(of: scenePhase) { _, new in
                 if new == .background { store.biometricLocked = true }

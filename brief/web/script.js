@@ -18,16 +18,34 @@ function loadAndShow() {
   initData();
 }
 
-document.getElementById('authForm').addEventListener('submit', e => {
+document.getElementById('authFormEmail').addEventListener('submit', e => {
   e.preventDefault();
   const email = document.getElementById('authEmail').value.trim().toLowerCase();
-  const errEl = document.getElementById('authErr');
+  const errEl = document.getElementById('authErrEmail');
   if (email !== ALLOWED_EMAIL) { errEl.textContent = 'Access restricted.'; return; }
-  _sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } }).then(res => {
-    if (res.error) { errEl.textContent = res.error.message; return; }
-    document.getElementById('authStepEmail').style.display = 'none';
-    document.getElementById('authStepSent').style.display = 'block';
+  document.getElementById('authConfirmedEmail').textContent = email;
+  document.getElementById('authStep1').style.display = 'none';
+  document.getElementById('authStep2').style.display = 'block';
+  document.getElementById('authPassword').focus();
+});
+
+document.getElementById('authFormPass').addEventListener('submit', e => {
+  e.preventDefault();
+  const email = document.getElementById('authEmail').value.trim().toLowerCase();
+  const password = document.getElementById('authPassword').value;
+  const errEl = document.getElementById('authErrPass');
+  const btn = e.submitter || e.target.querySelector('[type=submit]');
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  _sb.auth.signInWithPassword({ email, password }).then(res => {
+    if (res.error) { errEl.textContent = res.error.message; btn.textContent = 'Sign in'; btn.disabled = false; }
   });
+});
+
+document.getElementById('authBack').addEventListener('click', () => {
+  document.getElementById('authStep2').style.display = 'none';
+  document.getElementById('authStep1').style.display = 'block';
+  document.getElementById('authErrEmail').textContent = '';
+  document.getElementById('authPassword').value = '';
 });
 
 // ===== DATA =====
