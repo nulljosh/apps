@@ -1010,6 +1010,22 @@ struct SubstanceChart: View {
                 .interpolationMethod(.catmullRom)
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
 
+                LineMark(
+                    x: .value("Age", point.age),
+                    y: .value("MDMA", point.mollyIntensity)
+                )
+                .foregroundStyle(Color.orange.opacity(0.7))
+                .interpolationMethod(.catmullRom)
+                .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [3, 3]))
+
+                LineMark(
+                    x: .value("Age", point.age),
+                    y: .value("LSD", point.lsdIntensity)
+                )
+                .foregroundStyle(Color.purple.opacity(0.6))
+                .interpolationMethod(.catmullRom)
+                .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 5]))
+
                 PointMark(
                     x: .value("Age", point.age),
                     y: .value("Weed", point.weedIntensity)
@@ -1017,7 +1033,7 @@ struct SubstanceChart: View {
                 .foregroundStyle(Color.green)
                 .symbolSize(selectedAge == point.age ? 60 : 20)
             }
-            .chartXScale(domain: 17...27)
+            .chartXScale(domain: 16...27)
             .chartYScale(domain: 0...1)
             .chartYAxis {
                 AxisMarks(values: [0.0, 0.5, 1.0]) { value in
@@ -1031,7 +1047,7 @@ struct SubstanceChart: View {
                 }
             }
             .chartXAxis {
-                AxisMarks(values: [17, 19, 21, 23, 25, 27]) { value in
+                AxisMarks(values: [16, 18, 20, 22, 24, 26]) { value in
                     AxisValueLabel {
                         if let age = value.as(Int.self) {
                             Text("age \(age)")

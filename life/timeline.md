@@ -11,6 +11,8 @@ Merged from embedded HTML timeline and source chronology. ISO dates where known;
 | 2007 | ADHD diagnosis (age 8) | event |
 | 2008 | First Disneyland trip (age 8). Florida and Hawaii trips through 2010–2020. Hawaii again Feb 2026. | forward |
 | ~2014 | Met a girl online. First serious relationship. | event |
+| ~2015 | Lost virginity at 16 in a tent on the high school baseball field. Mom wouldn't allow girls over. | event |
+| ~2015-2016 | MDMA introduced through girlfriend. LSD same period. Used both many times. | event |
 | 2017 | Prom (age 18). NYC trip. | event |
 | Late 2019 | Moved to New Westminster with Olivia Evans. Together ~8 months. | event |
 | ~2019-10-17 | Olivia told me she was pregnant. Chose abortion. Took care of her through it. | crisis |

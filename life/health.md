@@ -25,7 +25,8 @@
 
 | Substance | Dose | Notes |
 |-----------|------|-------|
-| Sertraline | 50mg nightly | On and off ~5-6 months as of March 2026 |
+| Sertraline | 50mg nightly | On and off ~5-6 months. Missing most doses. |
+| Concerta | Prescribed (methylphenidate) | ADHD stimulant. Missing most doses. |
 | Cannabis | Daily (5+ bong tokes) | Suppresses nightmares; chronic heavy use |
 | Psilocybin | Microdosing | |
 | Coffee | Daily | |

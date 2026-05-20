@@ -140,6 +140,8 @@ struct SubstancePoint: Identifiable {
     let label: String
     let weedIntensity: Double // 0-1
     let vapingIntensity: Double // 0-1
+    let mollyIntensity: Double // 0-1
+    let lsdIntensity: Double // 0-1
 }
 
 struct StrengthItem: Identifiable {
@@ -300,13 +302,14 @@ enum LifeData {
     ]
 
     static let substanceTimeline: [SubstancePoint] = [
-        SubstancePoint(age: 17, label: "First time", weedIntensity: 0.05, vapingIntensity: 0.0),
-        SubstancePoint(age: 18, label: "Occasional", weedIntensity: 0.15, vapingIntensity: 0.0),
-        SubstancePoint(age: 19, label: "Regular", weedIntensity: 0.4, vapingIntensity: 0.1),
-        SubstancePoint(age: 21, label: "Daily", weedIntensity: 0.6, vapingIntensity: 0.3),
-        SubstancePoint(age: 23, label: "Heavy daily", weedIntensity: 0.8, vapingIntensity: 0.5),
-        SubstancePoint(age: 25, label: "5+/day", weedIntensity: 0.95, vapingIntensity: 0.6),
-        SubstancePoint(age: 27, label: "Current", weedIntensity: 1.0, vapingIntensity: 0.6),
+        SubstancePoint(age: 16, label: "MDMA/LSD intro via girlfriend", weedIntensity: 0.0, vapingIntensity: 0.0, mollyIntensity: 0.25, lsdIntensity: 0.15),
+        SubstancePoint(age: 17, label: "Weed first time / MDMA heavy", weedIntensity: 0.05, vapingIntensity: 0.0, mollyIntensity: 0.65, lsdIntensity: 0.5),
+        SubstancePoint(age: 18, label: "Weed occasional / MDMA peak", weedIntensity: 0.15, vapingIntensity: 0.0, mollyIntensity: 0.75, lsdIntensity: 0.55),
+        SubstancePoint(age: 19, label: "Weed regular", weedIntensity: 0.4, vapingIntensity: 0.1, mollyIntensity: 0.65, lsdIntensity: 0.4),
+        SubstancePoint(age: 21, label: "Weed daily", weedIntensity: 0.6, vapingIntensity: 0.3, mollyIntensity: 0.5, lsdIntensity: 0.25),
+        SubstancePoint(age: 23, label: "Weed heavy daily", weedIntensity: 0.8, vapingIntensity: 0.5, mollyIntensity: 0.35, lsdIntensity: 0.15),
+        SubstancePoint(age: 25, label: "5+/day", weedIntensity: 0.95, vapingIntensity: 0.6, mollyIntensity: 0.25, lsdIntensity: 0.1),
+        SubstancePoint(age: 27, label: "Current", weedIntensity: 1.0, vapingIntensity: 0.6, mollyIntensity: 0.2, lsdIntensity: 0.08),
     ]
 
     static let strengths: [StrengthItem] = [
@@ -433,6 +436,8 @@ enum LifeData {
         TimelineEntry(year: "2007", text: "ADHD diagnosis (age 8)", detail: nil, category: .event),
         TimelineEntry(year: "2008", text: "First Disneyland trip (age 8)", detail: "Florida and Hawaii trips throughout 2010 to 2020. Hawaii again Feb 2026.", category: .forward),
         TimelineEntry(year: "~2014", text: "Met a girl online. First serious relationship.", detail: nil, category: .event),
+        TimelineEntry(year: "~2015", text: "Lost virginity at 16 in a tent on the baseball field behind school.", detail: "Mom wouldn't allow girls over. Anything like that had to be somewhere else, somewhere secret.", category: .event),
+        TimelineEntry(year: "~2015-2016", text: "MDMA introduced through girlfriend. LSD same period.", detail: "Used both many times. Neither escalated to daily the way weed later did.", category: .event),
         TimelineEntry(year: "2017", text: "Prom (age 18). NYC trip.", detail: nil, category: .event),
         TimelineEntry(year: "Late 2019", text: "Moved to New Westminster with Olivia Evans. ~Oct: pregnancy. Abortion.", detail: "Moved back to parents'. Broke up end of 2019 / early 2020. Together ~8 months.", category: .crisis),
         TimelineEntry(year: "~2020-04", text: "COVID. Olivia hooked up with a coworker at a party.", detail: "Drove home drunk; wrapped car around a tree. Car destroyed.", category: .crisis),
@@ -522,7 +527,7 @@ enum LifeData {
 
         // 13
         LifeSection(label: "Medication", paragraphs: [
-            "I was briefly put on ADHD medication as a child, maybe a few months to a year at most. I'm considering retrying ADHD medication now as an adult. The only other medication I've taken is sertraline (low dose), which I've been on for about 5 to 6 months on and off as of March 2026.",
+            "I was briefly put on ADHD medication as a child, maybe a few months to a year at most. I'm now on sertraline (50mg nightly) and Concerta (methylphenidate, ADHD stimulant). I miss most doses of both. Not deliberate -- it just doesn't happen. The consistency isn't there. Sertraline has been on and off for about 5 to 6 months.",
         ], note: nil),
 
         // 14
@@ -547,6 +552,7 @@ enum LifeData {
         // 17
         LifeSection(label: "Sexuality", paragraphs: [
             "I'm straight. I had one gay interaction with an old friend that made me feel grossed out. I have gay friends but most if not all of them have come onto me at some point, which doesn't just turn me off but genuinely disgusts me. Worth noting for the trust and boundaries stuff.",
+            "I lost my virginity at 16 in a tent on the baseball field behind my high school. The reason it happened there is that my mom wouldn't allow girls over. So anything like that had to be somewhere else, somewhere secret. The restriction didn't stop it. It just relocated it to somewhere that felt wrong before it started. The girl I was with at the time was the one who later introduced me to MDMA.",
         ], note: nil),
 
         // 18 - NEW: Boundaries
@@ -581,10 +587,18 @@ enum LifeData {
             "I don't really hate myself or anybody specifically. It's more of a general frustration. The anger goes both directions, inward as self-harm, outward as snapping at people. The root of it is frustration with how things are, not with any one person.",
         ], note: nil),
 
-        // 22 - NEW: Substances Expanded
+        // 22 - NEW: Choices & Conscience
+        LifeSection(label: "Choices & Conscience", paragraphs: [
+            "There are things I've done where I knew, in the moment, that I was crossing a line I'd set for myself. Not rules someone else made. My own. Getting involved with people I knew were bad news. Going along with situations because stopping felt harder than continuing.",
+            "Some of the drug stuff fits here. Not because I think there's anything wrong with it on principle, but because the way it started wasn't really deliberate. A friend introduced me to weed around 16. A girl I was with introduced me to Molly. I went along. Both of those happened before I had any real sense of who I was or what I wanted. The question of how much was peer pressure and how much was actually me is impossible to answer cleanly. Being 16, autistic, socially isolated, and raised in a house where I had to sneak around to have any normal experiences at all -- that context matters. But I was there. I made the calls.",
+            "I don't think I'm a bad person. I've never done anything to anyone that I'd be ashamed to name out loud. The guilt I carry is less about specific acts and more about a general sense that some of the ways I've moved through the world have been reactive rather than chosen. That's probably the ADHD and the autism and the circumstances, not a character flaw. But it's still mine to sit with.",
+        ], note: nil),
+
+        // 23 - NEW: Substances Expanded
         LifeSection(label: "Substances Expanded", paragraphs: [
-            "I first smoked weed at 17 at a party. Didn't get it. A few months later I smoked again and it half-deactivated my autism and helped me just relax and stop thinking. Started smoking every day. Still do at almost 27. About 5+ bong tokes every day.",
+            "First smoked weed at 16 or 17 -- a friend introduced me. At 17 there was a party, didn't get it. A few months later smoked again, it half-deactivated my autism and helped me relax and stop thinking. Started smoking every day. Still do at almost 27. About 5+ bong tokes every day.",
             "I've tried to cut back a little but not seriously. When I do the bad dreams come back and I get over-stressed about stuff that doesn't matter. Whether weed helps more than it hurts at this point: fifty fifty.",
+            "MDMA came in around the same time, through the girl I was with at 16. I've taken it more times than I can count. Same with LSD. Neither escalated the way weed did -- they stayed recreational and occasional rather than daily -- but I've taken both a lot. I'm on sertraline and Concerta now. I miss most doses of both.",
         ], note: nil),
 
         // 23 - NEW: Physical Health & Body
