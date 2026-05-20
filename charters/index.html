@@ -39,6 +39,7 @@ header{position:relative;z-index:50;padding:26px 40px 18px;border-bottom:1px sol
 .fb{background:none;border:1px solid var(--border);border-radius:100px;color:var(--muted);font-family:var(--f2);font-size:.72rem;font-weight:500;padding:3px 12px;cursor:pointer;transition:all .18s var(--sp);}
 .fb:hover{border-color:var(--b2);color:var(--cream);transform:translateY(-1px);}
 .fb.on{background:var(--b1);border-color:var(--b1);color:var(--cream);}
+.st{position:relative;z-index:38;padding:5px 40px;border-bottom:1px solid var(--border);font-size:.67rem;color:var(--m2);letter-spacing:.05em;background:rgba(12,18,32,.5);}
 #mv{position:relative;width:100%;}
 #mv.h{display:none;}
 .mw{width:100%;overflow:hidden;background:#060e18;}
@@ -83,6 +84,20 @@ header{position:relative;z-index:50;padding:26px 40px 18px;border-bottom:1px sol
 .tag.economic{border-color:#7aab7a;color:#7aab7a;background:rgba(122,171,122,.07);}
 .tag.social{border-color:#c4956a;color:#c4956a;background:rgba(196,149,106,.07);}
 .tag.cultural{border-color:#a07bc8;color:#a07bc8;background:rgba(160,123,200,.07);}
+#cpv{display:flex;flex-direction:column;height:calc(100vh - 136px);}
+#cpv.h{display:none;}
+.csr{padding:14px 40px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;background:rgba(12,18,32,.7);backdrop-filter:blur(6px);}
+.csl{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--m2);flex-shrink:0;}
+.csx{flex:1;max-width:320px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--cream);font-family:var(--f2);font-size:.82rem;padding:7px 12px;outline:none;cursor:pointer;transition:border-color .18s,box-shadow .18s;appearance:none;-webkit-appearance:none;}
+.csx:focus{border-color:var(--b2);box-shadow:0 0 0 3px rgba(36,114,178,.12);}
+.csx option{background:var(--surface);}
+.cvs{color:var(--m2);padding:0 4px;font-size:.8rem;}
+.cmp{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden;gap:1px;background:var(--border);}
+.cpc{overflow-y:auto;padding:22px 30px;background:var(--bg);}
+.cpc::-webkit-scrollbar{width:5px;}
+.cpc::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.cph{font-family:var(--f1);font-size:1.3rem;font-weight:900;color:var(--cream);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.cpe{padding:48px 0;text-align:center;color:var(--muted);font-size:.82rem;}
 #pan{position:fixed;top:0;right:0;width:460px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:300;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .32s var(--sp);overflow:hidden;}
 #pan.op{transform:translateX(0);box-shadow:-20px 0 60px rgba(0,0,0,.55);}
 .pt{padding:20px 18px 13px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
@@ -104,7 +119,6 @@ header{position:relative;z-index:50;padding:26px 40px 18px;border-bottom:1px sol
 .al{display:flex;flex-direction:column;gap:6px;}
 .ar{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;transition:border-color .18s;}
 .ar:hover{border-color:var(--b1);}
-.ar.h{display:none;}
 .aref{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--b2);font-weight:500;margin-bottom:2px;}
 .atit{font-family:var(--f1);font-size:.87rem;font-weight:700;color:var(--cream);margin-bottom:3px;}
 .atxt{font-size:.74rem;color:var(--muted);line-height:1.55;}
@@ -127,16 +141,24 @@ header{position:relative;z-index:50;padding:26px 40px 18px;border-bottom:1px sol
 .cc:nth-child(1){animation-delay:.04s}.cc:nth-child(2){animation-delay:.08s}.cc:nth-child(3){animation-delay:.12s}
 .cc:nth-child(4){animation-delay:.16s}.cc:nth-child(5){animation-delay:.20s}.cc:nth-child(6){animation-delay:.24s}
 .cc:nth-child(7){animation-delay:.28s}.cc:nth-child(8){animation-delay:.32s}.cc:nth-child(9){animation-delay:.36s}
-.cc:nth-child(10){animation-delay:.40s}.cc:nth-child(11){animation-delay:.44s}
+.cc:nth-child(10){animation-delay:.40s}.cc:nth-child(11){animation-delay:.44s}.cc:nth-child(12){animation-delay:.48s}
+.cc:nth-child(13){animation-delay:.52s}.cc:nth-child(14){animation-delay:.56s}.cc:nth-child(15){animation-delay:.60s}
 @media(max-width:768px){
   header{padding:14px;gap:10px;}
   .wm{font-size:1.3rem;}.tg{display:none;}
   .sw{max-width:100%;flex-basis:100%;order:3;}
   .vt{margin-left:0;}
   .filters{padding:7px 14px;}
+  .st{padding:5px 14px;}
   #lv{padding:14px;}
   #pan{width:100%;height:80vh;top:auto;bottom:0;border-left:none;border-top:1px solid var(--border);border-radius:14px 14px 0 0;transform:translateY(100%);}
   #pan.op{transform:translateY(0);}
+  #cpv{height:calc(100vh - 160px);}
+  .csr{flex-wrap:wrap;padding:10px 14px;}
+  .csx{max-width:100%;}
+  .cmp{grid-template-columns:1fr;overflow-y:auto;}
+  .cpc{overflow-y:visible;padding:16px;}
+  .cvs{display:none;}
 }
 </style>
 </head>
@@ -157,6 +179,7 @@ header{position:relative;z-index:50;padding:26px 40px 18px;border-bottom:1px sol
   <div class="vt">
     <button class="vb on" id="bm">Map</button>
     <button class="vb" id="bl">List</button>
+    <button class="vb" id="bc">Compare</button>
   </div>
 </header>
 
@@ -170,12 +193,13 @@ header{position:relative;z-index:50;padding:26px 40px 18px;border-bottom:1px sol
   <button class="fb" data-f="cultural">Cultural</button>
 </div>
 
+<div id="stbar" class="st animate__animated animate__fadeIn" style="animation-delay:.12s"></div>
+
 <main>
 <div id="mv">
   <div class="mw">
   <svg id="wsvg" class="wm-svg" viewBox="0 0 960 500" xmlns="http://www.w3.org/2000/svg">
     <rect width="960" height="500" fill="#060e18"/>
-    <!-- Continents -->
     <path class="ct" d="M27,28 L110,17 L267,19 L340,119 L321,131 L305,162 L287,213 L264,226 L247,247 L230,268 L215,290 L199,313 L184,342 L168,372 L154,395 L143,412 L130,420 L117,416 L105,405 L95,390 L88,370 L85,348 L87,325 L90,305 L87,285 L77,270 L63,263 L48,267 L36,278 L28,293 L27,310 L30,327 L29,341 L22,349 L11,347 L3,337 L0,323 L0,28 Z"/>
     <path class="ct" d="M265,228 L348,244 L388,265 L392,307 L372,353 L336,402 L300,420 L267,417 L237,397 L217,370 L212,338 L217,305 L238,270 L254,248 Z"/>
     <path class="ct" d="M436,53 L576,50 L597,117 L562,130 L532,117 L512,122 L490,122 L467,127 L452,148 L432,153 L420,133 L437,90 Z"/>
@@ -184,27 +208,34 @@ header{position:relative;z-index:50;padding:26px 40px 18px;border-bottom:1px sol
     <path class="ct" d="M555,56 L560,97 L596,117 L640,100 L680,155 L650,196 L614,225 L596,228 L580,200 L597,165 L597,117 L640,97 L775,110 L825,130 L875,130 L920,155 L960,175 L960,30 L555,56 Z"/>
     <path class="ct" d="M597,165 L640,155 L680,155 L700,195 L690,225 L660,240 L625,235 L600,218 L597,195 Z"/>
     <path class="ct" d="M680,155 L775,110 L825,130 L875,140 L920,160 L920,180 L875,195 L830,195 L800,215 L780,235 L760,250 L740,258 L720,255 L700,245 L700,225 L690,225 Z"/>
-    <!-- Featured countries -->
     <path class="co" id="m-CA" data-id="CA" d="M107,83 L128,56 L160,33 L213,17 L267,19 L307,75 L325,89 L335,106 L340,119 L321,119 L310,128 L302,119 L275,128 L257,119 L224,114 L187,114 L149,114 L149,122 L138,114 L127,100 Z"/>
     <text class="ml b" x="218" y="76" data-id="CA">Canada</text>
     <path class="co" id="m-US" data-id="US" d="M149,114 L224,114 L257,119 L275,128 L281,144 L278,153 L265,162 L262,181 L249,168 L241,170 L222,178 L214,173 L195,163 L177,162 L169,160 L161,156 L156,145 L149,122 Z"/>
     <text class="ml" x="213" y="148" data-id="US">United States</text>
+    <path class="co" id="m-MX" data-id="MX" d="M163,163 L226,163 L238,172 L240,190 L232,204 L218,214 L200,215 L183,207 L169,197 L162,183 Z"/>
+    <text class="ml" x="200" y="189" data-id="MX">Mexico</text>
     <path class="co" id="m-GB" data-id="GB" d="M464,111 L484,109 L484,104 L476,96 L475,88 L467,88 L466,94 L466,100 Z"/>
     <text class="ml" x="471" y="101" data-id="GB">UK</text>
     <path class="co" id="m-FR" data-id="FR" d="M468,117 L468,115 L476,114 L485,109 L507,117 L506,129 L489,130 L476,130 L475,121 Z"/>
     <text class="ml" x="487" y="122" data-id="FR">France</text>
     <path class="co" id="m-DE" data-id="DE" d="M506,117 L502,108 L502,103 L506,98 L523,100 L524,108 L521,116 Z"/>
     <text class="ml" x="512" y="108" data-id="DE">Germany</text>
+    <path class="co" id="m-SE" data-id="SE" d="M505,66 L520,63 L528,71 L526,90 L518,96 L508,95 L503,87 L504,73 Z"/>
+    <text class="ml" x="515" y="80" data-id="SE">Sweden</text>
     <path class="eu" id="m-EU" data-id="EU" d="M452,100 L483,88 L530,88 L553,103 L553,133 L535,148 L505,152 L475,150 L452,140 L440,122 Z"/>
     <text class="ml" x="498" y="138" data-id="EU" style="font-size:6.5px;fill:rgba(78,156,215,.6)">EU</text>
     <path class="co" id="m-IN" data-id="IN" d="M662,147 L689,150 L740,172 L712,212 L694,228 L688,228 L686,218 L673,190 L662,183 Z"/>
     <text class="ml" x="699" y="191" data-id="IN">India</text>
+    <path class="co" id="m-KR" data-id="KR" d="M786,163 L801,159 L807,168 L803,178 L791,179 L785,171 Z"/>
+    <text class="ml" x="796" y="170" data-id="KR">S. Korea</text>
     <path class="co" id="m-ZA" data-id="ZA" d="M524,311 L565,311 L568,327 L562,342 L547,347 L531,346 L516,335 L514,320 Z"/>
     <text class="ml" x="541" y="330" data-id="ZA">S. Africa</text>
     <path class="co" id="m-JP" data-id="JP" d="M829,157 L843,154 L848,150 L857,136 L857,144 L844,155 L835,157 L829,164 Z M857,136 L862,128 L867,129 L863,135 Z"/>
     <text class="ml" x="848" y="148" data-id="JP">Japan</text>
     <path class="co" id="m-AU" data-id="AU" d="M784,311 L829,284 L853,292 L854,306 L840,306 L840,292 L880,280 L884,321 L893,355 L877,375 L843,381 L811,375 L784,355 L772,337 L772,317 Z"/>
     <text class="ml" x="830" y="336" data-id="AU">Australia</text>
+    <path class="co" id="m-NZ" data-id="NZ" d="M893,343 L906,337 L912,347 L908,361 L897,363 L892,353 Z"/>
+    <text class="ml" x="901" y="351" data-id="NZ">N. Zealand</text>
     <path class="co" id="m-BR" data-id="BR" d="M342,244 L388,265 L388,278 L379,292 L366,314 L341,342 L286,306 L289,262 L316,247 Z"/>
     <text class="ml" x="335" y="297" data-id="BR">Brazil</text>
   </svg>
@@ -218,6 +249,19 @@ header{position:relative;z-index:50;padding:26px 40px 18px;border-bottom:1px sol
 
 <div id="lv" class="h">
   <div id="cg" class="cg"></div>
+</div>
+
+<div id="cpv" class="h">
+  <div class="csr">
+    <span class="csl">Compare:</span>
+    <select id="cs1" class="csx"><option value="">Select country A...</option></select>
+    <span class="cvs">vs</span>
+    <select id="cs2" class="csx"><option value="">Select country B...</option></select>
+  </div>
+  <div class="cmp">
+    <div class="cpc" id="cp1"><div class="cpe">Select a country above to begin comparing</div></div>
+    <div class="cpc" id="cp2"><div class="cpe">Select a second country to compare</div></div>
+  </div>
 </div>
 </main>
 
@@ -263,7 +307,6 @@ const D=[
 {ref:'14th Amendment (1868)',title:'Equal Protection and Due Process',tags:['civil','political'],text:'All persons born or naturalized in the United States are citizens. No State shall make or enforce any law which shall abridge the privileges or immunities of citizens; nor shall any State deprive any person of life, liberty, or property, without due process of law; nor deny to any person within its jurisdiction the equal protection of the laws.'},
 {ref:'15th Amendment (1870)',title:'Voting Rights - Race',tags:['political'],text:'The right of citizens of the United States to vote shall not be denied or abridged by the United States or by any State on account of race, color, or previous condition of servitude.'},
 {ref:'19th Amendment (1920)',title:"Women's Suffrage",tags:['political'],text:'The right of citizens of the United States to vote shall not be denied or abridged by the United States or by any State on account of sex.'},
-{ref:'24th Amendment (1964)',title:'No Poll Tax',tags:['political'],text:'The right of citizens of the United States to vote in any primary or other election for President, Vice President, or Senator or Representative in Congress, shall not be denied by reason of failure to pay any poll tax or other tax.'},
 {ref:'26th Amendment (1971)',title:'Voting Age 18',tags:['political'],text:'The right of citizens of the United States, who are eighteen years of age or older, to vote shall not be denied or abridged by the United States or by any State on account of age.'},
 ]}
 ]},
@@ -290,7 +333,7 @@ const D=[
 ]}
 ]},
 {id:'FR',name:'France',region:'Europe',docs:[
-{id:'droits',title:'Declaration of the Rights of Man and of the Citizen',year:1789,parent:'French Republic - Preamble to 1958 Constitution',arts:[
+{id:'droits',title:'Declaration of the Rights of Man and of the Citizen',year:1789,parent:'French Republic — Preamble to 1958 Constitution',arts:[
 {ref:'Article 1',title:'Liberty and Equality',tags:['civil'],text:'Men are born and remain free and equal in rights. Social distinctions may be based only on considerations of the common good.'},
 {ref:'Article 2',title:'Natural Rights',tags:['civil'],text:'The goal of any political association is the conservation of the natural and imprescriptible rights of man. These rights are liberty, property, safety and resistance against oppression.'},
 {ref:'Article 3',title:'National Sovereignty',tags:['political'],text:'The principle of any sovereignty resides essentially in the Nation. No body, no individual may exercise any authority which does not proceed directly from the Nation.'},
@@ -316,8 +359,21 @@ const D=[
 {ref:'Article 16a',title:'Right of Asylum',tags:['civil'],text:'Persons persecuted on political grounds shall have the right of asylum.'},
 ]}
 ]},
+{id:'SE',name:'Sweden',region:'Europe',docs:[
+{id:'se74',title:'Instrument of Government',year:1974,parent:'Swedish Fundamental Laws (Grundlagarna)',arts:[
+{ref:'Ch. 1, Art. 2',title:'Human Dignity and Social Rights',tags:['civil','social'],text:'The public institutions shall promote the opportunity for all to attain participation and equality in society and for the rights of the child to be safeguarded. The public institutions shall combat discrimination of persons on grounds of gender, colour, national or ethnic origin, linguistic or religious affiliation, functional disability, sexual orientation, age or other circumstance affecting the individual.'},
+{ref:'Ch. 2, Art. 1',title:'Freedom of Expression and Information',tags:['civil','political'],text:'Every citizen is guaranteed freedom of expression — freedom to communicate information and to express thoughts, opinions and feelings in speech, writing, pictures or in any other manner; freedom of information, that is, freedom to obtain and receive information and otherwise to acquaint oneself with the utterances of others.'},
+{ref:'Ch. 2, Art. 6',title:'Personal Integrity and Privacy',tags:['civil'],text:'Every citizen is protected against physical violations. Every citizen is likewise protected against searches, house searches and other such invasions of personal privacy, and against surveillance and monitoring of mail or other confidential correspondence, telephone calls, and other confidential communications.'},
+{ref:'Ch. 2, Art. 15',title:'Right to Equal Treatment',tags:['civil'],text:'No act of law or other provision may imply the unfavourable treatment of anyone because they belong to a minority group by reason of ethnic origin, colour or similar circumstance, or on the ground of sexual orientation.'},
+{ref:'Ch. 2, Art. 17',title:'Right to Assemble and Demonstrate',tags:['civil','political'],text:'Every citizen has the right to organise or participate in demonstrations in a public place, and to organise or join in processions in a public place. Every citizen also has the right to participate in meetings at which subjects of public interest are discussed.'},
+{ref:'Ch. 2, Art. 20',title:'Limitation of Fundamental Rights',tags:['political'],text:'Rights may be limited only to satisfy a purpose acceptable in a democratic society. The limitation shall never exceed what is necessary with regard to the purpose which occasioned it, nor may it be so extensive as to constitute a threat to the free formation of opinion.'},
+]},
+{id:'freedompress',title:'Freedom of the Press Act',year:1766,parent:"Swedish Fundamental Laws — world's oldest freedom of press law",arts:[
+{ref:'Ch. 1, Art. 1',title:'Freedom of the Press — 1766',tags:['civil','political'],text:'In accordance with the principles of a free state of opinion, the right of every Swedish subject to publish written documents without prior restriction by a public authority is hereby established. This freedom of the press shall be subject only to such restrictions as are made necessary by a combination of regard for the right of the individual and regard for the security of the community.'},
+]}
+]},
 {id:'JP',name:'Japan',region:'Asia',docs:[
-{id:'jp46',title:'Constitution of Japan - Chapter III',year:1946,parent:'Promulgated under Emperor Showa',arts:[
+{id:'jp46',title:'Constitution of Japan — Chapter III',year:1946,parent:'Promulgated under Emperor Showa',arts:[
 {ref:'Article 11',title:'Fundamental Human Rights',tags:['civil'],text:'The people shall not be prevented from enjoying any of the fundamental human rights. These fundamental human rights guaranteed to the people by this Constitution shall be conferred upon the people of this and future generations as eternal and inviolate rights.'},
 {ref:'Article 13',title:'Right to Life, Liberty, Pursuit of Happiness',tags:['civil'],text:'All of the people shall be respected as individuals. Their right to life, liberty, and the pursuit of happiness shall, to the extent that it does not interfere with the public welfare, be the supreme consideration in legislation and in other governmental affairs.'},
 {ref:'Article 14',title:'Equality under the Law',tags:['civil'],text:'All of the people are equal under the law and there shall be no discrimination in political, economic or social relations because of race, creed, sex, social status or family origin.'},
@@ -339,8 +395,23 @@ const D=[
 {ref:'Implied Right (1997)',title:'Freedom of Political Communication',tags:['political'],text:'The Constitution contains an implied freedom of political communication, derived from the system of representative and responsible government it establishes. This prohibits laws that unduly burden freedom of communication on matters of government and politics. (Lange v Australian Broadcasting Corporation, 1997)'},
 ]}
 ]},
+{id:'NZ',name:'New Zealand',region:'Oceania',docs:[
+{id:'nzbor',title:'New Zealand Bill of Rights Act',year:1990,parent:'New Zealand Statute',arts:[
+{ref:'Section 13',title:'Freedom of Thought, Conscience and Religion',tags:['civil'],text:'Everyone has the right to freedom of thought, conscience, religion, and belief, including the right to adopt and hold opinions without interference.'},
+{ref:'Section 14',title:'Freedom of Expression',tags:['civil','political'],text:'Everyone has the right to freedom of expression, including the freedom to seek, receive, and impart information and opinions of any kind in any form.'},
+{ref:'Section 17',title:'Freedom of Association',tags:['civil','political'],text:'Everyone has the right to freedom of association.'},
+{ref:'Section 18',title:'Freedom of Movement',tags:['civil'],text:'Everyone lawfully in New Zealand has the right to freedom of movement and residence in New Zealand.'},
+{ref:'Section 19',title:'Freedom from Discrimination',tags:['civil'],text:'Everyone has the right to freedom from discrimination on the grounds of colour, race, ethnic or national origins, sex, marital status, or religious belief.'},
+{ref:'Section 22',title:'Right to Liberty',tags:['civil'],text:'Everyone has the right not to be arbitrarily arrested or detained.'},
+{ref:'Section 25',title:'Minimum Standards of Criminal Procedure',tags:['civil'],text:'Everyone who is charged with an offence has the right to the minimum standards of fair trial, including the right to be informed promptly and in detail of the charge; to present a defence; and to be presumed innocent until proved guilty beyond reasonable doubt.'},
+]},
+{id:'nztreaty',title:'Treaty of Waitangi',year:1840,parent:'Te Tiriti o Waitangi — foundational constitutional significance',arts:[
+{ref:'Article 2',title:'Rangatiratanga — Maori Self-Determination',tags:['political','cultural'],text:'The Crown guarantees to the Chiefs and Tribes of New Zealand and to the respective families and individuals thereof the full exclusive and undisturbed possession of their Lands and Estates, Forests, Fisheries and other properties which they may collectively or individually possess, so long as it is their wish and desire to retain the same in their possession.'},
+{ref:'Article 3',title:'Equal Rights of Citizenship',tags:['civil'],text:'The Queen of England extends to the Natives of New Zealand Her royal protection and imparts to them all the Rights and Privileges of British Subjects.'},
+]}
+]},
 {id:'EU',name:'European Union',region:'Europe (Supranational)',docs:[
-{id:'eu00',title:'Charter of Fundamental Rights of the European Union',year:2009,parent:'Treaty of Lisbon - Legally binding since 2009',arts:[
+{id:'eu00',title:'Charter of Fundamental Rights of the EU',year:2009,parent:'Treaty of Lisbon — legally binding since 2009',arts:[
 {ref:'Article 1',title:'Human Dignity',tags:['civil'],text:'Human dignity is inviolable. It must be respected and protected.'},
 {ref:'Article 2',title:'Right to Life',tags:['civil'],text:'Everyone has the right to life. No one shall be condemned to the death penalty, or executed.'},
 {ref:'Article 4',title:'Prohibition of Torture',tags:['civil'],text:'No one shall be subjected to torture or to inhuman or degrading treatment or punishment.'},
@@ -356,7 +427,7 @@ const D=[
 ]}
 ]},
 {id:'ZA',name:'South Africa',region:'Africa',docs:[
-{id:'bor96',title:'Bill of Rights - Chapter 2',year:1996,parent:'Constitution of the Republic of South Africa',arts:[
+{id:'bor96',title:'Bill of Rights — Chapter 2',year:1996,parent:'Constitution of the Republic of South Africa',arts:[
 {ref:'Section 9',title:'Equality',tags:['civil'],text:'Everyone is equal before the law and has the right to equal protection and benefit of the law without discrimination. The state may not unfairly discriminate against anyone on grounds including race, gender, sex, pregnancy, marital status, ethnic or social origin, colour, sexual orientation, age, disability, religion, conscience, belief, culture, language and birth.'},
 {ref:'Section 10',title:'Human Dignity',tags:['civil'],text:'Everyone has inherent dignity and the right to have their dignity respected and protected.'},
 {ref:'Section 11',title:'Life',tags:['civil'],text:'Everyone has the right to life.'},
@@ -368,11 +439,11 @@ const D=[
 {ref:'Section 24',title:'Environment',tags:['social'],text:'Everyone has the right to an environment that is not harmful to their health or wellbeing; and to have the environment protected, for the benefit of present and future generations, through reasonable legislative and other measures.'},
 {ref:'Section 26',title:'Access to Housing',tags:['social'],text:'Everyone has the right to have access to adequate housing. The state must take reasonable legislative and other measures, within its available resources, to achieve the progressive realisation of this right.'},
 {ref:'Section 27',title:'Health Care, Food, Water and Social Security',tags:['social'],text:'Everyone has the right to have access to health care services, including reproductive health care; sufficient food and water; and social security, including appropriate social assistance if they are unable to support themselves and their dependants.'},
-{ref:'Section 29',title:'Education',tags:['social','cultural'],text:'Everyone has the right to a basic education, including adult basic education; and to further education, which the state must make progressively available and accessible. Everyone has the right to receive education in the official language or languages of their choice in public educational institutions where that education is reasonably practicable.'},
+{ref:'Section 29',title:'Education',tags:['social','cultural'],text:'Everyone has the right to a basic education, including adult basic education; and to further education, which the state must make progressively available and accessible. Everyone has the right to receive education in the official language or languages of their choice where that education is reasonably practicable.'},
 ]}
 ]},
 {id:'IN',name:'India',region:'Asia',docs:[
-{id:'in50',title:'Fundamental Rights - Part III',year:1950,parent:'Constitution of India',arts:[
+{id:'in50',title:'Fundamental Rights — Part III',year:1950,parent:'Constitution of India',arts:[
 {ref:'Article 14',title:'Equality before Law',tags:['civil'],text:'The State shall not deny to any person equality before the law or the equal protection of the laws within the territory of India.'},
 {ref:'Article 15',title:'Prohibition of Discrimination',tags:['civil'],text:'The State shall not discriminate against any citizen on grounds only of religion, race, caste, sex, place of birth or any of them.'},
 {ref:'Article 17',title:'Abolition of Untouchability',tags:['civil'],text:'"Untouchability" is abolished and its practice in any form is forbidden. The enforcement of any disability arising out of "Untouchability" shall be an offence punishable in accordance with law.'},
@@ -386,8 +457,35 @@ const D=[
 {ref:'Article 32',title:'Right to Constitutional Remedies',tags:['civil'],text:'The right to move the Supreme Court by appropriate proceedings for the enforcement of the rights conferred by this Part is guaranteed. The Supreme Court shall have power to issue directions or orders or writs for the enforcement of any of the rights conferred by this Part.'},
 ]}
 ]},
+{id:'MX',name:'Mexico',region:'North America',docs:[
+{id:'cpeum',title:'Political Constitution of the United Mexican States',year:1917,parent:'Constitucion Politica de los Estados Unidos Mexicanos',arts:[
+{ref:'Article 1',title:'Human Rights and Their Guarantee',tags:['civil'],text:'In the United Mexican States everyone will enjoy the human rights recognized in this Constitution and in the international human rights treaties to which the Mexican State is a party. The norms relative to human rights shall be interpreted always favoring the broader protection to persons. All authorities shall prevent, investigate, punish and remedy violations of human rights.'},
+{ref:'Article 3',title:'Right to Education',tags:['social','cultural'],text:'Every person has the right to receive education. The State will provide preschool, elementary, middle, and upper secondary education. Education is the right of every person. Public education will be free, secular and compulsory. The State shall guarantee quality education, with equity, inclusion and intercultural excellence.'},
+{ref:'Article 4',title:'Equality and Social Rights',tags:['civil','social'],text:'Men and women are equal before the law. Everyone has the right to decide in a free, responsible and informed way the number and spacing of their children. Everyone has the right to health protection. Every family has the right to enjoy decent and dignified housing. Every person has the right to food that is nutritious, sufficient and of quality.'},
+{ref:'Article 6',title:'Freedom of Expression',tags:['civil','political'],text:'The manifestation of ideas shall not be subject to any judicial or administrative investigation unless it attacks the morals of third parties or the rights of others, provokes a crime, or perturbs public order. The right to free access to pluralistic and truthful information and to seek, receive and spread information and ideas through any medium of expression is guaranteed.'},
+{ref:'Article 7',title:'Freedom of the Press',tags:['civil','political'],text:'Freedom of writing and publishing writings on any subject is inviolable. No law or authority may establish prior censorship, require bonds from authors or printers, or restrict freedom of printing. No authority may prohibit the circulation of a publication.'},
+{ref:'Article 27',title:'Land Reform and Agrarian Rights',tags:['economic','social'],text:'The ownership of lands and waters within the boundaries of the national territory corresponds originally to the Nation. The Nation shall guarantee the integral development of the ejido, the communal property owners, and agrarian communities to strengthen their economic life.'},
+{ref:'Article 123',title:'Labour Rights',tags:['economic'],text:'Every person has the right to dignified and socially useful work. The maximum duration of the work day shall be eight hours. Overtime work shall be paid at double rate. For every six days of work, workers shall enjoy at least one day of rest. Workers shall have the right to a minimum wage sufficient to satisfy the normal material, social and cultural needs.'},
+]}
+]},
+{id:'KR',name:'South Korea',region:'Asia',docs:[
+{id:'kr48',title:'Constitution of the Republic of Korea',year:1948,parent:'Current version amended 1987',arts:[
+{ref:'Article 10',title:'Human Dignity and Happiness',tags:['civil'],text:'All citizens shall be assured of human worth and dignity and have the right to pursue happiness. It shall be the duty of the State to confirm and guarantee the fundamental and inviolable human rights of individuals.'},
+{ref:'Article 11',title:'Equality',tags:['civil'],text:'All citizens shall be equal before the law, and there shall be no discrimination in political, economic, social, or cultural life on account of sex, religion, or social status. No privileged caste shall be recognized or ever established.'},
+{ref:'Article 12',title:'Freedom and Security of Person',tags:['civil'],text:'All citizens shall enjoy personal liberty. No person shall be arrested, detained, searched, seized or interrogated except as provided by Act. No person shall be punished, placed under preventive restrictions or subjected to involuntary labor except as provided by Act and through lawful procedures.'},
+{ref:'Article 15',title:'Freedom of Occupation',tags:['economic'],text:'All citizens shall have the freedom of choice of occupation.'},
+{ref:'Article 17',title:'Privacy of Home Life',tags:['civil'],text:'The privacy of home life of all citizens shall not be violated.'},
+{ref:'Article 19',title:'Freedom of Conscience',tags:['civil'],text:'All citizens shall enjoy freedom of conscience.'},
+{ref:'Article 21',title:'Freedom of Speech and Press',tags:['civil','political'],text:'All citizens shall enjoy freedom of speech and the press, and freedom of assembly and association. Licensing or censorship of speech and the press, and licensing of assembly and association shall not be recognized.'},
+{ref:'Article 23',title:'Right to Property',tags:['economic'],text:'The right of property of all citizens shall be guaranteed. The contents and limitations thereof shall be determined by Act. The exercise of property rights shall conform to the public welfare.'},
+{ref:'Article 31',title:'Right to Education',tags:['social'],text:'All citizens shall have an equal right to receive an education corresponding to their abilities. All citizens who have children to support shall be responsible at least for their elementary education and other education as provided by Act.'},
+{ref:'Article 32',title:'Right to Work',tags:['economic'],text:'All citizens shall have the right to work. The State shall endeavor to promote the employment of workers and to guarantee optimum wages through social and economic means and shall enforce a minimum wage system under the conditions as prescribed by Act.'},
+{ref:'Article 34',title:'Human Dignity and Social Security',tags:['social'],text:'All citizens shall be entitled to a life worthy of human beings. The State shall have the duty to endeavor to promote social security and welfare. The State shall endeavor to promote the welfare and rights of women, the elderly, and the young.'},
+{ref:'Article 36',title:'Family and Health',tags:['social'],text:'Marriage and family life shall be entered into and sustained on the basis of individual dignity and equality of the sexes. The State shall endeavor to achieve this. The State shall protect mothers and the health of all citizens.'},
+]}
+]},
 {id:'BR',name:'Brazil',region:'South America',docs:[
-{id:'br88',title:'Federal Constitution - Fundamental Rights',year:1988,parent:'Constituicao da Republica Federativa do Brasil',arts:[
+{id:'br88',title:'Federal Constitution — Fundamental Rights',year:1988,parent:'Constituicao da Republica Federativa do Brasil',arts:[
 {ref:'Art. 5 (caput)',title:'Equality and Legal Security',tags:['civil'],text:'All persons are equal before the law, without any distinction whatsoever, Brazilians and foreigners residing in the country being ensured of inviolability of the right to life, to liberty, to equality, to security and to property.'},
 {ref:'Art. 5, IV',title:'Freedom of Thought',tags:['civil'],text:'Freedom of thought is assured, and anonymity is forbidden.'},
 {ref:'Art. 5, IX',title:'Freedom of Expression and Artistic Activity',tags:['civil'],text:'Expression of intellectual, artistic, scientific and communications activity is free, independently of censorship or licensing.'},
@@ -399,11 +497,21 @@ const D=[
 ]}
 ];
 
-let AF='all',AC=null,CV='map';
+let AF='all',AC=null,CV='map',CC1=null,CC2=null;
+
 function cTags(c){const s=new Set();c.docs.forEach(d=>d.arts.forEach(a=>a.tags.forEach(t=>s.add(t))));return[...s];}
 function docCt(c){return c.docs.length===1?'1 document':c.docs.length+' documents';}
-function artMatch(a){return AF==='all'||a.tags.includes(AF);}
 function cMatch(c){return AF==='all'||c.docs.some(d=>d.arts.some(a=>a.tags.includes(AF)));}
+function totalArts(c){return c.docs.reduce((a,d)=>a+d.arts.length,0);}
+
+function renderStats(){
+  const nc=D.length,nd=D.reduce((a,x)=>a+x.docs.length,0),na=D.reduce((a,x)=>a+x.docs.reduce((b,y)=>b+y.arts.length,0),0);
+  document.getElementById('stbar').textContent=nc+' constitutions · '+nd+' documents · '+na+' articles';
+}
+
+function artHtml(a){
+  return '<div class="ar"><div class="aref">'+a.ref+'</div><div class="atit">'+a.title+'</div><div class="atxt">'+a.text+'</div><div class="atgs">'+a.tags.map(t=>'<span class="tag '+t+'">'+t+'</span>').join('')+'</div></div>';
+}
 
 function renderList(){
   const g=document.getElementById('cg');
@@ -413,9 +521,9 @@ function renderList(){
     el.className='cc fu'+(cMatch(c)?'':' h')+(AC===c.id?' sel':'');
     el.dataset.id=c.id;
     const tags=cTags(c);
-    const docsHtml=c.docs.map(d=>`<div class="dr"><span>${d.title}</span><span class="dy">${d.year}</span></div>`).join('');
-    const tagsHtml=tags.map(t=>`<span class="tag ${t}">${t}</span>`).join('');
-    el.innerHTML=`<div class="ch"><div><div class="cn">${c.name}</div><div class="cr">${c.region}</div></div><div class="cb">${docCt(c)}</div></div><div class="cd">${docsHtml}</div><div class="tgs">${tagsHtml}</div>`;
+    const docsHtml=c.docs.map(d=>'<div class="dr"><span>'+d.title+'</span><span class="dy">'+d.year+'</span></div>').join('');
+    const tagsHtml=tags.map(t=>'<span class="tag '+t+'">'+t+'</span>').join('');
+    el.innerHTML='<div class="ch"><div><div class="cn">'+c.name+'</div><div class="cr">'+c.region+'</div></div><div class="cb">'+docCt(c)+'</div></div><div class="cd">'+docsHtml+'</div><div class="tgs">'+tagsHtml+'</div>';
     el.addEventListener('click',()=>openPanel(c.id));
     g.appendChild(el);
   });
@@ -433,6 +541,7 @@ function openPanel(id){
   renderPanel(c,'');
   document.getElementById('pan').classList.add('op');
   document.getElementById('ov').classList.add('on');
+  history.replaceState(null,'','#'+id);
 }
 
 function closePanel(){
@@ -441,6 +550,7 @@ function closePanel(){
   document.querySelectorAll('.co,.eu').forEach(e=>e.classList.remove('sel'));
   document.querySelectorAll('.cc').forEach(e=>e.classList.remove('sel'));
   AC=null;
+  if(CV!=='compare')history.replaceState(null,'','#');
 }
 
 function renderPanel(c,q){
@@ -453,19 +563,79 @@ function renderPanel(c,q){
       return a.title.toLowerCase().includes(ql)||a.text.toLowerCase().includes(ql)||a.ref.toLowerCase().includes(ql);
     });
     if(!fa.length)return;
-    const artsHtml=fa.map(a=>`<div class="ar"><div class="aref">${a.ref}</div><div class="atit">${a.title}</div><div class="atxt">${a.text}</div><div class="atgs">${a.tags.map(t=>`<span class="tag ${t}">${t}</span>`).join('')}</div></div>`).join('');
-    html+=`<div class="db"><div class="dt">${d.title}</div><div class="dm"><span class="dy2">${d.year}</span><span>${d.parent}</span></div><div class="al">${artsHtml}</div></div>`;
+    html+='<div class="db"><div class="dt">'+d.title+'</div><div class="dm"><span class="dy2">'+d.year+'</span><span>'+d.parent+'</span></div><div class="al">'+fa.map(artHtml).join('')+'</div></div>';
   });
   document.getElementById('pb').innerHTML=html||'<div style="padding:18px;text-align:center;color:var(--muted);font-size:.82rem">No articles match the current filter.</div>';
 }
 
-// Map init
+function renderCompareCol(colId,cid){
+  const c=D.find(x=>x.id===cid);
+  if(!c){
+    const msg=colId==='cp1'?'Select a country above to begin comparing':'Select a second country to compare';
+    document.getElementById(colId).innerHTML='<div class="cpe">'+msg+'</div>';
+    return;
+  }
+  let html='<div class="cph">'+c.name+' <span style="font-size:.7rem;font-weight:400;color:var(--muted)">'+c.region+'</span></div>';
+  let matched=0;
+  c.docs.forEach(d=>{
+    const fa=d.arts.filter(a=>AF==='all'||a.tags.includes(AF));
+    if(!fa.length)return;
+    matched+=fa.length;
+    html+='<div class="db"><div class="dt">'+d.title+'</div><div class="dm"><span class="dy2">'+d.year+'</span><span>'+d.parent+'</span></div><div class="al">'+fa.map(artHtml).join('')+'</div></div>';
+  });
+  if(!matched)html+='<div class="cpe">No articles match the current filter.</div>';
+  document.getElementById(colId).innerHTML=html;
+}
+
+function renderCompare(){
+  renderCompareCol('cp1',CC1);
+  renderCompareCol('cp2',CC2);
+  if(CC1||CC2){
+    history.replaceState(null,'',CC1&&CC2?'#compare/'+CC1+','+CC2:'#compare');
+  }
+}
+
+function populateCompareSelects(){
+  const opts=D.map(c=>'<option value="'+c.id+'">'+c.name+'</option>').join('');
+  document.getElementById('cs1').innerHTML='<option value="">Select country A...</option>'+opts;
+  document.getElementById('cs2').innerHTML='<option value="">Select country B...</option>'+opts;
+}
+
+function switchView(v){
+  CV=v;
+  document.getElementById('mv').classList.toggle('h',v!=='map');
+  document.getElementById('lv').classList.toggle('h',v!=='list');
+  document.getElementById('cpv').classList.toggle('h',v!=='compare');
+  document.getElementById('bm').classList.toggle('on',v==='map');
+  document.getElementById('bl').classList.toggle('on',v==='list');
+  document.getElementById('bc').classList.toggle('on',v==='compare');
+  if(v==='list')renderList();
+  if(v==='compare')renderCompare();
+}
+
+function loadHash(){
+  const h=location.hash.slice(1);
+  if(!h)return;
+  if(h.startsWith('compare')){
+    switchView('compare');
+    const rest=h.replace(/^compare\/?/,'');
+    const parts=rest.split(',');
+    if(parts[0]&&D.find(x=>x.id===parts[0])){CC1=parts[0];document.getElementById('cs1').value=parts[0];}
+    if(parts[1]&&D.find(x=>x.id===parts[1])){CC2=parts[1];document.getElementById('cs2').value=parts[1];}
+    renderCompare();
+  } else {
+    const c=D.find(x=>x.id===h.toUpperCase()||x.id===h);
+    if(c)openPanel(c.id);
+  }
+}
+
 function initMap(){
   const tip=document.getElementById('tip');
   document.querySelectorAll('.co,.eu').forEach(el=>{
     const id=el.dataset.id;
     const c=D.find(x=>x.id===id);if(!c)return;
-    el.addEventListener('mouseenter',e=>{tip.textContent=c.name+' - '+c.docs.length+' document'+(c.docs.length>1?'s':'');tip.style.opacity='1';});
+    const arts=totalArts(c);
+    el.addEventListener('mouseenter',()=>{tip.textContent=c.name+' — '+arts+' article'+(arts!==1?'s':'');tip.style.opacity='1';});
     el.addEventListener('mousemove',e=>{tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-8)+'px';});
     el.addEventListener('mouseleave',()=>{tip.style.opacity='0';});
     el.addEventListener('click',()=>{tip.style.opacity='0';openPanel(id);});
@@ -476,46 +646,47 @@ function initMap(){
   });
 }
 
-// Search
 const gs=document.getElementById('gs'),sd=document.getElementById('sd');
 gs.addEventListener('input',()=>{
   const q=gs.value.toLowerCase().trim();
   if(!q){sd.classList.remove('op');return;}
   const res=[];
   D.forEach(c=>c.docs.forEach(d=>d.arts.forEach(a=>{
-    if(a.title.toLowerCase().includes(q)||a.text.toLowerCase().includes(q))
-      res.push({c,a});
+    if(a.title.toLowerCase().includes(q)||a.text.toLowerCase().includes(q))res.push({c,a});
   })));
   if(!res.length){
     sd.innerHTML='<div class="sre">No results found.</div>';
   } else {
-    sd.innerHTML=res.slice(0,16).map(r=>`<div class="sri" data-id="${r.c.id}"><div class="src">${r.c.name}</div><div class="srt">${r.a.ref} - ${r.a.title}</div><div class="srx">${r.a.text}</div></div>`).join('');
+    sd.innerHTML=res.slice(0,16).map(r=>'<div class="sri" data-id="'+r.c.id+'"><div class="src">'+r.c.name+'</div><div class="srt">'+r.a.ref+' — '+r.a.title+'</div><div class="srx">'+r.a.text+'</div></div>').join('');
     sd.querySelectorAll('.sri').forEach(e=>e.addEventListener('click',()=>{gs.value='';sd.classList.remove('op');openPanel(e.dataset.id);}));
   }
   sd.classList.add('op');
 });
 document.addEventListener('click',e=>{if(!gs.contains(e.target)&&!sd.contains(e.target))sd.classList.remove('op');});
 
-// View toggle
-document.getElementById('bm').addEventListener('click',()=>{CV='map';document.getElementById('mv').classList.remove('h');document.getElementById('lv').classList.add('h');document.getElementById('bm').classList.add('on');document.getElementById('bl').classList.remove('on');});
-document.getElementById('bl').addEventListener('click',()=>{CV='list';document.getElementById('lv').classList.remove('h');document.getElementById('mv').classList.add('h');document.getElementById('bl').classList.add('on');document.getElementById('bm').classList.remove('on');renderList();});
+document.getElementById('bm').addEventListener('click',()=>switchView('map'));
+document.getElementById('bl').addEventListener('click',()=>switchView('list'));
+document.getElementById('bc').addEventListener('click',()=>switchView('compare'));
 
-// Filters
 document.querySelectorAll('.fb').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));
   b.classList.add('on');AF=b.dataset.f;
   if(CV==='list')renderList();
+  if(CV==='compare')renderCompare();
   if(AC){const c=D.find(x=>x.id===AC);if(c)renderPanel(c,document.getElementById('ps').value);}
 }));
 
-// Panel search
 document.getElementById('ps').addEventListener('input',e=>{if(!AC)return;const c=D.find(x=>x.id===AC);if(c)renderPanel(c,e.target.value);});
-
-// Close
+document.getElementById('cs1').addEventListener('change',e=>{CC1=e.target.value||null;renderCompare();});
+document.getElementById('cs2').addEventListener('change',e=>{CC2=e.target.value||null;renderCompare();});
 document.getElementById('pcl').addEventListener('click',closePanel);
 document.getElementById('ov').addEventListener('click',closePanel);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&AC)closePanel();});
 
+populateCompareSelects();
+renderStats();
 initMap();
+loadHash();
 </script>
 </body>
 </html>
