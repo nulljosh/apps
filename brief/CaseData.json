@@ -70,7 +70,7 @@
   ],
 
   "checklist": [
-    { "id": 0, "label": "Call Paul Kent-Snowsell — book appointment", "priority": "now" },
+    { "id": 0, "label": "Paul Kent declined May 18 — contact Thomas Harding & Neil Chantler (PK referrals — Degen case)", "priority": "now", "done": true },
     { "id": 1, "label": "PTSD assessment started (therapy) — get Dx letter", "priority": "now", "done": true },
     { "id": 2, "label": "Body cam footage requested from RCMP", "priority": "now" },
     { "id": 3, "label": "Police report — both Daryls full names", "priority": "now" },
@@ -86,16 +86,19 @@
     { "id": 13, "label": "Pin discovery date: when you first understood a civil Charter claim was an appropriate remedy", "priority": "now", "done": true },
     { "id": 14, "label": "ATIP filed with RCMP — officer names, notebooks (Form 1624), BWC footage, File #2023-25586", "priority": "now" },
     { "id": 15, "label": "FOI filed with E-Comm 9-1-1 BC — 911 audio + CAD notes (neutralizes Godoy scope argument)", "priority": "now" },
-    { "id": 16, "label": "Email outreach sent to: Cameron Ward, Arvay Finlay, Klein Lawyers, BCCLA — email, don't call", "priority": "now" }
+    { "id": 16, "label": "Email outreach sent to: Cameron Ward, Arvay Finlay, Klein Lawyers, BCCLA — email, don't call", "priority": "now" },
+    { "id": 17, "label": "Contact Thomas Harding (referred by Paul Kent — did Degen case $317k)", "priority": "now" },
+    { "id": 18, "label": "Contact Neil Chantler (referred by Paul Kent)", "priority": "now" }
   ],
 
   "lawyers": [
     {
       "initials": "PK", "name": "Paul G. Kent-Snowsell",
       "firm": "Kane Shannon & Weiler (KSW)", "location": "Surrey BC",
-      "tags": ["33 yrs trial", "Sued RCMP", "Voicemail left"],
+      "tags": ["33 yrs trial", "Sued RCMP", "Declined May 18"],
       "phone": "6045917321", "email": "pgkent@kswlawyers.ca",
-      "outreach_method": "call", "status": "voicemail_left"
+      "outreach_method": "call", "status": "declined",
+      "declined_note": "Not taking new cases at this time (May 18, 2026). Referred Thomas Harding (did Degen case) and Neil Chantler."
     },
     {
       "initials": "CW", "name": "Cameron Ward",
@@ -106,11 +109,26 @@
       "priority_note": "He IS the Ward in Ward v. Vancouver (2010 SCC) — highest-value target"
     },
     {
-      "initials": "DL", "name": "DLA Law (Dosanjh Ladner Arora)",
+      "initials": "DL", "name": "DLA Law (Ingrid Eiermann)",
       "firm": "DLA Law", "location": "Vancouver BC",
-      "tags": ["Police Misconduct", "Wrongful arrest", "Email sent"],
+      "tags": ["Police Misconduct", "Wrongful arrest", "Declined May 15"],
       "phone": "6043276381", "email": "Ingrid@dlalaw.ca",
-      "outreach_method": "email", "status": "email_sent_follow_up"
+      "outreach_method": "email", "status": "declined",
+      "declined_note": "Not able to assist with your matter (May 15, 2026)."
+    },
+    {
+      "initials": "TH", "name": "Thomas Harding",
+      "firm": "TBD", "location": "Vancouver BC",
+      "tags": ["Degen case $317k", "RCMP misconduct", "PK referral"],
+      "outreach_method": "call", "status": "not_contacted",
+      "priority_note": "Referred by Paul Kent (KSW) — did the Degen v. Min. Public Safety 2023 BCSC ($317k Surrey RCMP). Top priority."
+    },
+    {
+      "initials": "NC", "name": "Neil Chantler",
+      "firm": "TBD", "location": "Vancouver BC",
+      "tags": ["Civil rights", "PK referral"],
+      "outreach_method": "call", "status": "not_contacted",
+      "priority_note": "Referred by Paul Kent (KSW) — does this type of case."
     },
     {
       "initials": "AF", "name": "Arvay Finlay LLP",

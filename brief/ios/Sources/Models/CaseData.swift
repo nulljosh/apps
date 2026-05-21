@@ -239,7 +239,7 @@ let journalSeed: [JournalEntry] = [
 ]
 
 let caseChecklist: [ChecklistItem] = [
-    ChecklistItem(id: 0, label: "Call Paul Kent-Snowsell — book appointment", priority: .now),
+    ChecklistItem(id: 0, label: "Paul Kent declined May 18 — contact Thomas Harding & Neil Chantler (PK referrals — Degen case)", priority: .now),
     ChecklistItem(id: 1, label: "PTSD assessment started (therapy) — get Dx letter", priority: .now),
     ChecklistItem(id: 2, label: "Body cam footage requested from RCMP", priority: .now),
     ChecklistItem(id: 3, label: "Police report — both Daryls full names", priority: .now),
@@ -255,19 +255,31 @@ let caseChecklist: [ChecklistItem] = [
     ChecklistItem(id: 13, label: "Pin discovery date: when you first understood a civil Charter claim was an appropriate remedy", priority: .now),
     ChecklistItem(id: 14, label: "ATIP filed with RCMP — officer names, notebooks (Form 1624), BWC footage, File #2023-25586", priority: .now),
     ChecklistItem(id: 15, label: "FOI filed with E-Comm 9-1-1 BC — 911 audio + CAD notes (neutralizes Godoy scope argument)", priority: .now),
-    ChecklistItem(id: 16, label: "Email outreach sent to: Cameron Ward, Arvay Finlay, Klein Lawyers, BCCLA — email, don't call", priority: .now)
+    ChecklistItem(id: 16, label: "Email outreach sent to: Cameron Ward, Arvay Finlay, Klein Lawyers, BCCLA — email, don't call", priority: .now),
+    ChecklistItem(id: 17, label: "Contact Thomas Harding (referred by Paul Kent — did Degen case $317k)", priority: .now),
+    ChecklistItem(id: 18, label: "Contact Neil Chantler (referred by Paul Kent)", priority: .now)
 ]
 
 let caseLawyers: [Lawyer] = [
     Lawyer(id: "pk", initials: "PK", name: "Paul G. Kent-Snowsell",
-           subtitle: "Kane Shannon & Weiler (KSW) · Surrey BC · Of Counsel",
-           tags: [LawyerTag(label: "33 yrs trial", style: .good), LawyerTag(label: "Sued RCMP", style: .good)],
+           subtitle: "Kane Shannon & Weiler (KSW) · Surrey BC · Declined May 18 — referred Harding & Chantler",
+           tags: [LawyerTag(label: "33 yrs trial", style: .good), LawyerTag(label: "Sued RCMP", style: .good), LawyerTag(label: "Declined May 18", style: .fail)],
            phone: "6045917321", phoneNote: nil, email: "pgkent@kswlawyers.ca", website: nil),
 
-    Lawyer(id: "dl", initials: "DL", name: "DLA Law (Dosanjh Ladner Arora)",
-           subtitle: "Vancouver BC",
-           tags: [LawyerTag(label: "Police Misconduct", style: .good), LawyerTag(label: "Wrongful arrest", style: .good)],
+    Lawyer(id: "dl", initials: "DL", name: "DLA Law (Ingrid Eiermann)",
+           subtitle: "Vancouver BC · Declined May 15",
+           tags: [LawyerTag(label: "Police Misconduct", style: .good), LawyerTag(label: "Wrongful arrest", style: .good), LawyerTag(label: "Declined May 15", style: .fail)],
            phone: "6043276381", phoneNote: nil, email: "Ingrid@dlalaw.ca", website: nil),
+
+    Lawyer(id: "th", initials: "TH", name: "Thomas Harding",
+           subtitle: "Vancouver BC · Referred by Paul Kent (KSW) · Did Degen case ($317k)",
+           tags: [LawyerTag(label: "Degen case $317k", style: .good), LawyerTag(label: "RCMP misconduct", style: .good), LawyerTag(label: "PK referral", style: .urgent)],
+           phone: nil, phoneNote: nil, email: nil, website: nil),
+
+    Lawyer(id: "nc", initials: "NC", name: "Neil Chantler",
+           subtitle: "Vancouver BC · Referred by Paul Kent (KSW)",
+           tags: [LawyerTag(label: "Civil rights", style: .good), LawyerTag(label: "PK referral", style: .urgent)],
+           phone: nil, phoneNote: nil, email: nil, website: nil),
 
     Lawyer(id: "mh", initials: "MH", name: "McQuarrie Hunter LLP",
            subtitle: "Surrey BC",
@@ -345,7 +357,7 @@ let caseComparables: [CaseComparable] = [
 ]
 
 let caseTimeline: [TimelineStep] = [
-    TimelineStep(when: "Now", title: "Call Paul Kent-Snowsell", description: "604-591-7321 (Kane Shannon & Weiler). Book appointment. In-person Surrey.", dotStyle: .now),
+    TimelineStep(when: "Now", title: "Contact PK referrals", description: "Paul Kent declined May 18. DLA declined May 15. Priority: Thomas Harding (did Degen $317k) + Neil Chantler — both referred by Kent. Still awaiting: Cameron Ward, Arvay Finlay, Klein, BCCLA.", dotStyle: .now),
     TimelineStep(when: "Month 1–2", title: "Evidence gathering", description: "Police report, hospital records, body cam, formal PTSD Dx (in progress), CRCC complaint, ATIP + E-Comm FOI.", dotStyle: .neutral),
     TimelineStep(when: "Month 2–4", title: "Claim filed", description: "Basic deadline expired Aug 1, 2025. If discoverability argument succeeds, file immediately — every day increases risk.", dotStyle: .neutral),
     TimelineStep(when: "Month 6–18", title: "Discovery & negotiation", description: "Evidence exchanged. Settlement talks begin. Federal AG typically prefers quiet settlement.", dotStyle: .warn),
@@ -354,9 +366,16 @@ let caseTimeline: [TimelineStep] = [
 ]
 
 let callScript = """
-CALLBACK PREP — Paul Kent-Snowsell, Kane Shannon & Weiler (KSW)
-604-591-7321 · pgkent@kswlawyers.ca
-Called · voicemail left
+STATUS UPDATE — May 20, 2026
+Paul Kent (KSW) — DECLINED May 18: "Not taking new cases at this time." Referred Thomas Harding & Neil Chantler.
+DLA Law (Ingrid Eiermann) — DECLINED May 15: "Not able to assist with your matter."
+
+PRIORITY CONTACTS (PK referrals):
+1. Thomas Harding — did the Degen v. Min. Public Safety 2023 BCSC ($317k Surrey RCMP)
+2. Neil Chantler — does this type of case
+
+---
+COLD CALL SCRIPT — use verbatim
 
 Have ready:
 — File #: 2023-25586 (RCMP file, confirmed Aug 1/2023)
