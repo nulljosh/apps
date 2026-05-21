@@ -118,15 +118,17 @@
     },
     {
       "initials": "TH", "name": "Thomas Harding",
-      "firm": "TBD", "location": "Vancouver BC",
+      "firm": "Thomas Harding Law Corporation (TLAG)", "location": "Surrey BC",
       "tags": ["Degen case $317k", "RCMP misconduct", "PK referral"],
+      "phone": "6046351330", "website": "tlag.ca",
       "outreach_method": "call", "status": "not_contacted",
       "priority_note": "Referred by Paul Kent (KSW) — did the Degen v. Min. Public Safety 2023 BCSC ($317k Surrey RCMP). Top priority."
     },
     {
       "initials": "NC", "name": "Neil Chantler",
-      "firm": "TBD", "location": "Vancouver BC",
+      "firm": "Chantler & Company", "location": "Vancouver BC",
       "tags": ["Civil rights", "PK referral"],
+      "phone": "6044248454", "email": "neilchantler@chantlerlaw.ca", "website": "chantlerlaw.ca",
       "outreach_method": "call", "status": "not_contacted",
       "priority_note": "Referred by Paul Kent (KSW) — does this type of case."
     },

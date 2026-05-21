@@ -272,14 +272,14 @@ let caseLawyers: [Lawyer] = [
            phone: "6043276381", phoneNote: nil, email: "Ingrid@dlalaw.ca", website: nil),
 
     Lawyer(id: "th", initials: "TH", name: "Thomas Harding",
-           subtitle: "Vancouver BC · Referred by Paul Kent (KSW) · Did Degen case ($317k)",
+           subtitle: "Thomas Harding Law Corp (TLAG) · Surrey BC · PK referral · Degen case $317k",
            tags: [LawyerTag(label: "Degen case $317k", style: .good), LawyerTag(label: "RCMP misconduct", style: .good), LawyerTag(label: "PK referral", style: .urgent)],
-           phone: nil, phoneNote: nil, email: nil, website: nil),
+           phone: "6046351330", phoneNote: nil, email: nil, website: "tlag.ca"),
 
     Lawyer(id: "nc", initials: "NC", name: "Neil Chantler",
-           subtitle: "Vancouver BC · Referred by Paul Kent (KSW)",
+           subtitle: "Chantler & Company · Vancouver BC · PK referral",
            tags: [LawyerTag(label: "Civil rights", style: .good), LawyerTag(label: "PK referral", style: .urgent)],
-           phone: nil, phoneNote: nil, email: nil, website: nil),
+           phone: "6044248454", phoneNote: nil, email: "neilchantler@chantlerlaw.ca", website: "chantlerlaw.ca"),
 
     Lawyer(id: "mh", initials: "MH", name: "McQuarrie Hunter LLP",
            subtitle: "Surrey BC",

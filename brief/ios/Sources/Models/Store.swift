@@ -72,7 +72,14 @@ final class Store {
         }
     }
 
+    private let biometricCooldown: Double = 4 * 3600
+
     @MainActor func authenticateWithBiometrics() async {
+        let last = UserDefaults.standard.double(forKey: "brief.lastBiometricAuth")
+        if Date().timeIntervalSince1970 - last < biometricCooldown {
+            biometricLocked = false
+            return
+        }
         let ctx = LAContext()
         var error: NSError?
         guard ctx.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
@@ -83,7 +90,10 @@ final class Store {
             .deviceOwnerAuthenticationWithBiometrics,
             localizedReason: "Unlock Brief"
         )) ?? false
-        if success { biometricLocked = false }
+        if success {
+            biometricLocked = false
+            UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "brief.lastBiometricAuth")
+        }
     }
 
     @MainActor func confirmEmail(email: String) {
