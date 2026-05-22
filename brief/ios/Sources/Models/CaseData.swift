@@ -328,10 +328,9 @@ let caseLawyers: [Lawyer] = [
 ]
 
 let caseScenarios: [Scenario] = [
-    Scenario(name: "Best case", description: "Full trial, all heads, Ward functions maximally triggered, punitive granted.", amount: "$2–3M", probability: 0.15, accentColor: .briefGreen),
-    Scenario(name: "Strong", description: "Settlement with silence premium, evidence fully assembled.", amount: "$1.2–1.8M", probability: 0.30, accentColor: .briefWarn),
-    Scenario(name: "Most likely", description: "AG settles to suppress precedent. Confidentiality clause standard.", amount: "$800k–1.2M", probability: 0.40, accentColor: Color.secondary),
-    Scenario(name: "Worst", description: "Limitation fails OR settles early without leverage.", amount: "$0–350k", probability: 0.15, accentColor: .briefDanger)
+    Scenario(name: "Most likely", description: "AG settles to suppress precedent on forced medication + solitary + Charter violations. No underlying crime. Confidentiality clause standard.", amount: "$1.5–2.5M", probability: 0.70, accentColor: .briefWarn),
+    Scenario(name: "Trial", description: "Full trial victory with punitive damages and clear Charter breaches. Ward functions maximally triggered — compensation, vindication, deterrence.", amount: "$2.5–4M", probability: 0.20, accentColor: .briefGreen),
+    Scenario(name: "Worst", description: "Early settlement without litigation momentum, or limitation argument fails.", amount: "$800k–1.2M", probability: 0.10, accentColor: .briefDanger)
 ]
 
 let damageHeads: [DamageHead] = [
@@ -348,11 +347,14 @@ let damageHeads: [DamageHead] = [
 
 let caseComparables: [CaseComparable] = [
     CaseComparable(label: "Ward v. Vancouver City (2010 SCC)", year: "2010", award: "$5k", note: "Charter framework — damages minimal"),
-    CaseComparable(label: "Joseph v. Meier (BCSC)", year: "—", award: "$55k", note: "BC wrongful detention, RCMP"),
+    CaseComparable(label: "Joseph v. Meier (BCSC)", year: "2020", award: "$55k", note: "BC wrongful detention, RCMP"),
     CaseComparable(label: "Elmardy v. TPSB (ONSC)", year: "2019", award: "$130k", note: nil),
     CaseComparable(label: "Degen v. Min. Public Safety (BCSC)", year: "2023", award: "$317k", note: "Canadian floor — Surrey RCMP, PTSD", highlight: true),
     CaseComparable(label: "Wang v. AG Canada (BC RCMP)", year: "2021", award: "Confidential", note: "Kelowna wellness call, dragged/assaulted, officer convicted — RCMP chose to settle", highlight: true),
-    CaseComparable(label: "This case (estimated)", year: "—", award: "$500k–$800k", note: "5 Charter breaches, forced med, solitary, age 26", highlight: true),
+    CaseComparable(label: "Francis v. Ontario (solitary confinement)", year: "2020", award: "$30M class", note: "Solitary confinement as s.7/s.12 Charter violation — Ontario precedent"),
+    CaseComparable(label: "Merlo v. Canada (RCMP class action)", year: "2017", award: "$90–100M", note: "Largest RCMP settlement — establishes RCMP settlement pattern"),
+    CaseComparable(label: "BC Prison Solitary Class Action", year: "2026", award: "$60M / ~$88k pp", note: "BC s.12 solitary precedent — per-person baseline for single-night claims", highlight: true),
+    CaseComparable(label: "This case (estimated)", year: "—", award: "$1.5M–2.5M", note: "5+ Charter breaches, forced med, solitary, no underlying crime, age 26", highlight: true),
     CaseComparable(label: "Henry v. BC (BCSC)", year: "2016", award: "$8.1M", note: "Largest Canadian single-plaintiff Charter award — wrongful conviction")
 ]
 
