@@ -9,351 +9,305 @@
   <title>Beep</title>
   <link rel="manifest" href="manifest.json">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --blue: #0071e3;
-      --blue-dark: #005bb5;
-      --bg: #f2f2f7;
-      --card: rgba(255,255,255,0.85);
-      --text: #1d1d1f;
-      --sub: #6e6e73;
-      --tab-h: 60px;
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1c1c1e;
-        --card: rgba(44,44,46,0.85);
-        --text: #f5f5f7;
-        --sub: #98989d;
-      }
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* Header */
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px 8px;
-      padding-top: calc(12px + env(safe-area-inset-top, 0px));
-      background: var(--card);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      flex-shrink: 0;
-      min-height: 56px;
-    }
-
-    header h1 {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.2px;
-    }
-
-    header button {
-      background: none;
-      border: none;
-      color: var(--blue);
-      font-size: 17px;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-family: inherit;
-    }
-
-    header button:active { opacity: 0.6; }
-    #back-btn { visibility: hidden; }
-
-    /* Progress bar */
-    #progress-bar {
-      height: 3px;
-      background: var(--blue);
-      width: 0%;
-      transition: width 0.15s linear, opacity 0.3s;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      flex-shrink: 0;
-    }
-
-    /* Frame */
-    #frame-wrap {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-
-    /* Offline overlay */
-    #offline {
-      display: none;
-      position: absolute;
-      inset: 0;
-      background: var(--bg);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      padding: 40px;
-      text-align: center;
-    }
-
-    #offline.visible { display: flex; }
-
-    #offline svg { color: var(--sub); }
-
-    #offline h2 {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-    }
-
-    #offline p {
-      color: var(--sub);
-      font-size: 15px;
-      line-height: 1.5;
-    }
-
-    #offline button {
-      background: var(--blue);
-      color: white;
-      border: none;
-      font-family: inherit;
-      font-size: 16px;
-      font-weight: 500;
-      padding: 12px 28px;
-      border-radius: 100px;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), opacity 0.15s;
-    }
-
-    #offline button:active { transform: scale(0.96); opacity: 0.8; }
-
-    /* Tab bar */
-    nav {
-      display: flex;
-      background: var(--card);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(0,0,0,0.08);
-      padding-bottom: var(--safe-bottom);
-      flex-shrink: 0;
-    }
-
-    nav button {
-      flex: 1;
-      background: none;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      padding: 8px 0;
-      cursor: pointer;
-      color: var(--sub);
-      font-family: inherit;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-      min-height: var(--tab-h);
-      transition: color 0.15s;
-    }
-
-    nav button.active { color: var(--blue); }
-
-    nav button svg {
-      width: 24px;
-      height: 24px;
-      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
-    }
-
-    nav button:active svg { transform: scale(0.88); }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--blue:#0071e3;--bg:#f2f2f7;--card:#fff;--text:#1d1d1f;--sub:#6e6e73;--sep:#c6c6c8;--red:#ff3b30;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
+    body{font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh}
+    .screen{display:none;min-height:100dvh}
+    .screen.active{display:flex;flex-direction:column}
+    #login{align-items:center;justify-content:center;padding:40px 28px calc(40px + var(--safe-bottom))}
+    .login-sub{font-size:15px;color:var(--sub);text-align:center;margin:6px 0 32px}
+    .login-title{font-size:34px;font-weight:700;margin-top:12px}
+    .field-group{width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px}
+    .field{width:100%;padding:14px 16px;font-size:17px;font-family:inherit;background:var(--card);border:1px solid var(--sep);border-radius:12px;color:var(--text);outline:none;-webkit-appearance:none}
+    .field:focus{border-color:var(--blue)}
+    .error-msg{font-size:13px;color:var(--red);text-align:center;min-height:18px;margin-top:2px}
+    .btn-primary{width:100%;max-width:380px;padding:15px;font-size:17px;font-weight:600;font-family:inherit;background:var(--blue);color:#fff;border:none;border-radius:14px;cursor:pointer;margin-top:6px;transition:opacity .15s}
+    .btn-primary:disabled{opacity:.4;cursor:default}
+    .btn-primary:active:not(:disabled){opacity:.8}
+    .spinner{display:inline-block;width:20px;height:20px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    #loading{align-items:center;justify-content:center;gap:16px}
+    #loading .spin2{width:32px;height:32px;border:2px solid rgba(0,0,0,.12);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+    #loading p{font-size:15px;color:var(--sub)}
+    #main{background:var(--bg)}
+    .tab-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(80px + var(--safe-bottom))}
+    .page-header{padding:calc(16px + var(--safe-top)) 20px 8px;font-size:28px;font-weight:700}
+    .tab-bar{position:fixed;bottom:0;left:0;right:0;height:calc(56px + var(--safe-bottom));padding-bottom:var(--safe-bottom);background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--sep);display:flex;align-items:stretch;z-index:100}
+    .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--sub);font-family:inherit;font-size:10px;font-weight:500;padding:0;transition:color .15s}
+    .tab-btn.active{color:var(--blue)}
+    .tab-btn svg{width:24px;height:24px}
+    .balance-card{margin:16px;padding:24px 20px;background:var(--blue);border-radius:20px;color:#fff}
+    .balance-label{font-size:13px;opacity:.8;margin-bottom:4px}
+    .balance-amount{font-size:48px;font-weight:700;letter-spacing:-1px;margin-bottom:16px}
+    .balance-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .card-num{font-size:13px;font-family:Menlo,monospace;opacity:.8}
+    .autoload-pill{font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;background:rgba(255,255,255,.25)}
+    .action-btn{margin:0 16px 8px;width:calc(100% - 32px);padding:14px;font-size:15px;font-weight:600;font-family:inherit;background:var(--card);color:var(--blue);border:1px solid var(--sep);border-radius:14px;cursor:pointer;text-align:center;display:block;text-decoration:none}
+    .action-btn:active{opacity:.7}
+    .section-header{font-size:20px;font-weight:600;padding:16px 20px 8px}
+    .list-card{margin:0 16px 12px;background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--sep)}
+    .trip-row{padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--sep)}
+    .trip-row:last-child{border-bottom:none}
+    .trip-info{flex:1;min-width:0}
+    .trip-loc{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .trip-meta{font-size:12px;color:var(--sub);margin-top:2px}
+    .trip-amt{font-size:15px;font-weight:600;white-space:nowrap}
+    .trip-amt.debit{color:var(--red)}
+    .trip-amt.credit{color:#30d158}
+    .empty-state{text-align:center;padding:60px 20px;color:var(--sub);font-size:15px}
+    .account-section{margin:8px 16px 16px;background:var(--card);border-radius:14px;border:1px solid var(--sep);overflow:hidden}
+    .acct-row{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--sep);font-size:15px}
+    .acct-row:last-child{border-bottom:none}
+    .acct-row .lbl{color:var(--sub)}
+    .acct-row .val{font-weight:500;font-family:Menlo,monospace;font-size:14px}
+    .signout-btn{margin:8px 16px 16px;width:calc(100% - 32px);padding:14px;font-size:15px;font-weight:600;font-family:inherit;background:var(--card);color:var(--red);border:1px solid var(--sep);border-radius:14px;cursor:pointer}
+    .signout-btn:active{opacity:.7}
+    .refresh-row{display:flex;justify-content:flex-end;padding:4px 20px 0;min-height:20px}
+    .pulse{width:8px;height:8px;border-radius:50%;background:var(--blue);animation:p 1s ease-in-out infinite}
+    @keyframes p{0%,100%{opacity:.3}50%{opacity:1}}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end}
+    .modal-overlay.open{display:flex}
+    .modal-sheet{width:100%;height:85dvh;background:var(--card);border-radius:20px 20px 0 0;overflow:hidden;display:flex;flex-direction:column}
+    .modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--sep);font-weight:600;font-size:17px}
+    .modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--blue);padding:0}
+    .modal-iframe{flex:1;border:none;width:100%}
   </style>
 </head>
 <body>
 
-<div id="progress-bar"></div>
-
-<header>
-  <button id="back-btn" onclick="goBack()">
-    <svg width="10" height="18" viewBox="0 0 10 18" fill="none">
-      <path d="M9 1L1 9L9 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Back
-  </button>
-  <h1 id="page-title">Compass</h1>
-  <button onclick="reload()">
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M1 9C1 4.58 4.58 1 9 1c2.76 0 5.2 1.37 6.72 3.47" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M17 9c0 4.42-3.58 8-8 8-2.76 0-5.2-1.37-6.72-3.47" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M14 1l2.72 3.47L13.4 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M4 17l-2.72-3.47L4.6 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
-</header>
-
-<div id="frame-wrap">
-  <iframe
-    id="frame"
-    title="Compass Card"
-    sandbox="allow-same-origin allow-scripts allow-forms allow-top-navigation allow-popups"
-  ></iframe>
-
-  <div id="offline">
-    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="2" y1="2" x2="22" y2="22"/>
-      <path d="M8.5 16.5a5 5 0 0 1 7 0"/>
-      <path d="M2 8.82a15 15 0 0 1 4.17-2.65"/>
-      <path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/>
-      <path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/>
-      <path d="M5 12.85a10 10 0 0 1 5.17-2.8"/>
-      <line x1="12" y1="20" x2="12.01" y2="20" stroke-width="2"/>
-    </svg>
-    <h2>No Connection</h2>
-    <p>Check your network and try again.</p>
-    <button onclick="retry()">Retry</button>
+<div id="login" class="screen active">
+  <svg width="64" height="64" viewBox="0 0 64 64" style="margin-top:48px">
+    <rect width="64" height="64" rx="16" fill="#0071e3"/>
+    <rect x="10" y="20" width="44" height="28" rx="5" fill="white" fill-opacity="0.2"/>
+    <rect x="10" y="20" width="44" height="9" rx="5" fill="white" fill-opacity="0.5"/>
+    <rect x="14" y="36" width="10" height="6" rx="2" fill="white"/>
+    <rect x="28" y="37" width="16" height="2" rx="1" fill="white" fill-opacity="0.6"/>
+    <rect x="28" y="41" width="10" height="2" rx="1" fill="white" fill-opacity="0.4"/>
+  </svg>
+  <div class="login-title">Beep</div>
+  <div class="login-sub">Sign in to your Compass Card account</div>
+  <div class="field-group">
+    <input class="field" id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
+    <input class="field" id="password" type="password" placeholder="Password" autocomplete="current-password">
+    <div class="error-msg" id="login-error"></div>
+    <button class="btn-primary" id="signin-btn" onclick="signIn()">Sign In</button>
   </div>
 </div>
 
-<nav>
-  <button class="active" data-url="https://www.compasscard.ca/" onclick="navigate(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="5" width="20" height="14" rx="2"/>
-      <line x1="2" y1="10" x2="22" y2="10"/>
-    </svg>
-    Home
-  </button>
-  <button data-url="https://www.compasscard.ca/LoadValue" onclick="navigate(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"/>
-      <line x1="12" y1="8" x2="12" y2="16"/>
-      <line x1="8" y1="12" x2="16" y2="12"/>
-    </svg>
-    Reload
-  </button>
-  <button data-url="https://www.compasscard.ca/CardUse" onclick="navigate(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="3" width="20" height="14" rx="2"/>
-      <path d="M8 21l8 0"/>
-      <line x1="12" y1="17" x2="12" y2="21"/>
-    </svg>
-    Trips
-  </button>
-  <button data-url="https://www.compasscard.ca/MyAccount" onclick="navigate(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="8" r="4"/>
-      <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/>
-    </svg>
-    Account
-  </button>
-</nav>
+<div id="loading" class="screen">
+  <div class="spin2"></div>
+  <p id="loading-msg">Loading…</p>
+</div>
+
+<div id="main" class="screen">
+  <div id="tab-home" class="tab-content">
+    <div class="page-header">My Card</div>
+    <div class="refresh-row"><div id="rdot" style="display:none" class="pulse"></div></div>
+    <div class="balance-card">
+      <div class="balance-label">Stored Value</div>
+      <div class="balance-amount" id="bal">--</div>
+      <div class="balance-meta">
+        <div class="card-num" id="cnum"></div>
+        <div id="alpill" class="autoload-pill" style="display:none">AutoLoad On</div>
+      </div>
+    </div>
+    <button class="action-btn" onclick="openReload()">Add Money</button>
+    <div class="section-header">Recent Trips</div>
+    <div class="list-card" id="recent-trips"></div>
+  </div>
+
+  <div id="tab-trips" class="tab-content" style="display:none">
+    <div class="page-header">Trips</div>
+    <div class="list-card" id="all-trips"></div>
+  </div>
+
+  <div id="tab-account" class="tab-content" style="display:none">
+    <div class="page-header">Account</div>
+    <div class="account-section">
+      <div class="acct-row"><span class="lbl">Balance</span><span class="val" id="ab">--</span></div>
+      <div class="acct-row"><span class="lbl">Card Number</span><span class="val" id="ac">--</span></div>
+      <div class="acct-row"><span class="lbl">AutoLoad</span><span class="val" id="al">--</span></div>
+    </div>
+    <a class="action-btn" href="https://www.compasscard.ca/MyAccount" target="_blank">Open in Browser</a>
+    <button class="signout-btn" onclick="signOut()">Sign Out</button>
+  </div>
+
+  <nav class="tab-bar">
+    <button class="tab-btn active" id="tb-home" onclick="switchTab('home')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.1L2 10v12h7v-7h6v7h7V10L12 2.1z"/></svg>
+      Home
+    </button>
+    <button class="tab-btn" id="tb-trips" onclick="switchTab('trips')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h2M13 15h4"/></svg>
+      Trips
+    </button>
+    <button class="tab-btn" id="tb-account" onclick="switchTab('account')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-5.33 0-8 2.67-8 4v1h16v-1c0-1.33-2.67-4-8-4z"/></svg>
+      Account
+    </button>
+  </nav>
+</div>
+
+<div class="modal-overlay" id="reload-modal">
+  <div class="modal-sheet">
+    <div class="modal-hdr">
+      <span>Add Money</span>
+      <button class="modal-close" onclick="closeReload()">Done</button>
+    </div>
+    <iframe class="modal-iframe" id="reload-frame" src="about:blank" sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-top-navigation"></iframe>
+  </div>
+</div>
 
 <script>
-  const frame = document.getElementById('frame');
-  const bar = document.getElementById('progress-bar');
-  const backBtn = document.getElementById('back-btn');
-  const offline = document.getElementById('offline');
-  const tabs = document.querySelectorAll('nav button');
+const API = '';
+let token = sessionStorage.getItem('beep_token');
+let dashboard = null, trips = [];
 
-  let history = [];
-  let currentURL = 'https://www.compasscard.ca/';
-  let loading = false;
+if (token) { showScreen('loading'); loadAll(); }
 
-  function setProgress(pct) {
-    bar.style.width = pct + '%';
-    bar.style.opacity = pct > 0 && pct < 100 ? '1' : '0';
+async function signIn() {
+  const email = document.getElementById('email').value.trim();
+  const pw = document.getElementById('password').value;
+  if (!email || !pw) return;
+  const btn = document.getElementById('signin-btn');
+  btn.disabled = true;
+  const sp = document.createElement('div');
+  sp.className = 'spinner';
+  btn.replaceChildren(sp);
+  document.getElementById('login-error').textContent = '';
+  try {
+    const res = await fetch(API + '/api/login', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, password: pw})
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Login failed');
+    token = data.token;
+    sessionStorage.setItem('beep_token', token);
+    showScreen('loading');
+    await loadAll();
+  } catch(e) {
+    document.getElementById('login-error').textContent = e.message;
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
   }
+}
 
-  function showOffline(show) {
-    offline.classList.toggle('visible', show);
+function signOut() {
+  sessionStorage.removeItem('beep_token');
+  token = null; dashboard = null; trips = [];
+  document.getElementById('email').value = '';
+  document.getElementById('password').value = '';
+  showScreen('login');
+}
+
+async function loadAll() {
+  document.getElementById('loading-msg').textContent = 'Loading…';
+  try {
+    const [db, tr] = await Promise.all([fetchDashboard(), fetchTrips()]);
+    dashboard = db; trips = tr;
+    renderDashboard(); renderTrips();
+    showScreen('main');
+  } catch(e) {
+    if (e.message === 'Session expired') signOut();
+    else document.getElementById('loading-msg').textContent = e.message;
   }
+}
 
-  function updateBack() {
-    backBtn.style.visibility = history.length > 0 ? 'visible' : 'hidden';
+async function fetchDashboard() {
+  const res = await fetch(API + '/api/dashboard', {headers:{Authorization:'Bearer '+token}});
+  const d = await res.json();
+  if (!res.ok) throw new Error(d.error || 'Failed');
+  return d;
+}
+
+async function fetchTrips() {
+  const res = await fetch(API + '/api/trips', {headers:{Authorization:'Bearer '+token}});
+  const d = await res.json();
+  if (!res.ok) throw new Error(d.error || 'Failed');
+  return d;
+}
+
+async function refresh() {
+  const dot = document.getElementById('rdot');
+  dot.style.display = 'block';
+  try {
+    const [db, tr] = await Promise.all([fetchDashboard(), fetchTrips()]);
+    dashboard = db; trips = tr;
+    renderDashboard(); renderTrips();
+  } catch(e) { if (e.message === 'Session expired') signOut(); }
+  finally { dot.style.display = 'none'; }
+}
+
+function renderDashboard() {
+  if (!dashboard) return;
+  document.getElementById('bal').textContent = dashboard.balance || '--';
+  document.getElementById('ab').textContent = dashboard.balance || '--';
+  document.getElementById('cnum').textContent = dashboard.cardNumber || '';
+  document.getElementById('ac').textContent = dashboard.cardNumber || '--';
+  document.getElementById('alpill').style.display = dashboard.autoLoad ? 'block' : 'none';
+  document.getElementById('al').textContent = dashboard.autoLoad ? 'Enabled' : 'Disabled';
+}
+
+function makeRow(t) {
+  const row = document.createElement('div');
+  row.className = 'trip-row';
+  const info = document.createElement('div');
+  info.className = 'trip-info';
+  const loc = document.createElement('div');
+  loc.className = 'trip-loc';
+  loc.textContent = t.location || t.product || '';
+  const meta = document.createElement('div');
+  meta.className = 'trip-meta';
+  meta.textContent = t.date + (t.product && t.location ? ' · ' + t.product : '');
+  info.append(loc, meta);
+  const amt = document.createElement('div');
+  amt.className = 'trip-amt' + (t.amount.startsWith('-') ? ' debit' : '');
+  amt.textContent = t.amount;
+  row.append(info, amt);
+  return row;
+}
+
+function renderTrips() {
+  const recent = document.getElementById('recent-trips');
+  const all = document.getElementById('all-trips');
+  recent.replaceChildren(); all.replaceChildren();
+  if (!trips.length) {
+    const e = document.createElement('div');
+    e.className = 'empty-state';
+    e.textContent = 'No trips found';
+    recent.appendChild(e.cloneNode(true));
+    all.appendChild(e);
+    return;
   }
+  trips.slice(0,5).forEach(t => recent.appendChild(makeRow(t)));
+  trips.forEach(t => all.appendChild(makeRow(t)));
+}
 
-  function navigate(btn) {
-    const url = btn.dataset.url;
-    if (url === currentURL && !offline.classList.contains('visible')) return;
-    history = [];
-    updateBack();
-    tabs.forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    loadURL(url);
-  }
+function showScreen(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(n).classList.add('active');
+}
 
-  function loadURL(url) {
-    showOffline(false);
-    setProgress(30);
-    currentURL = url;
-    frame.src = url;
-
-    // Detect load via timeout fallback (iframe cross-origin limits events)
-    clearTimeout(window._loadTimer);
-    window._loadTimer = setTimeout(() => setProgress(100), 3000);
-  }
-
-  function goBack() {
-    if (history.length === 0) return;
-    const prev = history.pop();
-    updateBack();
-    loadURL(prev);
-  }
-
-  function reload() {
-    if (offline.classList.contains('visible')) {
-      retry();
-      return;
-    }
-    frame.src = frame.src;
-    setProgress(20);
-  }
-
-  function retry() {
-    loadURL(currentURL);
-  }
-
-  frame.addEventListener('load', () => {
-    setProgress(100);
-    try {
-      const title = frame.contentDocument?.title;
-      if (title) document.getElementById('page-title').textContent = title;
-    } catch (e) {
-      // cross-origin — expected
-    }
+function switchTab(t) {
+  ['home','trips','account'].forEach(n => {
+    document.getElementById('tab-'+n).style.display = n===t ? 'block' : 'none';
+    document.getElementById('tb-'+n).classList.toggle('active', n===t);
   });
+}
 
-  frame.addEventListener('error', () => {
-    setProgress(0);
-    showOffline(true);
-  });
+function openReload() {
+  document.getElementById('reload-frame').src = 'https://www.compasscard.ca/LoadValue';
+  document.getElementById('reload-modal').classList.add('open');
+}
+function closeReload() {
+  document.getElementById('reload-modal').classList.remove('open');
+  document.getElementById('reload-frame').src = 'about:blank';
+  refresh();
+}
 
-  // Initial load
-  loadURL(currentURL);
+document.getElementById('password').addEventListener('keydown', e => { if (e.key==='Enter') signIn(); });
 </script>
 </body>
 </html>
