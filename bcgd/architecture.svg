@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" style="background:#fff;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif">
+  <!-- Title -->
+  <text x="400" y="36" text-anchor="middle" style="font-size:18px;font-weight:600;fill:#1d1d1f;letter-spacing:-0.02em">BCGD Architecture</text>
+  <text x="400" y="56" text-anchor="middle" style="font-size:11px;fill:#86868b">Landing Page + Inventory Dashboard</text>
+
+  <!-- Web (Landing Page) -->
+  <rect x="60" y="100" width="280" height="160" rx="12" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="200" y="128" text-anchor="middle" style="font-size:13px;font-weight:600;fill:#1d1d1f">web/</text>
+  <text x="200" y="148" text-anchor="middle" style="font-size:10px;fill:#86868b">Static Landing Page</text>
+  <rect x="80" y="165" width="100" height="32" rx="6" style="fill:#fff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="130" y="185" text-anchor="middle" style="font-size:10px;fill:#1d1d1f">index.html</text>
+  <rect x="200" y="165" width="120" height="32" rx="6" style="fill:#fff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="260" y="185" text-anchor="middle" style="font-size:10px;fill:#1d1d1f">img/ assets</text>
+  <rect x="80" y="210" width="240" height="32" rx="6" style="fill:#e8f4fd;stroke:#0071e3;stroke-width:1"/>
+  <text x="200" y="230" text-anchor="middle" style="font-size:10px;fill:#0071e3">bcgd.heyitsmejosh.com</text>
+
+  <!-- Dashboard -->
+  <rect x="460" y="100" width="280" height="280" rx="12" style="fill:#f5f5f7;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="600" y="128" text-anchor="middle" style="font-size:13px;font-weight:600;fill:#1d1d1f">dashboard/</text>
+  <text x="600" y="148" text-anchor="middle" style="font-size:10px;fill:#86868b">Vite + React 19</text>
+
+  <!-- Dashboard components -->
+  <rect x="480" y="165" width="110" height="28" rx="6" style="fill:#fff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="535" y="183" text-anchor="middle" style="font-size:9px;fill:#1d1d1f">Dashboard.jsx</text>
+  <rect x="610" y="165" width="110" height="28" rx="6" style="fill:#fff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="665" y="183" text-anchor="middle" style="font-size:9px;fill:#1d1d1f">PartList.jsx</text>
+  <rect x="480" y="205" width="110" height="28" rx="6" style="fill:#fff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="535" y="223" text-anchor="middle" style="font-size:9px;fill:#1d1d1f">PartForm.jsx</text>
+  <rect x="610" y="205" width="110" height="28" rx="6" style="fill:#fff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="665" y="223" text-anchor="middle" style="font-size:9px;fill:#1d1d1f">HistoryLog.jsx</text>
+
+  <!-- Storage layer -->
+  <rect x="480" y="250" width="240" height="28" rx="6" style="fill:#f0f0f0;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="600" y="268" text-anchor="middle" style="font-size:9px;fill:#86868b">storage.js (localStorage CRUD)</text>
+
+  <!-- App.jsx -->
+  <rect x="480" y="290" width="240" height="28" rx="6" style="fill:#fff;stroke:#d2d2d7;stroke-width:1"/>
+  <text x="600" y="308" text-anchor="middle" style="font-size:9px;fill:#1d1d1f">App.jsx (routing + state)</text>
+
+  <!-- Dashboard URL -->
+  <rect x="480" y="335" width="240" height="28" rx="6" style="fill:#e8f4fd;stroke:#0071e3;stroke-width:1"/>
+  <text x="600" y="353" text-anchor="middle" style="font-size:10px;fill:#0071e3">bcgd-dashboard.heyitsmejosh.com</text>
+
+  <!-- Vercel -->
+  <rect x="220" y="420" width="360" height="44" rx="10" style="fill:#000;stroke:none"/>
+  <text x="400" y="446" text-anchor="middle" style="font-size:12px;font-weight:500;fill:#fff">Vercel (2 projects)</text>
+
+  <!-- Arrows -->
+  <line x1="200" y1="260" x2="200" y2="420" style="stroke:#d2d2d7;stroke-width:1.5;stroke-dasharray:4,3"/>
+  <line x1="600" y1="380" x2="600" y2="420" style="stroke:#d2d2d7;stroke-width:1.5;stroke-dasharray:4,3"/>
+
+  <!-- Cloudflare DNS -->
+  <rect x="220" y="475" width="360" height="20" rx="4" style="fill:none"/>
+  <text x="400" y="490" text-anchor="middle" style="font-size:9px;fill:#86868b">Cloudflare DNS (CNAME -> cname.vercel-dns.com)</text>
+</svg>

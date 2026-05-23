@@ -1,0 +1,10 @@
+.DS_Store
+xcuserdata/
+*.xcuserstate
+*.xcodeproj
+.vercel
+**/build/
+**/DerivedData/
+default.profraw
+**/node_modules/
+**/dist/

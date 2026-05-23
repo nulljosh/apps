@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="400" height="240">
+  <rect width="400" height="240" fill="white"/>
+  <rect x="160" y="20" width="80" height="36" rx="8" fill="none" stroke="#333" stroke-width="1.5"/>
+  <text x="200" y="43" text-anchor="middle" fill="#333" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="500">LifeApp</text>
+  <line x1="200" y1="56" x2="200" y2="80" stroke="#999" stroke-width="1"/>
+  <rect x="140" y="80" width="120" height="36" rx="8" fill="none" stroke="#333" stroke-width="1.5"/>
+  <text x="200" y="103" text-anchor="middle" fill="#333" font-family="-apple-system,system-ui,sans-serif" font-size="12" font-weight="500">ContentView</text>
+  <line x1="160" y1="116" x2="80" y2="150" stroke="#999" stroke-width="1"/>
+  <line x1="200" y1="116" x2="200" y2="150" stroke="#999" stroke-width="1"/>
+  <line x1="240" y1="116" x2="320" y2="150" stroke="#999" stroke-width="1"/>
+  <rect x="20" y="150" width="120" height="36" rx="8" fill="none" stroke="#333" stroke-width="1.5"/>
+  <text x="80" y="173" text-anchor="middle" fill="#333" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="500">TimelineView</text>
+  <rect x="140" y="150" width="120" height="36" rx="8" fill="none" stroke="#333" stroke-width="1.5"/>
+  <text x="200" y="173" text-anchor="middle" fill="#333" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="500">SectionCardView</text>
+  <rect x="260" y="150" width="120" height="36" rx="8" fill="none" stroke="#333" stroke-width="1.5"/>
+  <text x="320" y="173" text-anchor="middle" fill="#333" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="500">LifeData</text>
+  <line x1="80" y1="186" x2="320" y2="186" stroke="#999" stroke-width="1" stroke-dasharray="4"/>
+  <text x="200" y="220" text-anchor="middle" fill="#999" font-family="-apple-system,system-ui,sans-serif" font-size="10">Static data, no networking</text>
+</svg>

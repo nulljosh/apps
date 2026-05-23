@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nimble — Instant Answers from Your Menubar</title>
+<meta name="description" content="A native macOS menubar app for instant answers. Math, knowledge, definitions — one keystroke away. Free and open source.">
+<meta name="theme-color" content="#ffca30">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --yellow: #ffca30;
+  --orange: #ff8c12;
+  --dark: #222;
+  --mid: #555;
+  --light: #999;
+  --bg: #fff;
+  --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--dark);
+  font-family: var(--font);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--orange); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 6rem 0 4rem;
+  background: var(--yellow);
+}
+
+.hero-icon {
+  width: 120px;
+  margin: 0 auto 2rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--dark);
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: rgba(0,0,0,0.6);
+  max-width: 440px;
+  margin: 0 auto 2.5rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.8rem 1.8rem;
+  border-radius: 100px;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.btn:hover { transform: translateY(-2px); text-decoration: none; }
+
+.btn-dark {
+  background: var(--dark);
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--dark);
+  border: 2px solid rgba(0,0,0,0.2);
+}
+.btn-outline:hover { border-color: var(--dark); }
+
+/* Mockup */
+.mockup-section {
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.mockup {
+  max-width: 380px;
+  margin: 0 auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.mockup-bar {
+  background: var(--orange);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mockup-input {
+  flex: 1;
+  font-family: var(--font);
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+}
+
+.mockup-btn-icon {
+  width: 28px;
+  height: 28px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.mockup-result {
+  padding: 16px;
+}
+.mockup-result h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.mockup-result p {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.5;
+}
+
+.mockup-credit {
+  background: var(--orange);
+  padding: 5px 14px;
+  text-align: right;
+  font-size: 11px;
+  color: rgba(255,255,255,0.8);
+}
+
+/* Features */
+.features {
+  padding: 4rem 0;
+  border-top: 1px solid #eee;
+}
+
+.features h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.feature h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.feature p {
+  font-size: 0.9rem;
+  color: var(--mid);
+  line-height: 1.5;
+}
+
+/* Quotes */
+.quotes {
+  padding: 4rem 0;
+  border-top: 1px solid #eee;
+}
+
+.quotes h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.quote {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  border-left: 3px solid var(--yellow);
+}
+
+.quote p {
+  font-size: 0.95rem;
+  color: var(--mid);
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: 0.25rem;
+}
+
+.quote cite {
+  font-size: 0.85rem;
+  color: var(--light);
+  font-style: normal;
+}
+
+/* Open Source */
+.oss {
+  padding: 4rem 0;
+  text-align: center;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+}
+
+.oss h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.oss p {
+  font-size: 1rem;
+  color: var(--mid);
+  max-width: 480px;
+  margin: 0 auto 2rem;
+}
+
+/* Footer */
+footer {
+  padding: 2rem 0;
+  text-align: center;
+  border-top: 1px solid #eee;
+  font-size: 0.85rem;
+  color: var(--light);
+}
+
+footer a { color: var(--light); }
+footer a:hover { color: var(--dark); }
+
+.credit {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-icon">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="200" height="200" rx="40" fill="#1a1a2e"/>
+        <circle cx="85" cy="85" r="32" fill="none" stroke="#ff8c12" stroke-width="5" stroke-linecap="round"/>
+        <line x1="108" y1="108" x2="140" y2="140" stroke="#ff8c12" stroke-width="5" stroke-linecap="round"/>
+        <rect x="50" y="140" width="100" height="3" rx="1.5" fill="#ff8c12" opacity="0.3"/>
+        <rect x="50" y="150" width="70" height="3" rx="1.5" fill="#ff8c12" opacity="0.2"/>
+        <rect x="50" y="160" width="85" height="3" rx="1.5" fill="#ff8c12" opacity="0.15"/>
+      </svg>
+    </div>
+    <h1>Nimble</h1>
+    <p>A simple but powerful instant-answer menubar client for macOS.</p>
+    <div class="hero-buttons">
+      <a href="https://github.com/nulljosh/nimble/releases" class="btn btn-dark">Download</a>
+      <a href="https://github.com/nulljosh/nimble" class="btn btn-outline">Source</a>
+    </div>
+  </div>
+</section>
+
+<section class="mockup-section">
+  <div class="container">
+    <div class="mockup">
+      <div class="mockup-bar">
+        <span class="mockup-input">Population of Canada</span>
+        <div class="mockup-btn-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ff8c12" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+      </div>
+      <div class="mockup-result">
+        <h4>Canada</h4>
+        <p>Canada is a country in North America. Its ten provinces and three territories extend from the Atlantic Ocean to the Pacific Ocean and northward into the Arctic Ocean, covering 9.98 million square kilometres. Population: approximately 40.1 million.</p>
+      </div>
+      <div class="mockup-credit">powered by Wikipedia</div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <h2>Nimble allows you to access a massive amount of knowledge whenever you need it.</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <h3>Instant Math</h3>
+        <p>Arithmetic and expressions evaluated locally. No network needed.</p>
+      </div>
+      <div class="feature">
+        <h3>Knowledge Search</h3>
+        <p>DuckDuckGo Instant Answers and Wikipedia. No API keys required.</p>
+      </div>
+      <div class="feature">
+        <h3>Global Hotkey</h3>
+        <p>Cmd+Shift+= from anywhere. Always one keystroke away.</p>
+      </div>
+      <div class="feature">
+        <h3>8 Themes</h3>
+        <p>Orange, red, yellow, green, blue, purple, pink, high contrast.</p>
+      </div>
+      <div class="feature">
+        <h3>Native macOS</h3>
+        <p>SwiftUI and MenuBarExtra. No Electron. Light and fast.</p>
+      </div>
+      <div class="feature">
+        <h3>Open Source</h3>
+        <p>MIT licensed. No telemetry. Your queries stay on your machine.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quotes">
+  <div class="container">
+    <h2>The original Nimble, in quotes.</h2>
+    <div class="quote">
+      <p>"The menubar client is every bit as intuitive as the web interface, meaning, it's easy to use and even if you aren't quite sure what you're asking, there's a good chance [it] will figure it out."</p>
+      <cite><a href="http://thenextweb.com/insider/2016/02/08/nimble-brings-wolfram-alpha-to-your-menubar-on-os-x/">The Next Web</a></cite>
+    </div>
+    <div class="quote">
+      <p>"Nimble can handle pretty much anything you'd normally throw at [it], including simple questions and math problems that require graphs."</p>
+      <cite><a href="http://lifehacker.com/nimble-crams-wolfram-alpha-into-your-macs-menu-bar-1758071364">Lifehacker</a></cite>
+    </div>
+  </div>
+</section>
+
+<section class="oss">
+  <div class="container">
+    <h2>Free &amp; Open Source</h2>
+    <p>Nimble is MIT licensed. A ground-up rewrite of the original <a href="https://github.com/Maybulb/Nimble">Maybulb/Nimble</a> in native SwiftUI. No API keys, no accounts, no subscriptions.</p>
+    <a href="https://github.com/nulljosh/nimble" class="btn btn-dark">View on GitHub</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Nimble &mdash; by <a href="https://heyitsmejosh.com">Joshua Trommel</a></p>
+    <p class="credit">Originally created by <a href="https://maybulb.com">Maybulb</a>. Rebuilt with love.</p>
+  </div>
+</footer>
+
+</body>
+</html>

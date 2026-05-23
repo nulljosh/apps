@@ -1,0 +1,34 @@
+name: TimesSquareSim
+options:
+  bundleIdPrefix: com.heyitsmejosh
+  deploymentTarget:
+    macOS: "15.0"
+settings:
+  DEVELOPMENT_TEAM: QMM486NPYC
+  SWIFT_VERSION: "6.0"
+  MARKETING_VERSION: "0.2.0"
+  CURRENT_PROJECT_VERSION: "1"
+targets:
+  TimesSquareSim:
+    type: application
+    platform: macOS
+    sources:
+      - Sources
+      - path: Resources
+        buildPhase: resources
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.nyc
+      GENERATE_INFOPLIST_FILE: YES
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      INFOPLIST_KEY_CFBundleDisplayName: "Times Square Survival"
+      INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.games
+  SimTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests
+    dependencies:
+      - target: TimesSquareSim
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.nyc.tests
+      GENERATE_INFOPLIST_FILE: YES

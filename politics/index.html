@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Political Compass</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='none' stroke='%23e8e8e8' stroke-width='3'/><line x1='50' y1='10' x2='50' y2='90' stroke='%23e8e8e8' stroke-width='2'/><line x1='10' y1='50' x2='90' y2='50' stroke='%23e8e8e8' stroke-width='2'/><polygon points='50,8 46,18 54,18' fill='%23e8e8e8'/></svg>">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#111;
+--text:#e8e8e8;
+--secondary:rgba(255,255,255,0.5);
+--tertiary:rgba(255,255,255,0.25);
+--border:rgba(255,255,255,0.1);
+}
+html{scroll-behavior:smooth}
+body{
+font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text',system-ui,sans-serif;
+color:var(--text);background:var(--bg);
+min-height:100vh;-webkit-font-smoothing:antialiased;
+font-size:16px;line-height:1.6;
+}
+::selection{background:rgba(255,255,255,0.15)}
+
+.container{
+max-width:680px;margin:0 auto;
+padding:0 clamp(1.25rem,5vw,3rem);
+}
+
+/* Progress */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:100;background:var(--border)}
+.progress-fill{height:100%;width:0%;background:var(--text);transition:width 0.5s ease-out}
+
+/* Typography */
+h1{
+font-size:clamp(2.5rem,7vw,4.5rem);
+font-weight:200;letter-spacing:-0.03em;line-height:1.05;
+}
+h2{font-size:clamp(1.4rem,3vw,1.8rem);font-weight:200;letter-spacing:-0.02em;line-height:1.2}
+.label{
+font-size:0.75rem;font-weight:500;letter-spacing:0.12em;
+text-transform:uppercase;color:var(--tertiary);
+}
+
+/* Screens */
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+
+/* Landing */
+#landing{
+justify-content:center;
+padding:clamp(4rem,10vw,8rem) 0;
+}
+#landing h1{margin-bottom:1rem}
+#landing .desc{
+color:var(--secondary);font-size:0.9375rem;
+line-height:1.7;max-width:520px;margin-bottom:2.5rem;
+}
+.meta-row{
+display:flex;gap:2rem;color:var(--tertiary);
+font-size:0.8125rem;margin-bottom:3rem;
+}
+.start-btn{
+display:inline-flex;align-items:center;gap:8px;
+background:none;border:1px solid var(--border);
+color:var(--text);padding:0.75rem 2rem;
+border-radius:2px;cursor:pointer;font-size:0.9375rem;
+font-family:inherit;transition:opacity 0.4s ease-out;
+}
+.start-btn:hover{opacity:0.5}
+.start-btn:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+
+/* Quiz */
+#quiz{padding:clamp(3rem,8vw,5rem) 0 3rem}
+.page-head{
+margin-bottom:clamp(2rem,4vw,3rem);
+padding-bottom:1rem;border-bottom:1px solid var(--border);
+}
+.page-head .label{margin-bottom:0.5rem}
+.page-head h2{color:var(--text)}
+
+.q-list{display:flex;flex-direction:column}
+.q-item{
+padding:1.25rem 0;
+border-bottom:1px solid var(--border);
+}
+.q-item:first-child{border-top:1px solid var(--border)}
+.q-item.answered .q-text{color:var(--text)}
+.q-num{
+font-size:0.6875rem;font-weight:500;letter-spacing:0.1em;
+text-transform:uppercase;color:var(--tertiary);margin-bottom:0.5rem;
+}
+.q-text{
+font-size:0.9375rem;line-height:1.7;color:var(--secondary);
+margin-bottom:1rem;transition:color 0.3s ease;
+}
+.answers{display:flex;gap:0;border:1px solid var(--border);border-radius:2px;overflow:hidden}
+.a-btn{
+flex:1;padding:0.625rem 0.25rem;min-height:44px;background:none;border:none;
+border-right:1px solid var(--border);
+color:var(--tertiary);font-family:inherit;font-size:0.6875rem;
+font-weight:500;letter-spacing:0.04em;cursor:pointer;
+transition:all 0.2s ease;text-align:center;
+}
+.a-btn:last-child{border-right:none}
+.a-btn:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.a-btn:focus-visible{outline:2px solid var(--text);outline-offset:-2px}
+.a-btn.sel{color:var(--bg);background:var(--text)}
+
+/* Nav */
+.quiz-nav{
+display:flex;justify-content:space-between;align-items:center;
+padding:2rem 0 3rem;
+}
+.nav-btn{
+background:none;border:1px solid var(--border);
+color:var(--text);padding:0.625rem 1.5rem;
+border-radius:2px;cursor:pointer;font-size:0.8125rem;
+font-family:inherit;transition:opacity 0.4s ease-out;
+}
+.nav-btn:hover{opacity:0.5}
+.nav-btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+.nav-btn.primary:hover{opacity:0.7}
+.nav-btn:disabled{opacity:0.2;cursor:default}
+.quiz-counter{font-size:0.75rem;color:var(--tertiary)}
+
+/* Results */
+#results{padding:clamp(3rem,8vw,5rem) 0 3rem}
+#results h1{margin-bottom:0.5rem}
+#results .label{margin-bottom:1rem;display:block}
+
+.compass-box{
+margin:2.5rem 0;padding:1.5rem;
+border:1px solid var(--border);border-radius:2px;
+}
+.compass-box svg{width:100%;height:auto;display:block}
+
+.coords{
+display:flex;gap:1.5rem;justify-content:center;
+font-size:0.8125rem;color:var(--secondary);margin-bottom:2rem;
+}
+.coords span{
+padding:0.5rem 1.25rem;border:1px solid var(--border);border-radius:2px;
+}
+.coords strong{color:var(--text);font-weight:500}
+
+.quadrant-info{
+border-top:1px solid var(--border);
+padding-top:1.5rem;margin-bottom:2rem;
+}
+.quadrant-info h2{margin-bottom:0.75rem}
+.quadrant-info p{color:var(--secondary);font-size:0.9375rem;line-height:1.7;max-width:560px}
+
+.result-btns{display:flex;gap:0.75rem;flex-wrap:wrap}
+
+/* Fade entrance */
+.fade{opacity:0;transform:translateY(20px);transition:opacity 0.8s ease-out,transform 0.8s ease-out}
+.fade.in{opacity:1;transform:translateY(0)}
+
+/* Responsive */
+@media(max-width:480px){
+.answers{flex-direction:column}
+.a-btn{flex:none;width:100%;min-height:48px;border-right:none;border-bottom:1px solid var(--border)}
+.a-btn:last-child{border-bottom:none}
+.coords{flex-direction:column;align-items:center}
+.meta-row{flex-direction:column;gap:0.5rem}
+}
+
+@media(prefers-reduced-motion:reduce){
+*{animation-duration:0.01ms!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress" style="display:none" role="progressbar" aria-valuemin="0" aria-valuemax="62" aria-valuenow="0" aria-label="Quiz progress">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+
+<!-- LANDING -->
+<div class="screen active" id="landing">
+<div class="container">
+<div class="fade" data-d="0">
+<p class="label">Political Compass</p>
+</div>
+<div class="fade" data-d="80">
+<h1>Where do<br>you stand?</h1>
+</div>
+<div class="fade" data-d="160">
+<p class="desc">Traditional left-right labels flatten political thought into a single line. This maps you across two independent axes -- economic and social -- for a more honest picture of your actual position.</p>
+</div>
+<div class="fade" data-d="240">
+<div class="meta-row">
+<span>62 propositions</span>
+<span>6 sections</span>
+<span>~8 minutes</span>
+</div>
+</div>
+<div class="fade" data-d="320">
+<button class="start-btn" onclick="start()">Begin test &rarr;</button>
+</div>
+</div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="quiz">
+<div class="container">
+<div class="page-head">
+<p class="label" id="pgLabel"></p>
+<h2 id="pgTitle"></h2>
+</div>
+<div class="q-list" id="qList"></div>
+<div class="quiz-nav">
+<button class="nav-btn" id="backBtn" onclick="back()">Back</button>
+<span class="quiz-counter" id="counter" aria-live="polite"></span>
+<button class="nav-btn primary" id="fwdBtn" onclick="forward()">Next</button>
+</div>
+</div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="results">
+<div class="container">
+<div class="fade" data-d="0">
+<span class="label">Your result</span>
+<h1>Political Compass</h1>
+</div>
+<div class="fade" data-d="100">
+<div class="compass-box">
+<svg id="compass" viewBox="0 0 440 440" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+</div>
+<div class="fade" data-d="200">
+<div class="coords" id="coords"></div>
+</div>
+<div class="fade" data-d="300">
+<div class="quadrant-info" id="quadInfo"></div>
+</div>
+<div class="fade" data-d="400">
+<div class="result-btns">
+<button class="nav-btn primary" onclick="retake()">Retake</button>
+<button class="nav-btn" onclick="copy()">Copy result</button>
+<button class="nav-btn" onclick="shareImage()">Download image</button>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+const P=[
+{t:"Globalisation & Conflict",q:[
+"If economic globalisation is inevitable, it should primarily serve humanity rather than the interests of trans-national corporations.",
+"I'd always support my country, whether it was right or wrong.",
+"No one chooses their country of birth, so it's foolish to be proud of it.",
+"Our race has many superior qualities, compared with other races.",
+"The enemy of my enemy is my friend.",
+"Military action that defies international law is sometimes justified.",
+"There is now a worrying fusion of information and entertainment."
+]},
+{t:"The Economy",q:[
+"People are ultimately divided more by class than by nationality.",
+"Controlling inflation is more important than controlling unemployment.",
+"Because corporations cannot be trusted to voluntarily protect the environment, they require regulation.",
+"\u201CFrom each according to his ability, to each according to his need\u201D is a fundamentally good idea.",
+"The freer the market, the freer the people.",
+"It\u2019s a sad reflection on our society that something as basic as drinking water is now a bottled, branded consumer product.",
+"Land shouldn\u2019t be a commodity to be bought and sold.",
+"It is regrettable that many personal fortunes are made by people who simply manipulate money and contribute nothing to their society.",
+"Protectionism is sometimes necessary in trade.",
+"The only social responsibility of a company should be to deliver a profit to its shareholders.",
+"The rich are too highly taxed.",
+"Those with the ability to pay should have access to higher standards of medical care.",
+"Governments should penalise businesses that mislead the public.",
+"A genuine free market requires restrictions on the ability of predator multinationals to create monopolies."
+]},
+{t:"Personal Values",q:[
+"Abortion, when the woman\u2019s life is not threatened, should always be illegal.",
+"All authority should be questioned.",
+"An eye for an eye and a tooth for a tooth.",
+"Taxpayers should not be expected to prop up any theatres or museums that cannot survive on a commercial basis.",
+"Schools should not make classroom attendance compulsory.",
+"All people have their rights, but it is better for all of us that different sorts of people should keep to their own kind.",
+"Good parents sometimes have to spank their children.",
+"It\u2019s natural for children to keep some secrets from their parents.",
+"Possessing marijuana for personal use should not be a criminal offence.",
+"The prime function of schooling should be to equip the future generation to find jobs.",
+"People with serious inheritable disabilities should not be allowed to reproduce.",
+"The most important thing for children to learn is to accept discipline.",
+"There are no savage and civilised peoples; there are only different cultures.",
+"Those who are able to work, and refuse the opportunity, should not expect society\u2019s support.",
+"When you are troubled, it\u2019s better not to think about it, but to keep busy with more cheerful things.",
+"First-generation immigrants can never be fully integrated within their new country.",
+"What\u2019s good for the most successful corporations is always, ultimately, good for all of us.",
+"No broadcasting institution, however independent its content, should receive public funding."
+]},
+{t:"Authority & the State",q:[
+"Our civil liberties are being excessively curbed in the name of counter-terrorism.",
+"A significant advantage of a one-party state is that it avoids all the arguments that delay progress in a democratic political system.",
+"Although the electronic age makes official surveillance easier, only wrongdoers need to be worried.",
+"The death penalty should be an option for the most serious crimes.",
+"In a civilised society, one must always have people above to be obeyed and people below to be commanded.",
+"Abstract art that doesn\u2019t represent anything shouldn\u2019t be considered art at all.",
+"In criminal justice, punishment should be more important than rehabilitation.",
+"It is a waste of time to try to rehabilitate some criminals.",
+"The businessperson and the manufacturer are more important than the writer and the artist.",
+"Mothers may have careers, but their first duty is to be homemakers.",
+"Almost all politicians promise economic growth, but we should heed the warnings of climate science that growth is detrimental to our efforts to curb global warming.",
+"Making peace with the establishment is an important aspect of maturity."
+]},
+{t:"Religion & Morality",q:[
+"Astrology accurately explains many things.",
+"You cannot be moral without being religious.",
+"Charity is better than social security as a means of helping the genuinely disadvantaged.",
+"Some people are naturally unlucky.",
+"It is important that my child\u2019s school instills religious values."
+]},
+{t:"Sex & Society",q:[
+"Sex outside marriage is usually immoral.",
+"A same sex couple in a stable, loving relationship should not be excluded from the possibility of child adoption.",
+"Pornography, depicting consenting adults, should be legal for the adult population.",
+"What goes on in a private bedroom between consenting adults is no business of the state.",
+"No one can feel naturally homosexual.",
+"These days openness about sex has gone too far."
+]}
+];
+
+const S=[
+['e',-1],['s',1],['s',-1],['s',1],['s',1],['s',1],['s',-1],
+['e',-1],['e',1],['e',-1],['e',-1],['e',1],['e',-1],['e',-1],['e',-1],['e',-1],['e',1],['e',1],['e',1],['e',-1],['e',-1],
+['s',1],['s',-1],['s',1],['e',1],['s',-1],['s',1],['s',1],['s',-1],['s',-1],['e',1],['s',1],['s',1],['s',-1],['e',1],['s',1],['s',1],['e',1],['e',1],
+['s',-1],['s',1],['s',1],['s',1],['s',1],['s',1],['s',1],['s',1],['e',1],['s',1],['e',-1],['s',1],
+['s',1],['s',1],['e',1],['s',-1],['s',1],
+['s',1],['s',-1],['s',-1],['s',-1],['s',1],['s',1]
+];
+
+const LABELS=['Strongly disagree','Disagree','Agree','Strongly agree'];
+const VALS=[-2,-1,1,2];
+let ans=new Array(62).fill(null);
+let pg=0;
+
+// Restore state from localStorage
+try{
+const sa=localStorage.getItem('pc_ans');
+const sp=localStorage.getItem('pc_pg');
+if(sa){const parsed=JSON.parse(sa);if(Array.isArray(parsed)&&parsed.length===62)ans=parsed}
+if(sp)pg=parseInt(sp)||0;
+}catch(e){}
+function save(){try{localStorage.setItem('pc_ans',JSON.stringify(ans));localStorage.setItem('pc_pg',String(pg))}catch(e){}}
+
+function gi(page,local){let i=0;for(let p=0;p<page;p++)i+=P[p].q.length;return i+local}
+function answered(){return ans.filter(a=>a!==null).length}
+
+function show(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+const el=document.getElementById(id);
+el.classList.add('active');
+document.getElementById('progress').style.display=id==='quiz'?'':'none';
+window.scrollTo({top:0,behavior:'instant'});
+requestAnimationFrame(()=>{
+el.querySelectorAll('.fade').forEach(f=>{
+const d=parseInt(f.dataset.d||0);
+setTimeout(()=>f.classList.add('in'),d+50);
+});
+});
+}
+
+function start(){if(!ans.some(a=>a!==null))pg=0;render();show('quiz');save()}
+function retake(){ans.fill(null);pg=0;save();show('landing')}
+
+function render(){
+const page=P[pg];
+document.getElementById('pgLabel').textContent=`Page ${pg+1} of 6`;
+document.getElementById('pgTitle').textContent=page.t;
+document.getElementById('backBtn').disabled=pg===0;
+document.getElementById('fwdBtn').textContent=pg===5?'See results':'Next';
+document.getElementById('counter').textContent=`${answered()} of 62`;
+document.getElementById('progressFill').style.width=((answered()/62)*100)+'%';
+
+const list=document.getElementById('qList');
+list.innerHTML='';
+page.q.forEach((q,i)=>{
+const g=gi(pg,i);
+const div=document.createElement('div');
+div.className='q-item'+(ans[g]!==null?' answered':'');
+div.innerHTML=`
+<div class="q-num">Proposition ${g+1}</div>
+<div class="q-text">${q}</div>
+<div class="answers" role="radiogroup" aria-label="Proposition ${g+1}">${LABELS.map((l,j)=>
+`<button class="a-btn${ans[g]===VALS[j]?' sel':''}" role="radio" aria-checked="${ans[g]===VALS[j]}" onclick="pick(${g},${VALS[j]},this)">${l}</button>`
+).join('')}</div>`;
+list.appendChild(div);
+});
+}
+
+function pick(g,val,el){
+ans[g]=val;
+const item=el.closest('.q-item');
+item.classList.add('answered');
+item.querySelectorAll('.a-btn').forEach(b=>{b.classList.remove('sel');b.setAttribute('aria-checked','false')});
+el.classList.add('sel');
+el.setAttribute('aria-checked','true');
+const a=answered();
+document.getElementById('counter').textContent=`${a} of 62`;
+document.getElementById('progressFill').style.width=((a/62)*100)+'%';
+document.getElementById('progress').setAttribute('aria-valuenow',String(a));
+save();
+}
+
+function back(){if(pg>0){pg--;save();render();show('quiz')}}
+function forward(){if(pg<5){pg++;save();render();show('quiz')}else calc()}
+
+function calc(){
+let et=0,ec=0,st=0,sc=0;
+for(let i=0;i<62;i++){
+const v=ans[i]||0;
+const[a,d]=S[i];
+if(a==='e'){et+=v*d;ec++}else{st+=v*d;sc++}
+}
+// Normalize each axis independently by its own question count (ec, sc)
+// so neither axis is weighted more heavily due to having more questions
+const e=ec?(et/(ec*2))*10:0;
+const s=sc?(st/(sc*2))*10:0;
+drawCompass(e,s);
+try{localStorage.removeItem('pc_ans');localStorage.removeItem('pc_pg')}catch(e){}
+show('results');
+}
+
+function drawCompass(econ,social){
+const svg=document.getElementById('compass');
+const cx=220,cy=220,sz=180;
+let h='';
+
+h+=`<rect x="${cx-sz}" y="${cy-sz}" width="${sz}" height="${sz}" fill="rgba(220,80,80,0.06)"/>`;
+h+=`<rect x="${cx}" y="${cy-sz}" width="${sz}" height="${sz}" fill="rgba(80,120,220,0.06)"/>`;
+h+=`<rect x="${cx-sz}" y="${cy}" width="${sz}" height="${sz}" fill="rgba(80,180,120,0.06)"/>`;
+h+=`<rect x="${cx}" y="${cy}" width="${sz}" height="${sz}" fill="rgba(220,180,80,0.06)"/>`;
+
+for(let i=-10;i<=10;i++){
+const x=cx+(i/10)*sz,y=cy+(i/10)*sz;
+const o=i===0?0.3:(i%5===0?0.08:0.04);
+const w=i===0?1:0.5;
+h+=`<line x1="${x}" y1="${cy-sz}" x2="${x}" y2="${cy+sz}" stroke="rgba(255,255,255,${o})" stroke-width="${w}"/>`;
+h+=`<line x1="${cx-sz}" y1="${y}" x2="${cx+sz}" y2="${y}" stroke="rgba(255,255,255,${o})" stroke-width="${w}"/>`;
+}
+
+const ls='font-family:-apple-system,system-ui,sans-serif;font-weight:500;letter-spacing:0.08em;text-anchor:middle';
+h+=`<text x="${cx}" y="${cy-sz-10}" style="${ls};font-size:9px;fill:rgba(255,255,255,0.4)">AUTHORITARIAN</text>`;
+h+=`<text x="${cx}" y="${cy+sz+18}" style="${ls};font-size:9px;fill:rgba(255,255,255,0.4)">LIBERTARIAN</text>`;
+h+=`<text x="${cx-sz-8}" y="${cy+3}" style="${ls};font-size:9px;fill:rgba(255,255,255,0.4)" text-anchor="end">LEFT</text>`;
+h+=`<text x="${cx+sz+8}" y="${cy+3}" style="${ls};font-size:9px;fill:rgba(255,255,255,0.4)" text-anchor="start">RIGHT</text>`;
+
+for(let i=-10;i<=10;i+=5){
+if(!i)continue;
+const x=cx+(i/10)*sz,y=cy+(i/10)*sz;
+h+=`<text x="${x}" y="${cy+sz+10}" style="font-family:-apple-system,system-ui;font-size:8px;fill:rgba(255,255,255,0.2);text-anchor:middle">${i}</text>`;
+h+=`<text x="${cx-sz-4}" y="${y+3}" style="font-family:-apple-system,system-ui;font-size:8px;fill:rgba(255,255,255,0.2);text-anchor:end">${-i}</text>`;
+}
+
+const dx=cx+(econ/10)*sz,dy=cy+(social/10)*sz;
+h+=`<line x1="${dx}" y1="${cy-sz}" x2="${dx}" y2="${cy+sz}" stroke="rgba(232,232,232,0.15)" stroke-width="0.5" stroke-dasharray="3,3"/>`;
+h+=`<line x1="${cx-sz}" y1="${dy}" x2="${cx+sz}" y2="${dy}" stroke="rgba(232,232,232,0.15)" stroke-width="0.5" stroke-dasharray="3,3"/>`;
+h+=`<circle cx="${dx}" cy="${dy}" r="6" fill="#e8e8e8" opacity="0.9"><animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite"/></circle>`;
+h+=`<circle cx="${dx}" cy="${dy}" r="2.5" fill="#111"/>`;
+
+svg.innerHTML=h;
+
+const er=Math.round(econ*10)/10,sr=Math.round(social*10)/10;
+document.getElementById('coords').innerHTML=
+`<span>Economic <strong>${er>0?'+':''}${er}</strong></span>`+
+`<span>Social <strong>${sr>0?'+':''}${sr}</strong></span>`;
+
+const q=quadrant(er,sr);
+document.getElementById('quadInfo').innerHTML=`<h2>${q.n}</h2><p>${q.d}</p>`;
+}
+
+function quadrant(e,s){
+if(e<=0&&s<=0)return{n:'Libertarian Left',d:'Left-leaning economics with strong emphasis on personal freedom. You favour social programs and collective welfare while opposing authoritarian governance and questioning traditional hierarchies.'};
+if(e>0&&s<=0)return{n:'Libertarian Right',d:'Free-market economics paired with deep commitment to individual liberty. You favour minimal government intervention in both economic and personal matters, prioritising voluntary exchange and personal autonomy.'};
+if(e<=0&&s>0)return{n:'Authoritarian Left',d:'Collective economic policies alongside a stronger role for the state. You support regulation, public ownership, and social programs while accepting more centralised authority to achieve these goals.'};
+return{n:'Authoritarian Right',d:'Conservative economics with support for traditional authority structures. You favour established institutions, national identity, and social order alongside private enterprise and fiscal conservatism.'};
+}
+
+function copy(){
+const c=document.getElementById('coords').innerText;
+const q=document.querySelector('#quadInfo h2').innerText;
+navigator.clipboard.writeText(`Political Compass: ${q} (${c})`).then(()=>{
+const b=document.querySelector('.result-btns .nav-btn:last-child');
+b.textContent='Copied';setTimeout(()=>b.textContent='Copy result',1500);
+});
+}
+
+function shareImage(){
+const svg=document.getElementById('compass');
+const svgData=new XMLSerializer().serializeToString(svg);
+const canvas=document.createElement('canvas');
+canvas.width=880;canvas.height=960;
+const ctx=canvas.getContext('2d');
+ctx.fillStyle='#111';ctx.fillRect(0,0,880,960);
+const img=new Image();
+img.onload=function(){
+ctx.drawImage(img,0,40,880,880);
+ctx.fillStyle='#e8e8e8';ctx.font='200 32px -apple-system,system-ui,sans-serif';
+ctx.textAlign='center';
+const coordText=document.getElementById('coords').innerText;
+ctx.fillStyle='rgba(255,255,255,0.5)';ctx.font='13px -apple-system,system-ui,sans-serif';
+ctx.fillText(coordText,440,940);
+const q=document.querySelector('#quadInfo h2').innerText;
+ctx.fillStyle='#e8e8e8';ctx.font='200 24px -apple-system,system-ui,sans-serif';
+ctx.fillText(q,440,920);
+canvas.toBlob(function(blob){
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;a.download='political-compass.png';
+a.click();URL.revokeObjectURL(url);
+},'image/png');
+};
+img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgData);
+}
+
+// Auto-resume if user has saved progress
+if(ans.some(a=>a!==null)){render();show('quiz')}
+
+requestAnimationFrame(()=>{
+document.querySelectorAll('#landing .fade').forEach(f=>{
+const d=parseInt(f.dataset.d||0);
+setTimeout(()=>f.classList.add('in'),d+100);
+});
+});
+</script>
+</body>
+</html>
