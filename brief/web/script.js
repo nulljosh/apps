@@ -186,12 +186,115 @@ const CHECKLIST = [
 ];
 
 const JOURNAL_SEED = [
-  { date:'2026-05-15', text:'Journal entry will load here from Supabase once signed in.' },
-  { date:'2026-05-11', text:'May 11, 2026 - pinned discovery date for s.8(1)(d).' },
-  { date:'2026-04-22', text:'Entries are sourced from the brief_journal table.' },
+  { date:'2026-05-11', text:'May 11, 2026 — pinned as formal discovery date for s.8(1)(d) discoverability argument.' },
+  { date:'2026-04-22', text:'Therapy started May 2026. PTSD causation letter pending.' },
 ];
 
 const CALL_SCRIPT = '30-SECOND COLD CALL — use verbatim:\n"Hi, my name is Josh Trommel. I have a Charter damages claim against the Attorney General of Canada — warrantless RCMP entry during a wellness call in Langley, August 2023, forced hospitalisation, forced antipsychotic medication, documented PTSD. I\'m looking to retain counsel. The basic two-year limit has passed but I have strong discoverability and incapacity arguments. I\'d like to book a consultation."\n\n---\n\nFULL CONSULTATION PREP:\n\nIntroduction: "My name is Joshua Trommel. I am following up on my email about a civil claim arising from a warrantless RCMP wellness-call entry in August 2023."\n\nKey facts (30 seconds):\n- Date: August 1, 2023, approx 11:00 AM, Langley BC (Brookswood detachment)\n- No underlying crime. Father present. I was sitting at kitchen table.\n- RCMP entered without warrant, restrained me within 30 seconds (prone, knee on back).\n- Transported to hospital, overnight hold, forced antipsychotic injection.\n- No s.10(b) caution at any point. File: 2023-25586.\n\nCharter grounds: ss. 7, 8, 9, 10(b), 12 + battery + false imprisonment.\n\nLimitation: Basic 2-year expired Aug 2025. Survived on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Discovery date: May 11, 2026.\n\nDefendant: Attorney General of Canada (RCMP is federal).\n\nDamages ask: $800k-1.2M settlement; $2-3M trial ceiling.\n\nQuestions for counsel:\n1. Do you take civil rights / Charter police misconduct cases?\n2. Retainer structure - flat or contingency?\n3. Have you acted against the AG / RCMP specifically?\n4. Are you press-capable if the AG stonewalls?\n5. When can we meet in person?';
+
+// ===== CASE-0002: Trommel v. Trommel =====
+
+let webActiveCase = 'rcmp';
+
+const FAMILY_GROUNDS = [
+  { id:'likeness', n:'01', title:'Appropriation of Personality', sec:'BC Privacy Act s.3', val:'$75–200k', high:200, grade:'A',
+    desc:'Brian Trommel used Joshua\'s face and likeness on family business vehicles and advertising without consent. Commercial exploitation for financial gain. Ongoing tort — limitation runs from last use date or May 2026 discovery. Photograph every vehicle with timestamps.',
+    cite:'BC Privacy Act RSBC 1996 c.373 s.3 · Krouse v. Chrysler Canada Ltd (1973)' },
+  { id:'iims', n:'02', title:'Intentional Infliction of Mental Suffering', sec:'IIMS', val:'$100–200k', high:200, grade:'A',
+    desc:'20+ year pattern of calculated conduct: police weaponized against Joshua at ages 10 and 15 for crying. Eviction into homelessness. Parking lot confrontation while Joshua was homeless — Brian\'s stated priority was a Yelp review, not his son\'s welfare. PTSD resulted.',
+    cite:'Wilkinson v. Downton [1897] 2 QB 57 · Piresferreira v. Ayotte 2010 ONCA 384' },
+  { id:'negligence', n:'03', title:'Parental Negligence', sec:'Negligence', val:'$50–150k', high:150, grade:'B',
+    desc:'Parents owed a duty of care. Breaches: calling police on a child for crying, evicting an adult child into homelessness, using police as a control mechanism. Causation to PTSD and lost earning capacity (age 26, 35+ working years). Psychiatric evidence must separate RCMP PTSD from family PTSD.',
+    cite:'Jordan House Ltd v. Menow [1974] SCR 239' },
+  { id:'battery', n:'04', title:'Battery — Non-Consensual Surgery', sec:'Battery', val:'$25–75k', high:75, grade:'C',
+    desc:'Circumcision performed in infancy without capacity for consent. BC Limitation Act s.16 suspends limitation during minority — clock started at age 19 (~2019). Novel argument in BC — no direct appellate authority. Include as supplementary, not lead claim.',
+    cite:'Malette v. Shulman (1990) 72 OR (2d) 417 · BC Limitation Act s.16' },
+  { id:'eviction', n:'05', title:'Wrongful Eviction', sec:'Negligence', val:'$25–75k', high:75, grade:'C',
+    desc:'Evicted from the only family home with no notice or transition support. Subsequently located in a parking lot while homeless. Brian\'s stated priority: a Yelp review. Special damages: shelter costs, lost income during homeless period.',
+    cite:'Parental duty of care · special damages causation' },
+];
+
+const FAMILY_SCENARIOS = [
+  { name:'Best case',   desc:'Full trial, all heads viable, punitive granted. Parents settle to avoid public judgment.', amt:'$1.5–2M',    pct:10, color:'var(--good)' },
+  { name:'Strong',      desc:'Likeness + IIMS survive limitation. Settlement with real leverage.',                       amt:'$700k–1.2M', pct:25, color:'var(--info)' },
+  { name:'Most likely', desc:'Likeness + recent IIMS survive. Childhood claims used for damages context only.',          amt:'$300k–600k', pct:45, color:'var(--warn)' },
+  { name:'Worst',       desc:'Limitation kills most claims. Parents have assets but settle minimally.',                  amt:'$0–100k',    pct:20, color:'var(--danger)' },
+];
+
+const FAMILY_STACK_HEADS = [
+  { label:'Appropriation of personality (ongoing)', sub:'BC Privacy Act s.3 — cleanest limitation',  low:75,  high:200, grade:'A' },
+  { label:'IIMS — pattern of conduct',              sub:'Needs psychiatric proof of illness',          low:100, high:200, grade:'A' },
+  { label:'Parental negligence — PTSD',             sub:'Must split from RCMP PTSD',                  low:50,  high:150, grade:'B' },
+  { label:'Lost earning capacity',                  sub:'Age 26, 35+ working years',                  low:100, high:300, grade:'B' },
+  { label:'Battery — non-consensual surgery',       sub:'Novel — lead with others',                   low:25,  high:75,  grade:'C' },
+  { label:'Special (shelter, therapy, lost income)',sub:'Homelessness period',                         low:25,  high:75,  grade:'C' },
+  { label:'Punitive',                               sub:'Parking lot + ongoing likeness use',          low:25,  high:100, grade:'C' },
+];
+
+const FAMILY_LAWYERS = [
+  { id:'lawsociety-f', init:'LS', name:'Law Society of BC', sub:'Lawyer Referral Service · 30-min free, then $25',
+    tags:[{t:'Civil tort referrals',c:'good'},{t:'Find a specialist',c:'good'}], status:'none', fit:4,
+    contacts:[{label:'1-800-663-1919',href:'tel:18006631919',kind:'tel',primary:true},{label:'lawsocietybc.ca',href:'https://lawsocietybc.ca',kind:'web'}] },
+  { id:'bccla-f', init:'BC', name:'BCCLA Referral Line', sub:'BC Civil Liberties Association',
+    tags:[{t:'Free referrals',c:'good'},{t:'Civil rights',c:'good'}], status:'none', fit:3,
+    contacts:[{label:'604-687-2919',href:'tel:6046872919',kind:'tel'},{label:'bccla.org',href:'https://bccla.org',kind:'web'}] },
+  { id:'slater-vecchio', init:'SV', name:'Slater Vecchio LLP', sub:'Vancouver BC · Civil litigation, personal injury',
+    tags:[{t:'Tort claims',c:'good'},{t:'Personal injury',c:'good'}], status:'none', fit:3,
+    contacts:[{label:'slatervecchio.com',href:'https://slatervecchio.com',kind:'web'}] },
+  { id:'harper-grey', init:'HG', name:'Harper Grey LLP', sub:'Vancouver BC · Civil litigation',
+    tags:[{t:'Civil tort',c:'good'},{t:'Intentional torts',c:'good'}], status:'none', fit:3,
+    contacts:[{label:'harpergrey.com',href:'https://harpergrey.com',kind:'web'}] },
+  { id:'watson-goepel', init:'WG', name:'Watson Goepel LLP', sub:'Vancouver BC · Civil litigation',
+    tags:[{t:'Civil tort',c:'good'},{t:'Limitation Act exp.',c:'good'}], status:'none', fit:3,
+    contacts:[{label:'watsongoepel.com',href:'https://watsongoepel.com',kind:'web'}] },
+];
+
+const FAMILY_CHECKLIST = [
+  { i:'f0',  label:'Photograph all vehicles / materials with your likeness — timestamp every photo',      pri:'now',  done:false, lev:30 },
+  { i:'f1',  label:'Screenshot online presence (website, social, Google My Business) using your image',   pri:'now',  done:false, lev:25 },
+  { i:'f2',  label:'Write precise timeline of the homelessness period (dates, locations, witnesses)',      pri:'now',  done:false, lev:20 },
+  { i:'f3',  label:'Preserve texts, emails, voicemails from parents re: eviction, parking lot, Yelp',    pri:'now',  done:false, lev:25 },
+  { i:'f4',  label:'Find or reconstruct the Yelp review and any response from your father',              pri:'now',  done:false, lev:20 },
+  { i:'f5',  label:'Document approximate dates of police calls at ages 10 and 15 (incident numbers)',    pri:'soon', done:false, lev:15 },
+  { i:'f6',  label:'Identify witnesses to the homelessness period or parking lot confrontation',           pri:'soon', done:false, lev:15 },
+  { i:'f7',  label:'Get therapy records documenting psychological harm from family (separate from RCMP)', pri:'soon', done:false, lev:20 },
+  { i:'f8',  label:'Research family business: name, registration, revenue (bcregistry.gov.bc.ca)',        pri:'soon', done:false, lev:15 },
+  { i:'f9',  label:'Pin discoverability date: May 2026 — formal written record',                         pri:'now',  done:false, lev:20 },
+  { i:'f10', label:'Contact Law Society BC referral (1-800-663-1919) — ask for civil tort specialist',   pri:'now',  done:false, lev:30 },
+  { i:'f11', label:'Audit digital footprint — anything that could be used against you',                   pri:'soon', done:false, lev:10 },
+];
+
+const FAMILY_TIMELINE = [
+  { when:'Now',         state:'now',  title:'Find civil tort counsel',    desc:'Law Society referral: 1-800-663-1919. Ask for tort / intentional harm / appropriation of personality. NOT Charter — different practice area.' },
+  { when:'Week 1–2',   state:'',     title:'Evidence gathering',         desc:'Photograph every vehicle with likeness. Screenshot online presence. Write precise dates for all incidents. Preserve texts, emails, voicemails.' },
+  { when:'Month 1–2',  state:'',     title:'Limitation analysis',        desc:'Lawyer must assess which claims survive limitation. Discoverability formally documented. Pin May 2026 as discovery date.' },
+  { when:'Month 2–6',  state:'warn', title:'Demand letter',              desc:'Without-prejudice demand to both defendants. Outlines claims, limitation basis, settlement figure. Sets negotiation clock.' },
+  { when:'Month 6–18', state:'good', title:'File or settle',             desc:'Most civil cases settle once counsel retained and demand delivered. Parents own $1M+ home — judgment can be registered against title in BC.' },
+  { when:'May 1, 2028',state:'bad',  title:'Hard deadline',              desc:'2-year basic limitation from May 2026 discovery. Must file or have documented discoverability argument before this date.' },
+];
+
+const FAMILY_CALL_SCRIPT = '30-SECOND — USE VERBATIM (Law Society referral):\n"Hi, my name is Josh Trommel. I\'m looking for a civil litigation lawyer with experience in intentional torts and appropriation of personality in BC. I have claims against my parents arising from commercial use of my likeness without consent, intentional infliction of mental suffering over a 20-year period, parental negligence, and wrongful eviction into homelessness. Discovery date is May 2026, basic limitation expires May 2028. I\'d like to book a 30-minute consultation."\n\n---\n\nFULL OUTREACH EMAIL:\nSubject: Civil Consultation — Appropriation of Personality / IIMS — Trommel\n\nHi [Name],\n\nMy name is Joshua Trommel. I\'m seeking a civil litigation lawyer with experience in intentional torts and/or appropriation of personality claims in BC.\n\nI have potential claims against my parents:\n1. Commercial use of my face and likeness on family business vehicles without consent — ongoing appropriation of personality tort under BC Privacy Act s.3.\n2. Intentional infliction of mental suffering — documented 20+ year pattern: eviction into homelessness, police weaponized during emotional distress, parking lot confrontation while homeless (father\'s stated priority: a Yelp review).\n3. Parental negligence contributing to documented PTSD.\n\nI have a separate Charter claim against the AG of Canada (RCMP). Discovery date: May 2026. Basic limitation expires May 2028.\n\nAvailable for consultation at your earliest convenience.\nJoshua Trommel · 778-201-4533';
+
+function getActiveChecklist() { return webActiveCase === 'rcmp' ? CHECKLIST : FAMILY_CHECKLIST; }
+const CL_STORE_FAMILY = 'brief.v3.checklist.family';
+function getClStore() { return webActiveCase === 'rcmp' ? CL_STORE : CL_STORE_FAMILY; }
+
+function setActiveCase(id) {
+  webActiveCase = id;
+  document.body.dataset.activecase = id;
+  document.querySelectorAll('.cs-btn').forEach(b => b.classList.toggle('active', b.dataset.case === id));
+  renderGrounds('grounds-case', '');
+  renderGrounds('grounds-money', '2');
+  renderScenarios();
+  renderStack();
+  document.querySelectorAll('.stack-toggle button').forEach(b => b.classList.toggle('active', b.dataset.m === stackMode));
+  renderLawyers();
+  renderChecklist();
+  renderTimeline();
+  if (id === 'rcmp') renderLeverage();
+  const scriptEl = document.getElementById('scriptText');
+  if (scriptEl) scriptEl.textContent = id === 'rcmp' ? CALL_SCRIPT : FAMILY_CALL_SCRIPT;
+}
 
 // ===== LEVERAGE =====
 const LAWYER_LEVERAGE = { none:0, voicemail:5, emailed:15, callback:40, retained:180 };
@@ -434,11 +537,14 @@ function renderTrajectory(currentTotal) {
 
 function renderGrounds(containerId, suffix) {
   const c = document.getElementById(containerId);
-  GROUNDS.forEach(g => {
+  while (c.firstChild) c.removeChild(c.firstChild);
+  const data = webActiveCase === 'rcmp' ? GROUNDS : FAMILY_GROUNDS;
+  const maxHigh = webActiveCase === 'rcmp' ? 600 : 200;
+  data.forEach(g => {
     const w = document.createElement('div');
     w.className = 'ground';
     w.dataset.id = g.id + suffix;
-    const pct = (g.high / 600) * 100;
+    const pct = (g.high / maxHigh) * 100;
 
     const hd = document.createElement('div'); hd.className = 'ground-hd';
     const n = document.createElement('div'); n.className = 'ground-n serif'; n.textContent = g.n;
@@ -478,9 +584,11 @@ function renderGrounds(containerId, suffix) {
 renderGrounds('grounds-case', '');
 renderGrounds('grounds-money', '2');
 
-(function(){
+function renderScenarios() {
   const c = document.getElementById('scenarios');
-  SCENARIOS.forEach((s,i) => {
+  while (c.firstChild) c.removeChild(c.firstChild);
+  const data = webActiveCase === 'rcmp' ? SCENARIOS : FAMILY_SCENARIOS;
+  data.forEach((s,i) => {
     const d = document.createElement('div'); d.className = 'scen';
     const row = document.createElement('div'); row.className = 'scen-row';
     const left = document.createElement('div');
@@ -499,16 +607,18 @@ renderGrounds('grounds-money', '2');
     d.appendChild(row); d.appendChild(barTrack);
     c.appendChild(d);
   });
-})();
+}
+renderScenarios();
 
 let stackMode = 'strong';
 function renderStack() {
   const c = document.getElementById('stackRows');
   c.innerHTML = '';
-  const total = STACK_HEADS.reduce((s,h) => s + (stackMode==='strong'?h.high:h.low), 0);
-  const max = Math.max(...STACK_HEADS.map(h => stackMode==='strong'?h.high:h.low));
+  const heads = webActiveCase === 'rcmp' ? STACK_HEADS : FAMILY_STACK_HEADS;
+  const total = heads.reduce((s,h) => s + (stackMode==='strong'?h.high:h.low), 0);
+  const max = Math.max(...heads.map(h => stackMode==='strong'?h.high:h.low));
   document.getElementById('stackTot').textContent = '$' + (total/1000).toFixed(2) + 'M';
-  STACK_HEADS.forEach(h => {
+  heads.forEach(h => {
     const v = stackMode==='strong' ? h.high : h.low;
     const pct = (v/max)*100;
     const r = document.createElement('div'); r.className = 'stack-row';
@@ -575,9 +685,11 @@ document.querySelectorAll('.stack-toggle button').forEach(b => {
   });
 })();
 
-(function(){
+function renderLawyers() {
   const c = document.getElementById('lawyers');
-  LAWYERS.forEach(L => {
+  while (c.firstChild) c.removeChild(c.firstChild);
+  const data = webActiveCase === 'rcmp' ? LAWYERS : FAMILY_LAWYERS;
+  data.forEach(L => {
     const d = document.createElement('div'); d.className = 'lawyer'; d.dataset.lawyerId = L.id;
 
     const av = document.createElement('div'); av.className = 'lawyer-av'; av.textContent = L.init;
@@ -613,21 +725,24 @@ document.querySelectorAll('.stack-toggle button').forEach(b => {
       chip.className = 'tag status ' + next;
       chip.textContent = STATUS_LABEL[next];
       _lawyerStatuses[L.id] = next;
-      if (_userId) _sb.from('brief_lawyer_status').upsert({ user_id:_userId, lawyer_id:L.id, status:next });
-      renderLeverage();
+      if (_userId && webActiveCase === 'rcmp') _sb.from('brief_lawyer_status').upsert({ user_id:_userId, lawyer_id:L.id, status:next });
+      if (webActiveCase === 'rcmp') renderLeverage();
     });
   });
-})();
+}
+renderLawyers();
 
-(function(){
+function renderTimeline() {
   const c = document.getElementById('timeline');
-  TIMELINE.forEach((t,i) => {
+  while (c.firstChild) c.removeChild(c.firstChild);
+  const data = webActiveCase === 'rcmp' ? TIMELINE : FAMILY_TIMELINE;
+  data.forEach((t,i) => {
     const d = document.createElement('div'); d.className = 'tl-item';
     const when = document.createElement('div'); when.className = 'tl-when'; when.textContent = t.when;
     const rail = document.createElement('div'); rail.className = 'tl-rail';
     const dot = document.createElement('div'); dot.className = 'tl-dot ' + (t.state||'');
     rail.appendChild(dot);
-    if (i < TIMELINE.length-1) { const line = document.createElement('div'); line.className = 'tl-line'; rail.appendChild(line); }
+    if (i < data.length-1) { const line = document.createElement('div'); line.className = 'tl-line'; rail.appendChild(line); }
     const body = document.createElement('div'); body.className = 'tl-body';
     const title = document.createElement('div'); title.className = 'tl-title serif'; title.textContent = t.title;
     const desc = document.createElement('div'); desc.className = 'tl-desc'; desc.textContent = t.desc;
@@ -635,13 +750,17 @@ document.querySelectorAll('.stack-toggle button').forEach(b => {
     d.appendChild(when); d.appendChild(rail); d.appendChild(body);
     c.appendChild(d);
   });
-})();
+}
+renderTimeline();
 
 const CL_STORE = 'brief.v3.checklist';
-(function(){
+function renderChecklist() {
   const c = document.getElementById('checklist');
-  const saved = JSON.parse(localStorage.getItem(CL_STORE) || '{}');
-  CHECKLIST.forEach(it => {
+  while (c.firstChild) c.removeChild(c.firstChild);
+  const cl = getActiveChecklist();
+  const store = getClStore();
+  const saved = JSON.parse(localStorage.getItem(store) || '{}');
+  cl.forEach(it => {
     if (saved[it.i] !== undefined) it.done = saved[it.i];
     const d = document.createElement('div'); d.className = 'cl-item'; d.dataset.i = it.i;
     const box = document.createElement('div'); box.className = 'cl-box' + (it.done?' done':'');
@@ -653,26 +772,28 @@ const CL_STORE = 'brief.v3.checklist';
     c.appendChild(d);
     d.addEventListener('click', () => {
       it.done = !it.done;
-      const s = JSON.parse(localStorage.getItem(CL_STORE) || '{}');
+      const s = JSON.parse(localStorage.getItem(store) || '{}');
       s[it.i] = it.done;
-      localStorage.setItem(CL_STORE, JSON.stringify(s));
+      localStorage.setItem(store, JSON.stringify(s));
       box.classList.toggle('done', it.done);
       lbl.classList.toggle('done', it.done);
       lev.style.opacity = it.done ? '0.4' : '';
       lev.style.textDecoration = it.done ? 'line-through' : '';
-      if (_userId) _sb.from('brief_checklist').upsert({ user_id:_userId, item_index:parseInt(it.i), completed:it.done });
+      if (_userId && webActiveCase === 'rcmp') _sb.from('brief_checklist').upsert({ user_id:_userId, item_index:parseInt(it.i), completed:it.done });
       updateClProg();
-      renderLeverage();
+      if (webActiveCase === 'rcmp') renderLeverage();
     });
   });
   updateClProg();
-})();
+}
+renderChecklist();
 
 function updateClProg() {
-  const done = CHECKLIST.filter(x => x.done).length;
+  const cl = getActiveChecklist();
+  const done = cl.filter(x => x.done).length;
   document.getElementById('clCount').textContent = done;
-  document.getElementById('clTotal').textContent = CHECKLIST.length;
-  document.getElementById('clBar').style.width = (done/CHECKLIST.length*100) + '%';
+  document.getElementById('clTotal').textContent = cl.length;
+  document.getElementById('clBar').style.width = (done/cl.length*100) + '%';
 }
 
 function renderJournalEntries(entries) {
@@ -708,17 +829,13 @@ const J_STORE = 'brief.v3.journal';
   document.getElementById('jCancel').addEventListener('click', () => { form.classList.remove('open'); txtI.value = ''; });
   document.getElementById('jSave').addEventListener('click', () => {
     const txt = txtI.value.trim(); if (!txt) return;
-    if (_userId) {
-      _sb.from('brief_journal').upsert({ user_id:_userId, date:dateI.value, text:txt }).then(() => loadJournalFromDB());
-    } else {
-      const s = JSON.parse(localStorage.getItem(J_STORE) || '[]');
-      s.push({ date:dateI.value, text:txt });
-      localStorage.setItem(J_STORE, JSON.stringify(s));
-      const m = {};
-      JOURNAL_SEED.forEach(e => m[e.date] = e);
-      s.forEach(e => m[e.date] = e);
-      renderJournalEntries(Object.values(m).sort((a,b) => b.date.localeCompare(a.date)));
-    }
+    const s = JSON.parse(localStorage.getItem(J_STORE) || '[]');
+    s.push({ date:dateI.value, text:txt });
+    localStorage.setItem(J_STORE, JSON.stringify(s));
+    const m = {};
+    JOURNAL_SEED.forEach(e => m[e.date] = e);
+    s.forEach(e => m[e.date] = e);
+    renderJournalEntries(Object.values(m).sort((a,b) => b.date.localeCompare(a.date)));
     txtI.value = ''; form.classList.remove('open');
   });
 })();
@@ -848,7 +965,6 @@ function loadLawyerStatusFromDB() {
 }
 
 function initData() {
-  loadJournalFromDB();
   loadChecklistFromDB();
   loadLawyerStatusFromDB();
 }

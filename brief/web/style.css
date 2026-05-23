@@ -638,3 +638,15 @@ footer { margin-top: 80px; padding: 28px 0; border-top: 1px solid var(--rule); d
   .ground-body { max-height: none !important; }
   :root { --bg: #fff !important; --paper: #f7f5f2 !important; --paper-2: #efece6 !important; --ink: #0d0d0d !important; --mid: rgba(0,0,0,0.65) !important; --muted: rgba(0,0,0,0.45) !important; --rule: rgba(0,0,0,0.10) !important; --rule-strong: rgba(0,0,0,0.20) !important; }
 }
+
+/* ===== CASE SWITCHER ===== */
+.case-switcher { display:flex; gap:4px; }
+.cs-btn { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:0.08em;
+  padding:4px 10px; border:1px solid var(--rule-strong); border-radius:4px;
+  background:transparent; color:var(--mid); cursor:pointer; transition:all 0.15s; }
+.cs-btn.active { background:var(--danger); color:#fff; border-color:var(--danger); }
+.cs-btn:not(.active):hover { background:var(--paper-2); color:var(--ink); }
+
+body[data-activecase="family"] .case-rcmp { display:none !important; }
+body[data-activecase="rcmp"] .case-family { display:none !important; }
+.case-family { display:none; }

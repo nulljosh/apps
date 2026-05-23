@@ -14,7 +14,7 @@ struct ContentView: View {
                     Label("Actions", systemImage: "checklist").tag("actions")
                 }
             }
-            .navigationTitle(store.activeCase.rawValue)
+            .navigationTitle(store.activeCase.title)
             .navigationSplitViewColumnWidth(min: 180, ideal: 200)
             .toolbar {
                 ToolbarItem {
@@ -28,7 +28,7 @@ struct ContentView: View {
                             }
                         }
                     } label: {
-                        Image(systemName: "folder")
+                        Label(store.activeCase.title, systemImage: "folder")
                     }
                 }
             }

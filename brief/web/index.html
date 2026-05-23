@@ -8,11 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
-<body data-theme="dark" data-accent="red">
+<body data-theme="dark" data-accent="red" data-activecase="rcmp">
 
 <!-- Auth overlay -->
 <div class="auth-overlay" id="authOverlay">
@@ -91,10 +91,14 @@
 <div class="strip">
   <div class="brand">Brief<span style="color:var(--muted)">&#xB7;</span></div>
   <div class="meta">
-    <span>FILE <b>CASE-0001</b></span>
+    <span>FILE <b id="stripFile">CASE-0001</b></span>
     <span>JURISDICTION <b>BC, Canada</b></span>
     <span>STATUS <b>Pre-litigation</b></span>
     <span class="pulse">Active outreach</span>
+  </div>
+  <div class="case-switcher">
+    <button class="cs-btn active" data-case="rcmp" onclick="setActiveCase('rcmp')">CASE-0001</button>
+    <button class="cs-btn" data-case="family" onclick="setActiveCase('family')">CASE-0002</button>
   </div>
   <div class="strip-pill" id="stripPill" title="Live settlement projection">
     <span id="pillVal">$&mdash;</span>
@@ -112,12 +116,16 @@
     <div class="l">Case Brief &middot; Volume I</div>
     <div class="r">Charter ss. 7 &middot; 8 &middot; 9 &middot; 10(b) &middot; 12</div>
   </div>
-  <h1 class="hero-title">
+  <h1 class="hero-title case-rcmp">
     Trommel <span class="v">v.</span> Attorney General of Canada
   </h1>
-  <p class="hero-sub">Charter violations arising from a warrantless wellness-call entry. Langley, British Columbia &mdash; August 1, 2023, ~11:00 AM. Two RCMP officers, one dwelling, no underlying crime.</p>
+  <h1 class="hero-title case-family">
+    Trommel <span class="v">v.</span> Trommel
+  </h1>
+  <p class="hero-sub case-rcmp">Charter violations arising from a warrantless wellness-call entry. Langley, British Columbia &mdash; August 1, 2023, ~11:00 AM. Two RCMP officers, one dwelling, no underlying crime.</p>
+  <p class="hero-sub case-family">Family tort claims arising from appropriation of personality, intentional infliction of mental suffering, parental negligence, and wrongful eviction. BC Supreme Court &mdash; discovery May 2026 &mdash; basic limit May 2028.</p>
 
-  <div class="clock">
+  <div class="clock case-rcmp">
     <div class="clock-hd">
       <div>
         <div class="lbl">Limitation Clock &middot; Discoverability + s.18 Active</div>
@@ -134,7 +142,7 @@
     </div>
   </div>
 
-  <div class="tristat">
+  <div class="tristat case-rcmp">
     <div class="col">
       <div class="lbl">Floor</div>
       <div class="val tnum">$317<span style="font-size:0.55em;color:var(--muted)">k</span></div>
@@ -149,6 +157,23 @@
       <div class="lbl">Trial ceiling</div>
       <div class="val tnum">$2.25<span style="font-size:0.55em;color:var(--muted)">M</span></div>
       <div class="sub">Ward maxed &middot; punitive granted</div>
+    </div>
+  </div>
+  <div class="tristat case-family">
+    <div class="col">
+      <div class="lbl">Floor</div>
+      <div class="val tnum">$100<span style="font-size:0.55em;color:var(--muted)">k</span></div>
+      <div class="sub">Likeness claim only &middot; minimum</div>
+    </div>
+    <div class="col likely">
+      <div class="lbl">Most likely</div>
+      <div class="val tnum">$300<span style="font-size:0.55em;color:var(--muted)">k&ndash;600k</span></div>
+      <div class="sub">Likeness + recent IIMS survive</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Trial ceiling</div>
+      <div class="val tnum">$1.5<span style="font-size:0.55em;color:var(--muted)">M+</span></div>
+      <div class="sub">All heads &middot; punitive granted</div>
     </div>
   </div>
 
@@ -173,7 +198,7 @@
     <a class="na-call" href="tel:6045917321">604-591-7321 &rarr;</a>
   </div>
 
-  <section class="section">
+  <section class="section case-rcmp">
     <div class="section-hd"><div class="lbl"><b>Facts</b> &middot; cover sheet</div><div class="hint">filed pre-litigation</div></div>
     <div class="facts">
       <div class="row"><div class="k">Date</div><div class="v">August 1, 2023 <em>&middot; ~11:00 AM</em></div></div>
@@ -188,7 +213,21 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section case-family">
+    <div class="section-hd"><div class="lbl"><b>Facts</b> &middot; cover sheet</div><div class="hint">filed pre-litigation</div></div>
+    <div class="facts">
+      <div class="row"><div class="k">Plaintiff</div><div class="v">Joshua Trommel</div></div>
+      <div class="row"><div class="k">Defendants</div><div class="v">Brian Trommel (father) &middot; Christine Trommel (mother)</div></div>
+      <div class="row"><div class="k">Jurisdiction</div><div class="v">BC Supreme Court</div></div>
+      <div class="row"><div class="k">Location</div><div class="v">Langley, BC</div></div>
+      <div class="row"><div class="k">Status</div><div class="v danger">Pre-litigation &middot; counsel selection</div></div>
+      <div class="row"><div class="k">Discovery</div><div class="v">May 2026</div></div>
+      <div class="row"><div class="k">Hard deadline</div><div class="v">May 1, 2028 <em>&middot; 2-yr basic from May 2026 discovery</em></div></div>
+      <div class="row"><div class="k">Core claims</div><div class="v">Appropriation of personality &middot; IIMS &middot; parental negligence &middot; battery &middot; wrongful eviction</div></div>
+    </div>
+  </section>
+
+  <section class="section case-rcmp">
     <div class="section-hd"><div class="lbl"><b>Witness</b> &middot; statement on file</div></div>
     <div class="witness">
       <div class="witness-hd">
@@ -212,11 +251,11 @@
   </section>
 
   <section class="section">
-    <div class="section-hd"><div class="lbl"><b>Legal grounds</b> &middot; 08 stacked breaches</div><div class="hint">tap to expand</div></div>
+    <div class="section-hd"><div class="lbl"><b>Legal grounds</b></div><div class="hint">tap to expand</div></div>
     <div class="grounds" id="grounds-case"></div>
   </section>
 
-  <section class="section">
+  <section class="section case-rcmp">
     <div class="section-hd"><div class="lbl"><b>Pain journal</b> &middot; contemporaneous</div></div>
     <div class="journal-controls">
       <div class="hint" style="font-family:var(--mono);font-size:11px;color:var(--mid)">Daily entries support continuity, causation, and damages quantum.</div>
@@ -238,8 +277,8 @@
 <!-- MONEY TAB -->
 <div class="tab-panel" id="panel-money">
 
-  <section class="section" id="leverage-widget" style="margin-top:32px"></section>
-  <section class="section" id="trajectory" style="margin-top:48px"></section>
+  <section class="section case-rcmp" id="leverage-widget" style="margin-top:32px"></section>
+  <section class="section case-rcmp" id="trajectory" style="margin-top:48px"></section>
 
   <section class="section" style="margin-top:32px">
     <div class="section-hd"><div class="lbl"><b>Outcome scenarios</b> &middot; probability-weighted</div></div>
@@ -253,10 +292,15 @@
         <div class="l-lbl">Stacked total</div>
         <div class="l-val tnum" id="stackTot">$2.25M</div>
       </div>
-      <div class="r">
+      <div class="r case-rcmp">
         <div>Settlement median <b>$800k &ndash; $1.2M</b></div>
         <div>Trial ceiling <b>$2 &ndash; $3M</b></div>
         <div>Floor <b>$317k</b> &middot; Degen 2023 BCSC</div>
+      </div>
+      <div class="r case-family">
+        <div>Most likely <b>$300k &ndash; $600k</b></div>
+        <div>Trial ceiling <b>$1.5M+</b></div>
+        <div>Deadline <b>May 2028</b></div>
       </div>
     </div>
     <div class="stack-toggle">
@@ -271,7 +315,7 @@
     <div id="scaleBands"></div>
   </section>
 
-  <section class="section">
+  <section class="section case-rcmp">
     <div class="section-hd"><div class="lbl"><b>Ward framework</b> &middot; s.24(1) damages doctrine</div></div>
     <div class="prose">
       <p><em>Vancouver (City) v. Ward, 2010 SCC 27</em>: Charter damages serve three functions &mdash; <span class="warn">compensation</span>, <span class="warn">vindication</span>, and <span class="warn">deterrence</span>.</p>
@@ -280,7 +324,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section case-rcmp">
     <div class="section-hd"><div class="lbl"><b>Silence premium</b> &middot; why the AG settles</div></div>
     <div class="prose">
       <p>The AG settles confidentially to suppress precedent, avoid press, kill discovery, and resolve before trial. This is a <em>structural</em> incentive &mdash; not just case-strength pricing.</p>
@@ -337,7 +381,7 @@
     <div class="cl-list" id="checklist"></div>
   </section>
 
-  <section class="section">
+  <section class="section case-rcmp">
     <div class="section-hd"><div class="lbl"><b>Risks</b> &middot; what AG will attack</div></div>
     <div class="risks">
       <div class="risk high"><div class="k">Kill shot</div><div class="v"><strong>Limitation</strong>. Rule 9-5 strike likely. s.8(1)(d) discoverability + s.18 incapacity must <em>both</em> be argued. Anything showing 2023&ndash;2025 functional capacity (taxes, leases, employment, banking, driving) hurts s.18.</div></div>
@@ -349,7 +393,7 @@
   </section>
 
   <section class="section">
-    <div class="section-hd"><div class="lbl"><b>Call script</b> &middot; callback prep</div></div>
+    <div class="section-hd"><div class="lbl"><b>Call script</b></div></div>
     <div class="script-hd">
       <div class="hint" style="font-family:var(--mono);font-size:11px;color:var(--mid)">Read once before each consultation.</div>
       <button class="copy-btn" id="copyScript">Copy</button>
@@ -357,7 +401,7 @@
     <div class="script" id="scriptText"></div>
   </section>
 
-  <section class="section">
+  <section class="section case-rcmp">
     <div class="section-hd"><div class="lbl"><b>Drafts</b> &middot; ready for review</div></div>
     <details class="draft">
       <summary><div class="d-title">Outreach email &middot; standard template</div><div class="d-kind">to counsel</div></summary>
@@ -430,7 +474,7 @@ Strategic: file AFTER counsel reviews. CRCC findings non-binding but persuasive.
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js?v=4"></script>
+<script src="script.js?v=5"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
