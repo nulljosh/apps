@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="44" fill="#0a0a0a"/>
+  <rect x="40" y="70" width="120" height="76" rx="10" fill="none" stroke="#0071e3" stroke-width="5"/>
+  <rect x="40" y="90" width="120" height="14" fill="#0071e3"/>
+  <rect x="52" y="118" width="36" height="14" rx="3" fill="#1a1a1a" stroke="#0071e3" stroke-width="2"/>
+  <rect x="96" y="118" width="52" height="14" rx="3" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+  <circle cx="150" cy="58" r="18" fill="#0071e3"/>
+  <text x="150" y="64" text-anchor="middle" font-family="-apple-system" font-size="18" font-weight="700" fill="white">C</text>
+</svg>

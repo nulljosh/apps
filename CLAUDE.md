@@ -32,6 +32,7 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **nimble** / **nimble-ios** -- Instant answers (macOS/iOS). MenuBarExtra blocked (Tahoe SDK bug).
 - **nyc** / **nyc-ios** -- Times Square colony sim (SpriteKit)
 - **portfolio-ios** -- Portfolio companion
+- **compass-ios** -- Native iOS wrapper for Compass card (TransLink BC). Login, reload, trips, account.
 - **wiretext-ios** -- Unicode wireframe design tool (iOS)
 
 ### macOS (SwiftUI)
