@@ -71,6 +71,14 @@
     .modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--sep);font-weight:600;font-size:17px}
     .modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--blue);padding:0}
     .modal-iframe{flex:1;border:none;width:100%}
+    /* two-step login */
+    .login-steps{width:100%;max-width:380px;overflow:hidden;position:relative}
+    .login-step{width:100%;transition:transform .28s ease,opacity .28s ease}
+    .login-step.hidden-left{transform:translateX(-100%);opacity:0;position:absolute;top:0;left:0;pointer-events:none}
+    .login-step.hidden-right{transform:translateX(100%);opacity:0;position:absolute;top:0;left:0;pointer-events:none}
+    .email-chip{width:100%;padding:14px 16px;font-size:17px;font-family:inherit;background:var(--card);border:1px solid var(--sep);border-radius:12px;color:var(--text);display:flex;align-items:center;gap:8px;cursor:pointer}
+    .email-chip svg{flex-shrink:0;color:var(--blue)}
+    .email-chip span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
   </style>
 </head>
 <body>
@@ -85,12 +93,26 @@
     <rect x="28" y="41" width="10" height="2" rx="1" fill="white" fill-opacity="0.4"/>
   </svg>
   <div class="login-title">Beep</div>
-  <div class="login-sub">Sign in to your Compass Card account</div>
-  <div class="field-group">
-    <input class="field" id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
-    <input class="field" id="password" type="password" placeholder="Password" autocomplete="current-password">
-    <div class="error-msg" id="login-error"></div>
-    <button class="btn-primary" id="signin-btn" onclick="signIn()">Sign In</button>
+  <div class="login-sub" id="login-sub">Sign in to your Compass Card account</div>
+
+  <div class="login-steps">
+    <!-- Step 1: Email -->
+    <div class="login-step field-group" id="step-email">
+      <input class="field" id="email" type="email" placeholder="Email" autocomplete="email" autocapitalize="none">
+      <div class="error-msg"></div>
+      <button class="btn-primary" id="continue-btn" onclick="advanceStep()" disabled>Continue</button>
+    </div>
+
+    <!-- Step 2: Password -->
+    <div class="login-step field-group hidden-right" id="step-password">
+      <button class="email-chip" onclick="retreatStep()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <span id="email-chip-label"></span>
+      </button>
+      <input class="field" id="password" type="password" placeholder="Password" autocomplete="current-password">
+      <div class="error-msg" id="login-error"></div>
+      <button class="btn-primary" id="signin-btn" onclick="signIn()">Sign In</button>
+    </div>
   </div>
 </div>
 
@@ -165,6 +187,37 @@ let dashboard = null, trips = [];
 
 if (token) { showScreen('loading'); loadAll(); }
 
+// ---- two-step login ----
+document.getElementById('email').addEventListener('input', function() {
+  const valid = this.value.includes('@') && this.value.includes('.');
+  document.getElementById('continue-btn').disabled = !valid;
+});
+document.getElementById('email').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); advanceStep(); }
+});
+document.getElementById('password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') signIn();
+});
+
+function advanceStep() {
+  const email = document.getElementById('email').value.trim();
+  if (!email.includes('@')) return;
+  document.getElementById('email-chip-label').textContent = email;
+  document.getElementById('login-sub').textContent = 'Enter your password';
+  document.getElementById('step-email').classList.add('hidden-left');
+  document.getElementById('step-email').classList.remove('hidden-right');
+  document.getElementById('step-password').classList.remove('hidden-right');
+  setTimeout(() => document.getElementById('password').focus(), 300);
+}
+
+function retreatStep() {
+  document.getElementById('login-sub').textContent = 'Sign in to your Compass Card account';
+  document.getElementById('login-error').textContent = '';
+  document.getElementById('step-password').classList.add('hidden-right');
+  document.getElementById('step-email').classList.remove('hidden-left');
+  setTimeout(() => document.getElementById('email').focus(), 300);
+}
+
 async function signIn() {
   const email = document.getElementById('email').value.trim();
   const pw = document.getElementById('password').value;
@@ -199,6 +252,9 @@ function signOut() {
   token = null; dashboard = null; trips = [];
   document.getElementById('email').value = '';
   document.getElementById('password').value = '';
+  document.getElementById('login-sub').textContent = 'Sign in to your Compass Card account';
+  document.getElementById('step-email').classList.remove('hidden-left');
+  document.getElementById('step-password').classList.add('hidden-right');
   showScreen('login');
 }
 
@@ -307,7 +363,7 @@ function closeReload() {
   refresh();
 }
 
-document.getElementById('password').addEventListener('keydown', e => { if (e.key==='Enter') signIn(); });
+
 </script>
 </body>
 </html>
