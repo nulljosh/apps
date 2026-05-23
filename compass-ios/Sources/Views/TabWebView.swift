@@ -11,49 +11,29 @@ struct TabWebView: View {
     @State private var isOffline = false
 
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: .top) {
-                CompassWebView(
-                    url: url,
-                    progress: $progress,
-                    canGoBack: $canGoBack,
-                    isOffline: $isOffline,
-                    actions: actions
-                )
-                .ignoresSafeArea(edges: .bottom)
+        ZStack(alignment: .top) {
+            CompassWebView(
+                url: url,
+                progress: $progress,
+                canGoBack: $canGoBack,
+                isOffline: $isOffline,
+                actions: actions
+            )
 
-                if progress > 0 && progress < 1 {
-                    GeometryReader { geo in
-                        Rectangle()
-                            .fill(Color.accentColor)
-                            .frame(width: geo.size.width * progress, height: 3)
-                            .animation(.linear(duration: 0.15), value: progress)
-                    }
-                    .frame(height: 3)
+            if progress > 0 && progress < 1 {
+                GeometryReader { geo in
+                    Rectangle()
+                        .fill(Color.accentColor)
+                        .frame(width: geo.size.width * progress, height: 3)
+                        .animation(.linear(duration: 0.15), value: progress)
                 }
-
-                if isOffline {
-                    OfflineView {
-                        isOffline = false
-                        actions.reload?()
-                    }
-                }
+                .frame(height: 3)
             }
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItemGroup(placement: .navigationBarLeading) {
-                    if canGoBack {
-                        Button { actions.goBack?() } label: {
-                            Image(systemName: "chevron.left")
-                        }
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button { actions.reload?() } label: {
-                        Image(systemName: "arrow.clockwise")
-                    }
-                    .disabled(isOffline)
+
+            if isOffline {
+                OfflineView {
+                    isOffline = false
+                    actions.reload?()
                 }
             }
         }

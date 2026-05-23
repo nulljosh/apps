@@ -19,13 +19,22 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.compass-ios
       ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-      GENERATE_INFOPLIST_FILE: YES
-      INFOPLIST_KEY_NSAppTransportSecurity: "<dict><key>NSAllowsArbitraryLoads</key><true/></dict>"
     info:
       path: Sources/Info.plist
       properties:
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
   CompassIOSTests:
     type: bundle.unit-test
     platform: iOS
