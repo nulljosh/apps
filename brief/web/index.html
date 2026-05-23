@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
@@ -100,7 +100,7 @@
     <button class="cs-btn active" data-case="rcmp" onclick="setActiveCase('rcmp')">CASE-0001</button>
     <button class="cs-btn" data-case="family" onclick="setActiveCase('family')">CASE-0002</button>
   </div>
-  <div class="strip-pill" id="stripPill" title="Live settlement projection">
+  <div class="strip-pill case-rcmp" id="stripPill" title="Live settlement projection">
     <span id="pillVal">$&mdash;</span>
     <svg id="pillSpark" width="36" height="12" viewBox="0 0 36 12" style="vertical-align:middle;margin-left:6px"><polyline fill="none" stroke="currentColor" stroke-width="1.4" points=""/></svg>
   </div>
@@ -114,7 +114,8 @@
 <header class="hero">
   <div class="hero-marks">
     <div class="l">Case Brief &middot; Volume I</div>
-    <div class="r">Charter ss. 7 &middot; 8 &middot; 9 &middot; 10(b) &middot; 12</div>
+    <div class="r case-rcmp">Charter ss. 7 &middot; 8 &middot; 9 &middot; 10(b) &middot; 12</div>
+    <div class="r case-family">BC Privacy Act s.3 &middot; IIMS &middot; Negligence</div>
   </div>
   <h1 class="hero-title case-rcmp">
     Trommel <span class="v">v.</span> Attorney General of Canada
@@ -189,13 +190,21 @@
 <!-- CASE TAB -->
 <div class="tab-panel active" id="panel-case">
 
-  <div class="next-action">
+  <div class="next-action case-rcmp">
     <div class="na-lbl">Next action</div>
     <div class="na-body">
       <div class="na-title">Active outreach &mdash; awaiting callbacks</div>
       <div class="na-note">Email-first strategy. Voicemail unreliable. 4 firms emailed.</div>
     </div>
     <a class="na-call" href="tel:6045917321">604-591-7321 &rarr;</a>
+  </div>
+  <div class="next-action case-family">
+    <div class="na-lbl">Next action</div>
+    <div class="na-body">
+      <div class="na-title">Law Society BC referral &mdash; find tort counsel</div>
+      <div class="na-note">Ask for civil litigation with intentional torts / appropriation of personality. 30-min free consult.</div>
+    </div>
+    <a class="na-call" href="tel:18006631919">1-800-663-1919 &rarr;</a>
   </div>
 
   <section class="section case-rcmp">
@@ -310,7 +319,7 @@
     <div class="stack-rows" id="stackRows"></div>
   </section>
 
-  <section class="section">
+  <section class="section case-rcmp">
     <div class="section-hd"><div class="lbl"><b>Comparable awards</b> &middot; Canadian &amp; global scale</div></div>
     <div id="scaleBands"></div>
   </section>
@@ -343,7 +352,7 @@
 <!-- ACTIONS TAB -->
 <div class="tab-panel" id="panel-actions">
 
-  <div class="next-action">
+  <div class="next-action case-rcmp">
     <div class="na-lbl">Next action</div>
     <div class="na-body">
       <div class="na-title">Active outreach &mdash; awaiting callbacks</div>
@@ -351,13 +360,21 @@
     </div>
     <a class="na-call" href="tel:6045917321">604-591-7321 &rarr;</a>
   </div>
+  <div class="next-action case-family">
+    <div class="na-lbl">Next action</div>
+    <div class="na-body">
+      <div class="na-title">Law Society BC referral &mdash; find tort counsel</div>
+      <div class="na-note">5 firms listed &middot; none contacted yet</div>
+    </div>
+    <a class="na-call" href="tel:18006631919">1-800-663-1919 &rarr;</a>
+  </div>
 
   <section class="section">
     <div class="section-hd"><div class="lbl"><b>Counsel</b> &middot; prospects ranked</div><div class="hint">tap status to cycle</div></div>
     <div id="lawyers"></div>
   </section>
 
-  <section class="section">
+  <section class="section case-rcmp">
     <div class="section-hd"><div class="lbl"><b>Strategy</b> &middot; pre-retainer</div></div>
     <div class="prose">
       <p>Contact at least 3 lawyers before committing to any one. Compare retainer structures &mdash; contingency terms vary significantly. Do not sign until all consultations are complete.</p>
@@ -474,7 +491,7 @@ Strategic: file AFTER counsel reviews. CRCC findings non-binding but persuasive.
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js?v=5"></script>
+<script src="script.js?v=6"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');

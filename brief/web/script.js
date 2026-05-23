@@ -283,6 +283,9 @@ function setActiveCase(id) {
   webActiveCase = id;
   document.body.dataset.activecase = id;
   document.querySelectorAll('.cs-btn').forEach(b => b.classList.toggle('active', b.dataset.case === id));
+  const f = document.getElementById('stripFile');
+  if (f) f.textContent = id === 'rcmp' ? 'CASE-0001' : 'CASE-0002';
+  document.title = id === 'rcmp' ? 'Brief — Trommel v. AG Canada' : 'Brief — Trommel v. Trommel';
   renderGrounds('grounds-case', '');
   renderGrounds('grounds-money', '2');
   renderScenarios();
@@ -917,15 +920,6 @@ document.getElementById('copyScript').addEventListener('click', function() {
 });
 
 // ===== SUPABASE SYNC (called after auth) =====
-function loadJournalFromDB() {
-  _sb.from('brief_journal').select('*').order('date', { ascending:false }).then(res => {
-    const map = {};
-    JOURNAL_SEED.forEach(e => map[e.date] = e);
-    (res.data||[]).forEach(e => map[e.date] = e);
-    renderJournalEntries(Object.values(map).sort((a,b) => b.date.localeCompare(a.date)));
-  });
-}
-
 function loadChecklistFromDB() {
   _sb.from('brief_checklist').select('*').then(res => {
     (res.data||[]).forEach(r => {
@@ -944,7 +938,7 @@ function loadChecklistFromDB() {
       if (lev) { lev.style.opacity = it.done ? '0.4' : ''; lev.style.textDecoration = it.done ? 'line-through' : ''; }
     });
     updateClProg();
-    renderLeverage();
+    if (webActiveCase === 'rcmp') renderLeverage();
   });
 }
 
@@ -960,7 +954,7 @@ function loadLawyerStatusFromDB() {
       chip.className = 'tag status ' + status;
       chip.textContent = STATUS_LABEL[status];
     });
-    renderLeverage();
+    if (webActiveCase === 'rcmp') renderLeverage();
   });
 }
 
