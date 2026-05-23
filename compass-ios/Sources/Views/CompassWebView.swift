@@ -18,8 +18,8 @@ struct CompassWebView: UIViewRepresentable {
         webView.navigationDelegate = context.coordinator
         webView.scrollView.contentInsetAdjustmentBehavior = .automatic
         webView.allowsBackForwardNavigationGestures = true
-        webView.addObserver(context.coordinator, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
-        webView.addObserver(context.coordinator, forKeyPath: #keyPath(WKWebView.canGoBack), options: .new, context: nil)
+        webView.addObserver(context.coordinator, forKeyPath: "estimatedProgress", options: .new, context: nil)
+        webView.addObserver(context.coordinator, forKeyPath: "canGoBack", options: .new, context: nil)
 
         actions.goBack = { webView.goBack() }
         actions.reload = { webView.reload() }
@@ -37,8 +37,8 @@ struct CompassWebView: UIViewRepresentable {
     }
 
     static func dismantleUIView(_ webView: WKWebView, coordinator: Coordinator) {
-        webView.removeObserver(coordinator, forKeyPath: #keyPath(WKWebView.estimatedProgress))
-        webView.removeObserver(coordinator, forKeyPath: #keyPath(WKWebView.canGoBack))
+        webView.removeObserver(coordinator, forKeyPath: "estimatedProgress")
+        webView.removeObserver(coordinator, forKeyPath: "canGoBack")
     }
 
     final class Coordinator: NSObject, WKNavigationDelegate {
@@ -52,9 +52,9 @@ struct CompassWebView: UIViewRepresentable {
 
         override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
             guard let webView = object as? WKWebView else { return }
-            if keyPath == #keyPath(WKWebView.estimatedProgress) {
+            if keyPath == "estimatedProgress" {
                 Task { @MainActor in self.parent.progress = webView.estimatedProgress }
-            } else if keyPath == #keyPath(WKWebView.canGoBack) {
+            } else if keyPath == "canGoBack" {
                 Task { @MainActor in self.parent.canGoBack = webView.canGoBack }
             }
         }
