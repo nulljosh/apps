@@ -15,8 +15,8 @@ Monorepo for standalone apps and experiments. Each subdirectory is an independen
 | **dose** | Health tracker: drugs, vitamins, biometrics | Web, iOS, watchOS |
 | **epiphany** | Finance + intelligence dashboard | Web, iOS, macOS, watchOS |
 | **grapher** | Desmos-style graphing calculator | Web |
-| **life** / **life-ios** | Conway's Game of Life simulator | macOS, iOS |
-| **lingo** / **lingo-ios** / **lingo-macos** | Language learning: 39 subjects, 330+ questions | Web (PWA), iOS, macOS |
+| **life** / **life-ios** | Personal life summary for therapy — 32 sections, 27 visuals, dual timeline | Web, iOS |
+| **lingo** / **lingo-ios** / **lingo-macos** | Language learning: 39 subjects, 570+ questions | Web (PWA), iOS, macOS |
 | **nimble** / **nimble-ios** / **nimble-web** | Instant answers: DuckDuckGo + Wikipedia + mind-map | macOS, iOS, Web |
 | **nyc** / **nyc-ios** / **nyc-web** | Times Square colony survival sim | macOS, iOS, Web |
 | **parallax** | Head-tracked 3D parallax via webcam + MediaPipe | Web |
