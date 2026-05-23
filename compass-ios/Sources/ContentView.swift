@@ -1,50 +1,37 @@
 import SwiftUI
 
-enum CompassTab: Int, CaseIterable {
-    case home, reload, trips, account
+struct ContentView: View {
+    @EnvironmentObject var session: CompassSession
 
-    var title: String {
-        switch self {
-        case .home: "Home"
-        case .reload: "Reload"
-        case .trips: "Trips"
-        case .account: "Account"
+    var body: some View {
+        Group {
+            switch session.authState {
+            case .unknown, .loggingIn:
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(UIColor.systemBackground))
+            case .loggedOut:
+                LoginView()
+            case .loggedIn:
+                MainTabView()
+            }
         }
-    }
-
-    var icon: String {
-        switch self {
-        case .home: "creditcard.fill"
-        case .reload: "plus.circle.fill"
-        case .trips: "tram.fill"
-        case .account: "person.fill"
-        }
-    }
-
-    var url: URL {
-        let base = "https://www.compasscard.ca"
-        switch self {
-        case .home: return URL(string: base)!
-        case .reload: return URL(string: "\(base)/LoadValue")!
-        case .trips: return URL(string: "\(base)/CardUse")!
-        case .account: return URL(string: "\(base)/MyAccount")!
+        .task {
+            await session.checkAuthState()
         }
     }
 }
 
-struct ContentView: View {
-    @State private var selectedTab = CompassTab.home
-
+struct MainTabView: View {
     var body: some View {
-        TabView(selection: $selectedTab) {
-            ForEach(CompassTab.allCases, id: \.self) { tab in
-                TabWebView(url: tab.url, title: tab.title)
-                    .tabItem {
-                        Label(tab.title, systemImage: tab.icon)
-                    }
-                    .tag(tab)
-            }
+        TabView {
+            DashboardView()
+                .tabItem { Label("Home", systemImage: "creditcard.fill") }
+            TripsView()
+                .tabItem { Label("Trips", systemImage: "tram.fill") }
+            AccountView()
+                .tabItem { Label("Account", systemImage: "person.fill") }
         }
-        .accentColor(Color(red: 0, green: 0.44, blue: 0.89))
+        .tint(Color(red: 0, green: 0.44, blue: 0.89))
     }
 }

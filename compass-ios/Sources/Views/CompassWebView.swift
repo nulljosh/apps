@@ -3,7 +3,6 @@ import WebKit
 
 struct CompassWebView: UIViewRepresentable {
     let url: URL
-    @EnvironmentObject var session: CompassSession
     @Binding var progress: Double
     @Binding var canGoBack: Bool
     @Binding var isOffline: Bool
@@ -14,7 +13,11 @@ struct CompassWebView: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView(frame: .zero, configuration: session.webViewConfig)
+        let config = WKWebViewConfiguration()
+        config.websiteDataStore = .default()
+        config.allowsInlineMediaPlayback = true
+
+        let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
         webView.scrollView.contentInsetAdjustmentBehavior = .automatic
         webView.allowsBackForwardNavigationGestures = true
@@ -60,36 +63,18 @@ struct CompassWebView: UIViewRepresentable {
         }
 
         func webView(_ webView: WKWebView, didStartProvisionalNavigation _: WKNavigation!) {
-            Task { @MainActor in
-                self.parent.session.isLoading = true
-                self.parent.isOffline = false
-            }
+            Task { @MainActor in self.parent.isOffline = false }
         }
 
-        func webView(_ webView: WKWebView, didFinish _: WKNavigation!) {
-            Task { @MainActor in
-                self.parent.session.isLoading = false
-                self.parent.session.pageTitle = webView.title ?? ""
-            }
-        }
-
-        func webView(_ webView: WKWebView, didFail _: WKNavigation!, withError error: Error) {
-            Task { @MainActor in self.parent.session.isLoading = false }
-        }
+        func webView(_ webView: WKWebView, didFail _: WKNavigation!, withError _: Error) {}
 
         func webView(_ webView: WKWebView, didFailProvisionalNavigation _: WKNavigation!, withError error: Error) {
-            let nsErr = error as NSError
-            let isNetworkError = nsErr.domain == NSURLErrorDomain && [
-                NSURLErrorNotConnectedToInternet,
-                NSURLErrorNetworkConnectionLost,
-                NSURLErrorTimedOut,
-                NSURLErrorCannotFindHost,
-                NSURLErrorCannotConnectToHost
-            ].contains(nsErr.code)
-            Task { @MainActor in
-                self.parent.session.isLoading = false
-                self.parent.isOffline = isNetworkError
-            }
+            let e = error as NSError
+            let isNetwork = e.domain == NSURLErrorDomain && [
+                NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost,
+                NSURLErrorTimedOut, NSURLErrorCannotFindHost, NSURLErrorCannotConnectToHost
+            ].contains(e.code)
+            Task { @MainActor in self.parent.isOffline = isNetwork }
         }
     }
 }
