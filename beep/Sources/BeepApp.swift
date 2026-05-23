@@ -1,8 +1,8 @@
 import SwiftUI
 
 @main
-struct CompassApp: App {
-    @StateObject private var session = CompassSession()
+struct BeepApp: App {
+    @StateObject private var session = BeepSession()
 
     var body: some Scene {
         WindowGroup {

@@ -1,7 +1,7 @@
 import SwiftUI
 import WebKit
 
-struct CompassWebView: UIViewRepresentable {
+struct BeepWebView: UIViewRepresentable {
     let url: URL
     @Binding var progress: Double
     @Binding var canGoBack: Bool
@@ -45,10 +45,10 @@ struct CompassWebView: UIViewRepresentable {
     }
 
     final class Coordinator: NSObject, WKNavigationDelegate {
-        var parent: CompassWebView
+        var parent: BeepWebView
         var lastURL: URL?
 
-        init(_ parent: CompassWebView) {
+        init(_ parent: BeepWebView) {
             self.parent = parent
             self.lastURL = parent.url
         }

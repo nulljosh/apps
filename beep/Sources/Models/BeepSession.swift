@@ -2,7 +2,7 @@ import Foundation
 import WebKit
 
 @MainActor
-final class CompassSession: ObservableObject {
+final class BeepSession: ObservableObject {
     @Published var authState: AuthState = .unknown
     @Published var cardInfo: CardInfo?
     @Published var trips: [TripRecord] = []
@@ -21,7 +21,7 @@ final class CompassSession: ObservableObject {
 
     func checkAuthState() async {
         await loadPage(URL(string: "https://www.compasscard.ca/")!)
-        let loggedIn = (try? await hiddenWebView.evaluateJavaScript(CompassExtractor.isLoggedIn)) as? Bool ?? false
+        let loggedIn = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.isLoggedIn)) as? Bool ?? false
         if loggedIn {
             await loadDashboard()
         } else {
@@ -29,17 +29,26 @@ final class CompassSession: ObservableObject {
         }
     }
 
-    func handleLoginSuccess() async {
+    func submitLogin(email: String, password: String) async -> Result<Void, LoginError> {
         authState = .loggingIn
-        await loadPage(URL(string: "https://www.compasscard.ca/")!)
+        await loadPage(URL(string: "https://www.compasscard.ca/SignIn")!)
+        _ = try? await hiddenWebView.evaluateJavaScript(BeepExtractor.fillLogin(email: email, password: password))
+        await navDelegate.waitForLoad()
+        let url = hiddenWebView.url?.absoluteString ?? ""
+        if url.lowercased().contains("signin") {
+            authState = .loggedOut
+            let msg = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.loginErrorMessage)) as? String
+            return .failure(LoginError(message: msg?.isEmpty == false ? msg! : "Invalid email or password."))
+        }
         await loadDashboard()
         await loadTrips()
+        return .success(())
     }
 
     func loadDashboard() async {
         isRefreshing = true
         defer { isRefreshing = false }
-        guard let jsonStr = (try? await hiddenWebView.evaluateJavaScript(CompassExtractor.cardInfoJSON)) as? String,
+        guard let jsonStr = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.cardInfoJSON)) as? String,
               let data = jsonStr.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
         let info = CardInfo(
@@ -53,7 +62,7 @@ final class CompassSession: ObservableObject {
 
     func loadTrips() async {
         await loadPage(URL(string: "https://www.compasscard.ca/CardUse")!)
-        if let jsonStr = (try? await hiddenWebView.evaluateJavaScript(CompassExtractor.tripsJSON)) as? String,
+        if let jsonStr = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.tripsJSON)) as? String,
            let data = jsonStr.data(using: .utf8),
            let rows = try? JSONSerialization.jsonObject(with: data) as? [[String: String]] {
             trips = rows.map {
@@ -74,6 +83,7 @@ final class CompassSession: ObservableObject {
     }
 
     func signOut() async {
+        KeychainManager.deleteCredentials()
         let store = WKWebsiteDataStore.default()
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
         let records = await store.dataRecords(ofTypes: types)

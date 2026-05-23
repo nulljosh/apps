@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ReloadSheetView: View {
-    @EnvironmentObject var session: CompassSession
+    @EnvironmentObject var session: BeepSession
     @Environment(\.dismiss) private var dismiss
     @StateObject private var actions = WebViewActions()
     @State private var progress: Double = 0
@@ -11,7 +11,7 @@ struct ReloadSheetView: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .top) {
-                CompassWebView(
+                BeepWebView(
                     url: URL(string: "https://www.compasscard.ca/LoadValue")!,
                     progress: $progress,
                     canGoBack: $canGoBack,

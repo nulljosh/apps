@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TripsView: View {
-    @EnvironmentObject var session: CompassSession
+    @EnvironmentObject var session: BeepSession
 
     var body: some View {
         NavigationStack {
@@ -75,7 +75,7 @@ struct TripRow: View {
 }
 
 struct EmptyTripsView: View {
-    @EnvironmentObject var session: CompassSession
+    @EnvironmentObject var session: BeepSession
 
     var body: some View {
         VStack(spacing: 16) {

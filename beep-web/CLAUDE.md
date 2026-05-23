@@ -1,4 +1,4 @@
-# Compass (Web PWA)
+# Beep Web
 
 Single-file PWA wrapper for compasscard.ca.
 
@@ -18,5 +18,5 @@ Single-file PWA wrapper for compasscard.ca.
 ## Deploy
 
 ```sh
-cd apps/compass && npx vercel --prod
+cd apps/beep-web && npx vercel --prod
 ```

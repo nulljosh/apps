@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AccountView: View {
-    @EnvironmentObject var session: CompassSession
+    @EnvironmentObject var session: BeepSession
     @State private var showSignOutConfirm = false
 
     var body: some View {

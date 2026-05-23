@@ -1,7 +1,7 @@
 {
-  "name": "Compass Card",
-  "short_name": "Compass",
-  "description": "Native wrapper for Compass card (TransLink BC)",
+  "name": "Beep",
+  "short_name": "Beep",
+  "description": "Beep — TransLink Compass card companion",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f2f2f7",

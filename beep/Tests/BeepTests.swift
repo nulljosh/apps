@@ -1,7 +1,7 @@
 import XCTest
-@testable import CompassIOS
+@testable import Beep
 
-final class CompassTests: XCTestCase {
+final class BeepTests: XCTestCase {
     func testCardInfoEquality() {
         let a = CardInfo(balance: "$10.00", cardNumber: "1234", autoLoadEnabled: false)
         let b = CardInfo(balance: "$10.00", cardNumber: "1234", autoLoadEnabled: false)

@@ -13,6 +13,7 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **grapher** -- Desmos-style graphing calculator. Live: grapher.heyitsmejosh.com.
 - **lingo** -- Language learning (vanilla JS PWA)
 - **nimble-web** -- Instant answers + web search with mind-map (Vite + React). Live: nimble.heyitsmejosh.com.
+- **beep-web** -- Beep PWA (iframe wrapper for compasscard.ca). Single-file HTML. Deploy: `cd apps/beep-web && npx vercel --prod`.
 - **nyc-web** -- Times Square colony sim (Canvas). Live: nyc.heyitsmejosh.com. Separate Vercel project — deploy with `cd apps/nyc-web && npx vercel --prod`.
 - **parallax** -- Head-tracked 3D parallax via webcam + MediaPipe. Static HTML.
 - **roost** -- Zillow clone for BC real estate. Vite + React PWA + Leaflet map, price pill markers, filters, Supabase auth. Live: roost.heyitsmejosh.com. Next: real BC listings scraper, agent profiles, price history, saved searches.
@@ -32,7 +33,7 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **nimble** / **nimble-ios** -- Instant answers (macOS/iOS). MenuBarExtra blocked (Tahoe SDK bug).
 - **nyc** / **nyc-ios** -- Times Square colony sim (SpriteKit)
 - **portfolio-ios** -- Portfolio companion
-- **compass-ios** -- Native iOS wrapper for Compass card (TransLink BC). Login, reload, trips, account.
+- **beep** -- Native SwiftUI iOS app for TransLink Compass card. Native login (hidden WKWebView + JS injection), Face ID, balance/trips dashboard, reload sheet.
 - **wiretext-ios** -- Unicode wireframe design tool (iOS)
 
 ### macOS (SwiftUI)

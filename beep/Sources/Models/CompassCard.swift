@@ -21,3 +21,7 @@ enum AuthState: Equatable {
     case loggingIn
     case loggedIn(CardInfo)
 }
+
+struct LoginError: Error {
+    let message: String
+}

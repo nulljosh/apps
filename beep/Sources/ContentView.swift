@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var session: CompassSession
+    @EnvironmentObject var session: BeepSession
 
     var body: some View {
         Group {

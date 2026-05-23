@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @EnvironmentObject var session: CompassSession
+    @EnvironmentObject var session: BeepSession
     @State private var showReload = false
 
     var body: some View {
@@ -36,7 +36,7 @@ struct DashboardView: View {
 }
 
 struct BalanceCardView: View {
-    @EnvironmentObject var session: CompassSession
+    @EnvironmentObject var session: BeepSession
 
     var body: some View {
         ZStack {
@@ -119,7 +119,7 @@ struct ReloadButton: View {
 }
 
 struct RecentTripsSection: View {
-    @EnvironmentObject var session: CompassSession
+    @EnvironmentObject var session: BeepSession
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {

@@ -1,4 +1,4 @@
-name: CompassIOS
+name: Beep
 options:
   bundleIdPrefix: com.nulljosh
   deploymentTarget:
@@ -9,7 +9,7 @@ settings:
   CURRENT_PROJECT_VERSION: "1"
   DEVELOPMENT_TEAM: QMM486NPYC
 targets:
-  CompassIOS:
+  Beep:
     type: application
     platform: iOS
     sources:
@@ -17,13 +17,14 @@ targets:
       - path: Assets.xcassets
         buildPhase: resources
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.compass-ios
+      PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.beep
       ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     info:
       path: Sources/Info.plist
       properties:
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
+        NSFaceIDUsageDescription: "Sign in to your Compass account with Face ID"
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
@@ -35,9 +36,9 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
-  CompassIOSTests:
+  BeepTests:
     type: bundle.unit-test
     platform: iOS
     sources: [Tests]
     dependencies:
-      - target: CompassIOS
+      - target: Beep
