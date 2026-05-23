@@ -1,13 +1,13 @@
 import SwiftUI
 import WebKit
-import Combine
 
 struct CompassWebView: UIViewRepresentable {
     let url: URL
     @EnvironmentObject var session: CompassSession
     @Binding var progress: Double
     @Binding var canGoBack: Bool
-    var onGoBack: (() -> Void)?
+    @Binding var isOffline: Bool
+    var actions: WebViewActions
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -21,17 +21,17 @@ struct CompassWebView: UIViewRepresentable {
         webView.addObserver(context.coordinator, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         webView.addObserver(context.coordinator, forKeyPath: #keyPath(WKWebView.canGoBack), options: .new, context: nil)
 
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
-        webView.load(request)
+        actions.goBack = { webView.goBack() }
+        actions.reload = { webView.reload() }
+
+        webView.load(URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad))
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        if webView.url?.absoluteString != url.absoluteString,
-           context.coordinator.lastURL != url {
+        if context.coordinator.lastURL != url {
             context.coordinator.lastURL = url
-            let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
-            webView.load(request)
+            webView.load(URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad))
         }
         context.coordinator.parent = self
     }
@@ -60,7 +60,10 @@ struct CompassWebView: UIViewRepresentable {
         }
 
         func webView(_ webView: WKWebView, didStartProvisionalNavigation _: WKNavigation!) {
-            Task { @MainActor in self.parent.session.isLoading = true }
+            Task { @MainActor in
+                self.parent.session.isLoading = true
+                self.parent.isOffline = false
+            }
         }
 
         func webView(_ webView: WKWebView, didFinish _: WKNavigation!) {
@@ -72,6 +75,21 @@ struct CompassWebView: UIViewRepresentable {
 
         func webView(_ webView: WKWebView, didFail _: WKNavigation!, withError error: Error) {
             Task { @MainActor in self.parent.session.isLoading = false }
+        }
+
+        func webView(_ webView: WKWebView, didFailProvisionalNavigation _: WKNavigation!, withError error: Error) {
+            let nsErr = error as NSError
+            let isNetworkError = nsErr.domain == NSURLErrorDomain && [
+                NSURLErrorNotConnectedToInternet,
+                NSURLErrorNetworkConnectionLost,
+                NSURLErrorTimedOut,
+                NSURLErrorCannotFindHost,
+                NSURLErrorCannotConnectToHost
+            ].contains(nsErr.code)
+            Task { @MainActor in
+                self.parent.session.isLoading = false
+                self.parent.isOffline = isNetworkError
+            }
         }
     }
 }
