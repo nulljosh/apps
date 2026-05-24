@@ -107,8 +107,10 @@ enum BeepExtractor {
     }
 
     // Returns JSON array: [{ date, location, product, amount, balance }]
-    static let tripsJSON = """
-    (function() {
+    // Uses callAsyncJavaScript — polls every 200ms up to 5s for SPA-rendered table rows
+    static let tripsJSONAsync = """
+    var attempts = 0;
+    while (attempts < 25) {
         var rows = [];
         document.querySelectorAll('table tbody tr').forEach(function(tr) {
             var cells = tr.querySelectorAll('td');
@@ -122,7 +124,10 @@ enum BeepExtractor {
                 });
             }
         });
-        return JSON.stringify(rows);
-    })()
+        if (rows.length > 0) return JSON.stringify(rows);
+        await new Promise(function(r) { setTimeout(r, 200); });
+        attempts++;
+    }
+    return JSON.stringify([]);
     """
 }

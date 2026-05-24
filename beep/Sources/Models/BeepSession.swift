@@ -24,9 +24,16 @@ final class BeepSession: ObservableObject {
         let loggedIn = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.isLoggedIn)) as? Bool ?? false
         if loggedIn {
             await loadDashboard()
-        } else {
-            authState = .loggedOut
+            return
         }
+        // Auto-login with Keychain + biometrics — no LoginView flash
+        if KeychainManager.hasCredentials,
+           await BiometricAuth.authenticate(),
+           let creds = try? KeychainManager.loadCredentials() {
+            let result = await submitLogin(email: creds.email, password: creds.password)
+            if case .success = result { return }
+        }
+        authState = .loggedOut
     }
 
     func submitLogin(email: String, password: String) async -> Result<Void, LoginError> {
@@ -61,10 +68,14 @@ final class BeepSession: ObservableObject {
     }
 
     func loadTrips() async {
+        guard !isRefreshing else { return }
         isRefreshing = true
         defer { isRefreshing = false }
         await loadPage(URL(string: "https://www.compasscard.ca/CardUse")!)
-        if let jsonStr = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.tripsJSON)) as? String,
+        // Use callAsyncJavaScript to poll until the SPA renders the trips table
+        if let jsonStr = try? await hiddenWebView.callAsyncJavaScript(
+            BeepExtractor.tripsJSONAsync, arguments: [:], in: nil, in: .page
+        ) as? String,
            let data = jsonStr.data(using: .utf8),
            let rows = try? JSONSerialization.jsonObject(with: data) as? [[String: String]] {
             trips = rows.map {
@@ -77,6 +88,7 @@ final class BeepSession: ObservableObject {
     }
 
     func refresh() async {
+        guard !isRefreshing else { return }
         isRefreshing = true
         defer { isRefreshing = false }
         await loadPage(URL(string: "https://www.compasscard.ca/")!)
@@ -103,11 +115,11 @@ final class BeepSession: ObservableObject {
 
 @MainActor
 final class WebNavDelegate: NSObject, WKNavigationDelegate {
-    private var continuation: CheckedContinuation<Void, Never>?
+    private var continuations: [CheckedContinuation<Void, Never>] = []
 
     func waitForLoad() async {
         await withCheckedContinuation { cont in
-            continuation = cont
+            continuations.append(cont)
         }
     }
 
@@ -124,7 +136,7 @@ final class WebNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     private func resume() {
-        continuation?.resume()
-        continuation = nil
+        guard !continuations.isEmpty else { return }
+        continuations.removeFirst().resume()
     }
 }
