@@ -2,16 +2,18 @@ import SwiftUI
 
 struct ActionsTabView: View {
     @Environment(Store.self) private var store
-    private var rcmp: Bool { store.activeCase == .rcmp }
+    private var rcmp: Bool  { store.activeCase == .rcmp }
+    private var muni: Bool  { store.activeCase == .muni }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 22) {
+                    if muni { NoticeCardView() }
                     lawyersSection
                     strategySection
                     timelineSection
-                    SectionCard("Evidence checklist") { ChecklistView() }
+                    SectionCard("Evidence checklist", roman: "§13") { ChecklistView() }
                     if rcmp {
                         CallScriptView(text: callScript, title: "Callback prep")
                         CallScriptView(text: outreachEmail, title: "Outreach email")
@@ -19,6 +21,9 @@ struct ActionsTabView: View {
                         evidenceGapsSection
                         draftsSection
                         callbackLogSection
+                    } else if muni {
+                        CallScriptView(text: muniCallScript, title: "Notice draft + lawyer pitch")
+                        muniRisksSection
                     } else {
                         CallScriptView(text: familyCallScript, title: "Outreach script")
                         familyRisksSection
@@ -54,7 +59,21 @@ struct ActionsTabView: View {
     private var lawyersSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Lawyers").font(.system(size:10,weight:.bold)).tracking(1.4).textCase(.uppercase).foregroundStyle(.secondary).padding(.horizontal,4)
-            ForEach(rcmp ? caseLawyers : familyCaseLawyers) { LawyerCardView(lawyer: $0) }
+            let lawyers: [Lawyer] = {
+                switch store.activeCase { case .rcmp: return caseLawyers; case .family: return familyCaseLawyers; case .muni: return muniCaseLawyers }
+            }()
+            ForEach(lawyers) { LawyerCardView(lawyer: $0) }
+        }
+    }
+
+    private var muniRisksSection: some View {
+        SectionCard("Risks — what Surrey will argue") {
+            VStack(alignment:.leading,spacing:10) {
+                risk("Notice missed (kill shot).", "If the 2-month window under Community Charter s.285 passes without written notice, the claim is barred — full stop. No lawyer can fix this.", .briefDanger)
+                risk("Policy immunity.", "Surrey argues the hazard was a policy/budget decision. Counter: post-Marchi 2021 SCC, operational maintenance failures aren't shielded.", .briefWarn)
+                risk("Open and obvious.", "Surrey argues the hazard was visible and plaintiff assumed the risk. Counter: Waldick v. Malcolm holds occupiers must address known hazards regardless.", .briefWarn)
+                risk("Minor injury cap.", "Road rash is classified as a minor injury under BC tort law — $5,500 cap on pain/suffering. Get a GP to document any joint or bone involvement to change classification.", .briefWarn)
+            }
         }
     }
 
@@ -70,6 +89,13 @@ struct ActionsTabView: View {
                         .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
                     Text("Be expensive to fight quietly. Each press-capable lawyer contact, each documented evidence piece, each Charter ground formally pleaded raises the AG's internal cost of suppressing this case publicly.")
                         .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+                } else if store.activeCase == .muni {
+                    Text("Do these in order: (1) send the s.285 notice today — registered mail is sufficient; (2) book a free PI consult through Law Society BC; (3) let the lawyer send the demand to Surrey Risk Management.")
+                        .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
+                    Text("PI lawyers in BC take slip-and-fall municipal claims on contingency. No upfront cost. They know how Surrey's risk team prices claims and will handle the notice if you haven't sent it yet.")
+                        .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+                    Text("The evidence is solid: two angles of the hazard plus the injury photo. Add a GP visit for injury documentation on record. That's a clean file.")
+                        .font(.system(size:11,design:.monospaced)).foregroundStyle(.briefWarn).lineSpacing(3)
                 } else {
                     Text("Contact a civil litigation lawyer specializing in intentional torts and/or appropriation of personality. Call Law Society BC referral first — 1-800-663-1919.")
                         .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
@@ -85,7 +111,9 @@ struct ActionsTabView: View {
     private var timelineSection: some View {
         SectionCard("Timeline") {
             VStack(spacing: 0) {
-                let timeline = rcmp ? caseTimeline : familyCaseTimeline
+                let timeline: [TimelineStep] = {
+                    switch store.activeCase { case .rcmp: return caseTimeline; case .family: return familyCaseTimeline; case .muni: return muniCaseTimeline }
+                }()
                 ForEach(timeline) { step in
                     HStack(alignment: .top, spacing: 14) {
                         VStack(spacing: 0) {

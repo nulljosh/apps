@@ -4,10 +4,15 @@ struct MoneyTabView: View {
     @Environment(Store.self) private var store
     @State private var barsVisible = false
 
-    var scenarios:   [Scenario]    { store.activeCase == .rcmp ? caseScenarios  : familyCaseScenarios }
-    var activeDamageHeads: [DamageHead] { store.activeCase == .rcmp ? damageHeads : familyDamageHeads }
+    var scenarios: [Scenario] {
+        switch store.activeCase { case .rcmp: return caseScenarios; case .family: return familyCaseScenarios; case .muni: return muniCaseScenarios }
+    }
+    var activeDamageHeads: [DamageHead] {
+        switch store.activeCase { case .rcmp: return damageHeads; case .family: return familyDamageHeads; case .muni: return muniDamageHeads }
+    }
 
     private var rcmp: Bool { store.activeCase == .rcmp }
+    private var muni: Bool { store.activeCase == .muni }
 
     var body: some View {
         NavigationStack {
@@ -91,7 +96,29 @@ struct MoneyTabView: View {
                         }
                     }
 
-                    if rcmp {
+                    if muni {
+                        SectionCard("Why Surrey settles") {
+                            Text("Post-Marchi 2021 SCC, municipalities cannot hide behind policy immunity for day-to-day maintenance failures. A sunken, gravel-displaced sidewalk panel is an operational defect — not a budget allocation decision.\n\nVancouver paid $7.8M in sidewalk-fall settlements over 5 years. Individual claims typically resolve within 6 months if properly noticed and documented. A PI lawyer on contingency costs nothing upfront.\n\nThe notice requirement (Community Charter s.285) is the only hard gate. Miss the 2-month window and the claim dies regardless of merit.")
+                                .font(.system(size:12)).foregroundStyle(.secondary).lineSpacing(4)
+                        }
+                        SectionCard("Damages claimed") {
+                            VStack(spacing: 0) {
+                                ForEach(activeDamageHeads) { h in
+                                    HStack(alignment: .top, spacing: 12) {
+                                        Text(h.head).font(.system(size:13,weight:.semibold)).frame(maxWidth:.infinity,alignment:.leading).lineSpacing(2)
+                                        Text(h.range).font(.system(size:11,weight:.semibold)).foregroundStyle(.briefWarn).frame(width:90,alignment:.trailing)
+                                    }
+                                    .padding(.vertical,11)
+                                    Divider()
+                                }
+                                HStack {
+                                    Text("Net range").font(.system(size:11,weight:.bold)).foregroundStyle(.secondary)
+                                    Spacer()
+                                    Text("$8k–14k").font(.system(size:18,weight:.bold,design:.rounded)).foregroundStyle(.briefGreen)
+                                }.padding(.top,14)
+                            }
+                        }
+                    } else if rcmp {
                         SectionCard("Comparable cases · Canada") {
                             VStack(spacing: 0) {
                                 ForEach(caseComparables) { c in

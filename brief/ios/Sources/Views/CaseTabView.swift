@@ -4,37 +4,33 @@ struct CaseTabView: View {
     @Environment(Store.self) private var store
     @State private var expandedGround: String? = nil
 
-    var facts:     [CaseFact]  { store.activeCase == .rcmp ? caseFacts      : familyCaseFacts }
-    var witnesses: [Witness]   { store.activeCase == .rcmp ? caseWitnesses  : familyCaseWitnesses }
-    var grounds:   [Ground]    { store.activeCase == .rcmp ? caseGrounds    : familyCaseGrounds }
-
-    var settlementLabel: String { store.activeCase == .rcmp ? "$1,000,000"          : "$300k–$600k" }
-    var settlementRange: String { store.activeCase == .rcmp ? "$800k–$1.5M full leverage · $2–3M trial ceiling" : "$300k–600k most likely · $1.5–2M trial ceiling" }
-    var navTitle:        String { store.activeCase == .rcmp ? "Trommel v. AG Canada" : "Trommel v. Trommel" }
+    private var facts:     [CaseFact] {
+        switch store.activeCase { case .rcmp: return caseFacts; case .family: return familyCaseFacts; case .muni: return muniCaseFacts }
+    }
+    private var witnesses: [Witness] {
+        switch store.activeCase { case .rcmp: return caseWitnesses; case .family: return familyCaseWitnesses; case .muni: return muniCaseWitnesses }
+    }
+    private var grounds:   [Ground] {
+        switch store.activeCase { case .rcmp: return caseGrounds; case .family: return familyCaseGrounds; case .muni: return muniCaseGrounds }
+    }
+    private var navTitle: String { store.activeCase.title }
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 22) {
+                VStack(spacing: 20) {
+                    // Limitation / notice banner
                     LimitationBannerView()
 
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Likely settlement")
-                            .font(.system(size: 10, weight: .bold))
-                            .tracking(1.2)
-                            .textCase(.uppercase)
-                            .foregroundStyle(.secondary)
-                        Text(settlementLabel)
-                            .font(.system(size: 28, weight: .bold, design: .rounded))
-                        Text(settlementRange)
-                            .font(.system(size: 11, design: .monospaced))
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(18)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+                    // Value belt
+                    ValueBeltView()
 
-                    section("Facts") {
+                    // Muni notice card
+                    if store.activeCase == .muni {
+                        NoticeCardView()
+                    }
+
+                    section("Facts", roman: "§1", hint: "cover sheet") {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 14) {
                             ForEach(facts) { fact in
                                 VStack(alignment: .leading, spacing: 4) {
@@ -45,6 +41,7 @@ struct CaseTabView: View {
                                         .foregroundStyle(.secondary)
                                     Text(fact.value)
                                         .font(.system(size: 13, weight: .semibold))
+                                        .fixedSize(horizontal: false, vertical: true)
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .gridCellColumns(fact.fullWidth ? 2 : 1)
@@ -55,23 +52,21 @@ struct CaseTabView: View {
                     }
 
                     if !witnesses.isEmpty {
-                        section("Witnesses") {
-                            ForEach(witnesses) { witness in
-                                WitnessCardView(witness: witness)
-                            }
+                        section("Witnesses", roman: "§2") {
+                            ForEach(witnesses) { WitnessCardView(witness: $0) }
                         }
                     }
 
-                    section("Legal grounds", hint: "tap to expand") {
+                    section("Legal grounds", roman: "§3", hint: "tap to expand") {
                         VStack(spacing: 6) {
-                            ForEach(grounds) { ground in
-                                GroundRowView(ground: ground, expandedId: $expandedGround)
-                            }
+                            ForEach(grounds) { GroundRowView(ground: $0, expandedId: $expandedGround) }
                         }
                     }
 
-                    section("Pain journal") {
-                        JournalView()
+                    if store.activeCase == .rcmp {
+                        section("Pain journal", roman: "§4", hint: "supports continuity") {
+                            JournalView()
+                        }
                     }
                 }
                 .padding(.horizontal, 16)
@@ -81,42 +76,37 @@ struct CaseTabView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        ForEach(CaseID.allCases) { c in
-                            Button { store.activeCase = c } label: {
-                                if store.activeCase == c { Label(c.title, systemImage: "checkmark") }
-                                else { Text(c.title) }
-                            }
-                        }
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text(store.activeCase.rawValue)
-                                .font(.system(size: 11, weight: .bold, design: .monospaced))
-                            Image(systemName: "chevron.up.chevron.down")
-                                .font(.system(size: 10))
-                        }
-                        .foregroundStyle(.secondary)
-                    }
+                    casePicker
                 }
             }
         }
     }
 
+    private var casePicker: some View {
+        Menu {
+            ForEach(CaseID.allCases) { c in
+                Button { store.activeCase = c } label: {
+                    if store.activeCase == c { Label(c.title, systemImage: "checkmark") }
+                    else { Text(c.title) }
+                }
+            }
+        } label: {
+            HStack(spacing: 4) {
+                Text(store.activeCase.rawValue)
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                Image(systemName: "chevron.up.chevron.down").font(.system(size: 10))
+            }
+            .foregroundStyle(.secondary)
+        }
+    }
+
     @ViewBuilder
-    private func section<Content: View>(_ label: String, hint: String? = nil, @ViewBuilder content: () -> Content) -> some View {
+    private func section<C: View>(_ label: String, roman: String? = nil, hint: String? = nil, @ViewBuilder content: () -> C) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
-                Text(label)
-                    .font(.system(size: 10, weight: .bold))
-                    .tracking(1.4)
-                    .textCase(.uppercase)
-                    .foregroundStyle(.secondary)
-                if let hint {
-                    Spacer()
-                    Text(hint)
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(.tertiary)
-                }
+                if let roman { Text(roman).font(.system(size: 11, weight: .medium, design: .monospaced)).foregroundStyle(Color.briefDanger) }
+                Text(label).font(.system(size: 10, weight: .bold)).tracking(1.4).textCase(.uppercase).foregroundStyle(.secondary)
+                if let hint { Spacer(); Text(hint).font(.system(size: 10, design: .monospaced)).foregroundStyle(.tertiary) }
             }
             .padding(.horizontal, 4)
             content()

@@ -47,7 +47,7 @@ final class Store {
     var signInError: String?
     var activeCase: CaseID = .rcmp
     private(set) var journalEntries: [JournalEntry] = []
-    private(set) var completedItems: Set<Int> = [1, 8, 9, 10, 13]
+    private(set) var completedItems: Set<Int> = [1, 8, 9, 10, 13, 201]
     private(set) var lawyerStatuses: [String: String] = [:]
     private var userId: String?
 
@@ -156,7 +156,7 @@ final class Store {
     @MainActor private func loadChecklist() async {
         let rows: [BriefChecklistRow]? = try? await sbClient
             .from("brief_checklist").select().execute().value
-        var done: Set<Int> = [1, 8, 9, 10, 13]
+        var done: Set<Int> = [1, 8, 9, 10, 13, 201]
         (rows ?? []).forEach { if $0.completed { done.insert($0.item_index) } else { done.remove($0.item_index) } }
         completedItems = done
     }

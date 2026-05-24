@@ -13,5 +13,8 @@ struct ContentView: View {
             ActionsTabView()
                 .tabItem { Label("Actions", systemImage: "checklist") }
         }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            ClassificationBannerView()
+        }
     }
 }

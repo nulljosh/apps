@@ -45,7 +45,7 @@ final class Store {
     var signInError: String?
     var activeCase: CaseID = .rcmp
     private(set) var journalEntries: [JournalEntry] = []
-    private(set) var completedItems: Set<Int> = [1, 8, 9, 10, 13]
+    private(set) var completedItems: Set<Int> = [1, 8, 9, 10, 13, 201]
     private(set) var lawyerStatuses: [String: String] = [:]
     private var userId: String?
 

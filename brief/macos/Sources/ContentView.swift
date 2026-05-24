@@ -28,7 +28,7 @@ struct ContentView: View {
                             }
                         }
                     } label: {
-                        Label(store.activeCase.title, systemImage: "folder")
+                        Label(store.activeCase.rawValue, systemImage: "folder")
                     }
                 }
             }
@@ -38,6 +38,9 @@ struct ContentView: View {
             case "actions": ActionsTabView()
             default:        CaseTabView()
             }
+        }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            ClassificationBannerView()
         }
     }
 }

@@ -2,38 +2,56 @@ import SwiftUI
 
 struct ActionsTabView: View {
     @Environment(Store.self) private var store
-    private var rcmp: Bool { store.activeCase == .rcmp }
+    private var rcmp: Bool  { store.activeCase == .rcmp }
+    private var muni: Bool  { store.activeCase == .muni }
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 22) {
-                lawyersSection
-                strategySection
-                timelineSection
-                SectionCard("Evidence checklist") { ChecklistView() }
-                if rcmp {
-                    CallScriptView(text: callScript, title: "Callback prep")
-                    CallScriptView(text: outreachEmail, title: "Outreach email")
-                    risksSection
-                    evidenceGapsSection
-                    draftsSection
-                    callbackLogSection
-                } else {
-                    CallScriptView(text: familyCallScript, title: "Outreach script")
-                    familyRisksSection
-                    familyEvidenceSection
+                VStack(spacing: 22) {
+                    if muni { NoticeCardView() }
+                    lawyersSection
+                    strategySection
+                    timelineSection
+                    SectionCard("Evidence checklist", roman: "§13") { ChecklistView() }
+                    if rcmp {
+                        CallScriptView(text: callScript, title: "Callback prep")
+                        CallScriptView(text: outreachEmail, title: "Outreach email")
+                        risksSection
+                        evidenceGapsSection
+                        draftsSection
+                        callbackLogSection
+                    } else if muni {
+                        CallScriptView(text: muniCallScript, title: "Notice draft + lawyer pitch")
+                        muniRisksSection
+                    } else {
+                        CallScriptView(text: familyCallScript, title: "Outreach script")
+                        familyRisksSection
+                        familyEvidenceSection
+                    }
                 }
+                .padding(.horizontal, 16).padding(.bottom, 32)
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 32)
-        }
-        .navigationTitle("Actions")
+            .navigationTitle("Actions")
     }
 
     private var lawyersSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Lawyers").font(.system(size:10,weight:.bold)).tracking(1.4).textCase(.uppercase).foregroundStyle(.secondary).padding(.horizontal,4)
-            ForEach(rcmp ? caseLawyers : familyCaseLawyers) { LawyerCardView(lawyer: $0) }
+            let lawyers: [Lawyer] = {
+                switch store.activeCase { case .rcmp: return caseLawyers; case .family: return familyCaseLawyers; case .muni: return muniCaseLawyers }
+            }()
+            ForEach(lawyers) { LawyerCardView(lawyer: $0) }
+        }
+    }
+
+    private var muniRisksSection: some View {
+        SectionCard("Risks — what Surrey will argue") {
+            VStack(alignment:.leading,spacing:10) {
+                risk("Notice missed (kill shot).", "If the 2-month window under Community Charter s.285 passes without written notice, the claim is barred — full stop. No lawyer can fix this.", .briefDanger)
+                risk("Policy immunity.", "Surrey argues the hazard was a policy/budget decision. Counter: post-Marchi 2021 SCC, operational maintenance failures aren't shielded.", .briefWarn)
+                risk("Open and obvious.", "Surrey argues the hazard was visible and plaintiff assumed the risk. Counter: Waldick v. Malcolm holds occupiers must address known hazards regardless.", .briefWarn)
+                risk("Minor injury cap.", "Road rash is classified as a minor injury under BC tort law — $5,500 cap on pain/suffering. Get a GP to document any joint or bone involvement to change classification.", .briefWarn)
+            }
         }
     }
 
@@ -45,10 +63,17 @@ struct ActionsTabView: View {
                         .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
                     Text("Basic 2-yr limit expired Aug 1, 2025 — claim survives on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Therapy start May 2026 supports both. Ultimate deadline: Aug 1, 2038. File as soon as counsel confirms.")
                         .font(.system(size:11,design:.monospaced)).foregroundStyle(.briefWarn).lineSpacing(3).fontWeight(.bold)
-                    Text("Call order:\n1. Paul Kent-Snowsell — Kane Shannon & Weiler — 604-591-7321\n2. DLA Law (Ingrid) — Police Misconduct — 604-327-6381\n3. McQuarrie Hunter LLP — Limitation Act — 604-581-7001\n4. Sean Hern Law Corp — 604-684-9151\n5. Cameron Ward — cameronward.com\n6. Arvay Finlay LLP — 604-696-9928\n7. Klein Lawyers — callkleinlawyers.com\n8. Pivot Legal — 604-255-9700 (referrals)\n9. BCCLA Referral — 604-687-2919\n10. CBA BC — 604-687-3221 / info@cbabc.org")
+                    Text("DECLINED: Paul Kent (KSW) May 18 — not taking new cases. DLA Law (Ingrid) May 15 — not able to assist.\n\nPriority referrals from Kent:\n1. Thomas Harding — did Degen case ($317k Surrey RCMP)\n2. Neil Chantler — does this type of case\n\nStill awaiting:\n3. Cameron Ward — cameronward.com\n4. Arvay Finlay LLP — 604-696-9928\n5. Klein Lawyers — callkleinlawyers.com\n6. McQuarrie Hunter LLP — 604-581-7001\n7. Sean Hern Law Corp — 604-684-9151\n8. Pivot Legal — 604-255-9700\n9. BCCLA Referral — 604-687-2919\n10. CBA BC — 604-687-3221 / info@cbabc.org")
                         .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
                     Text("Be expensive to fight quietly. Each press-capable lawyer contact, each documented evidence piece, each Charter ground formally pleaded raises the AG's internal cost of suppressing this case publicly.")
                         .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+                } else if store.activeCase == .muni {
+                    Text("Do these in order: (1) send the s.285 notice today — registered mail is sufficient; (2) book a free PI consult through Law Society BC; (3) let the lawyer send the demand to Surrey Risk Management.")
+                        .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
+                    Text("PI lawyers in BC take slip-and-fall municipal claims on contingency. No upfront cost. They know how Surrey's risk team prices claims and will handle the notice if you haven't sent it yet.")
+                        .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
+                    Text("The evidence is solid: two angles of the hazard plus the injury photo. Add a GP visit for injury documentation on record. That's a clean file.")
+                        .font(.system(size:11,design:.monospaced)).foregroundStyle(.briefWarn).lineSpacing(3)
                 } else {
                     Text("Contact a civil litigation lawyer specializing in intentional torts and/or appropriation of personality. Call Law Society BC referral first — 1-800-663-1919.")
                         .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
@@ -64,7 +89,9 @@ struct ActionsTabView: View {
     private var timelineSection: some View {
         SectionCard("Timeline") {
             VStack(spacing: 0) {
-                let timeline = rcmp ? caseTimeline : familyCaseTimeline
+                let timeline: [TimelineStep] = {
+                    switch store.activeCase { case .rcmp: return caseTimeline; case .family: return familyCaseTimeline; case .muni: return muniCaseTimeline }
+                }()
                 ForEach(timeline) { step in
                     HStack(alignment: .top, spacing: 14) {
                         VStack(spacing: 0) {

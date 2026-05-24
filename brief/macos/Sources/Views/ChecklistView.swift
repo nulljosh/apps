@@ -3,9 +3,16 @@ import SwiftUI
 struct ChecklistView: View {
     @Environment(Store.self) private var store
 
-    private var completedCount: Int { store.completedItems.count }
-    private var total: Int { caseChecklist.count }
-    private var progress: Double { Double(completedCount) / Double(total) }
+    private var checklist: [ChecklistItem] {
+        switch store.activeCase {
+        case .rcmp:   return caseChecklist
+        case .family: return familyCaseChecklist
+        case .muni:   return muniCaseChecklist
+        }
+    }
+    private var completedCount: Int { store.completedItems.filter { id in checklist.contains(where: { $0.id == id }) }.count }
+    private var total: Int { checklist.count }
+    private var progress: Double { total > 0 ? Double(completedCount) / Double(total) : 0 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -29,7 +36,7 @@ struct ChecklistView: View {
             .frame(height: 3)
             .padding(.bottom, 10)
 
-            ForEach(caseChecklist) { item in
+            ForEach(checklist) { item in
                 let done = store.completedItems.contains(item.id)
                 HStack(spacing: 12) {
                     ZStack {
@@ -61,7 +68,7 @@ struct ChecklistView: View {
                             Text("soon")
                                 .font(.system(size: 9, weight: .bold))
                                 .foregroundStyle(.briefWarn)
-}
+                        }
                     }
                 }
                 .contentShape(Rectangle())
@@ -69,7 +76,7 @@ struct ChecklistView: View {
                     Task { await store.toggleItem(item.id) }
                 }
                 .padding(.vertical, 10)
-                if item.id < caseChecklist.count - 1 {
+                if item.id != checklist.last?.id {
                     Divider()
                 }
             }

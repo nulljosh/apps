@@ -3,7 +3,13 @@ import SwiftUI
 struct ChecklistView: View {
     @Environment(Store.self) private var store
 
-    private var checklist: [ChecklistItem] { store.activeCase == .rcmp ? caseChecklist : familyCaseChecklist }
+    private var checklist: [ChecklistItem] {
+        switch store.activeCase {
+        case .rcmp:   return caseChecklist
+        case .family: return familyCaseChecklist
+        case .muni:   return muniCaseChecklist
+        }
+    }
     private var completedCount: Int { store.completedItems.filter { id in checklist.contains(where: { $0.id == id }) }.count }
     private var total: Int { checklist.count }
     private var progress: Double { total > 0 ? Double(completedCount) / Double(total) : 0 }
