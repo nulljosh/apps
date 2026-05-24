@@ -81,6 +81,17 @@ struct MoneyTabView: View {
                                     Spacer()
                                     Text("$2.25M").font(.system(size:12,weight:.bold)).foregroundStyle(.briefGreen)
                                 }
+                            } else if muni {
+                                HStack {
+                                    Text("Floor").font(.system(size:12,weight:.bold))
+                                    Spacer()
+                                    Text("$4k").font(.system(size:12,weight:.bold)).foregroundStyle(.briefWarn)
+                                }.padding(.top,8)
+                                HStack {
+                                    Text("Ceiling").font(.system(size:12,weight:.bold))
+                                    Spacer()
+                                    Text("$12k").font(.system(size:12,weight:.bold)).foregroundStyle(.briefGreen)
+                                }
                             } else {
                                 HStack {
                                     Text("Conservative").font(.system(size:12,weight:.bold))
@@ -160,34 +171,36 @@ struct MoneyTabView: View {
                         }
                     }
 
-                    SectionCard("Damages claimed") {
-                        VStack(spacing: 0) {
-                            let rows: [(String, String)] = rcmp
-                                ? [("General (non-pecuniary)","Pain, suffering, loss of dignity, PTSD"),
-                                   ("Charter damages s.24(1)","Compensatory deterrence per breach"),
-                                   ("Punitive","Egregious, bad-faith state action"),
-                                   ("Future earning capacity","Age 26, 35+ working years. Vocational economist required."),
-                                   ("Special","Treatment, medications, lost income, wrist"),
-                                   ("Aggravated","Deliberate nature of violations")]
-                                : [("General (non-pecuniary)","Pain, suffering, PTSD"),
-                                   ("Appropriation of personality","Commercial value of likeness used without consent"),
-                                   ("IIMS","Intentional infliction of mental suffering — pattern of conduct"),
-                                   ("Battery","Non-consensual bodily modification"),
-                                   ("Lost earning capacity","Age 26, 35+ working years. PTSD from home environment."),
-                                   ("Special","Treatment, therapy, homelessness costs"),
-                                   ("Punitive","Parking lot confrontation + ongoing likeness use after eviction")]
-                            ForEach(rows, id: \.0) { k, v in
-                                HStack(alignment:.top,spacing:12) {
-                                    Text(k).font(.system(size:13,weight:.semibold)).frame(maxWidth:.infinity,alignment:.leading)
-                                    Text(v).font(.system(size:12)).foregroundStyle(.secondary).lineSpacing(2)
-                                }.padding(.vertical,11)
-                                Divider()
+                    if !muni {
+                        SectionCard("Damages claimed") {
+                            VStack(spacing: 0) {
+                                let rows: [(String, String)] = rcmp
+                                    ? [("General (non-pecuniary)","Pain, suffering, loss of dignity, PTSD"),
+                                       ("Charter damages s.24(1)","Compensatory deterrence per breach"),
+                                       ("Punitive","Egregious, bad-faith state action"),
+                                       ("Future earning capacity","Age 26, 35+ working years. Vocational economist required."),
+                                       ("Special","Treatment, medications, lost income, wrist"),
+                                       ("Aggravated","Deliberate nature of violations")]
+                                    : [("General (non-pecuniary)","Pain, suffering, PTSD"),
+                                       ("Appropriation of personality","Commercial value of likeness used without consent"),
+                                       ("IIMS","Intentional infliction of mental suffering — pattern of conduct"),
+                                       ("Battery","Non-consensual bodily modification"),
+                                       ("Lost earning capacity","Age 26, 35+ working years. PTSD from home environment."),
+                                       ("Special","Treatment, therapy, homelessness costs"),
+                                       ("Punitive","Parking lot confrontation + ongoing likeness use after eviction")]
+                                ForEach(rows, id: \.0) { k, v in
+                                    HStack(alignment:.top,spacing:12) {
+                                        Text(k).font(.system(size:13,weight:.semibold)).frame(maxWidth:.infinity,alignment:.leading)
+                                        Text(v).font(.system(size:12)).foregroundStyle(.secondary).lineSpacing(2)
+                                    }.padding(.vertical,11)
+                                    Divider()
+                                }
+                                HStack {
+                                    Text("Net range").font(.system(size:11,weight:.bold)).foregroundStyle(.secondary)
+                                    Spacer()
+                                    Text(rcmp ? "$800k–$2M (median $1M+)" : "$300k–$1.15M").font(.system(size:18,weight:.bold,design:.rounded)).foregroundStyle(.briefGreen)
+                                }.padding(.top,14)
                             }
-                            HStack {
-                                Text("Net range").font(.system(size:11,weight:.bold)).foregroundStyle(.secondary)
-                                Spacer()
-                                Text(rcmp ? "$800k–$2M (median $1M+)" : "$300k–$1.15M").font(.system(size:18,weight:.bold,design:.rounded)).foregroundStyle(.briefGreen)
-                            }.padding(.top,14)
                         }
                     }
                 }

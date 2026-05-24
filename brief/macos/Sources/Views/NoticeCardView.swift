@@ -1,1 +1,1 @@
-../../../../ios/Sources/Views/NoticeCardView.swift
+../../../ios/Sources/Views/NoticeCardView.swift

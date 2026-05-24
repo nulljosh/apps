@@ -1,1 +1,1 @@
-../../../../ios/Sources/Views/ValueBeltView.swift
+../../../ios/Sources/Views/ValueBeltView.swift

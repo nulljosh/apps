@@ -19,6 +19,8 @@ struct CaseTabView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    CoverHeaderView()
+
                     // Limitation / notice banner
                     LimitationBannerView()
 

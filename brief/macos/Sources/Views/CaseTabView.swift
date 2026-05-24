@@ -18,6 +18,7 @@ struct CaseTabView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 22) {
+                CoverHeaderView()
                 LimitationBannerView()
                 ValueBeltView()
 
