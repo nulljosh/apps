@@ -1,24 +1,25 @@
 <img src="icon.svg" width="80">
 
-# Compass iOS
+# Beep
 
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.2.0-blue)
 
-Native iOS wrapper for the Compass card (TransLink BC) website. Persistent login, tab navigation for balance, card reload, trip history, and account management.
+Native iOS app for the TransLink Compass Card. Headless WKWebView handles auth and data extraction; all UI is SwiftUI.
 
 ## Features
 
-- Persistent authentication via `WKWebsiteDataStore.default()`
-- 4-tab navigation: Home, Reload, Trips, Account
-- Loading progress bar
-- Pull-to-refresh via toolbar button
-- Back/forward gesture support
+- Face ID / Touch ID auto-login on relaunch — no login screen flash
+- Balance card with tappable AutoLoad status → in-app settings sheet
+- Native reload amount picker ($10 / $20 / $50 / $100 / custom) before payment webview
+- Trips tab with SPA-aware polling (waits up to 5s for DOM render)
+- Pull-to-refresh on dashboard
+- Recent trips preview on home tab
 
 ## Build
 
 ```sh
 xcodegen generate
-open CompassIOS.xcodeproj
+open Beep.xcodeproj
 ```
 
 ## Architecture
