@@ -21,9 +21,7 @@ final class BeepSession: ObservableObject {
 
     func checkAuthState() async {
         await loadPage(URL(string: "https://www.compasscard.ca/")!)
-        let loggedIn = (try? await hiddenWebView.callAsyncJavaScript(
-            "return \(BeepExtractor.isLoggedIn)", arguments: [:], in: nil, in: .defaultClient
-        )) as? Bool ?? false
+        let loggedIn = await evalJS(BeepExtractor.isLoggedIn) as? Bool ?? false
         if loggedIn {
             await loadDashboard()
             return
@@ -41,16 +39,12 @@ final class BeepSession: ObservableObject {
     func submitLogin(email: String, password: String) async -> Result<Void, LoginError> {
         authState = .loggingIn
         await loadPage(URL(string: "https://www.compasscard.ca/SignIn")!)
-        _ = try? await hiddenWebView.callAsyncJavaScript(
-            BeepExtractor.fillLogin(email: email, password: password), arguments: [:], in: nil, in: .defaultClient
-        )
+        _ = await evalJS(BeepExtractor.fillLogin(email: email, password: password))
         await navDelegate.waitForLoad()
         let url = hiddenWebView.url?.absoluteString ?? ""
         if url.lowercased().contains("signin") {
             authState = .loggedOut
-            let msg = (try? await hiddenWebView.callAsyncJavaScript(
-                "return \(BeepExtractor.loginErrorMessage)", arguments: [:], in: nil, in: .defaultClient
-            )) as? String
+            let msg = await evalJS(BeepExtractor.loginErrorMessage) as? String
             return .failure(LoginError(message: msg?.isEmpty == false ? msg! : "Invalid email or password."))
         }
         await loadDashboard()
@@ -61,9 +55,7 @@ final class BeepSession: ObservableObject {
     func loadDashboard() async {
         isRefreshing = true
         defer { isRefreshing = false }
-        guard let jsonStr = (try? await hiddenWebView.callAsyncJavaScript(
-            "return \(BeepExtractor.cardInfoJSON)", arguments: [:], in: nil, in: .defaultClient
-        )) as? String,
+        guard let jsonStr = await evalJS(BeepExtractor.cardInfoJSON) as? String,
               let data = jsonStr.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
         let info = CardInfo(
@@ -80,10 +72,7 @@ final class BeepSession: ObservableObject {
         isRefreshing = true
         defer { isRefreshing = false }
         await loadPage(URL(string: "https://www.compasscard.ca/CardUse")!)
-        // Use callAsyncJavaScript to poll until the SPA renders the trips table
-        if let jsonStr = try? await hiddenWebView.callAsyncJavaScript(
-            BeepExtractor.tripsJSONAsync, arguments: [:], in: nil, in: .defaultClient
-        ) as? String,
+        if let jsonStr = await callAsyncJS(BeepExtractor.tripsJSONAsync) as? String,
            let data = jsonStr.data(using: .utf8),
            let rows = try? JSONSerialization.jsonObject(with: data) as? [[String: String]] {
             trips = rows.map {
@@ -113,6 +102,22 @@ final class BeepSession: ObservableObject {
         cardInfo = nil
         trips = []
         authState = .loggedOut
+    }
+
+    private func evalJS(_ script: String) async -> Any? {
+        await withCheckedContinuation { (cont: CheckedContinuation<Any?, Never>) in
+            hiddenWebView.evaluateJavaScript(script, in: nil, in: .defaultClient) { result in
+                cont.resume(returning: try? result.get())
+            }
+        }
+    }
+
+    private func callAsyncJS(_ body: String) async -> Any? {
+        await withCheckedContinuation { (cont: CheckedContinuation<Any?, Never>) in
+            hiddenWebView.callAsyncJavaScript(body, arguments: [:], in: nil, in: .defaultClient) { value, _ in
+                cont.resume(returning: value)
+            }
+        }
     }
 
     private func loadPage(_ url: URL) async {
