@@ -214,8 +214,9 @@
     },
     {
       "id": 16,
-      "label": "Email outreach sent to: Cameron Ward, Arvay Finlay, Klein Lawyers, BCCLA \u2014 email, don't call",
-      "priority": "now"
+      "label": "Email outreach sent to: Cameron Ward (declined \u2014 no longer practising), Arvay Finlay, Klein Lawyers, BCCLA \u2014 email, don't call",
+      "priority": "now",
+      "done": true
     },
     {
       "id": 17,
@@ -258,8 +259,8 @@
       "email": "cward@cameronward.com",
       "website": "cameronward.com",
       "outreach_method": "email",
-      "status": "not_contacted",
-      "priority_note": "He IS the Ward in Ward v. Vancouver (2010 SCC) \u2014 highest-value target"
+      "status": "declined",
+      "declined_note": "No longer practising law (May 23, 2026 \u2014 email reply)."
     },
     {
       "initials": "DL",
