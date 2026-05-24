@@ -61,6 +61,8 @@ final class BeepSession: ObservableObject {
     }
 
     func loadTrips() async {
+        isRefreshing = true
+        defer { isRefreshing = false }
         await loadPage(URL(string: "https://www.compasscard.ca/CardUse")!)
         if let jsonStr = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.tripsJSON)) as? String,
            let data = jsonStr.data(using: .utf8),

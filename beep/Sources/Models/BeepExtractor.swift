@@ -90,6 +90,22 @@ enum BeepExtractor {
     })()
     """
 
+    // Pre-fills the reload amount field on /LoadValue after page load
+    static func fillReloadAmount(_ amount: Int) -> String {
+        """
+        (function() {
+            var field = document.querySelector(
+                'input[name*="amount" i], input[id*="amount" i], input[id*="value" i], input[type="number"]'
+            );
+            if (!field) return;
+            var setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+            setter.call(field, '\(amount)');
+            field.dispatchEvent(new Event('input', {bubbles:true}));
+            field.dispatchEvent(new Event('change', {bubbles:true}));
+        })()
+        """
+    }
+
     // Returns JSON array: [{ date, location, product, amount, balance }]
     static let tripsJSON = """
     (function() {

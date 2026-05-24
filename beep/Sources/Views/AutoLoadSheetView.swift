@@ -1,8 +1,6 @@
 import SwiftUI
 
-struct ReloadSheetView: View {
-    var prefilledAmount: Int? = nil
-    @EnvironmentObject var session: BeepSession
+struct AutoLoadSheetView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var actions = WebViewActions()
     @State private var progress: Double = 0
@@ -13,12 +11,11 @@ struct ReloadSheetView: View {
         NavigationStack {
             ZStack(alignment: .top) {
                 BeepWebView(
-                    url: URL(string: "https://www.compasscard.ca/LoadValue")!,
+                    url: URL(string: "https://www.compasscard.ca/AutoLoad")!,
                     progress: $progress,
                     canGoBack: $canGoBack,
                     isOffline: $isOffline,
-                    actions: actions,
-                    setupScript: prefilledAmount.map { BeepExtractor.fillReloadAmount($0) }
+                    actions: actions
                 )
 
                 if progress > 0 && progress < 1 {
@@ -31,7 +28,7 @@ struct ReloadSheetView: View {
                     .frame(height: 3)
                 }
             }
-            .navigationTitle("Reload Card")
+            .navigationTitle("AutoLoad Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -42,10 +39,7 @@ struct ReloadSheetView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        Task { await session.loadDashboard() }
-                        dismiss()
-                    }
+                    Button("Done") { dismiss() }
                 }
             }
         }

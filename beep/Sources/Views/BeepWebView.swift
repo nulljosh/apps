@@ -7,6 +7,7 @@ struct BeepWebView: UIViewRepresentable {
     @Binding var canGoBack: Bool
     @Binding var isOffline: Bool
     var actions: WebViewActions
+    var setupScript: String? = nil
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -16,6 +17,11 @@ struct BeepWebView: UIViewRepresentable {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .default()
         config.allowsInlineMediaPlayback = true
+        if let script = setupScript {
+            config.userContentController.addUserScript(
+                WKUserScript(source: script, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+            )
+        }
 
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
