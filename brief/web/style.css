@@ -321,11 +321,13 @@ body {
 .ground-mag { height: 2px; background: var(--rule); margin: 0 0 0 78px; }
 .ground-mag-fill { height: 100%; width: 0; transition: width 0.8s cubic-bezier(0.22,1,0.36,1); }
 .ground-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.22,1,0.36,1); }
-.ground.open .ground-body { max-height: 600px; }
+.ground.open .ground-body { max-height: 900px; }
 .ground-inner { padding: 18px 0 24px 78px; display: grid; gap: 14px; }
 .ground-desc { font-family: var(--sans); font-size: 14.5px; line-height: 1.6; color: var(--ink); max-width: 68ch; font-weight: 400; letter-spacing: -0.003em; }
 .ground-cite { font-family: var(--mono); font-size: 11px; color: var(--mid); padding: 10px 14px; background: var(--paper-2); border-left: 2px solid var(--rule-strong); border-radius: 0 4px 4px 0; line-height: 1.6; }
 .ground-cite b { color: var(--ink); font-weight: 500; }
+.ground-risk { font-family: var(--mono); font-size: 11px; color: var(--mid); padding: 10px 14px; background: var(--paper-2); border-left: 2px solid var(--warn); border-radius: 0 4px 4px 0; line-height: 1.6; }
+.ground-risk::before { content: 'RISK \00B7 '; color: var(--warn); font-weight: 600; letter-spacing: 0.08em; }
 
 /* Journal */
 .journal-controls { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }

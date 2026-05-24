@@ -11,6 +11,7 @@ struct Ground: Identifiable {
     let accent: Color
     let description: String
     let citation: String
+    var risk: String = ""
     var openByDefault: Bool = false
 }
 
@@ -145,42 +146,50 @@ let caseGrounds: [Ground] = [
            value: "$100–200k", accent: .briefDanger,
            description: "Officers knelt on subject's back while prone, causing respiratory distress consistent with positional asphyxia — a documented cause of in-custody death. No crime committed. Officers had post-2020 training and knew this technique is prohibited in low-risk situations. Father witnessed. Subject had a pre-existing wrist injury (prior fracture) that was directly aggravated and reinvigorated by the prone restraint — elevates special damages and supports an independent physical harm head. Aggravated assault causing bodily harm.",
            citation: "Elmardy v. TPSB, 2019 ONSC 2931 ($130k) · Degen v. Min. Public Safety, 2023 BCSC ($317k — Surrey RCMP, PTSD, positional force)",
+           risk: "AG argues force was proportionate · Counter: Degen/Elmardy found liability for prone restraint with no crime; father's testimony of zero resistance is fatal to any proportionality defence.",
            openByDefault: true),
 
     Ground(id: "punitive", number: 2, title: "Punitive Conduct", section: "—",
            value: "$50–150k", accent: .briefWarn,
            description: "Sustained 7-step cascade of misconduct: unlawful entry, physical assault, arrest without grounds, forced medication, solitary confinement, overnight hold, discharge with no aftercare. Each step a choice. Langley RCMP had no MICR/mental health co-responder in August 2023. Officers responded to a psychiatric wellness call with zero psychiatric support. A helping role weaponized into the worst night of the subject's life.",
-           citation: "High-handed, bad-faith state action — Ward v. Vancouver [2010] SCC 27"),
+           citation: "High-handed, bad-faith state action — Ward v. Vancouver [2010] SCC 27",
+           risk: "AG argues each step was independently authorized under MHA · Counter: Ward's bad-faith deterrence head applies; a 7-step cascade on a wellness call with no co-responder defeats any good-faith defence."),
 
     Ground(id: "ptsd", number: 3, title: "PTSD General", section: "—",
            value: "$75–150k", accent: .briefWarn,
            description: "Every day affected since August 1, 2023 — 33+ months of documented daily impact. No good days. Formal PTSD assessment underway May 2026. Clinical paper trail building. Causation to incident expected to be confirmed in writing by treating therapist. Separate from future earning capacity (age 26, 35+ working years — argued independently).",
-           citation: "Non-pecuniary damages, ongoing — pain, suffering, loss of dignity"),
+           citation: "Non-pecuniary damages, ongoing — pain, suffering, loss of dignity",
+           risk: "AG hires forensic psychiatrist to argue pre-existing vulnerability breaks causation · Counter: thin skull rule means defendants take plaintiff as found; 33+ months daily impact establishes quantum regardless."),
 
     Ground(id: "meds", number: 4, title: "Forced Medication", section: "s.7",
            value: "$30–75k", accent: .briefWarn,
            description: "Involuntary antipsychotics administered without consent. Absolute right to refuse treatment is one of the most fundamental rights in Canadian law. Dual liability: s.7 Charter breach (security of the person) + battery tort. Crown defense — BC MHA s.31 'deemed consent' — is itself under active constitutional challenge as a s.7 violation (CCD v. AG BC, BCSC trial May 2025, decision pending).",
-           citation: "Fleming v. Ontario [2019] SCC 45 · CCD v. AG BC (BCSC 2025, pending)"),
+           citation: "Fleming v. Ontario [2019] SCC 45 · CCD v. AG BC (BCSC 2025, pending)",
+           risk: "AG argues MHA s.31 deemed consent authorizes involuntary medication · Counter: Fleming holds bodily integrity survives lawful detention; CCD v. AG BC has s.31 itself under constitutional challenge."),
 
     Ground(id: "entry", number: 5, title: "Unlawful Entry", section: "s.8",
            value: "$25–60k", accent: .briefWarn,
            description: "No Feeney warrant. No genuine exigent circumstances — subject answered door, spoke coherently, exercised right to walk away. Entry into a dwelling is the highest-tier s.8 breach. This is the root violation that enabled the entire chain of events that followed.",
-           citation: "R. v. Feeney [1997] 2 SCR 13"),
+           citation: "R. v. Feeney [1997] 2 SCR 13",
+           risk: "AG argues Godoy wellness-call authority justified entry · Counter: Feeney makes warrantless dwelling entry presumptively unreasonable; Godoy permits safety verification only, not restraint or forced medication."),
 
     Ground(id: "detain", number: 6, title: "Arbitrary Detention", section: "s.9",
            value: "$20–50k", accent: Color.secondary,
            description: "Walking away during a non-arrest wellness call is not flight — it is a legal right. Detention began at physical restraint with no lawful authority. Overnight hold with no charge. Mental Health Act apprehension criteria need scrutiny: did the observed behavior legally justify s.28 apprehension?",
-           citation: "R. v. Grant [2009] 2 SCR 353"),
+           citation: "R. v. Grant [2009] 2 SCR 353",
+           risk: "AG argues MHA s.28 officer-formed belief threshold was met on 911-call context · Counter: Grant requires non-arbitrary detention; walking away was not flight, and father's testimony dismantles apprehension standard."),
 
     Ground(id: "solitary", number: 7, title: "Solitary Confinement", section: "ss.7,12",
            value: "$15–40k", accent: Color.secondary,
            description: "Overnight solitary confinement with no charge and no crime committed. Subject was in mental health crisis — placing a distressed person in isolation is the clinical opposite of appropriate care. Released with no aftercare plan, no referral to psychiatric services, no follow-up.",
-           citation: "Ward v. Vancouver [2010] SCC 27"),
+           citation: "Ward v. Vancouver [2010] SCC 27",
+           risk: "AG argues overnight hold was clinically appropriate · Counter: Ward bad-faith head applies; isolating a person in mental health crisis with no aftercare, no referral, and no family contact is indefensible."),
 
     Ground(id: "counsel", number: 8, title: "Denial of Counsel", section: "s.10(b)",
            value: "$15–35k", accent: Color.secondary,
            description: "Upon detention, Charter s.10(b) requires immediate notification of the right to retain and instruct counsel, and a reasonable opportunity to exercise it. Detention is established at the moment of physical restraint. Once detention is proven, the burden shifts to the Crown to demonstrate s.10(b) was complied with. No compliance = automatic breach.",
-           citation: "R. v. Bartle [1994] 3 SCR 173 · R. v. Sinclair [2010] 2 SCR 310")
+           citation: "R. v. Bartle [1994] 3 SCR 173 · R. v. Sinclair [2010] 2 SCR 310",
+           risk: "AG argues no formal arrest triggered s.10(b) · Counter: Bartle/Sinclair make clear s.10(b) attaches at detention; burden shifts to Crown to prove compliance at physical restraint — none existed.")
 ]
 
 let caseFacts: [CaseFact] = [

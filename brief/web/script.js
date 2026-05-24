@@ -52,28 +52,36 @@ document.getElementById('authBack').addEventListener('click', () => {
 const GROUNDS = [
   { id:'s8', n:'01', title:'Unreasonable search & seizure', sec:'Charter s.8', val:'$200-500k', high:500, grade:'A',
     desc:'Warrantless entry into a private dwelling on a non-criminal wellness call. Highest-tier s.8 violation under Feeney - the home is the most protected space in Charter jurisprudence. No exigent circumstances doctrine survives close scrutiny here: father present, plaintiff visible at kitchen table, no medical emergency observable from doorway.',
-    cite:'R v. Feeney, [1997] 2 SCR 13 - warrantless dwelling entry presumptively unreasonable. R v. Godoy, [1999] 1 SCR 311 - limits 911-wellness entry to safety verification only.' },
+    cite:'R v. Feeney, [1997] 2 SCR 13 - warrantless dwelling entry presumptively unreasonable. R v. Godoy, [1999] 1 SCR 311 - limits 911-wellness entry to safety verification only.',
+    risk:'AG argues Godoy wellness-call authority justified entry · Counter: Godoy permits safety verification only; Feeney makes warrantless dwelling entry presumptively unreasonable once restraint begins inside the home.' },
   { id:'s9', n:'02', title:'Arbitrary detention', sec:'Charter s.9', val:'$150-350k', high:350, grade:'A',
     desc:'Prone restraint, transport to hospital, overnight hold. No charge laid, no underlying crime. Detention must be authorized by law and not arbitrary - MHA s.28 threshold not met (father testimony defeats apprehension standard).',
-    cite:'R v. Grant, 2009 SCC 32 - definition of detention. Mental Health Act (BC) s.28 - apprehension requires officer-formed belief of likelihood of harm.' },
+    cite:'R v. Grant, 2009 SCC 32 - definition of detention. Mental Health Act (BC) s.28 - apprehension requires officer-formed belief of likelihood of harm.',
+    risk:'AG argues MHA s.28 belief threshold was met on 911-call context · Counter: Grant requires non-arbitrary detention; father\'s direct testimony of coherent answers and zero violence dismantles the subjective apprehension standard.' },
   { id:'s7', n:'03', title:'Life, liberty, security of person', sec:'Charter s.7', val:'$250-600k', high:600, grade:'A',
     desc:'Forced antipsychotic medication absent consent and absent meaningful incapacity assessment. Fleming v. Ontario establishes that even validly detained persons retain bodily integrity. Engages physical, psychological, and dignity interests simultaneously.',
-    cite:'Fleming v. Ontario, 2019 SCC 45 - bodily integrity protected during state detention. Carter v. Canada, 2015 SCC 5 - s.7 protects against state-imposed physical intervention.' },
+    cite:'Fleming v. Ontario, 2019 SCC 45 - bodily integrity protected during state detention. Carter v. Canada, 2015 SCC 5 - s.7 protects against state-imposed physical intervention.',
+    risk:'AG argues valid MHA detention lawfully limits s.7 under s.1 · Counter: Fleming holds bodily integrity survives lawful detention; forced antipsychotic medication without capacity assessment is not saved by s.1.' },
   { id:'s10b', n:'04', title:'Right to counsel', sec:'Charter s.10(b)', val:'$50-150k', high:150, grade:'C',
     desc:'No caution given at any point of the encounter. Detention triggered s.10(b) immediately under Grant; failure to inform of right to counsel before transport and forced medication compounds every downstream violation.',
-    cite:'R v. Suberu, 2009 SCC 33 - s.10(b) attaches on detention without delay.' },
+    cite:'R v. Suberu, 2009 SCC 33 - s.10(b) attaches on detention without delay.',
+    risk:'AG argues no formal arrest means s.10(b) did not attach · Counter: Suberu makes clear s.10(b) attaches on detention without delay — prone restraint was detention and no caution was given at any point.' },
   { id:'s12', n:'05', title:'Cruel & unusual treatment', sec:'Charter s.12', val:'$100-300k', high:300, grade:'B',
     desc:'Prone restraint by kneeling on the back created positional asphyxia risk. Forced antipsychotic injection followed by overnight solitary, no family notification, discharge without aftercare. The aggregate satisfies the s.12 grossly disproportionate threshold.',
-    cite:'R v. Smith, [1987] 1 SCR 1045 - grossly disproportionate test. R v. Boudreault, 2018 SCC 58 - modern s.12 framework.' },
+    cite:'R v. Smith, [1987] 1 SCR 1045 - grossly disproportionate test. R v. Boudreault, 2018 SCC 58 - modern s.12 framework.',
+    risk:'AG argues each measure was individually proportionate · Counter: Boudreault assesses s.12 in aggregate; prone restraint plus forced injection plus overnight solitary plus no aftercare satisfies Smith\'s grossly disproportionate test.' },
   { id:'battery', n:'06', title:'Battery & excessive force', sec:'common law tort', val:'$80-200k', high:200, grade:'B',
     desc:'Non-consensual physical contact exceeding any lawful authority. Pre-existing wrist fracture aggravated by restraint - additional special damages head. Standard of force assessed objectively per Anderson; officer notebooks must demonstrate proportionality, and the 30-second contact window per father testimony fails that standard.',
-    cite:'Anderson v. Smith, 2010 BCCA - proportionality standard for police use of force.' },
+    cite:'Anderson v. Smith, 2010 BCCA - proportionality standard for police use of force.',
+    risk:'AG argues force was objectively proportionate · Counter: Anderson requires proportionality to actual conduct; father confirms zero resistance before prone restraint, and the pre-existing wrist fracture aggravation is a separate special-damages head.' },
   { id:'falseimp', n:'07', title:'False imprisonment', sec:'common law tort', val:'$60-180k', high:180, grade:'B',
     desc:'Overnight solitary confinement absent lawful authority. Each hour past the s.28 examination window is independently actionable. Combined with hospital MHA Form 4 procedural review - was a Form 1 ever generated, signed, and on what evidentiary basis?',
-    cite:'Bird v. The Queen, 2019 SCC 7 - false imprisonment within state custody.' },
+    cite:'Bird v. The Queen, 2019 SCC 7 - false imprisonment within state custody.',
+    risk:'AG argues MHA s.28 authorized the detention · Counter: Bird requires each hour beyond lawful authority to be independently justified; if no Form 1 was generated or the s.28 threshold was unmet, every hour of the overnight hold is actionable.' },
   { id:'iims', n:'08', title:'Negligent investigation', sec:'tort - Hill', val:'$50-150k', high:150, grade:'C',
     desc:'Officers owed a duty of care in investigation. Failure to verify wellness-call basis (911 audio defines this), failure to attempt verbal engagement before physical contact, failure to verify MHA s.28 threshold - all breach the Hill standard. Damages flow from downstream harms.',
-    cite:'Hill v. Hamilton-Wentworth Regional Police, 2007 SCC 41 - duty of care in police investigation.' },
+    cite:'Hill v. Hamilton-Wentworth Regional Police, 2007 SCC 41 - duty of care in police investigation.',
+    risk:'AG argues officers exercised reasonable real-time judgment · Counter: Hill imposes a duty of care; failure to attempt verbal engagement or verify the s.28 threshold before physical contact are discrete breaches causally tied to downstream harms.' },
 ];
 
 const SCENARIOS = [
@@ -199,19 +207,24 @@ let webActiveCase = 'rcmp';
 const FAMILY_GROUNDS = [
   { id:'likeness', n:'01', title:'Appropriation of Personality', sec:'BC Privacy Act s.3', val:'$75–200k', high:200, grade:'A',
     desc:'Brian Trommel used Joshua\'s face and likeness on family business vehicles and advertising without consent. Commercial exploitation for financial gain. Ongoing tort — limitation runs from last use date or May 2026 discovery. Photograph every vehicle with timestamps.',
-    cite:'BC Privacy Act RSBC 1996 c.373 s.3 · Krouse v. Chrysler Canada Ltd (1973)' },
+    cite:'BC Privacy Act RSBC 1996 c.373 s.3 · Krouse v. Chrysler Canada Ltd (1973)',
+    risk:'Defendants argue use was incidental or consented by proximity to the family business · Counter: Krouse holds commercial exploitation without express consent is actionable; ongoing vehicle use keeps limitation running from the last use date.' },
   { id:'iims', n:'02', title:'Intentional Infliction of Mental Suffering', sec:'IIMS', val:'$100–200k', high:200, grade:'A',
     desc:'20+ year pattern of calculated conduct: police weaponized against Joshua at ages 10 and 15 for crying. Eviction into homelessness. Parking lot confrontation while Joshua was homeless — Brian\'s stated priority was a Yelp review, not his son\'s welfare. PTSD resulted.',
-    cite:'Wilkinson v. Downton [1897] 2 QB 57 · Piresferreira v. Ayotte 2010 ONCA 384' },
+    cite:'Wilkinson v. Downton [1897] 2 QB 57 · Piresferreira v. Ayotte 2010 ONCA 384',
+    risk:'Defendants argue conduct was normal parenting · Counter: Piresferreira confirms a sustained pattern satisfies Wilkinson; police weaponized twice, eviction into homelessness, and parking-lot Yelp confrontation collectively reach calculated outrage.' },
   { id:'negligence', n:'03', title:'Parental Negligence', sec:'Negligence', val:'$50–150k', high:150, grade:'B',
     desc:'Parents owed a duty of care. Breaches: calling police on a child for crying, evicting an adult child into homelessness, using police as a control mechanism. Causation to PTSD and lost earning capacity (age 26, 35+ working years). Psychiatric evidence must separate RCMP PTSD from family PTSD.',
-    cite:'Jordan House Ltd v. Menow [1974] SCR 239' },
+    cite:'Jordan House Ltd v. Menow [1974] SCR 239',
+    risk:'Defendants argue parental duty ends at majority · Counter: Jordan House recognizes duty where reliance and vulnerability persist; causation must be separated from RCMP PTSD by independent psychiatric evidence.' },
   { id:'battery', n:'04', title:'Battery — Non-Consensual Surgery', sec:'Battery', val:'$25–75k', high:75, grade:'C',
     desc:'Circumcision performed in infancy without capacity for consent. BC Limitation Act s.16 suspends limitation during minority — clock started at age 19 (~2019). Novel argument in BC — no direct appellate authority. Include as supplementary, not lead claim.',
-    cite:'Malette v. Shulman (1990) 72 OR (2d) 417 · BC Limitation Act s.16' },
+    cite:'Malette v. Shulman (1990) 72 OR (2d) 417 · BC Limitation Act s.16',
+    risk:'Defendants argue limitation has expired and procedure was standard medical care · Counter: Malette holds non-consensual contact is battery; Limitation Act s.16 suspends the clock during minority, placing start of limitation at approximately age 19.' },
   { id:'eviction', n:'05', title:'Wrongful Eviction', sec:'Negligence', val:'$25–75k', high:75, grade:'C',
     desc:'Evicted from the only family home with no notice or transition support. Subsequently located in a parking lot while homeless. Brian\'s stated priority: a Yelp review. Special damages: shelter costs, lost income during homeless period.',
-    cite:'Parental duty of care · special damages causation' },
+    cite:'Parental duty of care · special damages causation',
+    risk:'Defendants argue adults have no right to remain in a parent\'s home · Counter: parental duty survives financial dependence; the homeless parking-lot confrontation with Yelp as stated priority corroborates breach and causation for special damages.' },
 ];
 
 const FAMILY_SCENARIOS = [
@@ -569,7 +582,9 @@ function renderGrounds(containerId, suffix) {
     const inner = document.createElement('div'); inner.className = 'ground-inner';
     const desc = document.createElement('div'); desc.className = 'ground-desc'; desc.textContent = g.desc;
     const cite = document.createElement('div'); cite.className = 'ground-cite'; cite.textContent = g.cite;
-    inner.appendChild(desc); inner.appendChild(cite); body.appendChild(inner);
+    inner.appendChild(desc);
+    if (g.risk) { const riskEl = document.createElement('div'); riskEl.className = 'ground-risk'; riskEl.textContent = g.risk; inner.appendChild(riskEl); }
+    inner.appendChild(cite); body.appendChild(inner);
 
     w.appendChild(hd); w.appendChild(mag); w.appendChild(body);
     c.appendChild(w);

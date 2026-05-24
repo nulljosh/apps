@@ -18,27 +18,32 @@ let familyCaseGrounds: [Ground] = [
            value: "$75–200k", accent: .briefDanger,
            description: "Brian Trommel used Joshua's face and likeness on family business vehicles and advertising without consent. Commercial exploitation for financial gain. Ongoing tort — limitation clock runs from last use date or from May 2026 discovery. Strongest claim on limitation. Photograph every vehicle with timestamps.",
            citation: "BC Privacy Act RSBC 1996 c.373 s.3 · Krouse v. Chrysler Canada Ltd (1973) — appropriation of personality",
+           risk: "Defendants argue use was incidental or consented by proximity to the family business · Counter: Krouse holds commercial exploitation without express consent is actionable; ongoing vehicle use keeps limitation running from the last use date.",
            openByDefault: true),
 
     Ground(id: "iims", number: 2, title: "Intentional Infliction of Mental Suffering", section: "IIMS",
            value: "$100–200k", accent: .briefDanger,
            description: "20+ year pattern of calculated conduct: police weaponized against Joshua at ages 10 and 15 for crying. Eviction from family home into homelessness. Parking lot confrontation while Joshua was homeless — Brian's stated priority was a Yelp review, not his son's welfare. Each act outrageous by any objective standard. PTSD resulted.",
-           citation: "Wilkinson v. Downton [1897] 2 QB 57 · Piresferreira v. Ayotte 2010 ONCA 384"),
+           citation: "Wilkinson v. Downton [1897] 2 QB 57 · Piresferreira v. Ayotte 2010 ONCA 384",
+           risk: "Defendants argue conduct was normal parenting · Counter: Piresferreira confirms a sustained pattern satisfies Wilkinson; police weaponized twice, eviction into homelessness, and parking-lot Yelp confrontation collectively reach calculated outrage."),
 
     Ground(id: "negligence", number: 3, title: "Parental Negligence", section: "Negligence",
            value: "$50–150k", accent: .briefWarn,
            description: "Parents owed a duty of care. Breaches: calling police on a child for crying, evicting an adult child into homelessness with no safety net, using police as a control mechanism. Causation to PTSD and lost earning capacity (age 26, 35+ working years). Psychiatric evidence must separate RCMP PTSD from family PTSD to protect both claims.",
-           citation: "Jordan House Ltd v. Menow [1974] SCR 239"),
+           citation: "Jordan House Ltd v. Menow [1974] SCR 239",
+           risk: "Defendants argue parental duty ends at majority · Counter: Jordan House recognizes duty where reliance and vulnerability persist; causation must be separated from RCMP PTSD by independent psychiatric evidence."),
 
     Ground(id: "battery", number: 4, title: "Battery — Non-Consensual Surgery", section: "Battery",
            value: "$25–75k", accent: Color.secondary,
            description: "Circumcision performed in infancy without capacity for consent. Irreversible bodily modification. BC Limitation Act s.16 suspends limitation during minority — clock started at age 19 (~2019). Discoverability: first understood as actionable May 2026. Novel argument in BC — no direct appellate authority. Include as supplementary, not lead claim.",
-           citation: "Malette v. Shulman (1990) 72 OR (2d) 417 · BC Limitation Act s.16"),
+           citation: "Malette v. Shulman (1990) 72 OR (2d) 417 · BC Limitation Act s.16",
+           risk: "Defendants argue limitation has expired and procedure was standard medical care · Counter: Malette holds non-consensual contact is battery; Limitation Act s.16 suspends the clock during minority, placing start of limitation at approximately age 19."),
 
     Ground(id: "eviction", number: 5, title: "Wrongful Eviction", section: "Negligence",
            value: "$25–75k", accent: Color.secondary,
            description: "Evicted from the only family home — Joshua's sole shelter. No notice, no transition support. Subsequently located by Brian Trommel in a parking lot while Joshua was homeless. Brian's stated priority: a Yelp review. That confrontation while homeless is the IIMS centerpiece. Special damages: shelter costs, lost income during homeless period.",
-           citation: "Parental duty of care · special damages causation")
+           citation: "Parental duty of care · special damages causation",
+           risk: "Defendants argue adults have no right to remain in a parent's home · Counter: parental duty survives financial dependence; the homeless parking-lot confrontation with Yelp as stated priority corroborates breach and causation for special damages.")
 ]
 
 let familyCaseWitnesses: [Witness] = []
