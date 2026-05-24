@@ -21,7 +21,9 @@ final class BeepSession: ObservableObject {
 
     func checkAuthState() async {
         await loadPage(URL(string: "https://www.compasscard.ca/")!)
-        let loggedIn = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.isLoggedIn, in: nil, in: .defaultClient)) as? Bool ?? false
+        let loggedIn = (try? await hiddenWebView.callAsyncJavaScript(
+            "return \(BeepExtractor.isLoggedIn)", arguments: [:], in: nil, in: .defaultClient
+        )) as? Bool ?? false
         if loggedIn {
             await loadDashboard()
             return
@@ -39,12 +41,16 @@ final class BeepSession: ObservableObject {
     func submitLogin(email: String, password: String) async -> Result<Void, LoginError> {
         authState = .loggingIn
         await loadPage(URL(string: "https://www.compasscard.ca/SignIn")!)
-        _ = try? await hiddenWebView.evaluateJavaScript(BeepExtractor.fillLogin(email: email, password: password), in: nil, in: .defaultClient)
+        _ = try? await hiddenWebView.callAsyncJavaScript(
+            BeepExtractor.fillLogin(email: email, password: password), arguments: [:], in: nil, in: .defaultClient
+        )
         await navDelegate.waitForLoad()
         let url = hiddenWebView.url?.absoluteString ?? ""
         if url.lowercased().contains("signin") {
             authState = .loggedOut
-            let msg = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.loginErrorMessage, in: nil, in: .defaultClient)) as? String
+            let msg = (try? await hiddenWebView.callAsyncJavaScript(
+                "return \(BeepExtractor.loginErrorMessage)", arguments: [:], in: nil, in: .defaultClient
+            )) as? String
             return .failure(LoginError(message: msg?.isEmpty == false ? msg! : "Invalid email or password."))
         }
         await loadDashboard()
@@ -55,7 +61,9 @@ final class BeepSession: ObservableObject {
     func loadDashboard() async {
         isRefreshing = true
         defer { isRefreshing = false }
-        guard let jsonStr = (try? await hiddenWebView.evaluateJavaScript(BeepExtractor.cardInfoJSON, in: nil, in: .defaultClient)) as? String,
+        guard let jsonStr = (try? await hiddenWebView.callAsyncJavaScript(
+            "return \(BeepExtractor.cardInfoJSON)", arguments: [:], in: nil, in: .defaultClient
+        )) as? String,
               let data = jsonStr.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
         let info = CardInfo(
