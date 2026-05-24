@@ -3,6 +3,7 @@ import SwiftUI
 struct AccountView: View {
     @EnvironmentObject var session: BeepSession
     @State private var showSignOutConfirm = false
+    @State private var showAutoLoad = false
 
     var body: some View {
         NavigationStack {
@@ -17,7 +18,13 @@ struct AccountView: View {
                     }
                     LabeledContent("Balance", value: session.cardInfo?.balance ?? "--")
                     if let info = session.cardInfo {
-                        LabeledContent("AutoLoad", value: info.autoLoadEnabled ? "Enabled" : "Disabled")
+                        Button { showAutoLoad = true } label: {
+                            LabeledContent("AutoLoad") {
+                                Text(info.autoLoadEnabled ? "Enabled" : "Disabled")
+                                    .foregroundStyle(info.autoLoadEnabled ? .green : .secondary)
+                            }
+                        }
+                        .foregroundStyle(.primary)
                     }
                 }
 
@@ -40,6 +47,11 @@ struct AccountView: View {
                 }
             }
             .navigationTitle("Account")
+        }
+        .sheet(isPresented: $showAutoLoad, onDismiss: {
+            Task { await session.loadDashboard() }
+        }) {
+            AutoLoadSheetView()
         }
         .confirmationDialog("Sign out of your Compass account?", isPresented: $showSignOutConfirm, titleVisibility: .visible) {
             Button("Sign Out", role: .destructive) {
