@@ -179,6 +179,22 @@ header{position:relative;z-index:50;padding:14px 28px;border-bottom:1px solid va
 .cs-bl{font-size:.59rem;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);margin-bottom:4px;}
 .pp-logout{width:100%;margin-top:8px;background:none;border:1px solid var(--br);border-radius:7px;padding:8px;color:var(--tx2);font-family:var(--fn);font-size:.78rem;cursor:pointer;transition:all .2s;}
 .pp-logout:hover{border-color:rgba(255,255,255,.2);color:var(--tx);}
+.pp-sec-h{display:flex;justify-content:space-between;align-items:center;}
+.pp-add-btn{background:none;border:none;color:var(--tx3);font-size:1.1rem;cursor:pointer;padding:0 2px;line-height:1;transition:color .15s;}
+.pp-add-btn:hover{color:var(--tx);}
+.cs-card{position:relative;}
+.cs-del{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--tx3);font-size:.9rem;cursor:pointer;padding:0 3px;line-height:1;transition:color .15s;}
+.cs-del:hover{color:#c77040;}
+#ce{position:fixed;inset:0;z-index:750;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+#ce.h{display:none;}
+.cebox{background:rgba(16,16,16,.99);border:1px solid var(--br2);border-radius:14px;padding:24px;width:min(400px,92vw);max-height:85vh;overflow-y:auto;display:flex;flex-direction:column;gap:12px;}
+.cebox::-webkit-scrollbar{width:4px;}
+.cebox::-webkit-scrollbar-thumb{background:var(--br);border-radius:2px;}
+.ce-ta{resize:vertical;min-height:60px;font-family:var(--fn);}
+.ce-claim-row{display:flex;flex-direction:column;gap:6px;padding:10px;background:var(--bg);border:1px solid var(--br);border-radius:7px;position:relative;}
+.ce-rm{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--tx3);font-size:.9rem;cursor:pointer;padding:0 2px;transition:color .15s;}
+.ce-rm:hover{color:#c77040;}
+.ce-sec-h{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);}
 @media(max-width:768px){
   header{padding:12px 14px;gap:10px;}
   .wm{font-size:1rem;}.tg{display:none;}
@@ -213,6 +229,20 @@ header{position:relative;z-index:50;padding:14px 28px;border-bottom:1px solid va
     <div class="am-err" id="am-err"></div>
     <button class="am-btn" id="am-sub">Sign In</button>
     <div class="am-sw" id="am-sw">No account? Register</div>
+  </div>
+</div>
+<div id="ce" class="h">
+  <div class="cebox">
+    <div class="am-title">Add Case</div>
+    <input id="ce-ttl" class="am-inp" placeholder="Case title" autocomplete="off">
+    <select id="ce-typ" class="am-inp"><option value="charter">Charter Claim</option><option value="civil">Civil Claim</option></select>
+    <textarea id="ce-verd" class="am-inp ce-ta" placeholder="Verdict / analysis" rows="3"></textarea>
+    <div class="ce-sec-h">Claims</div>
+    <div id="ce-cw"></div>
+    <button class="am-sw" id="ce-ac" style="text-align:left">+ Add Claim</button>
+    <textarea id="ce-bl" class="am-inp ce-ta" placeholder="Bottom line" rows="2"></textarea>
+    <button class="am-btn" id="ce-save">Save Case</button>
+    <div class="am-sw" id="ce-cancel">Cancel</div>
   </div>
 </div>
 
@@ -737,14 +767,14 @@ document.getElementById('cs1').addEventListener('change',e=>{CC1=e.target.value|
 document.getElementById('cs2').addEventListener('change',e=>{CC2=e.target.value||null;renderCompare();});
 document.getElementById('pcl').addEventListener('click',closePanel);
 document.getElementById('ov').addEventListener('click',()=>{closePanel();closeProfile();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(AC)closePanel();closeProfile();if(!document.getElementById('am').classList.contains('h'))hideAuth();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(AC)closePanel();closeProfile();if(!document.getElementById('am').classList.contains('h'))hideAuth();if(!document.getElementById('ce').classList.contains('h'))closeCaseEditor();}});
 
 populateCompareSelects();
 renderStats();
 initMap();
 loadHash();
 
-const CASES=[
+const SEED_CASES=[
 {id:'case-01',type:'charter',country:'CA',
 title:'Case 01 — Charter Breaches (Police / Government)',
 verdict:'Forced entry during wellness check with no warrant and no clear emergency. If initial entry was unlawful, all subsequent police actions may flow from that breach, creating a cumulative and substantial Charter claim.',
@@ -771,6 +801,9 @@ claims:[
 bottomLine:'Weaker than a Charter claim (private parties vs. government) but remains legally viable. Key enforcement advantage: defendants have identifiable assets and property. Build a detailed evidence file regardless of litigation decision.'
 }
 ];
+function loadCases(u){const d=localStorage.getItem('ch-cases-'+u);return d?JSON.parse(d):null;}
+function saveCases(u,arr){localStorage.setItem('ch-cases-'+u,JSON.stringify(arr));}
+let UCases=[];
 
 function phash(s){let h=5381;for(let i=0;i<s.length;i++)h=(h*33^s.charCodeAt(i))>>>0;return h.toString(36);}
 function getUsers(){return JSON.parse(localStorage.getItem('ch-users')||'{}');}
@@ -825,6 +858,9 @@ function updatePrBtn(){document.getElementById('prBtn').classList.toggle('on',!!
 
 function openProfile(){
   if(!CU){setAuthMode('login');showAuth();return;}
+  const stored=loadCases(CU.username);
+  UCases=stored||(CU.username==='joshua'?[...SEED_CASES]:[]);
+  if(!stored)saveCases(CU.username,UCases);
   renderProfile();
   document.getElementById('pp').classList.add('op');
   document.getElementById('ov').classList.add('on');
@@ -846,45 +882,113 @@ function renderProfile(){
   document.getElementById('pp-name').textContent=CU.name;
   const body=document.getElementById('pp-body');
   body.replaceChildren();
-  body.appendChild(mk('div','pp-sec-h','My Cases'));
-  CASES.forEach(cs=>{
+  const hdrRow=mk('div','pp-sec-h');
+  hdrRow.appendChild(mk('span',null,'My Cases'));
+  const addBtn=mk('button','pp-add-btn','+');
+  addBtn.title='New case';
+  addBtn.addEventListener('click',()=>openCaseEditor(null));
+  hdrRow.appendChild(addBtn);
+  body.appendChild(hdrRow);
+  UCases.forEach((cs,idx)=>{
     const card=mk('div','cs-card');
+    const del=mk('button','cs-del','×');
+    del.title='Delete case';
+    del.addEventListener('click',()=>{UCases.splice(idx,1);saveCases(CU.username,UCases);renderProfile();});
+    card.appendChild(del);
     card.appendChild(mk('span','cs-type '+cs.type,cs.type==='charter'?'Charter Claim':'Civil Claim'));
     card.appendChild(mk('div','cs-title',cs.title));
-    card.appendChild(mk('div','cs-verdict',cs.verdict));
-    if(cs.sections.length){
+    if(cs.verdict)card.appendChild(mk('div','cs-verdict',cs.verdict));
+    if(cs.sections&&cs.sections.length){
       card.appendChild(mk('div','cs-sl-h','Relevant Sections'));
       const secsDiv=mk('div','cs-secs');
       cs.sections.forEach(s=>{
         const link=mk('span','cs-slink',s);
-        link.dataset.cid=cs.country;
         link.addEventListener('click',()=>{
-          closeProfile();switchView('map');openPanel(cs.country);
-          setTimeout(()=>{const ps=document.getElementById('ps');ps.value=s;const c=D.find(x=>x.id===cs.country);if(c)renderPanel(c,s);},350);
+          closeProfile();switchView('map');openPanel(cs.country||'CA');
+          setTimeout(()=>{const ps=document.getElementById('ps');ps.value=s;const c=D.find(x=>x.id===(cs.country||'CA'));if(c)renderPanel(c,s);},350);
         });
         secsDiv.appendChild(link);
       });
       card.appendChild(secsDiv);
     }
-    const claimsDiv=mk('div','cs-claims');
-    cs.claims.forEach(cl=>{
-      const claim=mk('div','cs-claim');
-      claim.appendChild(mk('div','cs-cref',cl.ref));
-      claim.appendChild(mk('div','cs-ctit',cl.title));
-      claim.appendChild(mk('div','cs-cnote',cl.note));
-      claimsDiv.appendChild(claim);
-    });
-    card.appendChild(claimsDiv);
-    const bot=mk('div','cs-bottom');
-    bot.appendChild(mk('div','cs-bl','Bottom Line'));
-    bot.appendChild(mk('span',null,cs.bottomLine));
-    card.appendChild(bot);
+    if(cs.claims&&cs.claims.length){
+      const claimsDiv=mk('div','cs-claims');
+      cs.claims.forEach(cl=>{
+        const claim=mk('div','cs-claim');
+        claim.appendChild(mk('div','cs-cref',cl.ref));
+        claim.appendChild(mk('div','cs-ctit',cl.title));
+        if(cl.note)claim.appendChild(mk('div','cs-cnote',cl.note));
+        claimsDiv.appendChild(claim);
+      });
+      card.appendChild(claimsDiv);
+    }
+    if(cs.bottomLine){
+      const bot=mk('div','cs-bottom');
+      bot.appendChild(mk('div','cs-bl','Bottom Line'));
+      bot.appendChild(mk('span',null,cs.bottomLine));
+      card.appendChild(bot);
+    }
     body.appendChild(card);
   });
+  if(!UCases.length){body.appendChild(mk('div','cpe','No cases yet. Click + to add one.'));}
   const lo=mk('button','pp-logout','Sign out');
   lo.addEventListener('click',()=>{clearSession();updatePrBtn();closeProfile();});
   body.appendChild(lo);
 }
+
+let CE_CLAIMS=[];
+function openCaseEditor(cs){
+  CE_CLAIMS=cs&&cs.claims?cs.claims.map(c=>({...c})):[];
+  document.getElementById('ce-ttl').value=cs?cs.title:'';
+  document.getElementById('ce-typ').value=cs?cs.type:'charter';
+  document.getElementById('ce-verd').value=cs?cs.verdict:'';
+  document.getElementById('ce-bl').value=cs?cs.bottomLine:'';
+  renderCEClaims();
+  document.getElementById('ce').classList.remove('h');
+  document.getElementById('ce').dataset.eid=cs?cs.id:'';
+}
+function closeCaseEditor(){document.getElementById('ce').classList.add('h');}
+function renderCEClaims(){
+  const wrap=document.getElementById('ce-cw');
+  wrap.replaceChildren();
+  CE_CLAIMS.forEach((cl,i)=>{
+    const row=mk('div','ce-claim-row');
+    const rf=mk('input','am-inp');rf.placeholder='Ref';rf.value=cl.ref||'';
+    rf.addEventListener('input',e=>CE_CLAIMS[i].ref=e.target.value);
+    const ti=mk('input','am-inp');ti.placeholder='Title';ti.value=cl.title||'';
+    ti.addEventListener('input',e=>CE_CLAIMS[i].title=e.target.value);
+    const no=mk('input','am-inp');no.placeholder='Note';no.value=cl.note||'';
+    no.addEventListener('input',e=>CE_CLAIMS[i].note=e.target.value);
+    const rm=mk('button','ce-rm','×');
+    rm.addEventListener('click',()=>{CE_CLAIMS.splice(i,1);renderCEClaims();});
+    row.appendChild(rf);row.appendChild(ti);row.appendChild(no);row.appendChild(rm);
+    wrap.appendChild(row);
+  });
+}
+function saveCaseFromEditor(){
+  const title=document.getElementById('ce-ttl').value.trim();
+  if(!title)return;
+  const eid=document.getElementById('ce').dataset.eid;
+  const newCase={
+    id:eid||'case-'+Date.now(),
+    type:document.getElementById('ce-typ').value,
+    country:'CA',
+    title,
+    verdict:document.getElementById('ce-verd').value.trim(),
+    sections:[],
+    claims:CE_CLAIMS.map(c=>({...c})),
+    bottomLine:document.getElementById('ce-bl').value.trim()
+  };
+  if(eid){const idx=UCases.findIndex(x=>x.id===eid);if(idx>-1)UCases[idx]=newCase;else UCases.push(newCase);}
+  else UCases.push(newCase);
+  saveCases(CU.username,UCases);
+  renderProfile();
+  closeCaseEditor();
+}
+document.getElementById('ce-ac').addEventListener('click',()=>{CE_CLAIMS.push({ref:'',title:'',note:''});renderCEClaims();});
+document.getElementById('ce-save').addEventListener('click',saveCaseFromEditor);
+document.getElementById('ce-cancel').addEventListener('click',closeCaseEditor);
+document.getElementById('ce').addEventListener('click',e=>{if(e.target===document.getElementById('ce'))closeCaseEditor();});
 
 document.getElementById('prBtn').addEventListener('click',()=>{
   if(CU){const pp=document.getElementById('pp');if(pp.classList.contains('op'))closeProfile();else openProfile();}

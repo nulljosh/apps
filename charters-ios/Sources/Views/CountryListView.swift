@@ -1,10 +1,13 @@
 import SwiftUI
 
 struct CountryListView: View {
+    @EnvironmentObject var auth: AuthManager
     @Binding var selectedCountry: Country?
     @Binding var showCompare: Bool
     @State private var searchText = ""
     @State private var activeFilter = "all"
+    @State private var showProfile = false
+    @State private var showAuth = false
 
     let filters = ["all","civil","political","economic","social","cultural"]
 
@@ -73,13 +76,30 @@ struct CountryListView: View {
         .navigationTitle("Charters")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Compare") {
-                    showCompare = true
-                    selectedCountry = nil
+                HStack(spacing: 12) {
+                    Button("Compare") {
+                        showCompare = true
+                        selectedCountry = nil
+                    }
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(Color(hex: "4e9cd7"))
+                    Button {
+                        if auth.currentUser != nil { showProfile = true }
+                        else { showAuth = true }
+                    } label: {
+                        Image(systemName: auth.currentUser != nil ? "person.fill" : "person")
+                            .font(.system(size: 14))
+                            .foregroundColor(auth.currentUser != nil ? Color(hex: "4e9cd7") : Color(hex: "7a8e9e"))
+                    }
                 }
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(Color(hex: "4e9cd7"))
             }
+        }
+        .sheet(isPresented: $showProfile) {
+            ProfileView(selectedCountry: $selectedCountry)
+        }
+        .sheet(isPresented: $showAuth) {
+            AuthView()
         }
     }
 }
+
