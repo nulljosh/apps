@@ -3,12 +3,14 @@
   overflow: hidden;
   background: var(--bg);
   outline: none;
+  touch-action: manipulation;
 }
 
 .canvas-scroll {
   width: 100%;
   height: 100%;
   overflow: auto;
+  touch-action: pan-x pan-y;
 }
 
 .canvas {
@@ -19,4 +21,11 @@
 
 .canvas--place-mode {
   cursor: cell;
+}
+
+@media (max-width: 768px) {
+  .canvas-wrapper {
+    height: calc(100dvh - 44px - 50vh);
+    width: 100%;
+  }
 }

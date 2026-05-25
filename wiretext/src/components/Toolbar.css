@@ -65,3 +65,42 @@
   font-size: 12px;
   color: inherit;
 }
+
+@media (max-width: 768px) {
+  .toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 50vh;
+    overflow-y: auto;
+    z-index: 100;
+    background: var(--surface);
+    border-right: none;
+    border-top: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+  }
+
+  .toolbar-body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 0;
+    padding: 6px 0;
+  }
+
+  .toolbar-section {
+    flex-shrink: 0;
+    margin-bottom: 0;
+    border-right: 1px solid var(--border);
+  }
+
+  .toolbar-item {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 6px 10px;
+  }
+}

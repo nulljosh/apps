@@ -88,3 +88,9 @@
   font-size: 11px;
   color: var(--muted);
 }
+
+@media (max-width: 768px) {
+  .inspector {
+    display: none;
+  }
+}

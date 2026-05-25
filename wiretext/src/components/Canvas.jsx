@@ -47,11 +47,11 @@ export default function Canvas({
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Background
-    ctx.fillStyle = '#09090b';
+    ctx.fillStyle = '#faf7f4';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Grid dots
-    ctx.fillStyle = '#27272a';
+    ctx.fillStyle = 'rgba(26,22,18,0.1)';
     for (let r = 0; r <= rows; r++) {
       for (let c = 0; c <= cols; c++) {
         ctx.fillRect(Math.round(c * charW), r * charH, 1, 1);
@@ -63,7 +63,7 @@ export default function Canvas({
       const { col, row } = hoverCell;
       const previewGrid = stampComponent(grid, selectedPreset.template, col, row);
       ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
-      ctx.fillStyle = 'rgba(99,102,241,0.5)';
+      ctx.fillStyle = 'rgba(255,133,27,0.5)';
       for (let dy = 0; dy < selectedPreset.height; dy++) {
         const r = row + dy;
         if (r < 0 || r >= rows) continue;
@@ -77,7 +77,7 @@ export default function Canvas({
 
     // Characters
     ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
-    ctx.fillStyle = '#f4f4f5';
+    ctx.fillStyle = '#1a1612';
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const ch = grid[r][c];
@@ -90,7 +90,7 @@ export default function Canvas({
     // Cursor
     const cx = cursor.col * charW;
     const cy = cursor.row * charH;
-    ctx.strokeStyle = '#6366f1';
+    ctx.strokeStyle = '#FF851B';
     ctx.lineWidth = 1;
     ctx.strokeRect(cx + 0.5, cy + 0.5, charW - 1, charH - 1);
   }, [grid, cols, rows, cursor, selectedPreset]);

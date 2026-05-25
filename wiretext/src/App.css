@@ -3,6 +3,7 @@
   grid-template-columns: 200px 1fr 220px;
   grid-template-rows: 40px 1fr;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
   background: var(--bg);
 }
@@ -76,4 +77,27 @@
   border-color: #ef4444;
   color: #ef4444;
   background: rgba(239, 68, 68, 0.08);
+}
+
+@media (max-width: 768px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 44px 1fr auto;
+  }
+
+  .app-header {
+    grid-column: 1;
+    padding: 0 12px;
+  }
+
+  .app-header-actions {
+    gap: 4px;
+  }
+
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
 }
