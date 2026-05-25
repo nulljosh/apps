@@ -135,6 +135,12 @@ const SCALE = [
 ];
 
 const LAWYERS = [
+  { id:'thomas-harding',   init:'TH', name:'Thomas Harding', sub:'Thomas Harding Law Corp (TLAG) - Surrey BC - PK referral - Degen $317k',
+    tags:[{t:'Degen case $317k',c:'good'},{t:'RCMP misconduct',c:'good'},{t:'PK referral',c:'urgent'},{t:'PRIORITY',c:'urgent'}], status:'none', fit:5,
+    contacts:[{label:'604-635-1330',href:'tel:6046351330',kind:'tel',primary:true},{label:'tlag.ca',href:'https://tlag.ca',kind:'web'}] },
+  { id:'neil-chantler',    init:'NC', name:'Neil Chantler', sub:'Chantler & Company - Vancouver BC - PK referral',
+    tags:[{t:'Civil rights',c:'good'},{t:'PK referral',c:'urgent'},{t:'PRIORITY',c:'urgent'}], status:'none', fit:4,
+    contacts:[{label:'604-424-8454',href:'tel:6044248454',kind:'tel',primary:true},{label:'neilchantler@chantlerlaw.ca',href:'mailto:neilchantler@chantlerlaw.ca',kind:'email'},{label:'chantlerlaw.ca',href:'https://chantlerlaw.ca',kind:'web'}] },
   { id:'paul-kent',        init:'PK', name:'Paul G. Kent-Snowsell', sub:'Kane Shannon & Weiler - Surrey BC - Of Counsel',
     tags:[{t:'33 yrs trial',c:'good'},{t:'Sued RCMP',c:'good'}], status:'voicemail', fit:4,
     contacts:[{label:'604-591-7321',href:'tel:6045917321',kind:'tel',primary:true},{label:'pgkent@kswlawyers.ca',href:'mailto:pgkent@kswlawyers.ca',kind:'email'}] },
@@ -191,6 +197,8 @@ const CHECKLIST = [
   { i:'14', label:'ATIP filed with RCMP - officer names, notebooks, BWC',      pri:'now',  done:false, lev:70 },
   { i:'15', label:'FOI filed with E-Comm 9-1-1 BC - 911 audio + CAD notes',   pri:'now',  done:false, lev:65 },
   { i:'16', label:'Email outreach: Ward (declined), Arvay (declined May 25), Klein, BCCLA', pri:'now',  done:true, lev:30 },
+  { i:'17', label:'Contact Thomas Harding - TLAG 604-635-1330 (Degen $317k, PK referral) - TOP PRIORITY', pri:'now', done:false, lev:150 },
+  { i:'18', label:'Contact Neil Chantler - 604-424-8454 / neilchantler@chantlerlaw.ca (PK referral) - TOP PRIORITY', pri:'now', done:false, lev:140 },
 ];
 
 const JOURNAL_SEED = [

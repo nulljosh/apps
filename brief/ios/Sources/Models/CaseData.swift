@@ -268,11 +268,21 @@ let caseChecklist: [ChecklistItem] = [
     ChecklistItem(id: 14, label: "ATIP filed with RCMP — officer names, notebooks (Form 1624), BWC footage, File #2023-25586", priority: .now),
     ChecklistItem(id: 15, label: "FOI filed with E-Comm 9-1-1 BC — 911 audio + CAD notes (neutralizes Godoy scope argument)", priority: .now),
     ChecklistItem(id: 16, label: "Email outreach: Cameron Ward (declined), Arvay Finlay (declined May 25 — Robin Gage, no capacity), Klein Lawyers, BCCLA", priority: .now),
-    ChecklistItem(id: 17, label: "Contact Thomas Harding (referred by Paul Kent — did Degen case $317k)", priority: .now),
-    ChecklistItem(id: 18, label: "Contact Neil Chantler (referred by Paul Kent)", priority: .now)
+    ChecklistItem(id: 17, label: "PRIORITY: Call Thomas Harding — TLAG 604-635-1330 (Degen $317k, PK referral)", priority: .now),
+    ChecklistItem(id: 18, label: "PRIORITY: Call Neil Chantler — 604-424-8454 / neilchantler@chantlerlaw.ca (PK referral)", priority: .now)
 ]
 
 let caseLawyers: [Lawyer] = [
+    Lawyer(id: "th", initials: "TH", name: "Thomas Harding — PRIORITY",
+           subtitle: "Thomas Harding Law Corp (TLAG) · Surrey BC · PK referral · Degen case $317k",
+           tags: [LawyerTag(label: "Degen case $317k", style: .good), LawyerTag(label: "RCMP misconduct", style: .good), LawyerTag(label: "PK referral", style: .urgent), LawyerTag(label: "PRIORITY", style: .urgent)],
+           phone: "6046351330", phoneNote: nil, email: nil, website: "tlag.ca"),
+
+    Lawyer(id: "nc", initials: "NC", name: "Neil Chantler — PRIORITY",
+           subtitle: "Chantler & Company · Vancouver BC · PK referral",
+           tags: [LawyerTag(label: "Civil rights", style: .good), LawyerTag(label: "PK referral", style: .urgent), LawyerTag(label: "PRIORITY", style: .urgent)],
+           phone: "6044248454", phoneNote: nil, email: "neilchantler@chantlerlaw.ca", website: "chantlerlaw.ca"),
+
     Lawyer(id: "pk", initials: "PK", name: "Paul G. Kent-Snowsell",
            subtitle: "Kane Shannon & Weiler (KSW) · Surrey BC · Declined May 18 — referred Harding & Chantler",
            tags: [LawyerTag(label: "33 yrs trial", style: .good), LawyerTag(label: "Sued RCMP", style: .good), LawyerTag(label: "Declined May 18", style: .fail)],
@@ -282,16 +292,6 @@ let caseLawyers: [Lawyer] = [
            subtitle: "Vancouver BC · Declined May 15",
            tags: [LawyerTag(label: "Police Misconduct", style: .good), LawyerTag(label: "Wrongful arrest", style: .good), LawyerTag(label: "Declined May 15", style: .fail)],
            phone: "6043276381", phoneNote: nil, email: "Ingrid@dlalaw.ca", website: nil),
-
-    Lawyer(id: "th", initials: "TH", name: "Thomas Harding",
-           subtitle: "Thomas Harding Law Corp (TLAG) · Surrey BC · PK referral · Degen case $317k",
-           tags: [LawyerTag(label: "Degen case $317k", style: .good), LawyerTag(label: "RCMP misconduct", style: .good), LawyerTag(label: "PK referral", style: .urgent)],
-           phone: "6046351330", phoneNote: nil, email: nil, website: "tlag.ca"),
-
-    Lawyer(id: "nc", initials: "NC", name: "Neil Chantler",
-           subtitle: "Chantler & Company · Vancouver BC · PK referral",
-           tags: [LawyerTag(label: "Civil rights", style: .good), LawyerTag(label: "PK referral", style: .urgent)],
-           phone: "6044248454", phoneNote: nil, email: "neilchantler@chantlerlaw.ca", website: "chantlerlaw.ca"),
 
     Lawyer(id: "mh", initials: "MH", name: "McQuarrie Hunter LLP",
            subtitle: "Surrey BC",
