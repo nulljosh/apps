@@ -171,7 +171,7 @@ const LAWYERS = [
 ];
 
 const TIMELINE = [
-  { when:'Now',          state:'now',  title:'Counsel selection',        desc:'Email-first outreach to 4 firms. Voicemail unreliable. Compare retainer structures before signing.' },
+  { when:'Now',          state:'now',  title:'Call Harding & Chantler',  desc:'Thomas Harding 604-635-1330 (Degen $317k, PK referral) + Neil Chantler 604-424-8454. Ward/DLA/Arvay all declined. Klein + BCCLA still open.' },
   { when:'Month 1-2',    state:'',     title:'Evidence build',           desc:'Police report, ATIP, E-Comm FOI, hospital ROI, BWC, OPCC to CRCC complaint, PTSD diagnosis letter.' },
   { when:'Month 2-4',    state:'warn', title:'Claim filed',              desc:'Basic limit expired Aug 2025. If discoverability holds, file immediately - every day increases risk.' },
   { when:'Month 6-18',   state:'',     title:'Discovery & negotiation',  desc:'Evidence exchanged. Settlement talks begin. Federal AG typically prefers quiet settlement.' },
@@ -180,7 +180,7 @@ const TIMELINE = [
 ];
 
 const CHECKLIST = [
-  { i:'0',  label:'Call Paul Kent-Snowsell - book appointment',                pri:'now',  done:false, lev:20 },
+  { i:'0',  label:'Call Paul Kent-Snowsell - book appointment',                pri:'now',  done:true,  lev:20 },
   { i:'1',  label:'PTSD assessment started (therapy) - get Dx letter',         pri:'now',  done:true,  lev:80 },
   { i:'2',  label:'Body cam footage requested from RCMP',                       pri:'now',  done:false, lev:120 },
   { i:'3',  label:'Police report - both Daryls full names',                     pri:'now',  done:false, lev:45 },
@@ -716,7 +716,8 @@ function renderLawyers() {
   while (c.firstChild) c.removeChild(c.firstChild);
   const data = webActiveCase === 'rcmp' ? LAWYERS : FAMILY_LAWYERS;
   data.forEach(L => {
-    const d = document.createElement('div'); d.className = 'lawyer'; d.dataset.lawyerId = L.id;
+    const isPriority = L.id === 'thomas-harding' || L.id === 'neil-chantler';
+    const d = document.createElement('div'); d.className = 'lawyer' + (isPriority ? ' priority' : ''); d.dataset.lawyerId = L.id;
 
     const av = document.createElement('div'); av.className = 'lawyer-av'; av.textContent = L.init;
     const body = document.createElement('div'); body.className = 'lawyer-body';
@@ -786,8 +787,9 @@ function renderChecklist() {
   const cl = getActiveChecklist();
   const store = getClStore();
   const saved = JSON.parse(localStorage.getItem(store) || '{}');
+  cl.forEach(it => { if (saved[it.i] !== undefined) it.done = saved[it.i]; });
+  cl.sort((a, b) => (a.done === b.done) ? b.lev - a.lev : a.done ? 1 : -1);
   cl.forEach(it => {
-    if (saved[it.i] !== undefined) it.done = saved[it.i];
     const d = document.createElement('div'); d.className = 'cl-item'; d.dataset.i = it.i;
     const box = document.createElement('div'); box.className = 'cl-box' + (it.done?' done':'');
     const lbl = document.createElement('div'); lbl.className = 'cl-label' + (it.done?' done':''); lbl.textContent = it.label;

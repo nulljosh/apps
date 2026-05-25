@@ -474,6 +474,10 @@ body {
 .tag.status.voicemail { background: var(--paper-2); color: var(--muted); }
 .tag.status.callback  { background: var(--info-soft); color: var(--info); }
 .tag.status.retained  { background: var(--good-soft); color: var(--good); }
+.tag.status.declined  { background: #3d1a1a; color: #e05555; }
+.tag.urgent { background: #1a2d3d; color: #4db8ff; }
+.tag.fail   { background: #3d1a1a; color: #e05555; }
+.lawyer.priority { border-left: 3px solid #4db8ff; padding-left: 18px; margin-left: -21px; }
 .lawyer-actions { display: flex; flex-direction: column; gap: 6px; min-width: 200px; align-items: flex-end; }
 .contact { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 4px; background: var(--paper-2); font-family: var(--mono); font-size: 11.5px; text-decoration: none; color: var(--ink); border: 1px solid var(--rule); transition: all 0.15s; }
 .contact:hover { border-color: var(--ink); }
