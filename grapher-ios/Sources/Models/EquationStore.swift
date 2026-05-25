@@ -8,8 +8,8 @@ final class EquationStore {
     private let defaultsKey = "grapher.equations"
 
     static let colors = [
-        "#0071e3", "#ff453a", "#30d158", "#ffd60a",
-        "#bf5af2", "#ff9f0a", "#64d2ff", "#ff375f",
+        "#FF851B", "#ff453a", "#30d158", "#ffd60a",
+        "#bf5af2", "#0071e3", "#64d2ff", "#ff375f",
     ]
 
     init() {
