@@ -1,4 +1,4 @@
-import { useReducer, useCallback } from 'react';
+import { useReducer, useCallback, useState, useEffect } from 'react';
 import './App.css';
 import Toolbar from './components/Toolbar.jsx';
 import Canvas from './components/Canvas.jsx';
@@ -46,6 +46,20 @@ function reducer(state, action) {
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, undefined, () => createState());
+  const [inspectorOpen, setInspectorOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('wiretext-theme');
+    return saved === 'dark';
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('wiretext-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
 
   const handleSelectPreset = useCallback((preset) => {
     dispatch({ type: 'SELECT_PRESET', preset });
@@ -89,6 +103,29 @@ export default function App() {
           <button className="btn" onClick={handleClear}>Clear</button>
           <button className="btn" onClick={handleCopy}>Copy</button>
           <button className="btn btn-primary" onClick={handleExport}>Export .txt</button>
+          <button
+            className="btn btn-icon-round"
+            onClick={() => setDarkMode(d => !d)}
+            title="Toggle dark mode"
+          >
+            {darkMode ? (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.5"/>
+                <line x1="8" y1="0.5" x2="8" y2="2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="8" y1="13.5" x2="8" y2="15.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="0.5" y1="8" x2="2.5" y2="8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="13.5" y1="8" x2="15.5" y2="8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="2.55" y1="2.55" x2="3.96" y2="3.96" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="12.04" y1="12.04" x2="13.45" y2="13.45" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="2.55" y1="13.45" x2="3.96" y2="12.04" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="12.04" y1="3.96" x2="13.45" y2="2.55" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M13.5 9.5A6 6 0 0 1 6.5 2.5a6 6 0 1 0 7 7z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
+          </button>
         </div>
       </header>
 
@@ -116,7 +153,27 @@ export default function App() {
         selectedPreset={state.selectedPreset}
         historyLength={state.history.length}
         futureLength={state.future.length}
+        isOpen={inspectorOpen}
+        onClose={() => setInspectorOpen(false)}
       />
+
+      <button
+        className="inspector-toggle"
+        onClick={() => setInspectorOpen(o => !o)}
+        title="Toggle inspector"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="4" width="16" height="2" rx="1" fill="currentColor"/>
+          <rect x="2" y="9" width="10" height="2" rx="1" fill="currentColor"/>
+          <rect x="2" y="14" width="13" height="2" rx="1" fill="currentColor"/>
+          <circle cx="16" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+          <line x1="17.77" y1="11.77" x2="19.5" y2="13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+      </button>
+
+      {inspectorOpen && (
+        <div className="inspector-backdrop" onClick={() => setInspectorOpen(false)} />
+      )}
     </div>
   );
 }

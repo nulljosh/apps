@@ -7,9 +7,11 @@ export default function Inspector({
   selectedPreset,
   historyLength,
   futureLength,
+  isOpen,
+  onClose,
 }) {
   return (
-    <aside className="inspector">
+    <aside className={`inspector${isOpen ? ' is-open' : ''}`}>
       <div className="inspector-header">
         <span className="inspector-label">Inspector</span>
       </div>
