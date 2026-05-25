@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400" style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#fff">
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1d1d1f">grapher-macos Architecture</text>
+
+  <!-- GrapherMacApp node -->
+  <rect x="310" y="55" width="180" height="40" rx="8" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.5"/>
+  <text x="400" y="80" text-anchor="middle" font-size="12" font-weight="600" fill="#1d1d1f">GrapherMacApp</text>
+
+  <!-- MacContentView node -->
+  <rect x="310" y="135" width="180" height="40" rx="8" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.5"/>
+  <text x="400" y="160" text-anchor="middle" font-size="12" font-weight="600" fill="#1d1d1f">MacContentView</text>
+
+  <!-- Arrow: App -> ContentView -->
+  <line x1="400" y1="95" x2="400" y2="135" stroke="#d2d2d7" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- EquationStore node -->
+  <rect x="100" y="230" width="160" height="40" rx="8" fill="#e8f4fd" stroke="#0071e3" stroke-width="1.5"/>
+  <text x="180" y="255" text-anchor="middle" font-size="12" font-weight="600" fill="#0071e3">EquationStore</text>
+  <text x="180" y="270" text-anchor="middle" font-size="10" fill="#0071e3">@Observable</text>
+
+  <!-- MacGraphCanvasView node -->
+  <rect x="300" y="230" width="170" height="40" rx="8" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.5"/>
+  <text x="385" y="255" text-anchor="middle" font-size="12" font-weight="600" fill="#1d1d1f">MacGraphCanvasView</text>
+  <text x="385" y="270" text-anchor="middle" font-size="10" fill="#6e6e73">Canvas + ScrollWheel</text>
+
+  <!-- MacEquationListView node -->
+  <rect x="510" y="230" width="170" height="40" rx="8" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.5"/>
+  <text x="595" y="255" text-anchor="middle" font-size="12" font-weight="600" fill="#1d1d1f">MacEquationListView</text>
+  <text x="595" y="270" text-anchor="middle" font-size="10" fill="#6e6e73">NavigationSplitView sidebar</text>
+
+  <!-- Arrows: ContentView -> children -->
+  <line x1="360" y1="175" x2="220" y2="230" stroke="#d2d2d7" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="400" y1="175" x2="400" y2="230" stroke="#d2d2d7" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="440" y1="175" x2="560" y2="230" stroke="#d2d2d7" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- GraphMath node -->
+  <rect x="300" y="325" width="170" height="40" rx="8" fill="#f0fdf4" stroke="#30d158" stroke-width="1.5"/>
+  <text x="385" y="350" text-anchor="middle" font-size="12" font-weight="600" fill="#1d1d1f">GraphMath</text>
+  <text x="385" y="365" text-anchor="middle" font-size="10" fill="#30d158">NSExpression eval</text>
+
+  <!-- NSSavePanel node -->
+  <rect x="510" y="325" width="170" height="40" rx="8" fill="#fff7ed" stroke="#ff9f0a" stroke-width="1.5"/>
+  <text x="595" y="350" text-anchor="middle" font-size="12" font-weight="600" fill="#1d1d1f">NSSavePanel</text>
+  <text x="595" y="365" text-anchor="middle" font-size="10" fill="#ff9f0a">PNG export</text>
+
+  <!-- Arrows -->
+  <line x1="385" y1="270" x2="385" y2="325" stroke="#d2d2d7" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="595" y1="270" x2="595" y2="325" stroke="#d2d2d7" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#d2d2d7"/>
+    </marker>
+  </defs>
+</svg>
