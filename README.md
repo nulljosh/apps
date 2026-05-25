@@ -10,9 +10,14 @@ Monorepo for standalone apps and experiments. Each subdirectory is an independen
 
 | App | Description | Platform |
 |-----|-------------|----------|
+| **beep** | TransLink Compass Card — native iOS app with Face ID, balance/trips dashboard | iOS |
+| **beep-web** | TransLink Compass Card — PWA wrapper (iframe) with tab nav and offline state | Web (PWA) |
 | **bhaddie** | Location-based social + creator economy | iOS, Web, macOS |
+| **brief** | Litigation planning tool (*Trommel v. AG Canada* + *Trommel v. Trommel*). Private. | Web, iOS, macOS |
 | **cadence** | Git commit progress tracker across all repos | Web, iOS, macOS |
+| **charters** / **charters-ios** | Constitutional Rights Reference — compare rights across 15 constitutions | Web, iOS |
 | **dose** | Health tracker: drugs, vitamins, biometrics | Web, iOS, watchOS |
+| **echo** | On-device speech transcription via WhisperKit — no cloud, 12 languages | iOS, macOS |
 | **epiphany** | Finance + intelligence dashboard | Web, iOS, macOS, watchOS |
 | **grapher** | Desmos-style graphing calculator | Web |
 | **life** / **life-ios** | Personal life summary for therapy — 32 sections, 27 visuals, dual timeline | Web, iOS |
@@ -22,6 +27,7 @@ Monorepo for standalone apps and experiments. Each subdirectory is an independen
 | **parallax** | Head-tracked 3D parallax via webcam + MediaPipe | Web |
 | **portfolio-ios** | Portfolio companion | iOS |
 | **roost** | Zillow clone for BC — map, listings, filters, agent profiles, price history | Web (PWA) |
+| **school** | Grade 12 academic tracker (UVic CS admission) | Web, iOS |
 | **spark** | Idea forum with voting, comments, law integration, IP/trademark filing | Web, iOS, macOS, watchOS |
 | **tally** | BC Self-Serve scraper + benefits dashboard | Web (PWA), iOS, watchOS |
 | **wiretext** / **wiretext-ios** / **wiretext-macos** | Unicode wireframe design tool | Web, iOS, macOS |

@@ -1,7 +1,7 @@
 <img src="icon.svg" width="80">
 
 # wiretext
-![version](https://img.shields.io/badge/version-v1.0.0-blue)
+![version](https://img.shields.io/badge/version-v1.0.1-blue)
 
 Unicode wireframe design tool. Click components from the palette, place them on a monospace character canvas, export as plain text.
 

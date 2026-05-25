@@ -1,7 +1,7 @@
 <img src="icon.svg" width="80">
 
 # Dose
-![version](https://img.shields.io/badge/version-v1.3.0-blue)
+![version](https://img.shields.io/badge/version-v2.1.1-blue)
 Personal substance tracker, harm reduction wiki, and health dashboard.
 
 ## Features

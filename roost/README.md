@@ -2,7 +2,7 @@
 
 # Roost
 
-![version](https://img.shields.io/badge/version-v2.1.0-blue)
+![version](https://img.shields.io/badge/version-v2.0.1-blue)
 
 BC real estate listings app with interactive map, search filters, and favorites. Mobile-first PWA with Dark Editorial design.
 

@@ -2,7 +2,7 @@
 
 # Spark
 
-![version](https://img.shields.io/badge/version-v2.0.0-blue)
+![version](https://img.shields.io/badge/version-v2.0.1-blue)
 
 Idea-sharing platform with upvoting and JWT auth.
 
