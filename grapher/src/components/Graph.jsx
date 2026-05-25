@@ -1,8 +1,14 @@
 import { useRef, useEffect, useCallback } from 'react';
 
-const GRID_COLOR = 'rgba(255,255,255,0.06)';
-const AXIS_COLOR = 'rgba(255,255,255,0.25)';
-const LABEL_COLOR = 'rgba(255,255,255,0.45)';
+function graphColors() {
+  const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return {
+    grid: dark ? 'rgba(242,237,232,0.07)' : 'rgba(26,22,18,0.07)',
+    axis: dark ? 'rgba(242,237,232,0.3)' : 'rgba(26,22,18,0.3)',
+    label: dark ? 'rgba(242,237,232,0.5)' : 'rgba(26,22,18,0.5)',
+    bg: dark ? '#0d0c0b' : '#faf7f4',
+  };
+}
 
 export default function Graph({ equations }) {
   const canvasRef = useRef(null);
@@ -18,14 +24,16 @@ export default function Graph({ equations }) {
     const cx = W / 2 + ox;
     const cy = H / 2 + oy;
 
-    ctx.clearRect(0, 0, W, H);
+    const colors = graphColors();
+    ctx.fillStyle = colors.bg;
+    ctx.fillRect(0, 0, W, H);
 
     // grid
     const step = scale;
     const startX = ((cx % step) - step) % step;
     const startY = ((cy % step) - step) % step;
 
-    ctx.strokeStyle = GRID_COLOR;
+    ctx.strokeStyle = colors.grid;
     ctx.lineWidth = 1;
     for (let x = startX; x < W; x += step) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
@@ -35,14 +43,14 @@ export default function Graph({ equations }) {
     }
 
     // axes
-    ctx.strokeStyle = AXIS_COLOR;
+    ctx.strokeStyle = colors.axis;
     ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
 
     // axis labels
-    ctx.fillStyle = LABEL_COLOR;
-    ctx.font = '11px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.fillStyle = colors.label;
+    ctx.font = '11px "Space Grotesk", -apple-system, system-ui, sans-serif';
     ctx.textAlign = 'center';
     const labelStep = Math.round(Math.max(1, 80 / scale));
     for (let x = startX; x < W; x += step) {
@@ -138,7 +146,7 @@ export default function Graph({ equations }) {
   return (
     <canvas
       ref={canvasRef}
-      style={{ width: '100%', height: '100%', display: 'block', cursor: 'crosshair' }}
+      style={{ width: '100%', height: '100%', display: 'block', cursor: 'crosshair', touchAction: 'none' }}
       onWheel={onWheel}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}

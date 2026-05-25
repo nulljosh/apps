@@ -37,20 +37,17 @@ export default function App() {
   return (
     <div style={{
       height: '100dvh',
-      background: '#0a0a0f',
+      background: 'var(--bg)',
       display: 'flex',
       flexDirection: 'column',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
-      color: '#f5f5f7',
+      fontFamily: 'var(--font)',
+      color: 'var(--text)',
       overflow: 'hidden',
     }}>
-      {/* header */}
       <div style={{
         padding: '14px 20px 12px',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-        background: 'rgba(10,10,15,0.8)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid var(--border)',
+        background: 'var(--bg)',
         zIndex: 10,
         display: 'flex',
         alignItems: 'center',
@@ -60,29 +57,28 @@ export default function App() {
         <span style={{ fontSize: 16, fontWeight: 600, letterSpacing: '-0.01em' }}>Grapher</span>
         <span style={{
           marginLeft: 'auto', fontSize: 11,
-          color: 'rgba(255,255,255,0.3)',
+          color: 'var(--text-secondary)',
           fontFamily: '"SF Mono", "Menlo", monospace',
         }}>scroll to zoom · drag to pan</span>
       </div>
 
-      {/* main */}
-      <div style={{
+      <div className="main-layout" style={{
         flex: 1,
-        display: 'grid',
-        gridTemplateColumns: 'minmax(0,1fr) 300px',
+        display: 'flex',
+        flexDirection: 'row',
         overflow: 'hidden',
       }}>
-        {/* graph */}
-        <div style={{ position: 'relative', overflow: 'hidden' }}>
+        <div className="graph-pane" style={{ position: 'relative', overflow: 'hidden', flex: 1 }}>
           <Graph equations={equations} />
         </div>
 
-        {/* sidebar */}
-        <div style={{
+        <div className="sidebar-pane" style={{
+          width: 300,
           padding: 16,
-          borderLeft: '1px solid rgba(255,255,255,0.07)',
-          background: 'rgba(255,255,255,0.02)',
+          borderLeft: '1px solid var(--border)',
+          background: 'var(--bg2)',
           overflowY: 'auto',
+          flexShrink: 0,
         }}>
           <EquationList
             equations={equations}
@@ -93,12 +89,12 @@ export default function App() {
 
           <div style={{
             marginTop: 12,
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
+            background: 'var(--bg)',
+            border: '1px solid var(--border)',
             borderRadius: 12,
             padding: '12px 14px',
           }}>
-            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 8 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 8 }}>
               Quick examples
             </div>
             {['x^2', 'sin(x)', 'cos(x)', '2*x+1', 'sqrt(abs(x))', 'tan(x)', '1/x', 'x^3-x'].map((ex) => (
@@ -110,34 +106,41 @@ export default function App() {
                 }}
                 style={{
                   display: 'inline-block', margin: '3px 4px 3px 0',
-                  background: 'rgba(255,255,255,0.07)',
-                  border: '1px solid rgba(255,255,255,0.10)',
+                  background: 'var(--bg2)',
+                  border: '1px solid var(--border)',
                   borderRadius: 8, padding: '4px 9px',
-                  color: 'rgba(255,255,255,0.65)',
+                  color: 'var(--text-secondary)',
                   fontSize: 12,
                   fontFamily: '"SF Mono", "Menlo", monospace',
                   cursor: 'pointer',
                   transition: 'background 0.1s',
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}
-                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.07)'}
+                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
               >{ex}</button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* mobile bottom sheet */}
       <style>{`
         @media (max-width: 640px) {
-          .graph-layout {
-            grid-template-columns: 1fr !important;
-            grid-template-rows: 1fr auto !important;
+          .main-layout {
+            flex-direction: column !important;
           }
-          .sidebar {
+          .graph-pane {
+            order: 1;
+            flex: 1 !important;
+            min-height: 55dvh;
+            width: 100% !important;
+          }
+          .sidebar-pane {
+            order: 2;
+            width: 100% !important;
+            height: 45dvh;
             border-left: none !important;
-            border-top: 1px solid rgba(255,255,255,0.07) !important;
-            max-height: 45dvh;
+            border-top: 1px solid var(--border) !important;
+            overflow-y: auto;
           }
         }
       `}</style>

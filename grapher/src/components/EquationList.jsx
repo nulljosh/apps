@@ -3,10 +3,8 @@ import EquationRow from './EquationRow.jsx';
 export default function EquationList({ equations, onChange, onRemove, onAdd }) {
   return (
     <div style={{
-      background: 'rgba(255,255,255,0.05)',
-      backdropFilter: 'blur(20px)',
-      WebkitBackdropFilter: 'blur(20px)',
-      border: '1px solid rgba(255,255,255,0.10)',
+      background: 'var(--bg)',
+      border: '1px solid var(--border)',
       borderRadius: 16,
       padding: '16px 16px 12px',
       display: 'flex',
@@ -14,7 +12,7 @@ export default function EquationList({ equations, onChange, onRemove, onAdd }) {
     }}>
       <div style={{
         fontSize: 11, fontWeight: 600, letterSpacing: '0.08em',
-        textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)',
+        textTransform: 'uppercase', color: 'var(--text-secondary)',
         marginBottom: 12,
       }}>Equations</div>
 
@@ -32,18 +30,19 @@ export default function EquationList({ equations, onChange, onRemove, onAdd }) {
         onClick={onAdd}
         style={{
           marginTop: 4,
-          background: 'rgba(0,113,227,0.15)',
-          border: '1px solid rgba(0,113,227,0.35)',
+          background: 'rgba(255,133,27,0.1)',
+          border: '1px solid rgba(255,133,27,0.35)',
           borderRadius: 10,
-          color: '#0071e3',
+          color: 'var(--accent)',
           fontSize: 13,
-          fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
+          fontFamily: 'var(--font)',
           padding: '7px 0',
+          minHeight: 44,
           cursor: 'pointer',
           transition: 'background 0.15s',
         }}
-        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,113,227,0.25)'}
-        onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0,113,227,0.15)'}
+        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,133,27,0.2)'}
+        onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,133,27,0.1)'}
       >+ Add equation</button>
     </div>
   );
