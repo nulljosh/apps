@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { items as routineItems } from '../data/routine';
 
 const KEY = 'dose:profile';
 
@@ -52,6 +53,51 @@ const STATUS_COLORS = {
   pending: 'var(--text-tertiary)',
   done: 'var(--success)',
 };
+
+function RoutineSummary() {
+  let checked = {};
+  try {
+    checked = JSON.parse(localStorage.getItem('dose:routine:checked') || '{}');
+  } catch {}
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const todayChecks = checked[todayKey] || {};
+  const visible = routineItems.slice(0, 5);
+
+  if (routineItems.length === 0) {
+    return <div style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>No routine set</div>;
+  }
+
+  return (
+    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
+      {visible.map(item => {
+        const done = !!todayChecks[item.id];
+        return (
+          <li key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{
+              width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
+              background: done ? 'var(--accent)' : 'var(--border)',
+            }} />
+            <span style={{
+              fontSize: '0.83rem',
+              color: done ? 'var(--text-tertiary)' : 'var(--text-primary)',
+              textDecoration: done ? 'line-through' : 'none',
+            }}>
+              {item.label}
+            </span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)', marginLeft: 'auto', flexShrink: 0 }}>
+              {item.category}
+            </span>
+          </li>
+        );
+      })}
+      {routineItems.length > 5 && (
+        <li style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)' }}>
+          +{routineItems.length - 5} more
+        </li>
+      )}
+    </ul>
+  );
+}
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -179,22 +225,17 @@ export default function Profile() {
       {/* Routine */}
       <div className="section-label" style={{ marginBottom: 10 }}>Routine</div>
       <div className="card" style={{ marginBottom: 20 }}>
+        <RoutineSummary />
         <button
           onClick={() => navigate('/routine')}
           style={{
-            width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0',
-            color: 'inherit', fontFamily: 'inherit',
+            marginTop: 10, background: 'none', border: 'none', padding: 0,
+            color: 'var(--accent)', fontSize: '0.78rem', cursor: 'pointer',
+            fontFamily: 'inherit', textDecoration: 'underline', textDecorationColor: 'var(--accent-border)',
+            textUnderlineOffset: 3,
           }}
         >
-          <div>
-            <div style={{ fontWeight: 500, fontSize: '0.88rem' }}>Daily Routine</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: 2 }}>Health habits — resets at midnight</div>
-          </div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-            strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-tertiary)', flexShrink: 0 }}>
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
+          Edit routine
         </button>
       </div>
 
