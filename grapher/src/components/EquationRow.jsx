@@ -1,4 +1,20 @@
+import { useState, useEffect } from 'react';
+import { evaluate } from '../utils/evaluate.js';
+
 export default function EquationRow({ eq, onChange, onRemove, showRemove }) {
+  const [invalid, setInvalid] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      try {
+        const { fn, error } = evaluate(eq.expr);
+        setInvalid(fn === null && !!error);
+      } catch {
+        setInvalid(true);
+      }
+    }, 500);
+    return () => clearTimeout(t);
+  }, [eq.expr]);
+
   return (
     <div style={{ marginBottom: 10 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -16,7 +32,7 @@ export default function EquationRow({ eq, onChange, onRemove, showRemove }) {
           style={{
             flex: 1,
             background: 'var(--bg2)',
-            border: `1px solid ${eq.error ? 'rgba(220,53,69,0.6)' : 'var(--border)'}`,
+            border: `1px solid ${(eq.error || invalid) ? 'rgba(220,53,69,0.6)' : 'var(--border)'}`,
             borderRadius: 10,
             padding: '8px 12px',
             color: 'var(--text)',
@@ -27,10 +43,10 @@ export default function EquationRow({ eq, onChange, onRemove, showRemove }) {
             transition: 'border-color 0.15s',
           }}
           onFocus={(e) => {
-            if (!eq.error) e.target.style.borderColor = 'var(--accent)';
+            if (!eq.error && !invalid) e.target.style.borderColor = 'var(--accent)';
           }}
           onBlur={(e) => {
-            e.target.style.borderColor = eq.error ? 'rgba(220,53,69,0.6)' : 'var(--border)';
+            e.target.style.borderColor = (eq.error || invalid) ? 'rgba(220,53,69,0.6)' : 'var(--border)';
           }}
         />
         {showRemove && (
@@ -50,6 +66,9 @@ export default function EquationRow({ eq, onChange, onRemove, showRemove }) {
           fontSize: 11, color: 'rgba(220,53,69,0.85)',
           fontFamily: '"SF Mono", "Menlo", monospace',
         }}>{eq.error}</div>
+      )}
+      {invalid && !eq.error && (
+        <span style={{ fontSize: '0.7rem', color: '#e55', marginTop: 2, marginLeft: 20, display: 'block' }}>invalid expression</span>
       )}
     </div>
   );
