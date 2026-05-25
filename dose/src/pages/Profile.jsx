@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const KEY = 'dose:profile';
 
@@ -53,6 +54,7 @@ const STATUS_COLORS = {
 };
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(loadProfile);
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesVal, setNotesVal] = useState(profile.notes);
@@ -172,6 +174,28 @@ export default function Profile() {
             </span>
           </div>
         ))}
+      </div>
+
+      {/* Routine */}
+      <div className="section-label" style={{ marginBottom: 10 }}>Routine</div>
+      <div className="card" style={{ marginBottom: 20 }}>
+        <button
+          onClick={() => navigate('/routine')}
+          style={{
+            width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0',
+            color: 'inherit', fontFamily: 'inherit',
+          }}
+        >
+          <div>
+            <div style={{ fontWeight: 500, fontSize: '0.88rem' }}>Daily Routine</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: 2 }}>Health habits — resets at midnight</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+            strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-tertiary)', flexShrink: 0 }}>
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
       </div>
 
       {/* Notes */}

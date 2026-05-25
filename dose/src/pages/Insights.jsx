@@ -1,10 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDoseLog } from '../hooks/useDoseLog';
 import { useSubstances } from '../hooks/useSubstances';
 import ToleranceTracker from '../components/ToleranceTracker';
+import LabResults from './LabResults';
+import Biometrics from './Biometrics';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
+
+function SubTabBar({ active, onChange }) {
+  return (
+    <div style={{ display: 'flex', gap: 6, marginBottom: 24 }}>
+      {SUB_TABS.map(t => (
+        <button
+          key={t}
+          onClick={() => onChange(t)}
+          style={{
+            padding: '6px 16px',
+            borderRadius: 100,
+            border: active === t ? '1px solid var(--accent-border)' : '1px solid var(--border)',
+            background: active === t ? 'var(--accent-muted)' : 'transparent',
+            color: active === t ? 'var(--accent)' : 'var(--text-secondary)',
+            fontSize: '0.75rem',
+            fontWeight: 500,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            fontFamily: 'inherit',
+          }}
+        >
+          {t}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 function buildHeatmap(entries) {
   const grid = {};
@@ -16,9 +47,34 @@ function buildHeatmap(entries) {
   return grid;
 }
 
+const SUB_TABS = ['Insights', 'Labs', 'Biometrics'];
+
 export default function Insights() {
+  const [subTab, setSubTab] = useState('Insights');
   const { getEntries } = useDoseLog();
   const { getById } = useSubstances();
+
+  if (subTab === 'Labs') {
+    return (
+      <>
+        <div className="sub-tab-header">
+          <SubTabBar active={subTab} onChange={setSubTab} />
+        </div>
+        <LabResults />
+      </>
+    );
+  }
+
+  if (subTab === 'Biometrics') {
+    return (
+      <>
+        <div className="sub-tab-header">
+          <SubTabBar active={subTab} onChange={setSubTab} />
+        </div>
+        <Biometrics />
+      </>
+    );
+  }
 
   // Try last 30 days; if empty, fall back to all-time so users see something
   // as soon as they have any log history at all.
@@ -43,6 +99,7 @@ export default function Insights() {
 
   return (
     <main className="page">
+      <SubTabBar active={subTab} onChange={setSubTab} />
       <div className="flex-center" style={{ gap: 12, marginBottom: 6 }}>
         <h1 className="page-title">Insights</h1>
       </div>

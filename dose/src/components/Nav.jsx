@@ -30,29 +30,11 @@ const links = [
     ),
   },
   {
-    to: '/lab-results',
-    label: 'Labs',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5s-2.5-1.1-2.5-2.5V2"/><path d="M8.5 2h7"/><path d="M14.5 16h-5"/><path d="M8.5 7.5l-2 4h9l-2-4"/>
-      </svg>
-    ),
-  },
-  {
     to: '/body',
     label: 'Body',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="5" r="3"/><path d="M12 8v8m-4-6h8m-7 6l-3 4m10-4l3 4"/>
-      </svg>
-    ),
-  },
-  {
-    to: '/routine',
-    label: 'Routine',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
       </svg>
     ),
   },
