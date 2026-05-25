@@ -267,7 +267,7 @@ let caseChecklist: [ChecklistItem] = [
     ChecklistItem(id: 13, label: "Pin discovery date: when you first understood a civil Charter claim was an appropriate remedy", priority: .now),
     ChecklistItem(id: 14, label: "ATIP filed with RCMP — officer names, notebooks (Form 1624), BWC footage, File #2023-25586", priority: .now),
     ChecklistItem(id: 15, label: "FOI filed with E-Comm 9-1-1 BC — 911 audio + CAD notes (neutralizes Godoy scope argument)", priority: .now),
-    ChecklistItem(id: 16, label: "Email outreach sent to: Cameron Ward, Arvay Finlay, Klein Lawyers, BCCLA — email, don't call", priority: .now),
+    ChecklistItem(id: 16, label: "Email outreach: Cameron Ward (declined), Arvay Finlay (declined May 25 — Robin Gage, no capacity), Klein Lawyers, BCCLA", priority: .now),
     ChecklistItem(id: 17, label: "Contact Thomas Harding (referred by Paul Kent — did Degen case $317k)", priority: .now),
     ChecklistItem(id: 18, label: "Contact Neil Chantler (referred by Paul Kent)", priority: .now)
 ]
@@ -310,7 +310,7 @@ let caseLawyers: [Lawyer] = [
 
     Lawyer(id: "af", initials: "AF", name: "Arvay Finlay LLP",
            subtitle: "Vancouver BC",
-           tags: [LawyerTag(label: "Fairy Creek RCMP class action", style: .good), LawyerTag(label: "Charter ss.2/7/8/9", style: .good)],
+           tags: [LawyerTag(label: "Fairy Creek RCMP class action", style: .good), LawyerTag(label: "Charter ss.2/7/8/9", style: .good), LawyerTag(label: "Declined May 25", style: .fail)],
            phone: "6046969928", phoneNote: nil, email: nil, website: "arvayfinlay.ca"),
 
     Lawyer(id: "kl", initials: "KL", name: "Klein Lawyers",
@@ -371,7 +371,7 @@ let caseComparables: [CaseComparable] = [
 ]
 
 let caseTimeline: [TimelineStep] = [
-    TimelineStep(when: "Now", title: "Contact PK referrals", description: "Paul Kent declined May 18. DLA declined May 15. Priority: Thomas Harding (did Degen $317k) + Neil Chantler — both referred by Kent. Still awaiting: Cameron Ward, Arvay Finlay, Klein, BCCLA.", dotStyle: .now),
+    TimelineStep(when: "Now", title: "Contact PK referrals", description: "Paul Kent declined May 18. DLA declined May 15. Cameron Ward — no longer practising. Arvay Finlay declined May 25 (Robin Gage, no capacity). Priority: Thomas Harding (Degen $317k) + Neil Chantler — both referred by Kent. Still awaiting: Klein, BCCLA.", dotStyle: .now),
     TimelineStep(when: "Month 1–2", title: "Evidence gathering", description: "Police report, hospital records, body cam, formal PTSD Dx (in progress), CRCC complaint, ATIP + E-Comm FOI.", dotStyle: .neutral),
     TimelineStep(when: "Month 2–4", title: "Claim filed", description: "Basic deadline expired Aug 1, 2025. If discoverability argument succeeds, file immediately — every day increases risk.", dotStyle: .neutral),
     TimelineStep(when: "Month 6–18", title: "Discovery & negotiation", description: "Evidence exchanged. Settlement talks begin. Federal AG typically prefers quiet settlement.", dotStyle: .warn),
@@ -422,7 +422,7 @@ OUTREACH — VOICEMAILS NOT WORKING, SWITCH TO EMAIL:
 Email first:
 1. Cameron Ward — cameronward.com — EMAIL — he is the Ward in Ward v. Vancouver
 2. DLA Law — Ingrid@dlalaw.ca — EMAIL — follow up
-3. Arvay Finlay — arvayfinlay.ca — EMAIL
+3. Arvay Finlay — DECLINED May 25 (Robin Gage, Managing Partner — no capacity)
 4. Klein Lawyers — callkleinlawyers.com — EMAIL
 
 Call also viable:

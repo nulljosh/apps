@@ -142,7 +142,7 @@ const LAWYERS = [
     tags:[{t:'Ward v. Vancouver SCC',c:'good'},{t:'Charter & police',c:'good'}], status:'emailed', fit:5,
     contacts:[{label:'604-688-6881',href:'tel:6046886881',kind:'tel',primary:true},{label:'cward@cameronward.com',href:'mailto:cward@cameronward.com',kind:'email'},{label:'cameronward.com',href:'https://cameronward.com',kind:'web'}] },
   { id:'arvay-finlay',     init:'AF', name:'Arvay Finlay LLP', sub:'Vancouver BC',
-    tags:[{t:'Fairy Creek RCMP class',c:'good'},{t:'Charter ss.2/7/8/9',c:'good'}], status:'voicemail', fit:4,
+    tags:[{t:'Fairy Creek RCMP class',c:'good'},{t:'Charter ss.2/7/8/9',c:'good'},{t:'Declined May 25',c:'fail'}], status:'declined', fit:4,
     contacts:[{label:'604-696-9928',href:'tel:6046969928',kind:'tel'},{label:'arvayfinlay.ca',href:'https://arvayfinlay.ca',kind:'web'}] },
   { id:'klein-lawyers',    init:'KL', name:'Klein Lawyers', sub:'1385 W 8th Ave #400 - Vancouver BC - free consult, contingency',
     tags:[{t:'RCMP class actions',c:'good'},{t:'Federal court',c:'good'},{t:'Contingency',c:'good'}], status:'emailed', fit:3,
@@ -190,7 +190,7 @@ const CHECKLIST = [
   { i:'13', label:'Pin discovery date: May 11, 2026',                          pri:'now',  done:true,  lev:50 },
   { i:'14', label:'ATIP filed with RCMP - officer names, notebooks, BWC',      pri:'now',  done:false, lev:70 },
   { i:'15', label:'FOI filed with E-Comm 9-1-1 BC - 911 audio + CAD notes',   pri:'now',  done:false, lev:65 },
-  { i:'16', label:'Email outreach: Ward, Arvay, Klein, BCCLA',                 pri:'now',  done:false, lev:30 },
+  { i:'16', label:'Email outreach: Ward (declined), Arvay (declined May 25), Klein, BCCLA', pri:'now',  done:true, lev:30 },
 ];
 
 const JOURNAL_SEED = [
@@ -318,8 +318,8 @@ const BASELINE_PROJECTION = 400;
 const CEILING_PROJECTION  = 2250;
 
 let _lawyerStatuses = {};
-const STATUS_CYCLE = ['none','voicemail','emailed','callback','retained'];
-const STATUS_LABEL = { none:'Not contacted', voicemail:'Voicemail left', emailed:'Email sent', callback:'Callback received', retained:'Retained' };
+const STATUS_CYCLE = ['none','voicemail','emailed','callback','retained','declined'];
+const STATUS_LABEL = { none:'Not contacted', voicemail:'Voicemail left', emailed:'Email sent', callback:'Callback received', retained:'Retained', declined:'Declined' };
 
 function computeLeverage() {
   const evidence = CHECKLIST.reduce((s,x) => s + (x.done ? x.lev : 0), 0);
@@ -431,7 +431,7 @@ function renderTrajectory(currentTotal) {
   ];
   const details = [
     { l:'Where you stand today',    m:'Current projection of $' + currentTotal + 'k based on completed evidence and counsel posture.', v:'$' + currentTotal + 'k' },
-    { l:'Retain counsel',           m:"One signed retainer flips the AG's posture. Press-capable counsel (Cameron Ward, Arvay Finlay) maximizes the silence premium.", v:'+$180k' },
+    { l:'Retain counsel',           m:"One signed retainer flips the AG's posture. Press-capable counsel (Klein Lawyers, Thomas Harding) maximizes the silence premium.", v:'+$180k' },
     { l:'Complete top 5 evidence',  m:'BWC footage, therapist letter (PTSD + causation), ATIP officer notebooks, E-Comm 911 audio, hospital discharge - top leverage items.', v:'+$295k' },
     { l:'Claim filed',              m:'Filing converts pre-litigation soft leverage to live procedural pressure. AG must engage and consider discovery exposure.', v:'+$100k' },
     { l:'Trial-ready evidence',     m:'Full pleadings, expert reports (forensic psych + vocational economist). Trial threat is now credible.', v:'$' + CEILING_PROJECTION/1000 + 'M ceiling' },
