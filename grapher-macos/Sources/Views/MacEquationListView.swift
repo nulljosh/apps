@@ -71,6 +71,12 @@ struct MacEquationRowView: View {
 
     private let textColor = Color(hex: "f2ede8")
 
+    private var isInvalid: Bool {
+        let expr = equation.expression.trimmingCharacters(in: .whitespaces)
+        guard !expr.isEmpty else { return false }
+        return GraphMath.evaluate(expr, at: 0) == nil
+    }
+
     var body: some View {
         HStack(spacing: 8) {
             Button {
@@ -89,6 +95,12 @@ struct MacEquationRowView: View {
                 .foregroundColor(textColor)
                 .textFieldStyle(.plain)
                 .onChange(of: equation.expression) { onChange() }
+
+            if isInvalid {
+                Text("invalid")
+                    .font(.caption)
+                    .foregroundColor(.red.opacity(0.7))
+            }
 
             if showRemove {
                 Button(action: onRemove) {

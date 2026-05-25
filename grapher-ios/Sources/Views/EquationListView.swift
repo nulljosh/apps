@@ -69,9 +69,14 @@ struct EquationRowView: View {
 
     private let textColor = Color(hex: "f2ede8")
 
+    private var isInvalid: Bool {
+        let expr = equation.expression.trimmingCharacters(in: .whitespaces)
+        guard !expr.isEmpty else { return false }
+        return GraphMath.evaluate(expr, at: 0) == nil
+    }
+
     var body: some View {
         HStack(spacing: 10) {
-            // Color dot + enable toggle combined
             Button {
                 equation.enabled.toggle()
                 onChange()
@@ -89,6 +94,12 @@ struct EquationRowView: View {
                 .autocorrectionDisabled()
                 .autocapitalization(.none)
                 .onChange(of: equation.expression) { onChange() }
+
+            if isInvalid {
+                Circle()
+                    .fill(Color.red)
+                    .frame(width: 6, height: 6)
+            }
 
             if showRemove {
                 Button(action: onRemove) {
