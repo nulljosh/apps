@@ -2,7 +2,7 @@
 
 # Brief
 
-![version](https://img.shields.io/badge/version-v6.0.0-blue) ![platform](https://img.shields.io/badge/platform-Web%20%7C%20iOS%20%7C%20macOS-lightgrey) ![license](https://img.shields.io/badge/license-MIT-green)
+![version](https://img.shields.io/badge/version-v6.1.0-blue) ![platform](https://img.shields.io/badge/platform-Web%20%7C%20iOS%20%7C%20macOS-lightgrey) ![license](https://img.shields.io/badge/license-MIT-green)
 
 Litigation planning tool for *Trommel v. AG Canada* (CASE-0001) and *Trommel v. Trommel* (CASE-0002). Private.
 
