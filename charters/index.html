@@ -136,6 +136,49 @@ header{position:relative;z-index:50;padding:14px 28px;border-bottom:1px solid va
 .cc:nth-child(7){animation-delay:.21s}.cc:nth-child(8){animation-delay:.24s}.cc:nth-child(9){animation-delay:.27s}
 .cc:nth-child(10){animation-delay:.30s}.cc:nth-child(11){animation-delay:.33s}.cc:nth-child(12){animation-delay:.36s}
 .cc:nth-child(13){animation-delay:.39s}.cc:nth-child(14){animation-delay:.42s}.cc:nth-child(15){animation-delay:.45s}
+.prbtn{background:var(--s1);border:1px solid var(--br);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--tx2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s var(--sp);}
+.prbtn:hover{background:var(--s2);color:var(--tx);transform:scale(1.08);}
+.prbtn.on{border-color:rgba(255,255,255,.25);color:var(--tx);}
+#am{position:fixed;inset:0;z-index:700;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+#am.h{display:none;}
+.ambox{background:rgba(16,16,16,.99);border:1px solid var(--br2);border-radius:14px;padding:28px;width:min(360px,90vw);display:flex;flex-direction:column;gap:14px;}
+.am-title{font-size:1.05rem;font-weight:600;color:var(--tx);}
+.am-inp{width:100%;background:var(--s1);border:1px solid var(--br);border-radius:8px;padding:9px 12px;color:var(--tx);font-family:var(--fn);font-size:.85rem;outline:none;transition:border-color .18s var(--ease);}
+.am-inp:focus{border-color:rgba(255,255,255,.2);}
+.am-inp::placeholder{color:var(--tx3);}
+.am-btn{width:100%;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:9px 12px;color:var(--tx);font-family:var(--fn);font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s var(--sp);}
+.am-btn:hover{background:rgba(255,255,255,.14);}
+.am-sw{font-size:.76rem;color:var(--tx3);text-align:center;cursor:pointer;transition:color .15s;}
+.am-sw:hover{color:var(--tx2);}
+.am-err{font-size:.74rem;color:#c77040;min-height:1em;}
+#pp{position:fixed;top:0;left:0;width:420px;height:100vh;background:rgba(12,12,12,.95);border-right:1px solid var(--br);z-index:300;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .32s var(--sp);overflow:hidden;backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);}
+#pp.op{transform:translateX(0);box-shadow:24px 0 64px rgba(0,0,0,.8);}
+.pp-top{padding:18px 16px 12px;border-bottom:1px solid var(--br);flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.pp-name{font-size:1.15rem;font-weight:600;color:var(--tx);}
+.pp-sub{font-size:.64rem;text-transform:uppercase;letter-spacing:.12em;color:var(--tx3);margin-top:3px;}
+.pp-body{flex:1;overflow-y:auto;padding:14px 14px 24px;}
+.pp-body::-webkit-scrollbar{width:5px;}
+.pp-body::-webkit-scrollbar-thumb{background:var(--br);border-radius:3px;}
+.pp-sec-h{font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;color:var(--tx3);margin:6px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--br);}
+.cs-card{background:var(--s1);border:1px solid var(--br);border-radius:10px;padding:14px;margin-bottom:10px;}
+.cs-type{display:inline-block;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;padding:2px 8px;border-radius:100px;margin-bottom:8px;}
+.cs-type.charter{border:1px solid #4e9cd7;color:#4e9cd7;background:rgba(78,156,215,.07);}
+.cs-type.civil{border:1px solid #c4956a;color:#c4956a;background:rgba(196,149,106,.07);}
+.cs-title{font-size:.88rem;font-weight:600;color:var(--tx);margin-bottom:6px;}
+.cs-verdict{font-size:.74rem;color:var(--tx2);margin-bottom:10px;line-height:1.55;}
+.cs-sl-h{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin-bottom:5px;}
+.cs-secs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.cs-slink{font-size:.7rem;padding:2px 8px;border-radius:100px;background:rgba(78,156,215,.06);border:1px solid rgba(78,156,215,.2);color:#4e9cd7;cursor:pointer;transition:all .15s var(--sp);}
+.cs-slink:hover{background:rgba(78,156,215,.14);transform:translateY(-1px);}
+.cs-claims{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.cs-claim{background:var(--bg);border:1px solid var(--br);border-radius:7px;padding:8px 10px;}
+.cs-cref{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin-bottom:1px;}
+.cs-ctit{font-size:.8rem;font-weight:500;color:var(--tx);margin-bottom:2px;}
+.cs-cnote{font-size:.72rem;color:var(--tx2);line-height:1.5;}
+.cs-bottom{font-size:.73rem;color:var(--tx2);background:rgba(255,255,255,.03);border:1px solid var(--br);border-radius:7px;padding:9px 10px;line-height:1.55;}
+.cs-bl{font-size:.59rem;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);margin-bottom:4px;}
+.pp-logout{width:100%;margin-top:8px;background:none;border:1px solid var(--br);border-radius:7px;padding:8px;color:var(--tx2);font-family:var(--fn);font-size:.78rem;cursor:pointer;transition:all .2s;}
+.pp-logout:hover{border-color:rgba(255,255,255,.2);color:var(--tx);}
 @media(max-width:768px){
   header{padding:12px 14px;gap:10px;}
   .wm{font-size:1rem;}.tg{display:none;}
@@ -152,6 +195,8 @@ header{position:relative;z-index:50;padding:14px 28px;border-bottom:1px solid va
   .cmp{grid-template-columns:1fr;overflow-y:auto;}
   .cpc{overflow-y:visible;padding:16px;}
   .cvs{display:none;}
+  #pp{width:100%;border-right:none;border-top:1px solid var(--br);border-radius:12px 12px 0 0;top:auto;bottom:0;height:80vh;transform:translateY(100%);}
+  #pp.op{transform:translateY(0);}
 }
 </style>
 </head>
@@ -159,6 +204,17 @@ header{position:relative;z-index:50;padding:14px 28px;border-bottom:1px solid va
 <div id="ov"></div>
 <div id="tip"></div>
 <div id="sd"></div>
+<div id="am" class="h">
+  <div class="ambox">
+    <div class="am-title" id="am-title">Sign In</div>
+    <div id="am-name-wrap" style="display:none"><input class="am-inp" type="text" id="am-name" placeholder="Display name" autocomplete="off"></div>
+    <input class="am-inp" type="text" id="am-user" placeholder="Username" autocomplete="off">
+    <input class="am-inp" type="password" id="am-pass" placeholder="Password">
+    <div class="am-err" id="am-err"></div>
+    <button class="am-btn" id="am-sub">Sign In</button>
+    <div class="am-sw" id="am-sw">No account? Register</div>
+  </div>
+</div>
 
 <header>
   <div>
@@ -174,6 +230,7 @@ header{position:relative;z-index:50;padding:14px 28px;border-bottom:1px solid va
     <button class="vb" id="bl">List</button>
     <button class="vb" id="bc">Compare</button>
   </div>
+  <button class="prbtn" id="prBtn" title="Profile" aria-label="Profile"><svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
 </header>
 
 <div class="filters">
@@ -263,6 +320,14 @@ header{position:relative;z-index:50;padding:14px 28px;border-bottom:1px solid va
   </div>
   <div class="psw"><input type="search" id="ps" placeholder="Search within this constitution..."></div>
   <div id="pb"></div>
+</aside>
+
+<aside id="pp">
+  <div class="pp-top">
+    <div><div class="pp-name" id="pp-name"></div><div class="pp-sub">My Account</div></div>
+    <button class="pcl" id="ppClose">&#x2715;</button>
+  </div>
+  <div class="pp-body" id="pp-body"></div>
 </aside>
 
 <script>
@@ -671,13 +736,167 @@ document.getElementById('ps').addEventListener('input',e=>{if(!AC)return;const c
 document.getElementById('cs1').addEventListener('change',e=>{CC1=e.target.value||null;renderCompare();});
 document.getElementById('cs2').addEventListener('change',e=>{CC2=e.target.value||null;renderCompare();});
 document.getElementById('pcl').addEventListener('click',closePanel);
-document.getElementById('ov').addEventListener('click',closePanel);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&AC)closePanel();});
+document.getElementById('ov').addEventListener('click',()=>{closePanel();closeProfile();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(AC)closePanel();closeProfile();if(!document.getElementById('am').classList.contains('h'))hideAuth();}});
 
 populateCompareSelects();
 renderStats();
 initMap();
 loadHash();
+
+const CASES=[
+{id:'case-01',type:'charter',country:'CA',
+title:'Case 01 — Charter Breaches (Police / Government)',
+verdict:'Forced entry during wellness check with no warrant and no clear emergency. If initial entry was unlawful, all subsequent police actions may flow from that breach, creating a cumulative and substantial Charter claim.',
+sections:['Section 7','Section 8','Section 9','Section 10','Section 15'],
+claims:[
+{ref:'Section 7',title:'Life, Liberty and Security',note:'Forced entry and resulting PTSD may constitute a serious infringement of personal safety and autonomy.'},
+{ref:'Section 8',title:'Search and Seizure',note:'Home receives the highest level of privacy protection. Entry without lawful authority may be unconstitutional.'},
+{ref:'Section 9',title:'Arbitrary Detention',note:'Restricting movement inside own home without lawful grounds may amount to arbitrary detention.'},
+{ref:'Section 10',title:'Rights on Arrest',note:'If effectively detained, police were required to explain reasons and advise right to counsel.'},
+{ref:'Section 15',title:'Equality Rights',note:'Treating a mental health situation as a criminal confrontation rather than a care response may raise equality concerns.'},
+],
+bottomLine:'If initial entry was unlawful, a lawyer could argue all subsequent police actions flowed from that breach — creating a cumulative and substantial Charter claim.'
+},
+{id:'case-0002',type:'civil',country:'CA',
+title:'CASE-0002 — Civil Claim Against Private Parties',
+verdict:'Legitimate civil case. Strongest claims: appropriation of personality and intentional infliction of mental suffering. Recent conduct remains actionable despite older childhood events potentially being time-barred.',
+sections:[],
+claims:[
+{ref:'Appropriation of Personality',title:'Unauthorized Use of Likeness',note:'Especially if image is still being used commercially.'},
+{ref:'IIMS',title:'Intentional Infliction of Mental Suffering',note:'Parking lot confrontation and related conduct may meet the legal threshold for outrageous behavior.'},
+{ref:'Parental Negligence',title:'Childhood Failures',note:'Potential claim based on failures during childhood.'},
+{ref:'Lost Earning Capacity',title:'Economic Damages',note:'Damages available if the conduct impaired ability to work.'},
+],
+bottomLine:'Weaker than a Charter claim (private parties vs. government) but remains legally viable. Key enforcement advantage: defendants have identifiable assets and property. Build a detailed evidence file regardless of litigation decision.'
+}
+];
+
+function phash(s){let h=5381;for(let i=0;i<s.length;i++)h=(h*33^s.charCodeAt(i))>>>0;return h.toString(36);}
+function getUsers(){return JSON.parse(localStorage.getItem('ch-users')||'{}');}
+function saveUsers(u){localStorage.setItem('ch-users',JSON.stringify(u));}
+
+(function(){const u=getUsers();if(!u['joshua']){u['joshua']={name:'Joshua Trommel',pw:phash('charters')};saveUsers(u);}})();
+
+let CU=null;
+try{CU=JSON.parse(sessionStorage.getItem('ch-session')||'null');}catch(e){}
+function setSession(s){CU=s;sessionStorage.setItem('ch-session',JSON.stringify(s));}
+function clearSession(){CU=null;sessionStorage.removeItem('ch-session');}
+
+let AM_MODE='login';
+function showAuth(){document.getElementById('am').classList.remove('h');}
+function hideAuth(){
+  document.getElementById('am').classList.add('h');
+  document.getElementById('am-err').textContent='';
+  document.getElementById('am-user').value='';
+  document.getElementById('am-pass').value='';
+  document.getElementById('am-name').value='';
+}
+function setAuthMode(m){
+  AM_MODE=m;const r=m==='register';
+  document.getElementById('am-title').textContent=r?'Create Account':'Sign In';
+  document.getElementById('am-sub').textContent=r?'Create Account':'Sign In';
+  document.getElementById('am-sw').textContent=r?'Have an account? Sign in':'No account? Register';
+  document.getElementById('am-name-wrap').style.display=r?'':'none';
+  document.getElementById('am-err').textContent='';
+}
+
+function doAuth(){
+  const u=document.getElementById('am-user').value.trim().toLowerCase();
+  const p=document.getElementById('am-pass').value;
+  const n=document.getElementById('am-name').value.trim();
+  const err=document.getElementById('am-err');
+  if(!u||!p){err.textContent='Username and password required.';return;}
+  const users=getUsers();
+  if(AM_MODE==='login'){
+    if(!users[u]||users[u].pw!==phash(p)){err.textContent='Invalid username or password.';return;}
+    setSession({username:u,name:users[u].name});hideAuth();updatePrBtn();openProfile();
+  } else {
+    if(!n){err.textContent='Display name required.';return;}
+    if(u.length<2){err.textContent='Username must be at least 2 characters.';return;}
+    if(p.length<6){err.textContent='Password must be at least 6 characters.';return;}
+    if(users[u]){err.textContent='Username already taken.';return;}
+    users[u]={name:n,pw:phash(p)};saveUsers(users);
+    setSession({username:u,name:n});hideAuth();updatePrBtn();openProfile();
+  }
+}
+
+function updatePrBtn(){document.getElementById('prBtn').classList.toggle('on',!!CU);}
+
+function openProfile(){
+  if(!CU){setAuthMode('login');showAuth();return;}
+  renderProfile();
+  document.getElementById('pp').classList.add('op');
+  document.getElementById('ov').classList.add('on');
+}
+
+function closeProfile(){
+  document.getElementById('pp').classList.remove('op');
+  if(!AC)document.getElementById('ov').classList.remove('on');
+}
+
+function mk(tag,cls,txt){
+  const e=document.createElement(tag);
+  if(cls)e.className=cls;
+  if(txt!=null)e.textContent=txt;
+  return e;
+}
+
+function renderProfile(){
+  document.getElementById('pp-name').textContent=CU.name;
+  const body=document.getElementById('pp-body');
+  body.replaceChildren();
+  body.appendChild(mk('div','pp-sec-h','My Cases'));
+  CASES.forEach(cs=>{
+    const card=mk('div','cs-card');
+    card.appendChild(mk('span','cs-type '+cs.type,cs.type==='charter'?'Charter Claim':'Civil Claim'));
+    card.appendChild(mk('div','cs-title',cs.title));
+    card.appendChild(mk('div','cs-verdict',cs.verdict));
+    if(cs.sections.length){
+      card.appendChild(mk('div','cs-sl-h','Relevant Sections'));
+      const secsDiv=mk('div','cs-secs');
+      cs.sections.forEach(s=>{
+        const link=mk('span','cs-slink',s);
+        link.dataset.cid=cs.country;
+        link.addEventListener('click',()=>{
+          closeProfile();switchView('map');openPanel(cs.country);
+          setTimeout(()=>{const ps=document.getElementById('ps');ps.value=s;const c=D.find(x=>x.id===cs.country);if(c)renderPanel(c,s);},350);
+        });
+        secsDiv.appendChild(link);
+      });
+      card.appendChild(secsDiv);
+    }
+    const claimsDiv=mk('div','cs-claims');
+    cs.claims.forEach(cl=>{
+      const claim=mk('div','cs-claim');
+      claim.appendChild(mk('div','cs-cref',cl.ref));
+      claim.appendChild(mk('div','cs-ctit',cl.title));
+      claim.appendChild(mk('div','cs-cnote',cl.note));
+      claimsDiv.appendChild(claim);
+    });
+    card.appendChild(claimsDiv);
+    const bot=mk('div','cs-bottom');
+    bot.appendChild(mk('div','cs-bl','Bottom Line'));
+    bot.appendChild(mk('span',null,cs.bottomLine));
+    card.appendChild(bot);
+    body.appendChild(card);
+  });
+  const lo=mk('button','pp-logout','Sign out');
+  lo.addEventListener('click',()=>{clearSession();updatePrBtn();closeProfile();});
+  body.appendChild(lo);
+}
+
+document.getElementById('prBtn').addEventListener('click',()=>{
+  if(CU){const pp=document.getElementById('pp');if(pp.classList.contains('op'))closeProfile();else openProfile();}
+  else{setAuthMode('login');showAuth();}
+});
+document.getElementById('am-sub').addEventListener('click',doAuth);
+document.getElementById('am-sw').addEventListener('click',()=>setAuthMode(AM_MODE==='login'?'register':'login'));
+document.getElementById('am-user').addEventListener('keydown',e=>{if(e.key==='Enter')doAuth();});
+document.getElementById('am-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doAuth();});
+document.getElementById('am').addEventListener('click',e=>{if(e.target===document.getElementById('am'))hideAuth();});
+document.getElementById('ppClose').addEventListener('click',closeProfile);
+updatePrBtn();
 </script>
 </body>
 </html>
