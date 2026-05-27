@@ -632,6 +632,11 @@ button { user-select: none; font-family: inherit; }
 
 /* --- Nav --- */
 
+/* --- Nav wrappers --- */
+.nav-mobile { display: flex; width: 100%; }
+.nav-desktop { display: none; }
+
+/* --- Bottom nav bar --- */
 .nav {
   position: fixed;
   bottom: 12px;
@@ -654,6 +659,7 @@ button { user-select: none; font-family: inherit; }
   align-items: center;
   gap: 3px;
   padding: 10px 0 8px;
+  min-height: 44px;
   color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.6875rem;
@@ -661,6 +667,21 @@ button { user-select: none; font-family: inherit; }
   text-transform: uppercase;
   font-weight: 500;
   transition: color 0.4s ease-out;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--font);
+}
+
+/* More button reset */
+.nav-more-btn {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Secondary-active state for More button (a secondary route is current) */
+.nav-more-btn.secondary-active {
+  color: var(--text-primary);
 }
 
 .nav-link.active {
@@ -680,8 +701,86 @@ button { user-select: none; font-family: inherit; }
   background: var(--text-primary);
 }
 
-/* Desktop: sidebar nav */
-@media (min-width: 768px) {
+/* --- More bottom sheet backdrop --- */
+.nav-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: var(--overlay);
+  animation: fadeIn 0.18s ease;
+}
+
+/* --- More bottom sheet --- */
+.nav-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 120;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--nav-blur));
+  -webkit-backdrop-filter: blur(var(--nav-blur));
+  border: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.nav-sheet.open {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.nav-sheet-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  margin: 0 auto 16px;
+}
+
+.nav-sheet-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  font-family: var(--font);
+  letter-spacing: 0.01em;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nav-sheet-item:hover,
+.nav-sheet-item:active {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.nav-sheet-item.active {
+  color: var(--accent);
+  background: var(--accent-muted);
+}
+
+/* --- Desktop: sidebar nav --- */
+@media (min-width: 641px) {
+  .nav-mobile { display: none; }
+  .nav-desktop { display: flex; width: 100%; }
+  .nav-sheet { display: none; }
+  .nav-sheet-backdrop { display: none; }
+
   .nav {
     position: fixed;
     top: 0;
@@ -1515,7 +1614,7 @@ button { user-select: none; font-family: inherit; }
 }
 
 /* Desktop sidebar: hide the nav dot, use left bar via ::after instead */
-@media (min-width: 768px) {
+@media (min-width: 641px) {
   .nav-dot { display: none !important; }
 }
 

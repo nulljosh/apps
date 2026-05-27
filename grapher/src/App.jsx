@@ -55,7 +55,7 @@ export default function App() {
       }}>
         <img src="/icon.svg" width={24} height={24} alt="" style={{ borderRadius: 6 }} />
         <span style={{ fontSize: 16, fontWeight: 600, letterSpacing: '-0.01em' }}>Grapher</span>
-        <span style={{
+        <span className="nav-hint" style={{
           marginLeft: 'auto', fontSize: 11,
           color: 'var(--text-secondary)',
           fontFamily: '"SF Mono", "Menlo", monospace',
@@ -100,6 +100,7 @@ export default function App() {
             {['x^2', 'sin(x)', 'cos(x)', '2*x+1', 'sqrt(abs(x))', 'tan(x)', '1/x', 'x^3-x'].map((ex) => (
               <button
                 key={ex}
+                className="example-btn"
                 onClick={() => {
                   const id = nextId++;
                   setEquations((prev) => [...prev, makeEq(id, ex)]);
@@ -125,22 +126,33 @@ export default function App() {
 
       <style>{`
         @media (max-width: 640px) {
+          .nav-hint {
+            display: none;
+          }
           .main-layout {
             flex-direction: column !important;
           }
           .graph-pane {
             order: 1;
-            flex: 1 !important;
-            min-height: 55dvh;
+            flex: none !important;
+            height: calc(100dvh - 53px - 200px);
             width: 100% !important;
           }
           .sidebar-pane {
             order: 2;
             width: 100% !important;
-            height: 45dvh;
+            flex: none !important;
+            height: 200px;
+            max-height: 200px;
             border-left: none !important;
             border-top: 1px solid var(--border) !important;
             overflow-y: auto;
+            padding: 10px 12px !important;
+          }
+          .example-btn {
+            min-height: 44px !important;
+            min-width: 44px !important;
+            padding: 8px 10px !important;
           }
         }
       `}</style>

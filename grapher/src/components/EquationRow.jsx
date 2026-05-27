@@ -29,6 +29,7 @@ export default function EquationRow({ eq, onChange, onRemove, showRemove }) {
           placeholder="y = x^2"
           spellCheck={false}
           inputMode="text"
+          className="eq-input"
           style={{
             flex: 1,
             background: 'var(--bg2)',

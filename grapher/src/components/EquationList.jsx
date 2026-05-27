@@ -2,7 +2,7 @@ import EquationRow from './EquationRow.jsx';
 
 export default function EquationList({ equations, onChange, onRemove, onAdd }) {
   return (
-    <div style={{
+    <div className="eq-list-container" style={{
       background: 'var(--bg)',
       border: '1px solid var(--border)',
       borderRadius: 16,
