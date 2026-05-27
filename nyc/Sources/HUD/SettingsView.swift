@@ -44,6 +44,17 @@ struct SettingsView: View {
                 .toggleStyle(.switch)
                 .tint(Theme.accent)
 
+                Toggle(isOn: Binding(
+                    get: { gameState.soundEnabled },
+                    set: { gameState.soundEnabled = $0 }
+                )) {
+                    Text("Sound effects")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.text1)
+                }
+                .toggleStyle(.switch)
+                .tint(Theme.accent)
+
                 Divider().background(Theme.border)
 
                 Text("SAVE / LOAD")

@@ -309,6 +309,7 @@ final class GameScene: SKScene {
             addChild(node)
             node.playPlaceAnimation()
             buildingNodes[model.id] = node
+            AudioManager.shared.buildingPlaced()
 
             if type == .shelter {
                 TutorialView.checkAdvance(gameState: gameState, event: .shelterPlaced)

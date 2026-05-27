@@ -187,7 +187,9 @@ final class JobSystem {
             gameState.colonists[colonistIndex].attackTargetId = nil
             let leveled = gameState.colonists[colonistIndex].grantXP(30)
             gameState.playerXP += 10
+            HapticManager.combatHit()
             if leveled {
+                HapticManager.waveCleared()
                 gameState.log("\(attacker.name) reached level \(gameState.colonists[colonistIndex].level)")
             }
             gameState.log("\(attacker.name) killed \(target.name)")
@@ -198,9 +200,11 @@ final class JobSystem {
         if dist <= attacker.weapon.range {
             let dmg = attacker.weapon.damage * (1.0 + Double(attacker.stats.str) * 0.1)
             gameState.colonists[targetIdx].takeDamage(dmg)
+            HapticManager.combatHit()
             let leveled = gameState.colonists[colonistIndex].grantXP(5)
             gameState.playerXP += 1
             if leveled {
+                HapticManager.waveCleared()
                 gameState.log("\(gameState.colonists[colonistIndex].name) reached level \(gameState.colonists[colonistIndex].level)")
             }
         } else if !attacker.hasPath {

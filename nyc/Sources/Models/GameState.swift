@@ -42,6 +42,12 @@ final class GameState {
     var autoSaveEnabled: Bool = true
     var showSaveIndicator: Bool = false
 
+    // Audio
+    var soundEnabled: Bool {
+        get { AudioManager.shared.soundEnabled }
+        set { AudioManager.shared.soundEnabled = newValue }
+    }
+
     var selectedColonist: ColonistModel? {
         guard let id = selectedColonistId else { return nil }
         return colonists.first { $0.id == id }

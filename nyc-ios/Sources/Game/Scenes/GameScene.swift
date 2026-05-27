@@ -221,6 +221,7 @@ final class GameScene: SKScene {
             addChild(node)
             node.playPlaceAnimation()
             buildingNodes[model.id] = node
+            HapticManager.buildingPlaced()
 
             if type == .shelter {
                 TutorialView.checkAdvance(gameState: gameState, event: .shelterPlaced)

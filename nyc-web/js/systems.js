@@ -11,10 +11,30 @@ import { TileType, tileAt, setTile, GRID_SIZE } from './world.js';
 const TICKS_PER_DAY = 240;
 let accumulated = 0;
 let TICK_INTERVAL = 0.25;
+
+// Difficulty multipliers (applied at game start and via canPlace)
+export let DIFFICULTY_COST_MULT = 1.0;   // building cost multiplier
+export let DIFFICULTY_SPEED_MULT = 1.0;  // enemy/hostile colonist speed multiplier
+export let DIFFICULTY_HEALTH_MULT = 1.0; // starting health multiplier for hostile colonists
+
 export function setDifficulty(level) {
-    if (level === 'easy')   { TICK_INTERVAL = 0.35; }
-    if (level === 'medium') { TICK_INTERVAL = 0.25; }
-    if (level === 'hard')   { TICK_INTERVAL = 0.15; }
+    if (level === 'easy') {
+        TICK_INTERVAL = 0.35;
+        DIFFICULTY_COST_MULT = 0.5;
+        DIFFICULTY_SPEED_MULT = 0.5;
+        DIFFICULTY_HEALTH_MULT = 0.75;
+    } else if (level === 'hard') {
+        TICK_INTERVAL = 0.15;
+        DIFFICULTY_COST_MULT = 1.25;
+        DIFFICULTY_SPEED_MULT = 1.5;
+        DIFFICULTY_HEALTH_MULT = 1.25;
+    } else {
+        // medium / default
+        TICK_INTERVAL = 0.25;
+        DIFFICULTY_COST_MULT = 1.0;
+        DIFFICULTY_SPEED_MULT = 1.0;
+        DIFFICULTY_HEALTH_MULT = 1.0;
+    }
 }
 
 export function timeTick(dt, state) {
@@ -150,7 +170,8 @@ export function canPlace(type, col, row, grid, state) {
         }
     }
     for (const [res, amt] of Object.entries(bt.cost)) {
-        if ((state.resources[res] || 0) < amt) return false;
+        const scaledAmt = Math.ceil(amt * DIFFICULTY_COST_MULT);
+        if ((state.resources[res] || 0) < scaledAmt) return false;
     }
     return true;
 }
@@ -161,7 +182,7 @@ export function placeBuilding(type, col, row, grid, state, pathfinder) {
     if (!canPlace(type, col, row, grid, state)) return null;
     const bt = BuildingType[type];
     for (const [res, amt] of Object.entries(bt.cost)) {
-        state.resources[res] -= amt;
+        state.resources[res] -= Math.ceil(amt * DIFFICULTY_COST_MULT);
     }
     const [w, h] = bt.size;
     for (let r = row; r < row + h; r++) {
@@ -215,7 +236,8 @@ export function jobTick(state, pathfinder) {
             continue;
         }
 
-        const speed = Math.max(1, Math.floor(1.0 + c.stats.agi * 0.1));
+        const speedMult = c.job === 'attack' ? DIFFICULTY_SPEED_MULT : 1.0;
+        const speed = Math.max(1, Math.floor((1.0 + c.stats.agi * 0.1) * speedMult));
         for (let s = 0; s < speed; s++) {
             if (c.pathIndex >= c.pathCols.length) break;
             c.col = c.pathCols[c.pathIndex];
@@ -544,7 +566,7 @@ function bossCheck(state, alive, pathfinder) {
             if (!spawnC) continue;
 
             const phase = currentPhase(state);
-            const bossHP = phase === GamePhase.VICTORY ? 600 : phase === GamePhase.MASTERY ? 400 : 200;
+            const bossHP = (phase === GamePhase.VICTORY ? 600 : phase === GamePhase.MASTERY ? 400 : 200) * DIFFICULTY_HEALTH_MULT;
             const bossLvl = phase === GamePhase.VICTORY ? 10 : phase === GamePhase.MASTERY ? 8 : 5;
             const bossWeapon = phase === GamePhase.VICTORY ? 'rifle' : phase === GamePhase.MASTERY ? 'shotgun' : 'rifle';
 

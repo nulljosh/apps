@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 @MainActor
 final class NeedsSystem {
@@ -63,6 +64,7 @@ final class NeedsSystem {
             gameState.colonists[i].updateState()
 
             if gameState.colonists[i].isDead {
+                HapticManager.combatHit()
                 gameState.log("\(gameState.colonists[i].name) has died")
             }
         }

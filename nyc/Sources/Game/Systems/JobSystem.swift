@@ -181,6 +181,7 @@ final class JobSystem {
             gameState.colonists[colonistIndex].job = .idle
             gameState.colonists[colonistIndex].attackTargetId = nil
             gameState.colonists[colonistIndex].grantXP(15)
+            AudioManager.shared.colonistDied()
             gameState.log("\(attacker.name) killed \(target.name)")
             return
         }
@@ -190,6 +191,7 @@ final class JobSystem {
             // In range -- deal damage
             let dmg = attacker.weapon.damage * (1.0 + Double(attacker.stats.str) * 0.1)
             gameState.colonists[targetIdx].takeDamage(dmg)
+            AudioManager.shared.combatHit()
             gameState.colonists[colonistIndex].grantXP(2)
         } else if !attacker.hasPath {
             // Move toward target
