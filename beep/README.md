@@ -26,6 +26,12 @@ open Beep.xcodeproj
 
 See [architecture.svg](architecture.svg)
 
+## Roadmap
+
+- [ ] Write XCTest suite — unit tests for `CompassCard` model, balance parsing, trip parsing, reload flow
+- [ ] Create Apple Shortcut / Shortcuts workflow that triggers Claude to reload the app (run `claude` CLI, pass reload intent)
+- [ ] UI snapshot tests for dashboard and reload sheet
+
 ## License
 
 MIT 2026, Joshua Trommel
