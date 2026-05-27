@@ -201,7 +201,7 @@ let caseFacts: [CaseFact] = [
     CaseFact(key: "Location", value: "Langley, BC"),
     CaseFact(key: "Department", value: "Langley RCMP, Brookswood"),
     CaseFact(key: "Defendant", value: "AG of Canada"),
-    CaseFact(key: "Officers", value: "Daryl + D. Ryl"),
+    CaseFact(key: "Officers", value: "Cst. Darcy G. Ng (unconfirmed) + second officer (ATIP pending)"),
     CaseFact(key: "Witness", value: "Father, in kitchen"),
     CaseFact(key: "Status", value: "Pre-litigation"),
     CaseFact(key: "Wrist injury", value: "Pre-existing fracture aggravated by prone restraint — additional physical harm head", fullWidth: true)
@@ -242,7 +242,8 @@ They brought him to hospital after that and I couldn't see him until next day an
 
 let journalSeed: [JournalEntry] = [
     JournalEntry(date: "2026-05-11", text: "Discovery date established. Formally confirmed RCMP file #2023-25586 (August 1, 2023), began active legal research, retained a lawyer for consultation, and first understood that a civil proceeding under Ward v. Vancouver (City) [2010] 2 SCR 27 — a s.24(1) Charter damages claim — is an available and appropriate remedy. This constitutes discovery under BC Limitation Act s.8(1)(d). Called Paul Kent-Snowsell 3x; callback confirmed May 12. Contemporaneous record created."),
-    JournalEntry(date: "2026-05-10", text: "Started PTSD therapy today. Formal assessment underway — building the clinical paper trail. First session directly connected current symptoms to the August 1, 2023 incident."),
+    JournalEntry(date: "2026-05-10", text: "Formal PTSD assessment underway. Building clinical paper trail. Session directly connected current symptoms to the August 1, 2023 incident."),
+    JournalEntry(date: "2025-08-02", text: "Started therapy. First session — August 2, 2025. Formal discoverability anchor for s.18 incapacity argument under BC Limitation Act."),
     JournalEntry(date: "2026-05-06", text: "No good days since August 1, 2023. Every day is affected without exception."),
     JournalEntry(date: "2026-05-05", text: "Wakes with stomach aches and night sweats daily. Coping mechanisms developed in direct response to the trauma."),
     JournalEntry(date: "2026-05-03", text: "Nightmares with recurring themes. Worsened in intensity since the incident."),
@@ -254,7 +255,8 @@ let caseChecklist: [ChecklistItem] = [
     ChecklistItem(id: 0, label: "Paul Kent declined May 18 — contact Thomas Harding & Neil Chantler (PK referrals — Degen case)", priority: .now),
     ChecklistItem(id: 1, label: "PTSD assessment started (therapy) — get Dx letter", priority: .now),
     ChecklistItem(id: 2, label: "Body cam footage requested from RCMP", priority: .now),
-    ChecklistItem(id: 3, label: "Police report — both Daryls full names", priority: .now),
+    ChecklistItem(id: 3, label: "Police report — confirm Cst. Darcy G. Ng + second officer full name via ATIP", priority: .now),
+    ChecklistItem(id: 19, label: "RCMP complaint file 2023-XCAP — request copy for record", priority: .now),
     ChecklistItem(id: 4, label: "Hospital discharge records", priority: .now),
     ChecklistItem(id: 5, label: "Pain journal — daily entries", priority: .now),
     ChecklistItem(id: 6, label: "Therapist letter confirming PTSD & causation", priority: .now),
@@ -394,9 +396,10 @@ COLD CALL SCRIPT — use verbatim
 Have ready:
 — File #: 2023-25586 (RCMP file, confirmed Aug 1/2023)
 — Date of incident: August 1, 2023 (CONFIRMED)
-— Officers: Daryl + D. Ryl (Langley RCMP, Brookswood)
+— Officers: Cst. Darcy G. Ng (unconfirmed) + second officer (ATIP pending) — Langley RCMP, Brookswood
+— RCMP complaint file: 2023-XCAP
 — Witness: Father — written statement documented May 11, 2026 (in hand)
-— PTSD therapy started May 10, 2026 — formal assessment underway
+— PTSD therapy started August 2, 2025 — formal PTSD assessment underway May 2026
 — Pre-existing wrist injury (prior fracture) aggravated by prone restraint (special damages)
 — Basic 2-yr limitation expired Aug 1, 2025 — lead with this
 
@@ -441,7 +444,7 @@ Hi [Name],
 
 My name is Joshua Trommel. I'm reaching out because I have a potential civil claim arising from a warrantless wellness-call entry by Langley RCMP (Brookswood detachment) in August 2023.
 
-The incident involved unlawful entry into my home, excessive force, arbitrary detention, forced antipsychotic medication, and overnight solitary confinement, all without charge. I have been in therapy since May 2026 and am pursuing a formal PTSD diagnosis. The basic 2-year limitation expired August 2025; the claim survives on discoverability and PTSD-based incapacity under the BC Limitation Act.
+The incident involved unlawful entry into my home, excessive force, arbitrary detention, forced antipsychotic medication, and overnight solitary confinement, all without charge. I have been in therapy since August 2025 and am pursuing a formal PTSD diagnosis. The basic 2-year limitation expired August 2025; the claim survives on discoverability and PTSD-based incapacity under the BC Limitation Act.
 
 I've put together a detailed case brief here for your review:
 https://heyitsmejosh.com/brief
