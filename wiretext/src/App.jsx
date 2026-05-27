@@ -88,6 +88,50 @@ export default function App() {
     URL.revokeObjectURL(url);
   }, [state.grid]);
 
+  const handleExportPng = useCallback(() => {
+    const FONT_SIZE = 14;
+    const LINE_HEIGHT = 20;
+    const FONT_FAMILY = "'Berkeley Mono', 'JetBrains Mono', 'Fira Code', ui-monospace, monospace";
+
+    // Measure char width using same approach as Canvas.jsx
+    const measureCanvas = document.createElement('canvas');
+    const mctx = measureCanvas.getContext('2d');
+    mctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
+    const charW = mctx.measureText('M').width;
+
+    const cols = state.cols;
+    const rows = state.rows;
+    const width = Math.ceil(cols * charW);
+    const height = rows * LINE_HEIGHT;
+
+    const offscreen = document.createElement('canvas');
+    offscreen.width = width;
+    offscreen.height = height;
+    const ctx = offscreen.getContext('2d');
+
+    // White background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw characters — black on white, monospace
+    ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
+    ctx.fillStyle = '#000000';
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const ch = state.grid[r][c];
+        if (ch !== ' ') {
+          ctx.fillText(ch, c * charW, r * LINE_HEIGHT + FONT_SIZE);
+        }
+      }
+    }
+
+    const dataUrl = offscreen.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = 'wireframe.png';
+    a.click();
+  }, [state.grid, state.cols, state.rows]);
+
   const handleCopy = useCallback(() => {
     const text = gridToText(state.grid);
     navigator.clipboard.writeText(text).catch(() => {});
@@ -103,6 +147,7 @@ export default function App() {
           <button className="btn" onClick={handleClear}>Clear</button>
           <button className="btn" onClick={handleCopy}>Copy</button>
           <button className="btn btn-primary" onClick={handleExport}>Export .txt</button>
+          <button className="btn btn-primary" onClick={handleExportPng}>Export PNG</button>
           <button
             className="btn btn-icon-round"
             onClick={() => setDarkMode(d => !d)}

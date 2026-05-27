@@ -90,6 +90,7 @@ struct ToolbarSidebar: View {
             VStack(spacing: 1) {
                 SidebarButton("Copy to Clipboard", icon: "doc.on.doc", action: canvas.copyToClipboard)
                 SidebarButton("Export as Text...", icon: "square.and.arrow.up", action: canvas.exportText)
+                SidebarButton("Export as PNG...", icon: "photo", action: canvas.exportPNG)
                 SidebarButton("Undo", icon: "arrow.uturn.backward") { canvas.undo() }
                     .opacity(canvas.canUndo ? 1 : 0.35)
                 SidebarButton("Clear Canvas", icon: "trash", action: canvas.clear, danger: true)

@@ -95,6 +95,54 @@ final class CanvasModel {
         }
     }
 
+    @MainActor
+    func exportPNG() {
+        let charW = CanvasModel.charW
+        let charH = CanvasModel.charH
+        let cols = CanvasModel.cols
+        let rows = CanvasModel.rows
+        let width = charW * CGFloat(cols)
+        let height = charH * CGFloat(rows)
+
+        let image = NSImage(size: NSSize(width: width, height: height))
+        image.lockFocus()
+
+        NSColor.white.setFill()
+        NSRect(origin: .zero, size: NSSize(width: width, height: height)).fill()
+
+        let font = NSFont(name: "Menlo", size: 13) ?? NSFont.monospacedSystemFont(ofSize: 13, weight: .regular)
+        let attrs: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: NSColor.black
+        ]
+
+        // NSView draws with bottom-left origin; flip coordinates
+        for r in 0..<rows {
+            let y = height - CGFloat(r + 1) * charH
+            for c in 0..<cols {
+                let ch = grid[r][c]
+                guard ch != " " else { continue }
+                let pt = NSPoint(x: CGFloat(c) * charW, y: y)
+                String(ch).draw(at: pt, withAttributes: attrs)
+            }
+        }
+
+        image.unlockFocus()
+
+        guard let tiffData = image.tiffRepresentation,
+              let bitmap = NSBitmapImageRep(data: tiffData),
+              let pngData = bitmap.representation(using: .png, properties: [:]) else { return }
+
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "wireframe.png"
+        panel.allowedContentTypes = [.png]
+        panel.begin { result in
+            if result == .OK, let url = panel.url {
+                try? pngData.write(to: url)
+            }
+        }
+    }
+
     func copyToClipboard() {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(render(), forType: .string)

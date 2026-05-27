@@ -1,9 +1,11 @@
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
     @Environment(CanvasModel.self) private var canvas
     @State private var showPicker = false
     @State private var shareText: String? = nil
+    @State private var shareImage: UIImage? = nil
     @State private var showClearConfirm = false
 
     var body: some View {
@@ -53,7 +55,12 @@ struct ContentView: View {
                             Button {
                                 shareText = canvas.render()
                             } label: {
-                                Label("Export Text", systemImage: "square.and.arrow.up")
+                                Label("Share as Text", systemImage: "doc.plaintext")
+                            }
+                            Button {
+                                shareImage = canvas.renderToImage()
+                            } label: {
+                                Label("Share as Image", systemImage: "photo")
                             }
                         } label: {
                             Image(systemName: "ellipsis.circle")
@@ -78,7 +85,15 @@ struct ContentView: View {
                 set: { shareText = $0?.text }
             )
         ) { item in
-            ShareSheet(text: item.text)
+            ShareSheet(items: [item.text])
+        }
+        .sheet(
+            item: Binding(
+                get: { shareImage.map { ShareImageItem(image: $0) } },
+                set: { shareImage = $0?.image }
+            )
+        ) { item in
+            ShareSheet(items: [item.image])
         }
         .confirmationDialog("Clear Canvas", isPresented: $showClearConfirm, titleVisibility: .visible) {
             Button("Clear", role: .destructive) { canvas.clear() }
@@ -94,10 +109,15 @@ struct ShareItem: Identifiable {
     let text: String
 }
 
+struct ShareImageItem: Identifiable {
+    let id = UUID()
+    let image: UIImage
+}
+
 struct ShareSheet: UIViewControllerRepresentable {
-    let text: String
+    let items: [Any]
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
     }
     func updateUIViewController(_ vc: UIActivityViewController, context: Context) {}
 }

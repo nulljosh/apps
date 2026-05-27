@@ -24,6 +24,8 @@ struct WiretextApp: App {
             CommandMenu("Export") {
                 Button("Export as Text...") { canvas.exportText() }
                     .keyboardShortcut("e", modifiers: .command)
+                Button("Export as PNG...") { canvas.exportPNG() }
+                    .keyboardShortcut("p", modifiers: [.command, .shift])
                 Button("Copy to Clipboard") { canvas.copyToClipboard() }
                     .keyboardShortcut("c", modifiers: [.command, .shift])
             }

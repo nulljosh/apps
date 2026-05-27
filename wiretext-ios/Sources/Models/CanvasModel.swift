@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 @Observable
 final class CanvasModel {
@@ -74,6 +75,38 @@ final class CanvasModel {
 
     var canUndo: Bool { historyIndex > 0 }
     var canRedo: Bool { historyIndex < history.count - 1 }
+
+    @MainActor
+    func renderToImage() -> UIImage {
+        let charW = CanvasModel.charW
+        let charH = CanvasModel.charH
+        let cols = CanvasModel.cols
+        let rows = CanvasModel.rows
+        let width = charW * CGFloat(cols)
+        let height = charH * CGFloat(rows)
+        let size = CGSize(width: width, height: height)
+
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { ctx in
+            // White background
+            UIColor.white.setFill()
+            ctx.fill(CGRect(origin: .zero, size: size))
+
+            let font = UIFont(name: "Menlo", size: 13) ?? UIFont.monospacedSystemFont(ofSize: 13, weight: .regular)
+            let attrs: [NSAttributedString.Key: Any] = [
+                .font: font,
+                .foregroundColor: UIColor.black
+            ]
+            for r in 0..<rows {
+                for c in 0..<cols {
+                    let ch = grid[r][c]
+                    guard ch != " " else { continue }
+                    let pt = CGPoint(x: CGFloat(c) * charW, y: CGFloat(r) * charH)
+                    String(ch).draw(at: pt, withAttributes: attrs)
+                }
+            }
+        }
+    }
 
     private func saveHistory() {
         history = Array(history.prefix(historyIndex + 1))
