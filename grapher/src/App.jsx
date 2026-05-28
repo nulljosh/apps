@@ -62,24 +62,12 @@ export default function App() {
         }}>scroll to zoom · drag to pan</span>
       </div>
 
-      <div className="main-layout" style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'row',
-        overflow: 'hidden',
-      }}>
-        <div className="graph-pane" style={{ position: 'relative', overflow: 'hidden', flex: 1 }}>
+      <div className="main-layout">
+        <div className="graph-pane">
           <Graph equations={equations} />
         </div>
 
-        <div className="sidebar-pane" style={{
-          width: 300,
-          padding: 16,
-          borderLeft: '1px solid var(--border)',
-          background: 'var(--bg2)',
-          overflowY: 'auto',
-          flexShrink: 0,
-        }}>
+        <div className="sidebar-pane">
           <EquationList
             equations={equations}
             onChange={handleChange}
@@ -124,38 +112,6 @@ export default function App() {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 640px) {
-          .nav-hint {
-            display: none;
-          }
-          .main-layout {
-            flex-direction: column !important;
-          }
-          .graph-pane {
-            order: 1;
-            flex: none !important;
-            height: calc(100dvh - 53px - 200px);
-            width: 100% !important;
-          }
-          .sidebar-pane {
-            order: 2;
-            width: 100% !important;
-            flex: none !important;
-            height: 200px;
-            max-height: 200px;
-            border-left: none !important;
-            border-top: 1px solid var(--border) !important;
-            overflow-y: auto;
-            padding: 10px 12px !important;
-          }
-          .example-btn {
-            min-height: 44px !important;
-            min-width: 44px !important;
-            padding: 8px 10px !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

@@ -40,27 +40,73 @@ input:focus { outline: none; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
+.main-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.graph-pane {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+}
+
+.sidebar-pane {
+  width: 300px;
+  padding: 16px;
+  border-left: 1px solid var(--border);
+  background: var(--bg2);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
 @media (max-width: 640px) {
-  /* equation input rows */
+  .nav-hint { display: none; }
+
+  .main-layout {
+    flex-direction: column;
+  }
+
+  .graph-pane {
+    order: 1;
+    flex: none;
+    height: calc(100dvh - 53px - 200px);
+    width: 100%;
+  }
+
+  .sidebar-pane {
+    order: 2;
+    width: 100%;
+    flex: none;
+    height: 200px;
+    max-height: 200px;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding: 10px 12px;
+  }
+
   .eq-input {
-    font-size: 16px !important; /* prevents iOS auto-zoom */
+    font-size: 16px !important;
     min-height: 44px !important;
   }
 
-  /* equation list container: compact strip, scrollable */
   .eq-list-container {
-    max-height: 200px;
+    max-height: 160px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  /* all buttons in sidebar: minimum 44x44 touch target */
   button {
     min-height: 44px;
     min-width: 44px;
   }
 
-  /* canvas: fill full viewport width, explicit height */
+  .example-btn {
+    padding: 8px 10px !important;
+  }
+
   canvas {
     width: 100% !important;
     display: block;
