@@ -1,9 +1,18 @@
 import SwiftUI
 
+struct CurrentlyItem: Identifiable {
+    let id = UUID()
+    let text: String
+}
+
 @MainActor
 @Observable
 final class PortfolioViewModel {
     var projects: [Project] = []
+    let currently: [CurrentlyItem] = [
+        CurrentlyItem(text: "Finishing Pre-Calc 12 — spring blended class, wrapping up mid-June"),
+        CurrentlyItem(text: "Accepted to Capilano University — Paralegal Studies, starting fall 2026"),
+    ]
     var contributions: [Contribution] = []
     var eventMap: [String: [GitHubEvent]] = [:]
     var isLoading = false

@@ -57,6 +57,7 @@ struct ContentView: View {
         } detail: {
             ScrollView {
                 VStack(alignment: .leading, spacing: 32) {
+                    macCurrentlySection
                     if !viewModel.projects.isEmpty {
                         projectGrid
                     }
@@ -68,6 +69,26 @@ struct ContentView: View {
             }
         }
         .task { await viewModel.load() }
+    }
+
+    private var macCurrentlySection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Currently")
+                .font(.caption.weight(.medium))
+                .foregroundStyle(.tertiary)
+                .textCase(.uppercase)
+                .tracking(1.5)
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(viewModel.currently) { item in
+                    Text(item.text)
+                        .font(.body)
+                        .foregroundStyle(.primary)
+                }
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+        }
     }
 
     private var projectGrid: some View {
@@ -107,9 +128,30 @@ struct ContentView: View {
         .pickerStyle(.segmented)
     }
 
+    private var currentlySection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Currently")
+                .font(.caption.weight(.medium))
+                .foregroundStyle(.tertiary)
+                .textCase(.uppercase)
+                .tracking(1.5)
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(viewModel.currently) { item in
+                    Text(item.text)
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                }
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+        }
+    }
+
     private var projectsList: some View {
         ScrollView {
-            LazyVStack(spacing: 16) {
+            LazyVStack(alignment: .leading, spacing: 16) {
+                currentlySection
                 ForEach(viewModel.projects) { project in
                     ProjectCardView(project: project)
                 }
