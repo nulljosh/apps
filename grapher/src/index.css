@@ -5,23 +5,26 @@ html, body, #root {
   overscroll-behavior: none;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,900&family=DM+Sans:wght@400;500&display=swap');
+
 :root {
-  --bg: #faf7f4;
-  --bg2: #f0ebe4;
-  --text: #1a1612;
-  --text-secondary: rgba(26,22,18,0.55);
-  --border: rgba(26,22,18,0.1);
-  --accent: #FF851B;
-  --font: 'Space Grotesk', -apple-system, system-ui, sans-serif;
+  --bg: #FFF8F0;
+  --bg2: #f0e6d8;
+  --text: #1A1A1A;
+  --text-secondary: rgba(26,26,26,0.55);
+  --border: rgba(26,26,26,0.1);
+  --accent: #E4002B;
+  --font: 'DM Sans', -apple-system, system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0d0c0b;
-    --bg2: #161412;
-    --text: #f2ede8;
-    --text-secondary: rgba(242,237,232,0.55);
-    --border: rgba(242,237,232,0.1);
+    --bg: #1A1A1A;
+    --bg2: #2a2118;
+    --text: #FFF8F0;
+    --text-secondary: rgba(255,248,240,0.55);
+    --border: rgba(255,248,240,0.1);
   }
 }
 

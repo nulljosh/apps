@@ -8,13 +8,13 @@
     --border-light: rgba(255,255,255,0.10);
     --blur:         blur(20px);
     --blur-heavy:   blur(40px);
-    --accent:       #0071e3;
-    --accent-light: #2997ff;
+    --accent:       #E4002B;
+    --accent-light: #ff3355;
     --text-1:       rgba(255,255,255,0.92);
     --text-2:       rgba(255,255,255,0.55);
     --text-3:       rgba(255,255,255,0.35);
     --green:        #30d158;
-    --yellow:       #ffd60a;
+    --yellow:       #F9C31F;
     --orange:       #ff9f0a;
     --red:          #ff453a;
     --pink:         #ff375f;

@@ -4,31 +4,34 @@
   padding: 0;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,900&family=DM+Sans:wght@400;500&display=swap');
+
 :root {
-  --bg: #faf7f4;
-  --surface: #f0ebe4;
-  --surface2: #e8e0d6;
-  --border: rgba(26,22,18,0.1);
-  --border2: rgba(26,22,18,0.2);
-  --text: #1a1612;
-  --muted: rgba(26,22,18,0.45);
-  --subtle: rgba(26,22,18,0.65);
-  --accent: #FF851B;
-  --accent-dim: #e67615;
-  --accent-muted: rgba(255,133,27,0.12);
-  --font: 'Space Grotesk', -apple-system, system-ui, sans-serif;
+  --bg: #FFF8F0;
+  --surface: #f0e6d8;
+  --surface2: #ede0d0;
+  --border: rgba(26,26,26,0.1);
+  --border2: rgba(26,26,26,0.2);
+  --text: #1A1A1A;
+  --muted: rgba(26,26,26,0.45);
+  --subtle: rgba(26,26,26,0.65);
+  --accent: #E4002B;
+  --accent-dim: #c8001f;
+  --accent-muted: rgba(228,0,43,0.12);
+  --font: 'DM Sans', -apple-system, system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
   --font-mono: 'Berkeley Mono', 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 }
 
 [data-theme="dark"] {
-  --bg: #0d0c0b;
-  --surface: #161412;
-  --surface2: #1e1b18;
-  --border: rgba(242,237,232,0.1);
-  --border2: rgba(242,237,232,0.18);
-  --text: #f2ede8;
-  --muted: rgba(242,237,232,0.45);
-  --subtle: rgba(242,237,232,0.65);
+  --bg: #1A1A1A;
+  --surface: #2a2118;
+  --surface2: #332920;
+  --border: rgba(255,248,240,0.1);
+  --border2: rgba(255,248,240,0.18);
+  --text: #FFF8F0;
+  --muted: rgba(255,248,240,0.45);
+  --subtle: rgba(255,248,240,0.65);
 }
 
 html, body, #root {

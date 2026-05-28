@@ -1,50 +1,53 @@
-/* === Portfolio Vibe — heyitsmejosh.com === */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,900&family=DM+Sans:wght@400;500&display=swap');
+
+/* === CFA Palette === */
 :root {
-  --bg: #fafafa;
-  --bg2: #f2f2f2;
-  --text: #111;
-  --text2: rgba(0,0,0,0.5);
-  --text3: rgba(0,0,0,0.3);
-  --border: rgba(0,0,0,0.09);
-  --border2: rgba(0,0,0,0.06);
-  --font: 'Geist',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --bg: #FFF8F0;
+  --bg2: #f0e6d8;
+  --text: #1A1A1A;
+  --text2: rgba(26,26,26,0.5);
+  --text3: rgba(26,26,26,0.3);
+  --border: rgba(26,26,26,0.09);
+  --border2: rgba(26,26,26,0.06);
+  --font: 'DM Sans',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
   --spring: cubic-bezier(0.34,1.56,0.64,1);
   --ease: cubic-bezier(0.16,1,0.3,1);
 
-  /* Legacy aliases — component CSS compatibility */
-  --navy: var(--bg);
-  --navy-light: var(--bg2);
-  --navy-lighter: #e0e0e0;
-  --cream: var(--text);
-  --cream-dim: var(--text2);
-  --muted: var(--text3);
-  --blue-dark: #333;
-  --blue: #555;
-  --blue-light: #666;
-  --amber: #888;
-  --red: #c44040;
-  --green: #3d9e6a;
+  --navy: #1A1A1A;
+  --navy-light: #2a2118;
+  --navy-lighter: #332920;
+  --cream: #FFF8F0;
+  --cream-dim: rgba(255,248,240,0.65);
+  --muted: rgba(26,26,26,0.4);
+  --blue-dark: #c8001f;
+  --blue: #E4002B;
+  --blue-light: #ff3355;
+  --amber: #F9C31F;
+  --red: #E4002B;
+  --green: #1a7f37;
+  --accent: #E4002B;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #111;
-    --bg2: #1c1c1c;
-    --text: #e8e8e8;
-    --text2: rgba(255,255,255,0.45);
-    --text3: rgba(255,255,255,0.25);
-    --border: rgba(255,255,255,0.09);
-    --border2: rgba(255,255,255,0.06);
+    --bg: #1A1A1A;
+    --bg2: #2a2118;
+    --text: #FFF8F0;
+    --text2: rgba(255,248,240,0.5);
+    --text3: rgba(255,248,240,0.3);
+    --border: rgba(255,248,240,0.09);
+    --border2: rgba(255,248,240,0.06);
 
-    --navy: var(--bg);
-    --navy-light: var(--bg2);
-    --navy-lighter: #2a2a2a;
-    --cream: var(--text);
-    --cream-dim: var(--text2);
-    --muted: var(--text3);
-    --blue-dark: #888;
-    --blue: #aaa;
-    --blue-light: #ccc;
+    --navy: #1A1A1A;
+    --navy-light: #2a2118;
+    --navy-lighter: #332920;
+    --cream: #FFF8F0;
+    --cream-dim: rgba(255,248,240,0.65);
+    --muted: rgba(255,248,240,0.4);
+    --blue-dark: #ff3355;
+    --blue: #E4002B;
+    --blue-light: #ff6680;
   }
 }
 
