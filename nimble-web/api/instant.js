@@ -1,32 +1,55 @@
+import { createHmac } from 'node:crypto';
+
 const rateLimitStore = new Map();
 const RATE_WINDOW_MS = 60_000;
 const RATE_LIMIT = 20;
+const PRO_RATE_LIMIT = 200;
 
-function checkRateLimit(ip) {
+function checkRateLimit(ip, limit = RATE_LIMIT) {
   const now = Date.now();
   const entry = rateLimitStore.get(ip);
   if (!entry || now - entry.start > RATE_WINDOW_MS) {
     rateLimitStore.set(ip, { start: now, count: 1 });
     return true;
   }
-  if (entry.count >= RATE_LIMIT) return false;
+  if (entry.count >= limit) return false;
   entry.count++;
   return true;
 }
 
+function verifyProToken(token) {
+  if (!process.env.ADMIN_KEY || !token) return false;
+  if (token === process.env.ADMIN_KEY) return true;
+  try {
+    const [payload, sig] = token.split('.');
+    const expected = createHmac('sha256', process.env.ADMIN_KEY).update(payload).digest('base64url');
+    if (sig !== expected) return false;
+    const data = JSON.parse(Buffer.from(payload, 'base64url').toString());
+    return typeof data.expiry === 'number' && data.expiry > Date.now();
+  } catch { return false; }
+}
+
 export default async function handler(req, res) {
-  const allowedOrigins = ['https://nimble.heyitsmejosh.com', 'http://localhost:3000', 'http://localhost:5173'];
+  const prodOrigin = 'https://nimble.heyitsmejosh.com';
+  const allowedOrigins = process.env.NODE_ENV === 'development'
+    ? [prodOrigin, 'http://localhost:3000', 'http://localhost:5173']
+    : [prodOrigin];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Nimble-Token');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  const token = req.headers['x-nimble-token'];
+  const isPro = verifyProToken(token);
   const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
-  if (!checkRateLimit(ip)) {
+  if (!isPro && !checkRateLimit(ip)) {
+    return res.status(429).json({ error: 'Too many requests. Upgrade to Pro for unlimited searches.' });
+  }
+  if (isPro && !checkRateLimit(ip, PRO_RATE_LIMIT)) {
     return res.status(429).json({ error: 'Too many requests' });
   }
 
@@ -70,14 +93,7 @@ async function queryDDG(query, signal) {
   if (data.Answer) {
     const clean = data.Answer.replace(/<[^>]+>/g, '');
     if (clean) {
-      return {
-        type: 'text',
-        heading: null,
-        body: clean,
-        source: 'DuckDuckGo',
-        sourceURL: null,
-        imageURL: null,
-      };
+      return { type: 'text', heading: null, body: clean, source: 'DuckDuckGo', sourceURL: null, imageURL: null };
     }
   }
 
@@ -150,27 +166,21 @@ async function queryWikipedia(query, signal) {
 function preprocessQuery(raw) {
   let q = raw.trim().replace(/\?+$/, '').trim();
 
-  // "who is [the] X" / "who was [the] X"
   let m = q.match(/^who\s+(?:is|was|are|were)\s+(?:the\s+)?(.+)$/i);
   if (m) return { ddgQuery: m[1].trim(), wikiQuery: m[1].trim() };
 
-  // "what is [the] X" / "what's [the] X"
   m = q.match(/^what(?:'s|\s+is|\s+was)\s+(?:the\s+)?(.+)$/i);
   if (m) return { ddgQuery: m[1].trim(), wikiQuery: m[1].trim() };
 
-  // "where is X [located]"
   m = q.match(/^where\s+is\s+(.+?)(?:\s+located)?$/i);
   if (m) return { ddgQuery: `${m[1].trim()} location`, wikiQuery: m[1].trim() };
 
-  // "when was/did X [born/founded]"
   m = q.match(/^when\s+(?:was|did|were?|is)\s+(.+?)(?:\s+born|\s+founded|\s+established)?$/i);
   if (m) return { ddgQuery: raw, wikiQuery: m[1].trim() };
 
-  // "how [adj] is X"
   m = q.match(/^how\s+(much|many|tall|old|big|far|long|wide|deep|large|small|fast|heavy)\s+is\s+(.+)$/i);
   if (m) return { ddgQuery: `${m[2].trim()} ${m[1].toLowerCase()}`, wikiQuery: m[2].trim() };
 
-  // "population/capital/president/prime minister/currency/language/area of X"
   m = q.match(/^(population|capital|president|prime\s+minister|premier|currency|language|area|gdp|timezone)\s+of\s+(.+)$/i);
   if (m) return { ddgQuery: `${m[2].trim()} ${m[1].toLowerCase()}`, wikiQuery: `${m[1].toLowerCase()} of ${m[2].trim()}` };
 

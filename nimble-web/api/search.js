@@ -1,34 +1,57 @@
 const rateLimitStore = new Map();
 const RATE_WINDOW_MS = 60_000;
 const RATE_LIMIT = 20;
+const PRO_RATE_LIMIT = 200;
 
-function checkRateLimit(ip) {
+function checkRateLimit(ip, limit = RATE_LIMIT) {
   const now = Date.now();
   const entry = rateLimitStore.get(ip);
   if (!entry || now - entry.start > RATE_WINDOW_MS) {
     rateLimitStore.set(ip, { start: now, count: 1 });
     return true;
   }
-  if (entry.count >= RATE_LIMIT) return false;
+  if (entry.count >= limit) return false;
   entry.count++;
   return true;
 }
 
+import { createHmac } from 'node:crypto';
+
+function verifyProToken(token) {
+  if (!process.env.ADMIN_KEY || !token) return false;
+  if (token === process.env.ADMIN_KEY) return true;
+  try {
+    const [payload, sig] = token.split('.');
+    const expected = createHmac('sha256', process.env.ADMIN_KEY).update(payload).digest('base64url');
+    if (sig !== expected) return false;
+    const data = JSON.parse(Buffer.from(payload, 'base64url').toString());
+    return typeof data.expiry === 'number' && data.expiry > Date.now();
+  } catch { return false; }
+}
+
 export default async function handler(req, res) {
-  const allowedOrigins = ['https://nimble.heyitsmejosh.com', 'http://localhost:3000', 'http://localhost:5173'];
+  const prodOrigin = 'https://nimble.heyitsmejosh.com';
+  const allowedOrigins = process.env.NODE_ENV === 'development'
+    ? [prodOrigin, 'http://localhost:3000', 'http://localhost:5173']
+    : [prodOrigin];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Nimble-Token');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
+  const token = req.headers['x-nimble-token'];
+  const isPro = verifyProToken(token);
   const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
-  if (!checkRateLimit(ip)) {
+  if (!isPro && !checkRateLimit(ip)) {
+    return res.status(429).json({ error: 'Too many requests. Upgrade to Pro for unlimited searches.' });
+  }
+  if (isPro && !checkRateLimit(ip, PRO_RATE_LIMIT)) {
     return res.status(429).json({ error: 'Too many requests' });
   }
 
