@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './Toolbar.css';
 import { PRESETS, CATEGORIES } from '../lib/presets.js';
 
-export default function Toolbar({ selectedPreset, onSelectPreset }) {
+export default function Toolbar({ selectedPreset, onSelectPreset, isOpen }) {
   const [search, setSearch] = useState('');
 
   const query = search.trim().toLowerCase();
@@ -11,7 +11,7 @@ export default function Toolbar({ selectedPreset, onSelectPreset }) {
     : null;
 
   return (
-    <aside className="toolbar">
+    <aside className={`toolbar${isOpen ? ' toolbar--mobile-open' : ''}`}>
       <div className="toolbar-search">
         <input
           className="toolbar-search-input"

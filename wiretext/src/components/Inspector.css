@@ -93,17 +93,18 @@
   .inspector {
     display: flex;
     position: fixed;
-    bottom: 0;
+    bottom: calc(54px + env(safe-area-inset-bottom, 0px));
     left: 0;
     right: 0;
-    height: 50vh;
+    height: 45vh;
     border-left: none;
     border-top: 1px solid var(--border);
     border-radius: 12px 12px 0 0;
     z-index: 100;
-    transform: translateY(100%);
+    transform: translateY(110%);
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     overflow-y: auto;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
   }
 
   .inspector.is-open {

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { SessionProvider } from './context/SessionContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Auth from './pages/Auth';
 import Nav from './components/Nav';
 import Dashboard from './pages/Dashboard';
 import Substances from './pages/Substances';
@@ -38,6 +40,44 @@ function ThemeToggle({ theme, setTheme }) {
   );
 }
 
+function AppShell({ theme, setTheme }) {
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
+  if (!user) return <Auth />;
+
+  return (
+    <SessionProvider>
+      <div style={{ minHeight: '100dvh' }}>
+        <ThemeToggle theme={theme} setTheme={setTheme} />
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/substances" element={<Substances />} />
+          <Route path="/substances/:id" element={<SubstanceDetail />} />
+          <Route path="/interactions" element={<Substances defaultTab="interactions" />} />
+          <Route path="/insights" element={<Insights />} />
+          <Route path="/body" element={<Body />} />
+          <Route path="/biometrics" element={<Biometrics />} />
+          <Route path="/health" element={<Biometrics defaultTab="health" />} />
+          <Route path="/bodywork" element={<Bodywork />} />
+          <Route path="/feet" element={<Feet />} />
+          <Route path="/hands" element={<Hands />} />
+          <Route path="/abdomen" element={<Abdomen />} />
+          <Route path="/meridians" element={<Meridians />} />
+          <Route path="/symptom-finder" element={<SymptomFinder />} />
+          <Route path="/sessions" element={<Sessions />} />
+          <Route path="/facemaxxing" element={<Facemaxxing />} />
+          <Route path="/routine" element={<Routine />} />
+          <Route path="/lab-results" element={<LabResults />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="*" element={<Dashboard />} />
+        </Routes>
+        <Nav />
+      </div>
+    </SessionProvider>
+  );
+}
+
 export default function App() {
   const [theme, setTheme] = useState(
     () => localStorage.getItem('dose:theme') || (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light')
@@ -57,34 +97,9 @@ export default function App() {
 
   return (
     <HashRouter>
-      <SessionProvider>
-        <div style={{ minHeight: '100dvh' }}>
-          <ThemeToggle theme={theme} setTheme={setTheme} />
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/substances" element={<Substances />} />
-            <Route path="/substances/:id" element={<SubstanceDetail />} />
-            <Route path="/interactions" element={<Substances defaultTab="interactions" />} />
-            <Route path="/insights" element={<Insights />} />
-            <Route path="/body" element={<Body />} />
-            <Route path="/biometrics" element={<Biometrics />} />
-            <Route path="/health" element={<Biometrics defaultTab="health" />} />
-            <Route path="/bodywork" element={<Bodywork />} />
-            <Route path="/feet" element={<Feet />} />
-            <Route path="/hands" element={<Hands />} />
-            <Route path="/abdomen" element={<Abdomen />} />
-            <Route path="/meridians" element={<Meridians />} />
-            <Route path="/symptom-finder" element={<SymptomFinder />} />
-            <Route path="/sessions" element={<Sessions />} />
-            <Route path="/facemaxxing" element={<Facemaxxing />} />
-            <Route path="/routine" element={<Routine />} />
-            <Route path="/lab-results" element={<LabResults />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="*" element={<Dashboard />} />
-          </Routes>
-          <Nav />
-        </div>
-      </SessionProvider>
+      <AuthProvider>
+        <AppShell theme={theme} setTheme={setTheme} />
+      </AuthProvider>
     </HashRouter>
   );
 }

@@ -19,6 +19,7 @@ export default function Canvas({
   rows,
   cursor,
   selectedPreset,
+  darkMode,
   onPlaceComponent,
   onCursorMove,
   onUndo,
@@ -28,7 +29,6 @@ export default function Canvas({
   const charWRef = useRef(null);
   const hoverRef = useRef(null);
 
-  // Lazy-measure char width once
   function getCharW() {
     if (!charWRef.current) {
       charWRef.current = measureCharWidth(FONT_SIZE, FONT_FAMILY);
@@ -36,7 +36,6 @@ export default function Canvas({
     return charWRef.current;
   }
 
-  // Draw the full grid
   const draw = useCallback((hoverCell) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -46,19 +45,16 @@ export default function Canvas({
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Background
-    ctx.fillStyle = '#faf7f4';
+    ctx.fillStyle = darkMode ? '#0d0c0b' : '#faf7f4';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Grid dots
-    ctx.fillStyle = 'rgba(26,22,18,0.1)';
+    ctx.fillStyle = darkMode ? 'rgba(242,237,232,0.1)' : 'rgba(26,22,18,0.1)';
     for (let r = 0; r <= rows; r++) {
       for (let c = 0; c <= cols; c++) {
         ctx.fillRect(Math.round(c * charW), r * charH, 1, 1);
       }
     }
 
-    // Hover preview
     if (hoverCell && selectedPreset) {
       const { col, row } = hoverCell;
       const previewGrid = stampComponent(grid, selectedPreset.template, col, row);
@@ -75,9 +71,8 @@ export default function Canvas({
       }
     }
 
-    // Characters
     ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
-    ctx.fillStyle = '#1a1612';
+    ctx.fillStyle = darkMode ? '#f2ede8' : '#1a1612';
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const ch = grid[r][c];
@@ -87,15 +82,13 @@ export default function Canvas({
       }
     }
 
-    // Cursor
     const cx = cursor.col * charW;
     const cy = cursor.row * charH;
     ctx.strokeStyle = '#FF851B';
     ctx.lineWidth = 1;
     ctx.strokeRect(cx + 0.5, cy + 0.5, charW - 1, charH - 1);
-  }, [grid, cols, rows, cursor, selectedPreset]);
+  }, [grid, cols, rows, cursor, selectedPreset, darkMode]);
 
-  // Resize canvas to match display size
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -109,16 +102,20 @@ export default function Canvas({
     draw(hoverRef.current);
   }, [grid, cols, rows, cursor, selectedPreset, draw]);
 
-  const getCellFromEvent = useCallback((e) => {
+  const getCellFromPoint = useCallback((clientX, clientY) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
     const charW = getCharW();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    const px = (e.clientX - rect.left) * scaleX;
-    const py = (e.clientY - rect.top) * scaleY;
+    const px = (clientX - rect.left) * scaleX;
+    const py = (clientY - rect.top) * scaleY;
     return pxToCell(px, py, charW, LINE_HEIGHT);
   }, []);
+
+  const getCellFromEvent = useCallback((e) => {
+    return getCellFromPoint(e.clientX, e.clientY);
+  }, [getCellFromPoint]);
 
   const handleMouseMove = useCallback((e) => {
     const cell = getCellFromEvent(e);
@@ -140,6 +137,15 @@ export default function Canvas({
     }
   }, [getCellFromEvent, selectedPreset, onPlaceComponent, onCursorMove]);
 
+  const handleTouchEnd = useCallback((e) => {
+    if (!selectedPreset) return;
+    const touch = e.changedTouches[0];
+    if (!touch) return;
+    const cell = getCellFromPoint(touch.clientX, touch.clientY);
+    onCursorMove(cell.col, cell.row);
+    onPlaceComponent(selectedPreset, cell.col, cell.row);
+  }, [selectedPreset, getCellFromPoint, onCursorMove, onPlaceComponent]);
+
   const handleKeyDown = useCallback((e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
       e.preventDefault();
@@ -160,6 +166,7 @@ export default function Canvas({
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           onClick={handleClick}
+          onTouchEnd={handleTouchEnd}
         />
       </div>
     </div>

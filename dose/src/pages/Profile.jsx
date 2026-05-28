@@ -1,49 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { items as routineItems } from '../data/routine';
-
-const KEY = 'dose:profile';
-
-const DEFAULT_PROFILE = {
-  substances: [
-    { name: 'Coffee', frequency: 'daily', notes: 'Probably affecting stomach pH' },
-    { name: 'Cannabis', frequency: 'daily', notes: 'Daily use, vaping. Started ~10 years ago.' },
-    { name: 'Tobacco/Vape', frequency: 'daily', notes: 'Lung health concern. Spirometry pending.' },
-    { name: 'Sertraline', frequency: 'daily', notes: '50mg nightly' },
-    { name: 'Concerta', frequency: 'daily', notes: 'Methylphenidate ER — ADHD' },
-    { name: 'Psilocybin', frequency: 'microdosing', notes: 'Intermittent microdosing' },
-    { name: 'L-Theanine', frequency: 'daily', notes: '200mg with coffee' },
-  ],
-  conditions: [
-    { name: 'ADHD', status: 'diagnosed', notes: '' },
-    { name: 'Autism', status: 'diagnosed', notes: '' },
-    { name: 'Bunion (big toe)', status: 'active', notes: 'Right foot' },
-    { name: 'Low SpO2', status: 'monitoring', notes: '92-100% range. Possibly smoking related.' },
-    { name: 'Stomach pH / acid', status: 'concern', notes: 'Coffee + smoking likely contributing' },
-  ],
-  pendingTests: [
-    { name: 'Liver Panel', location: 'LifeLabs', status: 'pending', notes: '' },
-    { name: 'Thyroid Panel', location: 'LifeLabs', status: 'pending', notes: '' },
-    { name: 'Full Blood Panel (CBC, lipids, heart markers)', location: 'LifeLabs', status: 'pending', notes: '' },
-    { name: 'Spirometry (lung function)', location: 'TBD', status: 'pending', notes: 'Smoking-related lung function concern' },
-    { name: 'Cognitive / brain health baseline', location: 'TBD', status: 'pending', notes: 'Weed/vape since ~age 16' },
-  ],
-  notes: 'Currently tracking blood pressure and resting heart rate trends. Cessation support options exist for smoking — ask doctor.',
-};
-
-function loadProfile() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return DEFAULT_PROFILE;
-    return { ...DEFAULT_PROFILE, ...JSON.parse(raw) };
-  } catch {
-    return DEFAULT_PROFILE;
-  }
-}
-
-function saveProfile(data) {
-  try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {}
-}
+import { useProfile } from '../hooks/useProfile';
+import { useAuth } from '../context/AuthContext';
 
 const STATUS_COLORS = {
   diagnosed: 'var(--accent)',
@@ -101,28 +60,49 @@ function RoutineSummary() {
 
 export default function Profile() {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState(loadProfile);
+  const { signOut } = useAuth();
+  const { profile, saveProfile, profileLoading } = useProfile();
   const [editingNotes, setEditingNotes] = useState(false);
-  const [notesVal, setNotesVal] = useState(profile.notes);
+  const [notesVal, setNotesVal] = useState('');
 
   function saveNotes() {
     const next = { ...profile, notes: notesVal };
-    setProfile(next);
     saveProfile(next);
     setEditingNotes(false);
+  }
+
+  function startEditNotes() {
+    setNotesVal(profile.notes);
+    setEditingNotes(true);
   }
 
   function toggleTestStatus(i) {
     const tests = [...profile.pendingTests];
     tests[i] = { ...tests[i], status: tests[i].status === 'pending' ? 'done' : 'pending' };
-    const next = { ...profile, pendingTests: tests };
-    setProfile(next);
-    saveProfile(next);
+    saveProfile({ ...profile, pendingTests: tests });
+  }
+
+  if (profileLoading) {
+    return (
+      <div className="page" style={{ maxWidth: 600 }}>
+        <h1 className="page-title">Health Profile</h1>
+        <p style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem' }}>Loading...</p>
+      </div>
+    );
   }
 
   return (
     <div className="page" style={{ maxWidth: 600 }}>
-      <h1 className="page-title">Health Profile</h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+        <h1 className="page-title" style={{ margin: 0 }}>Health Profile</h1>
+        <button
+          onClick={signOut}
+          className="btn-ghost"
+          style={{ fontSize: '0.75rem' }}
+        >
+          Sign out
+        </button>
+      </div>
       <p className="page-subtitle">Background, conditions, and pending medical actions.</p>
 
       {/* Pending Tests */}
@@ -253,7 +233,7 @@ export default function Profile() {
             />
             <div style={{ display: 'flex', gap: 8 }}>
               <button className="btn-primary" onClick={saveNotes}>Save</button>
-              <button className="btn-ghost" onClick={() => { setEditingNotes(false); setNotesVal(profile.notes); }}>Cancel</button>
+              <button className="btn-ghost" onClick={() => setEditingNotes(false)}>Cancel</button>
             </div>
           </>
         ) : (
@@ -261,7 +241,7 @@ export default function Profile() {
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6 }}>
               {profile.notes || 'No notes.'}
             </p>
-            <button className="btn-ghost" onClick={() => setEditingNotes(true)} style={{ flexShrink: 0 }}>Edit</button>
+            <button className="btn-ghost" onClick={startEditNotes} style={{ flexShrink: 0 }}>Edit</button>
           </div>
         )}
       </div>
