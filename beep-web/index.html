@@ -8,10 +8,13 @@
   <meta name="apple-mobile-web-app-title" content="Beep">
   <title>Beep</title>
   <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--blue:#E4002B;--bg:#FFF8F0;--card:#f0e6d8;--text:#1A1A1A;--sub:#4a3f38;--sep:rgba(26,26,26,0.15);--red:#E4002B;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
-    body{font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh}
+    body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh}
     .screen{display:none;min-height:100dvh}
     .screen.active{display:flex;flex-direction:column}
     #login{align-items:center;justify-content:center;padding:40px 28px calc(40px + var(--safe-bottom))}
