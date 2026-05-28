@@ -8,7 +8,6 @@ struct AuthView: View {
     @State private var password = ""
     @State private var loading = false
     @State private var errorMessage: String?
-    @State private var successMessage: String?
 
     enum Tab { case signIn, register }
 
@@ -99,9 +98,7 @@ struct AuthView: View {
             if tab == .signIn {
                 try await authService.signIn(email: email, password: password)
             } else {
-                try await authService.signUp(email: email, password: password)
-                successMessage = "Check your email to confirm your account, then sign in."
-                tab = .signIn
+                try await authService.signIn(email: email, password: password)
             }
         } catch {
             errorMessage = error.localizedDescription

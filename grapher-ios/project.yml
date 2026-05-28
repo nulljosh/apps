@@ -26,3 +26,13 @@ targets:
     sources: [Tests]
     dependencies:
       - target: GrapherIOS
+  GrapherIOSUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - UITests
+    dependencies:
+      - target: GrapherIOS
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.nulljosh.grapher-ios.uitests
+      GENERATE_INFOPLIST_FILE: YES

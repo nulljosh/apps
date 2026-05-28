@@ -16,6 +16,8 @@
 		2916D332F0CA9DCE57E3E55A /* SessionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E12140D5AE0B99C6BE9A2E2 /* SessionHistoryView.swift */; };
 		293C2350E646A41D465B5C71 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9D5B4E7C646AF50DADE68 /* DashboardView.swift */; };
 		2B1BF4519E0BE393BCA523B0 /* GlassModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5219BB1D836FC41CB9C0B21 /* GlassModifiers.swift */; };
+		2F9D3AA8C888A3891BD6702C /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39FD6B09FB76EBED7F816FC /* AuthView.swift */; };
+		30886660819784903AAC423E /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A660901E88D0F3B59110204E /* AuthService.swift */; };
 		30F3080D415CBF6C50FCE3A4 /* BodyMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B311D9209ACE76195028449E /* BodyMapView.swift */; };
 		33E3FB245B8B3BD2970D7DBC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3057504A3A875563DC88B1 /* SettingsView.swift */; };
 		392CA299C6A901E7C8082F0D /* CSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0100EAF7660790CB2076E8 /* CSVExporter.swift */; };
@@ -54,6 +56,7 @@
 		AF2EE850115F47E5069C2894 /* BiometricEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653F0F0518590F33D5A3B4E7 /* BiometricEntry.swift */; };
 		B6FF682DBA1AA10662434838 /* CombinedBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C71A91DA5229F06F59D920 /* CombinedBodyView.swift */; };
 		B952F3F654DAEC637D058BDC /* LabMarkerChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0B90F1173BFC6B66E49994 /* LabMarkerChartView.swift */; };
+		BF2D2A276AA9298A56223C87 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 2836A7399AB3537105910E3F /* Supabase */; };
 		BF9493800113655A88D85254 /* FacemaxxingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56DF19EBDDEE9E4FDA41EEB /* FacemaxxingView.swift */; };
 		BFB64F0D40488C6B2720C3D4 /* LabResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3FCE869C9145AA4C3630EC /* LabResult.swift */; };
 		C8CD7C6DF71D15C441256EF0 /* HealthGradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201D1FBEC07905F67B1CD6BD /* HealthGradeView.swift */; };
@@ -143,6 +146,7 @@
 		9B3FCE869C9145AA4C3630EC /* LabResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabResult.swift; sourceTree = "<group>"; };
 		9CD9D5B4E7C646AF50DADE68 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		A079F23A43B3D36B334FF32C /* DoseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseApp.swift; sourceTree = "<group>"; };
+		A660901E88D0F3B59110204E /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		A6D7C7B95F2E60D30505A522 /* LabResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabResultsView.swift; sourceTree = "<group>"; };
 		A7261207A74BD07536E87B21 /* ZoneDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneDetailView.swift; sourceTree = "<group>"; };
 		ABBD4D3BA875752B7C35E8EB /* CSVExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporterTests.swift; sourceTree = "<group>"; };
@@ -175,6 +179,7 @@
 		F02F797F12B5742B4B1C3F12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F0828A6091BE78F3F2DCC3BF /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		F1A42396D0DFA8095574F4E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F39FD6B09FB76EBED7F816FC /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		F44E31E74E4854CCAC953A0F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		F51CB366EDF75BD6D938FE83 /* InteractionCheckerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionCheckerView.swift; sourceTree = "<group>"; };
 		FECB687953F8BAFC321BD953 /* ReflexologyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflexologyData.swift; sourceTree = "<group>"; };
@@ -195,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BCBCE683DD90A3BECC1F6EB /* HealthKit.framework in Frameworks */,
+				BF2D2A276AA9298A56223C87 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +210,7 @@
 		2B428AEFFF6EE6E6D40FE080 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A660901E88D0F3B59110204E /* AuthService.swift */,
 				7C0100EAF7660790CB2076E8 /* CSVExporter.swift */,
 				C534B06DF281DF9336AC3148 /* DataStore.swift */,
 				4760F98075780C9B8F1CC276 /* HealthKitService.swift */,
@@ -276,6 +283,7 @@
 			children = (
 				C544CCCD81868C4B209D0611 /* AbdomenView.swift */,
 				C9B5EA7E88D5810D00958E35 /* AddDoseSheet.swift */,
+				F39FD6B09FB76EBED7F816FC /* AuthView.swift */,
 				B311D9209ACE76195028449E /* BodyMapView.swift */,
 				E89880E71F4CFEC147A66F6D /* BodyView.swift */,
 				C4CE0151530910199A429544 /* BodyworkHubView.swift */,
@@ -410,6 +418,7 @@
 			);
 			name = Dose;
 			packageProductDependencies = (
+				2836A7399AB3537105910E3F /* Supabase */,
 			);
 			productName = Dose;
 			productReference = C3EBB199DE6DF1554DCC6A41 /* Dose.app */;
@@ -447,6 +456,9 @@
 			);
 			mainGroup = BB4EC32CE0F54FF0145520F2;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C02564A630C06D67301A4997 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F5FEA589315AFB7745BB1679 /* Products */;
 			projectDirPath = "";
@@ -495,6 +507,8 @@
 				E35DC77504ADF3582B7B84A9 /* AbdomenView.swift in Sources */,
 				E2114ADE60A1CE938C84E23C /* AcupunctureData.swift in Sources */,
 				592E2468301F728F08922E24 /* AddDoseSheet.swift in Sources */,
+				30886660819784903AAC423E /* AuthService.swift in Sources */,
+				2F9D3AA8C888A3891BD6702C /* AuthView.swift in Sources */,
 				AF2EE850115F47E5069C2894 /* BiometricEntry.swift in Sources */,
 				30F3080D415CBF6C50FCE3A4 /* BodyMapView.swift in Sources */,
 				D0AD42AC88B044B65135658F /* BodyView.swift in Sources */,
@@ -836,6 +850,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C02564A630C06D67301A4997 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2836A7399AB3537105910E3F /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C02564A630C06D67301A4997 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AFD5A1FE0EB46C313D480984 /* Project object */;
 }

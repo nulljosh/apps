@@ -21,7 +21,6 @@ export default function Auth() {
     } else {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) setError(error.message);
-      else setMessage('Check your email to confirm your account.');
     }
 
     setLoading(false);

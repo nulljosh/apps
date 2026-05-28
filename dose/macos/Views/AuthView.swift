@@ -8,7 +8,6 @@ struct MacAuthView: View {
     @State private var password = ""
     @State private var loading = false
     @State private var errorMessage: String?
-    @State private var successMessage: String?
 
     enum Tab { case signIn, register }
 
@@ -33,7 +32,6 @@ struct MacAuthView: View {
             .pickerStyle(.segmented)
             .onChange(of: tab) { _, _ in
                 errorMessage = nil
-                successMessage = nil
             }
 
             VStack(spacing: 10) {
@@ -46,10 +44,6 @@ struct MacAuthView: View {
             if let error = errorMessage {
                 Text(error).font(.caption).foregroundStyle(.red).multilineTextAlignment(.center)
             }
-            if let success = successMessage {
-                Text(success).font(.caption).foregroundStyle(.green).multilineTextAlignment(.center)
-            }
-
             Button {
                 Task { await submit() }
             } label: {
@@ -70,16 +64,13 @@ struct MacAuthView: View {
     private func submit() async {
         guard !loading else { return }
         errorMessage = nil
-        successMessage = nil
         loading = true
         defer { loading = false }
         do {
             if tab == .signIn {
                 try await authService.signIn(email: email, password: password)
             } else {
-                try await authService.signUp(email: email, password: password)
-                successMessage = "Check your email to confirm, then sign in."
-                tab = .signIn
+                try await authService.signIn(email: email, password: password)
             }
         } catch {
             errorMessage = error.localizedDescription
