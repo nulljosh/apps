@@ -36,7 +36,7 @@ struct ContentView: View {
             }
             .background(Color(hex: "0d0c0b"))
         }
-        .ignoresSafeArea(edges: .top)
+        .ignoresSafeArea()
     }
 
     // MARK: - iPad layout: sidebar equations, detail graph
