@@ -1,0 +1,31 @@
+{
+  "grades": {
+    "retrieved_at": "2026-05-22",
+    "courses": [
+      {
+        "course": "Pre-Calculus 12",
+        "course_ou": "184298",
+        "categories": [
+          {
+            "category": "Unit Assignments",
+            "grade_pct": 83,
+            "items": [
+              { "name": "Unit 1 — Sequences & Series",  "score": 88,  "out_of": 100, "percentage": 88 },
+              { "name": "Unit 2 — Transformations",     "score": 78,  "out_of": 100, "percentage": 78 },
+              { "name": "Unit 3 — Polynomials",         "score": null, "out_of": 100, "percentage": null },
+              { "name": "Unit 4 — Exponents & Logs",    "score": null, "out_of": 100, "percentage": null },
+              { "name": "Unit 5 — Rational Expressions","score": null, "out_of": 100, "percentage": null },
+              { "name": "Unit 6 — Sinusoidal Functions","score": null, "out_of": 100, "percentage": null },
+              { "name": "Unit 7 — Trig Identities",     "score": null, "out_of": 100, "percentage": null }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "lastUpdated": "2026-05-22",
+    "stale": false,
+    "ageHours": 0
+  }
+}

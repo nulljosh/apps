@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadence</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0f;
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --text: #ffffff;
+      --text-secondary: rgba(255,255,255,0.5);
+      --text-tertiary: rgba(255,255,255,0.3);
+      --border: rgba(255,255,255,0.08);
+      --accent: #0071e3;
+      --accent-dim: rgba(0,113,227,0.15);
+      --accent-bright: rgba(0,113,227,0.9);
+      --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 3rem) 4rem;
+    }
+
+    /* Entrance animation */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Glass card mixin */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+    }
+
+    /* Header */
+    header { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+
+    .wordmark {
+      font-size: clamp(2.75rem, 8vw, 5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.05;
+      margin-bottom: 0.75rem;
+    }
+
+    .sub {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .streak-badge {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      border: 1px solid rgba(0,113,227,0.4);
+      border-radius: 100px;
+      padding: 3px 10px;
+      background: rgba(0,113,227,0.1);
+    }
+
+    /* Section label */
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    section { margin-bottom: clamp(2rem, 4vw, 3rem); }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-cell {
+      padding: 1.25rem 1.25rem 1rem;
+      transition: transform 0.2s var(--spring), filter 0.2s ease;
+    }
+
+    .stat-cell:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .stat-num {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-size: 0.6875rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Repo breakdown */
+    .repo-breakdown {
+      list-style: none;
+      margin-top: 12px;
+    }
+
+    .repo-breakdown li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.5rem 1.25rem;
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      border-top: 1px solid var(--border);
+    }
+
+    .repo-breakdown li:last-child { border-radius: 0 0 16px 16px; }
+    .repo-breakdown li span:first-child { color: var(--text-secondary); }
+    .repo-breakdown li span:last-child { font-variant-numeric: tabular-nums; }
+
+    /* Chart */
+    .chart-wrap {
+      padding: 1.5rem;
+    }
+
+    canvas { max-height: 160px; }
+
+    /* Heatmap */
+    .heatmap-wrap { padding: 1.5rem; }
+
+    .heatmap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+    }
+
+    .heatmap-cell {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.05);
+      transition: transform 0.15s var(--spring);
+    }
+
+    .heatmap-cell:hover { transform: scale(1.6); }
+    .heatmap-cell.l1 { background: rgba(0,113,227,0.2); }
+    .heatmap-cell.l2 { background: rgba(0,113,227,0.45); }
+    .heatmap-cell.l3 { background: rgba(0,113,227,0.7); }
+    .heatmap-cell.l4 { background: rgba(0,113,227,0.9); }
+
+    /* Project list */
+    .proj-list { list-style: none; }
+
+    .proj-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.875rem 1.25rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      transition: background 0.15s ease, transform 0.2s var(--spring);
+    }
+
+    .proj-row:first-child { border-radius: 16px 16px 0 0; border-top: none; }
+    .proj-row:last-child { border-radius: 0 0 16px 16px; }
+    .proj-row:hover { background: rgba(255,255,255,0.04); transform: translateX(4px); }
+
+    .proj-name {
+      color: var(--text);
+      font-weight: 500;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .proj-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 1.25rem;
+      flex-shrink: 0;
+      font-size: 0.875rem;
+    }
+
+    .proj-commits {
+      color: var(--text);
+      font-weight: 600;
+      min-width: 3ch;
+      text-align: right;
+    }
+
+    .proj-ago { color: var(--text-tertiary); white-space: nowrap; }
+
+    .status-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--text-tertiary);
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    .status-dot.active { background: var(--accent); }
+
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .proj-meta { gap: 0.75rem; }
+      .proj-ago { display: none; }
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0 12px;
+      border-top: 1px solid var(--border);
+      color: var(--text-tertiary);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+    footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header class="fade-up">
+      <div class="wordmark">Cadence</div>
+      <div class="sub">
+        <span id="date-line">code activity</span>
+        <span class="streak-badge" id="streak-badge">-- day streak</span>
+      </div>
+    </header>
+
+    <section class="fade-up" style="transition-delay:0.05s">
+      <span class="section-label">Stats</span>
+      <div class="glass">
+        <div class="stats-grid">
+          <div class="stat-cell">
+            <div class="stat-num" id="stat-total">--</div>
+            <div class="stat-label">Commits 30d</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num" id="stat-projects">--</div>
+            <div class="stat-label">Repos</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num" id="stat-best">--</div>
+            <div class="stat-label">Best Day</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num" id="stat-streak">--</div>
+            <div class="stat-label">Streak</div>
+          </div>
+        </div>
+        <ul class="repo-breakdown" id="repo-breakdown"></ul>
+      </div>
+    </section>
+
+    <section class="fade-up" style="transition-delay:0.1s">
+      <span class="section-label">Commit Activity</span>
+      <div class="glass chart-wrap">
+        <canvas id="commitChart"></canvas>
+      </div>
+    </section>
+
+    <section class="fade-up" style="transition-delay:0.15s">
+      <span class="section-label">Activity Grid</span>
+      <div class="glass heatmap-wrap">
+        <div class="heatmap" id="heatmap"></div>
+      </div>
+    </section>
+
+    <section class="fade-up" style="transition-delay:0.2s">
+      <span class="section-label">Projects</span>
+      <ul class="proj-list glass" id="proj-list"></ul>
+    </section>
+
+    <footer>
+      <span>MIT 2026 Joshua Trommel</span>
+      <a href="https://github.com/nulljosh/cadence" target="_blank" rel="noopener">GitHub</a>
+    </footer>
+
+  </div>
+
+  <script>
+    const API = '';
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+    function mk(tag, cls, text) {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text !== undefined) e.textContent = text;
+      return e;
+    }
+
+    async function load() {
+      const [stats, heatmap, projects] = await Promise.all([
+        fetch(API+'/api/stats').then(r=>r.json()),
+        fetch(API+'/api/heatmap').then(r=>r.json()),
+        fetch(API+'/api/projects').then(r=>r.json()),
+      ]);
+
+      const now = new Date();
+      document.getElementById('date-line').textContent =
+        now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toLowerCase();
+
+      document.getElementById('stat-total').textContent = stats.total30.toLocaleString();
+      document.getElementById('stat-projects').textContent = stats.activeProjects;
+      document.getElementById('stat-best').textContent = stats.bestDay;
+      document.getElementById('stat-streak').textContent = stats.streak;
+      document.getElementById('streak-badge').textContent = stats.streak + '-day streak';
+
+      // Per-repo breakdown (top 5)
+      const breakdown = document.getElementById('repo-breakdown');
+      Object.entries(stats.perRepo || {})
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .forEach(([name, count]) => {
+          const li = mk('li');
+          li.appendChild(mk('span', null, name));
+          li.appendChild(mk('span', null, count + (count === 1 ? ' commit' : ' commits')));
+          breakdown.appendChild(li);
+        });
+
+      // Chart
+      const labels = [], data = [];
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date(now); d.setDate(d.getDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        data.push(stats.daily[key] || 0);
+      }
+      new Chart(document.getElementById('commitChart'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            data,
+            backgroundColor: 'rgba(0,113,227,0.15)',
+            borderColor: 'rgba(0,113,227,0.5)',
+            borderWidth: 1,
+            borderRadius: 3,
+            hoverBackgroundColor: 'rgba(0,113,227,0.3)'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(20,20,30,0.9)',
+              borderColor: 'rgba(255,255,255,0.12)',
+              borderWidth: 1,
+              titleColor: 'rgba(255,255,255,0.5)',
+              bodyColor: '#ffffff',
+              callbacks: { label: ctx => ' ' + ctx.raw + ' commits' }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 10 }, maxTicksLimit: 8 } },
+            y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 10 } } }
+          }
+        }
+      });
+
+      // Heatmap
+      const hm = document.getElementById('heatmap');
+      const max = Math.max(...Object.values(heatmap), 1);
+      for (let i = 364; i >= 0; i--) {
+        const d = new Date(now); d.setDate(d.getDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        const count = heatmap[key] || 0;
+        const ratio = count / max;
+        const level = count === 0 ? '' : ratio < 0.25 ? 'l1' : ratio < 0.5 ? 'l2' : ratio < 0.75 ? 'l3' : 'l4';
+        const cell = mk('div', 'heatmap-cell' + (level ? ' ' + level : ''));
+        cell.title = key + ': ' + count + ' commits';
+        hm.appendChild(cell);
+      }
+
+      // Projects
+      const list = document.getElementById('proj-list');
+      projects.forEach(p => {
+        const li = mk('li', 'proj-row');
+        const name = mk('span', 'proj-name', p.name);
+        const meta = mk('div', 'proj-meta');
+        const dot = mk('span', 'status-dot' + (p.status === 'active' ? ' active' : ''));
+        const commits = mk('span', 'proj-commits', String(p.commits30));
+        const ago = mk('span', 'proj-ago', p.lastCommitAgo);
+        meta.append(dot, commits, ago);
+        li.append(name, meta);
+        list.appendChild(li);
+      });
+    }
+
+    load();
+  </script>
+</body>
+</html>

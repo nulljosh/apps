@@ -1,0 +1,14 @@
+{
+  "updated": "2026-05-11T08:00:34",
+  "admission": {
+    "status": "Under Review",
+    "program": "BSc Computer Science",
+    "student_id": "V01122835"
+  },
+  "residence": {
+    "status": "Application Received",
+    "term": "Fall 2026 \u2013 Spring 2027",
+    "lottery_deadline": "2026-05-15",
+    "offers_start": "mid-to-late May 2026"
+  }
+}

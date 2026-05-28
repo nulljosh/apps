@@ -1,0 +1,533 @@
+import SwiftUI
+
+struct PeopleView: View {
+    @State private var query = ""
+    @State private var profile: PersonProfile?
+    @State private var recentSearches: [String] = []
+    @State private var isSearching = false
+    @State private var error: String?
+    @State private var selectedResult: PersonSearchResult?
+    @State private var suggestionIndex = 0
+
+    @State private var indexedPeople: [IndexedPerson] = []
+    @State private var isLoadingIndex = false
+    @State private var selectedPerson: IndexedPerson?
+
+    private let recentsKey = "people.recentSearches"
+    private let suggestionPool = [
+        "Elon Musk", "Taylor Swift", "Justin Trudeau",
+        "Mark Zuckerberg", "Beyonce", "Sam Altman",
+        "Tim Cook", "Rihanna", "Jensen Huang",
+        "LeBron James", "Drake", "Satya Nadella",
+        "Oprah Winfrey", "Jeff Bezos", "Alexandria Ocasio-Cortez"
+    ]
+
+    private var currentSuggestions: [String] {
+        let count = suggestionPool.count
+        return (0..<4).map { suggestionPool[(suggestionIndex + $0) % count] }
+    }
+
+    private let columns = [
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12)
+    ]
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 0) {
+                    // Search bar always at top
+                    searchBar
+                        .padding(.horizontal, 16)
+                        .padding(.top, 8)
+                        .padding(.bottom, 12)
+
+                    // Search results (when active)
+                    if let error {
+                        errorView(error)
+                    } else if isSearching {
+                        loadingView
+                    } else if let profile {
+                        resultsView(profile)
+                    }
+
+                    // Divider between search results and index
+                    if profile != nil || isSearching || error != nil {
+                        Divider().padding(.vertical, 12).padding(.horizontal, 16)
+                    }
+
+                    // Index grid (always visible)
+                    indexSection
+                }
+                .padding(.bottom, 80)
+            }
+            .background(Palette.bg)
+            .navigationTitle("People")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {}
+            .onAppear {
+                loadRecents()
+                loadIndex()
+            }
+            .sheet(item: $selectedResult) { result in
+                NavigationStack {
+                    PersonDetailView(result: result, profile: profile, onIndex: { person in
+                        indexFromSearch(person: person)
+                    })
+                }
+            }
+            .sheet(item: $selectedPerson) { person in
+                NavigationStack {
+                    PersonDetailView(indexedPerson: person, onUpdate: { updated in
+                        if let idx = indexedPeople.firstIndex(where: { $0.id == updated.id }) {
+                            indexedPeople[idx] = updated
+                        }
+                    }, onDelete: {
+                        indexedPeople.removeAll { $0.id == person.id }
+                    })
+                }
+            }
+        }
+    }
+
+    // MARK: - Index Section (always visible below search)
+
+    private var indexSection: some View {
+        VStack(spacing: 0) {
+            if isLoadingIndex && indexedPeople.isEmpty {
+                VStack(spacing: 12) {
+                    ProgressView().controlSize(.regular)
+                    Text("Loading index...")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.vertical, 24)
+            } else if !indexedPeople.isEmpty {
+                HStack {
+                    Text("Indexed")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .textCase(.uppercase)
+                    Spacer()
+                    Text("\(indexedPeople.count)")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 8)
+
+                LazyVGrid(columns: columns, spacing: 12) {
+                    ForEach(indexedPeople) { person in
+                        indexCard(person)
+                    }
+                }
+                .padding(.horizontal, 16)
+
+                // Graph below index if enough people
+                if indexedPeople.count > 1 {
+                    Divider().padding(.vertical, 12).padding(.horizontal, 16)
+                    HStack {
+                        Text("Connections")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                            .textCase(.uppercase)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 8)
+
+                    PersonGraphView(people: indexedPeople) { person in
+                        selectedPerson = person
+                    }
+                    .frame(height: 300)
+                    .padding(.horizontal, 16)
+                }
+            } else if profile == nil && !isSearching && error == nil {
+                // Empty state with suggestions (only when no search active)
+                recentsView
+            }
+        }
+    }
+
+    private var searchBar: some View {
+        HStack(spacing: 10) {
+            HStack(spacing: 8) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+                TextField("Search anyone...", text: $query)
+                    .textInputAutocapitalization(.words)
+                    .autocorrectionDisabled()
+                    .submitLabel(.search)
+                    .onSubmit { performSearch() }
+                if !query.isEmpty {
+                    Button {
+                        query = ""
+                        profile = nil
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+
+            if !query.isEmpty {
+                Button("Search") { performSearch() }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Palette.appleBlue)
+            }
+        }
+    }
+
+    private func errorView(_ message: String) -> some View {
+        VStack(spacing: 16) {
+            Spacer()
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 40))
+                .foregroundStyle(.secondary)
+            Text("Search failed")
+                .font(.headline)
+            Text(message)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 40)
+            Button("Try Again") { performSearch() }
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Palette.appleBlue)
+            Spacer()
+        }
+    }
+
+    private var loadingView: some View {
+        VStack(spacing: 16) {
+            Spacer()
+            ProgressView()
+                .controlSize(.large)
+            Text("Searching...")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Spacer()
+        }
+    }
+
+    private func resultsView(_ profile: PersonProfile) -> some View {
+        VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
+                if let image = profile.primaryImage, let imageURL = URL(string: image) {
+                    AsyncImage(url: imageURL) { phase in
+                        switch phase {
+                        case .success(let img):
+                            img.resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 80, height: 80)
+                                .clipShape(Circle())
+                        default:
+                            Circle()
+                                .fill(Palette.overlay.opacity(0.1))
+                                .frame(width: 80, height: 80)
+                                .overlay {
+                                    Image(systemName: "person.fill")
+                                        .font(.title)
+                                        .foregroundStyle(.secondary)
+                                }
+                        }
+                    }
+                    .padding(.top, 8)
+                    .padding(.bottom, 4)
+                }
+
+                Text(profile.query)
+                    .font(.title2.weight(.bold))
+                    .padding(.bottom, 4)
+
+                Text("\(profile.results.count) results")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.bottom, 16)
+
+                if !profile.socialLinks.isEmpty {
+                    socialLinksSection(profile.socialLinks)
+                        .padding(.bottom, 16)
+                }
+
+                ForEach(profile.results) { result in
+                    resultCard(result)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 8)
+                }
+            }
+            .padding(.bottom, 80)
+        }
+    }
+
+    private func socialLinksSection(_ links: [SocialLink]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(links) { link in
+                    Button {
+                        if let url = URL(string: link.url) {
+                            UIApplication.shared.open(url)
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: link.systemImage)
+                                .font(.caption)
+                            Text(link.displayName)
+                                .font(.caption.weight(.semibold))
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(.ultraThinMaterial, in: Capsule())
+                    }
+                    .tint(.primary)
+                }
+            }
+            .padding(.horizontal, 16)
+        }
+    }
+
+    private func resultCard(_ result: PersonSearchResult) -> some View {
+        Button {
+            selectedResult = result
+        } label: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(result.title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.primary)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+
+                Text(result.snippet)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(3)
+                    .multilineTextAlignment(.leading)
+
+                Text(result.displayUrl)
+                    .font(.caption2)
+                    .foregroundStyle(Palette.appleBlue)
+                    .lineLimit(1)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(14)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var recentsView: some View {
+        VStack(spacing: 0) {
+                if recentSearches.isEmpty {
+                    VStack(spacing: 16) {
+                        Spacer()
+                        Image(systemName: "person.crop.rectangle.stack")
+                            .font(.system(size: 48))
+                            .foregroundStyle(.tertiary)
+                        Text("Search for anyone")
+                            .font(.headline)
+                        Text("Find public profiles, social accounts, and news mentions.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 40)
+
+                        HStack(spacing: 8) {
+                            ForEach(currentSuggestions, id: \.self) { name in
+                                Button {
+                                    query = name
+                                    performSearch()
+                                } label: {
+                                    Text(name)
+                                        .font(.caption.weight(.medium))
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(.ultraThinMaterial, in: Capsule())
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .animation(.easeInOut, value: suggestionIndex)
+                        .onReceive(Timer.publish(every: 3, on: .main, in: .common).autoconnect()) { _ in
+                            suggestionIndex = (suggestionIndex + 1) % suggestionPool.count
+                        }
+
+                        Spacer()
+                    }
+                    .frame(maxHeight: .infinity)
+                } else {
+                    HStack {
+                        Text("Recent")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                            .textCase(.uppercase)
+                        Spacer()
+                        Button("Clear") {
+                            recentSearches = []
+                            saveRecents()
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 16)
+                    .padding(.bottom, 8)
+
+                    ForEach(recentSearches, id: \.self) { name in
+                        Button {
+                            query = name
+                            performSearch()
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "clock.arrow.circlepath")
+                                    .foregroundStyle(.secondary)
+                                    .font(.subheadline)
+                                Text(name)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                        }
+                        .buttonStyle(.plain)
+                        Divider().padding(.leading, 48)
+                    }
+                }
+            }
+            .padding(.bottom, 80)
+    }
+
+    private func indexCard(_ person: IndexedPerson) -> some View {
+        Button {
+            selectedPerson = person
+        } label: {
+            VStack(spacing: 8) {
+                if let image = person.image, let url = URL(string: image) {
+                    AsyncImage(url: url) { phase in
+                        switch phase {
+                        case .success(let img):
+                            img.resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 48, height: 48)
+                                .clipShape(Circle())
+                        default:
+                            personPlaceholder(size: 48)
+                        }
+                    }
+                } else {
+                    personPlaceholder(size: 56)
+                }
+
+                Text(person.name)
+                    .font(.caption.weight(.semibold))
+                    .lineLimit(1)
+                    .foregroundStyle(.primary)
+
+                if !person.tags.isEmpty {
+                    Text(person.tags.prefix(2).joined(separator: ", "))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+
+                if person.enrichment != nil {
+                    Image(systemName: "sparkles")
+                        .font(.caption2)
+                        .foregroundStyle(Palette.warningAmber)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(12)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func personPlaceholder(size: CGFloat) -> some View {
+        Circle()
+            .fill(Palette.overlay.opacity(0.1))
+            .frame(width: size, height: size)
+            .overlay {
+                Image(systemName: "person.fill")
+                    .font(size > 40 ? .title2 : .caption)
+                    .foregroundStyle(.secondary)
+            }
+    }
+
+    // MARK: - Actions
+
+    private func performSearch() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+
+        query = trimmed
+        isSearching = true
+        error = nil
+
+        addToRecents(trimmed)
+
+        Task {
+            do {
+                let result = try await EpiphanyAPI.shared.fetchPeople(query: trimmed)
+                profile = result
+            } catch {
+                self.error = error.localizedDescription
+            }
+            isSearching = false
+        }
+    }
+
+    private func loadIndex() {
+        isLoadingIndex = true
+        Task {
+            do {
+                indexedPeople = try await EpiphanyAPI.shared.fetchPeopleIndex()
+            } catch {
+                // Silently fail -- index is supplementary
+            }
+            isLoadingIndex = false
+        }
+    }
+
+    private func refreshIndex() async {
+        do {
+            indexedPeople = try await EpiphanyAPI.shared.fetchPeopleIndex()
+        } catch {
+            // Silently fail
+        }
+    }
+
+    private func indexFromSearch(person: IndexedPerson) {
+        Task {
+            do {
+                let saved = try await EpiphanyAPI.shared.indexPerson(person)
+                indexedPeople.insert(saved, at: 0)
+            } catch {
+                // Handled in detail view
+            }
+        }
+    }
+
+    private func addToRecents(_ name: String) {
+        recentSearches.removeAll { $0.lowercased() == name.lowercased() }
+        recentSearches.insert(name, at: 0)
+        if recentSearches.count > 20 { recentSearches = Array(recentSearches.prefix(20)) }
+        saveRecents()
+    }
+
+    private func loadRecents() {
+        recentSearches = UserDefaults.standard.stringArray(forKey: recentsKey) ?? []
+    }
+
+    private func saveRecents() {
+        UserDefaults.standard.set(recentSearches, forKey: recentsKey)
+    }
+}

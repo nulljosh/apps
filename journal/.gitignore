@@ -1,0 +1,11 @@
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+.DS_Store
+private/
+*.profraw
+.env
+.env.local
+.env.*.local
+.env.production

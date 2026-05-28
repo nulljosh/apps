@@ -1,0 +1,88 @@
+<svg width="1100" height="680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif; font-weight: 700; font-size: 22px; fill: #1c1c1e; }
+      .subtitle { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif; font-weight: 400; font-size: 13px; fill: #8e8e93; }
+      .node-text { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif; font-weight: 600; font-size: 13px; fill: #1c1c1e; }
+      .node-sub { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif; font-weight: 400; font-size: 11px; fill: #636366; }
+      .badge { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif; font-weight: 600; font-size: 11px; }
+      .done { stroke: #30d158; fill: #f0fff4; }
+      .active { stroke: #ff9f0a; fill: #fffbf0; }
+      .next { stroke: #007aff; fill: #f0f6ff; }
+      .center { stroke: #636366; fill: #f5f7fa; }
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#c7c7cc"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="680" fill="#f5f7fa" rx="16"/>
+
+  <!-- Title -->
+  <text x="550" y="44" text-anchor="middle" class="title">Academic Progress Map</text>
+  <text x="550" y="64" text-anchor="middle" class="subtitle">May 2026 — Capilano University (Paralegal Studies) path</text>
+
+  <!-- Center: Joshua -->
+  <circle cx="550" cy="340" r="52" class="center" stroke-width="2.5"/>
+  <text x="550" y="335" text-anchor="middle" class="node-text">Joshua</text>
+  <text x="550" y="354" text-anchor="middle" class="node-sub">Grade 12 · 2026</text>
+
+  <!-- Connections: left (done) -->
+  <line x1="500" y1="310" x2="360" y2="210" stroke="#c7c7cc" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="500" y1="340" x2="340" y2="340" stroke="#c7c7cc" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="500" y1="370" x2="360" y2="470" stroke="#c7c7cc" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Connections: right (active + next) -->
+  <line x1="600" y1="310" x2="740" y2="210" stroke="#c7c7cc" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="600" y1="370" x2="740" y2="470" stroke="#c7c7cc" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Done: English 12 -->
+  <rect x="185" y="178" width="166" height="60" rx="12" class="done" stroke-width="2"/>
+  <text x="268" y="203" text-anchor="middle" class="node-text">English Studies 12</text>
+  <text x="268" y="221" text-anchor="middle" class="node-sub">A · 87%</text>
+  <rect x="287" y="227" width="42" height="16" rx="8" fill="#30d158"/>
+  <text x="308" y="239" text-anchor="middle" class="badge" fill="white">Done</text>
+
+  <!-- Done: Law 12 -->
+  <rect x="155" y="308" width="166" height="60" rx="12" class="done" stroke-width="2"/>
+  <text x="238" y="333" text-anchor="middle" class="node-text">Law 12</text>
+  <text x="238" y="351" text-anchor="middle" class="node-sub">C- · 50%</text>
+  <rect x="218" y="357" width="42" height="16" rx="8" fill="#30d158"/>
+  <text x="239" y="369" text-anchor="middle" class="badge" fill="white">Done</text>
+
+  <!-- Done: A&P 12 -->
+  <rect x="185" y="438" width="166" height="60" rx="12" class="done" stroke-width="2"/>
+  <text x="268" y="463" text-anchor="middle" class="node-text">Biology / A&amp;P 12</text>
+  <text x="268" y="481" text-anchor="middle" class="node-sub">C+ · 67% · 9/9 units</text>
+  <rect x="287" y="487" width="42" height="16" rx="8" fill="#30d158"/>
+  <text x="308" y="499" text-anchor="middle" class="badge" fill="white">Done</text>
+
+  <!-- Active: Pre-Calc 12 -->
+  <rect x="748" y="178" width="175" height="72" rx="12" class="active" stroke-width="2"/>
+  <text x="835" y="203" text-anchor="middle" class="node-text">Pre-Calculus 12</text>
+  <text x="835" y="221" text-anchor="middle" class="node-sub">U1–U6 done · U7 active</text>
+  <text x="835" y="237" text-anchor="middle" class="node-sub">83% avg (2 graded)</text>
+  <rect x="814" y="241" width="42" height="16" rx="8" fill="#ff9f0a"/>
+  <text x="835" y="253" text-anchor="middle" class="badge" fill="white">Active</text>
+
+  <!-- Next: CapU Paralegal -->
+  <rect x="748" y="438" width="175" height="60" rx="12" class="next" stroke-width="2"/>
+  <text x="835" y="463" text-anchor="middle" class="node-text">CapU Paralegal</text>
+  <text x="835" y="481" text-anchor="middle" class="node-sub">Applying 2026</text>
+  <rect x="812" y="487" width="46" height="16" rx="8" fill="#007aff"/>
+  <text x="835" y="499" text-anchor="middle" class="badge" fill="white">Next</text>
+
+  <!-- Legend -->
+  <rect x="30" y="590" width="340" height="64" rx="12" fill="white" stroke="#e5e5ea" stroke-width="1.5"/>
+  <text x="200" y="610" text-anchor="middle" class="node-text">Legend</text>
+  <rect x="48" y="620" width="48" height="18" rx="6" class="done" stroke-width="1.5"/>
+  <text x="104" y="633" class="node-sub">Completed</text>
+  <rect x="170" y="620" width="48" height="18" rx="6" class="active" stroke-width="1.5"/>
+  <text x="226" y="633" class="node-sub">In Progress</text>
+  <rect x="295" y="620" width="48" height="18" rx="6" class="next" stroke-width="1.5"/>
+  <text x="351" y="633" class="node-sub">Next</text>
+
+  <!-- Footer -->
+  <text x="550" y="662" text-anchor="middle" class="subtitle">Last updated: 2026-05-22</text>
+</svg>

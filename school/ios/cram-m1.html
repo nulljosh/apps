@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 Rewrite — PC12 Cram Sheet</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+:root{--bg:#0a0a12;--s:rgba(255,255,255,0.05);--s2:rgba(255,255,255,0.07);--b:rgba(255,255,255,0.09);--t:#f0f0f8;--td:rgba(240,240,248,0.5);--acc:#0071e3;--green:#34c759;--orange:#ff9f0a;--red:#ff453a;--blue:#0a84ff;--pink:#bf5af2;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;background:var(--bg);color:var(--t);line-height:1.6;padding:2rem;min-height:100vh;}
+h1{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;color:var(--t);margin-bottom:.25rem;}
+.sub{font-size:.85rem;color:var(--td);margin-bottom:2rem;}
+.grid{display:flex;gap:1rem;align-items:flex-start;}
+.col{display:flex;flex-direction:column;gap:1rem;flex:1;}
+@media(max-width:900px){.grid{flex-wrap:wrap;}.col{flex:1 1 calc(50% - .5rem);}}
+@media(max-width:600px){.grid{flex-direction:column;}.col{flex:none;width:100%;}}
+.card{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:1.25rem;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.card h2{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--acc);margin-bottom:1rem;}
+.card h3{font-size:.78rem;font-weight:600;color:var(--orange);margin:.9rem 0 .4rem;letter-spacing:.02em;}
+.f{font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,.35);border:1px solid var(--b);border-radius:8px;padding:.4rem .7rem;font-size:.78rem;margin:.3rem 0;display:block;color:#7dd3fc;}
+p,li{font-size:.84rem;color:var(--td);margin:.2rem 0;}
+ul{padding-left:1.1rem;}
+.warn{background:rgba(255,69,58,.1);border:1px solid rgba(255,69,58,.25);border-radius:10px;padding:.6rem .9rem;margin:.5rem 0;}
+.warn p{color:#ff6b6b;}
+.tip{background:rgba(52,199,89,.1);border:1px solid rgba(52,199,89,.25);border-radius:10px;padding:.6rem .9rem;margin:.5rem 0;}
+.tip p{color:#6ee7a0;}
+.hl{color:var(--t);}
+strong{color:var(--t);}
+.tag{display:inline-block;font-size:.68rem;font-weight:600;padding:.15rem .5rem;border-radius:6px;background:rgba(0,113,227,.2);color:var(--acc);margin-bottom:.4rem;letter-spacing:.04em;}
+@media print{body{background:#fff;color:#111;padding:1rem;background-image:none;}.card{background:#f5f5f7;border-color:#ddd;backdrop-filter:none;}.f{background:#eee;border-color:#ccc;color:#1d4ed8;}.card h2{color:#0071e3;}p,li{color:#333;}strong{color:#111;}.warn{background:#fff0f0;border-color:#fcc;}.warn p{color:#c00;}.tip{background:#f0fff4;border-color:#bce;}.tip p{color:#166534;}}
+</style>
+</head>
+<body>
+<h1>Module 1 Rewrite — Cram Sheet</h1>
+<div class="sub">PC12 · LEC · 3–6pm Today · Room A179 · Joshua Trommel</div>
+
+<div class="grid">
+
+<!-- COLUMN 1 -->
+<div class="col">
+
+<div class="card">
+<div class="tag">Unit 1</div>
+<h2>Sequences &amp; Series</h2>
+
+<h3>Arithmetic</h3>
+<span class="f">aₙ = a₁ + (n−1)d</span>
+<span class="f">Sₙ = n/2 · (a₁ + aₙ)</span>
+<span class="f">Sₙ = n/2 · (2a₁ + (n−1)d)</span>
+<ul>
+  <li>d = common difference = a₂ − a₁</li>
+  <li>Find n: isolate n after subbing in known values</li>
+</ul>
+
+<h3>Geometric</h3>
+<span class="f">aₙ = a₁ · r^(n−1)</span>
+<span class="f">Sₙ = a₁(1 − rⁿ) / (1 − r)</span>
+<span class="f">S∞ = a₁ / (1 − r)  [only if |r| &lt; 1]</span>
+<ul>
+  <li>r = common ratio = a₂ / a₁</li>
+  <li>Find n: aₙ = a₁rⁿ⁻¹ → log both sides</li>
+</ul>
+
+<div class="warn">
+  <p><strong>Convergent vs Divergent</strong></p>
+  <p>|r| &lt; 1 → converges (S∞ exists)</p>
+  <p>|r| ≥ 1 → diverges (NO S∞)</p>
+  <p>r = −0.99 → |r| = 0.99 &lt; 1 → CONVERGES</p>
+</div>
+
+<h3>Sigma Notation</h3>
+<span class="f">Σᵢ₌₁ⁿ (a₁ + (i−1)d)  ← arithmetic</span>
+<span class="f">Σᵢ₌₁ⁿ a₁·r^(i−1)    ← geometric</span>
+
+<div class="tip">
+  <p>To find S from σ to n terms: Sₙ − Sσ₋₁</p>
+</div>
+</div>
+
+<div class="card">
+<h2>Common Errors to Avoid</h2>
+<ul style="margin-top:.5rem;">
+  <li>U1: Check sign of r. r = −0.99 → |r| = 0.99 &lt; 1 → STILL CONVERGES.</li>
+  <li>U1: S∞ only exists when |r| &lt; 1. If |r| ≥ 1, write "divergent, no sum."</li>
+  <li>U2: h shifts RIGHT when positive. y = f(x−3) shifts 3 units RIGHT, not left.</li>
+  <li>U2: Horizontal stretch = 1/|b|. If b=2, graph compresses horizontally by ½.</li>
+  <li>U3: Always factor out GCF before attempting other methods.</li>
+  <li>U3: Sum of cubes middle sign is MINUS: (a+b)(a²−ab+b²).</li>
+  <li>U3: Diff of cubes middle sign is PLUS: (a−b)(a²+ab+b²).</li>
+  <li>U3: For messy trinomials, verify by mentally multiplying back.</li>
+</ul>
+</div>
+
+</div><!-- /col 1 -->
+
+<!-- COLUMN 2 -->
+<div class="col">
+
+<div class="card">
+<div class="tag">Unit 3</div>
+<h2>Polynomials</h2>
+
+<h3>Factoring — Always GCF First</h3>
+<span class="f">a² − b² = (a−b)(a+b)</span>
+<span class="f">a³ + b³ = (a+b)(a²−ab+b²)</span>
+<span class="f">a³ − b³ = (a−b)(a²+ab+b²)</span>
+
+<h3>Simple Trinomial (a = 1)</h3>
+<span class="f">x² + bx + c = (x+p)(x+q)</span>
+<p>Find p, q: <span class="hl">p + q = b</span> and <span class="hl">p · q = c</span></p>
+
+<h3>AC Method (Messy, a ≠ 1)</h3>
+<ul>
+  <li>1. Multiply a·c (target product)</li>
+  <li>2. Find two #s: multiply to ac, add to b</li>
+  <li>3. Split middle term using those two #s</li>
+  <li>4. Factor by grouping</li>
+</ul>
+<span class="f">6x²−13x+6: ac=36, find −9,−4</span>
+<span class="f">→ 6x²−9x−4x+6 → (3x−2)(2x−3)</span>
+
+<h3>Grouping (4 Terms)</h3>
+<span class="f">ax+ay+bx+by = a(x+y)+b(x+y)</span>
+<span class="f">= (a+b)(x+y)</span>
+
+<h3>Substitution (Biquadratic)</h3>
+<span class="f">2x⁴+9x²+9: let u=x²</span>
+<span class="f">2u²+9u+9 = (2u+3)(u+3)</span>
+<span class="f">→ (2x²+3)(x²+3)</span>
+</div>
+
+<div class="card">
+<div class="tag">Unit 3 cont.</div>
+<h2>Theorems &amp; Graphs</h2>
+
+<h3>Remainder &amp; Factor Theorems</h3>
+<ul>
+  <li>P(a) = remainder when P(x) ÷ (x−a)</li>
+  <li>(x−a) is a factor ⟺ P(a) = 0</li>
+</ul>
+
+<h3>Rational Root Theorem</h3>
+<span class="f">possible roots = ±(factors of constant) / (factors of leading coeff)</span>
+<p>Test with synthetic division. If P(r)=0, (x−r) is a factor.</p>
+
+<h3>Polynomial Graphs</h3>
+<ul>
+  <li>Degree n → max n x-intercepts, max n−1 turns</li>
+  <li>Leading coeff +, even degree → both ends up</li>
+  <li>Leading coeff −, odd degree → left up, right down</li>
+  <li>Odd multiplicity → crosses x-axis at root</li>
+  <li>Even multiplicity → bounces off x-axis at root</li>
+</ul>
+</div>
+
+</div><!-- /col 2 -->
+
+<!-- COLUMN 3 -->
+<div class="col">
+
+<div class="card">
+<div class="tag">Unit 2</div>
+<h2>Transformations</h2>
+
+<h3>General Form</h3>
+<span class="f">y = a·f(b(x − h)) + k</span>
+
+<ul>
+  <li><strong>a</strong> — vertical stretch by |a|; a &lt; 0 reflects over x-axis</li>
+  <li><strong>b</strong> — horizontal stretch by 1/|b|; b &lt; 0 reflects over y-axis</li>
+  <li><strong>h</strong> — horizontal shift RIGHT by h</li>
+  <li><strong>k</strong> — vertical shift UP by k</li>
+</ul>
+
+<h3>Mapping Rule</h3>
+<span class="f">(x, y) → (x/b + h, ay + k)</span>
+
+<div class="tip">
+  <p>Apply b first (divide x), then shift by h. Don't mix up order.</p>
+</div>
+
+<h3>Inverse Functions</h3>
+<ul>
+  <li>Swap x and y, then solve for y</li>
+  <li>Notation: f⁻¹(x)</li>
+  <li>Graph: reflection over line y = x</li>
+  <li>Domain of f = Range of f⁻¹ and vice versa</li>
+</ul>
+
+<h3>Reflections</h3>
+<ul>
+  <li>Over x-axis: (x, y) → (x, −y) → multiply by −1 outside</li>
+  <li>Over y-axis: (x, y) → (−x, y) → replace x with −x inside</li>
+  <li>Over y = x: swap x and y (inverse)</li>
+</ul>
+
+<h3>Domain &amp; Range Shifts</h3>
+<span class="f">D: [d₁/b + h, d₂/b + h]</span>
+<span class="f">R: [a·r₁ + k, a·r₂ + k]</span>
+</div>
+
+<div class="card">
+<h2>Quick Reference — Key Facts</h2>
+<h3>Arithmetic Trick</h3>
+<p>If you know a₁, aₙ, and n: <span class="hl">Sₙ = n(a₁+aₙ)/2</span></p>
+<h3>Geometric Trick</h3>
+<p>To find missing term: <span class="hl">aₙ/a₁ = r^(n−1)</span>, take nth root</p>
+<h3>Transformation Quick Check</h3>
+<span class="f">y = 2f(3(x−1)) + 4</span>
+<p>→ stretch V×2, compress H×⅓, shift R1, shift U4</p>
+<h3>Factoring Decision Tree</h3>
+<ol style="padding-left:1.1rem;font-size:.85rem;color:var(--td);">
+  <li>GCF?</li>
+  <li>2 terms: diff of squares? cubes?</li>
+  <li>3 terms, a=1: simple trinomial</li>
+  <li>3 terms, a≠1: AC method</li>
+  <li>4 terms: grouping</li>
+  <li>4+ terms or degree 4: substitution or rational roots</li>
+</ol>
+</div>
+
+</div><!-- /col 3 -->
+
+</div><!-- /grid -->
+
+<p style="text-align:center;font-size:.75rem;color:var(--td);margin-top:1.5rem;">PC12 · Module 1 Rewrite · May 28, 2026 · Joshua Trommel · LEC</p>
+</body>
+</html>
