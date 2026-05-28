@@ -4,6 +4,7 @@ import LocalAuthentication
 @main
 struct DoseApp: App {
     @Environment(\.scenePhase) private var scenePhase
+    @State private var authService = AuthService()
     @State private var dataStore = DataStore()
     @State private var healthKitService = HealthKitService()
     @State private var notificationService = NotificationService()
@@ -21,6 +22,11 @@ struct DoseApp: App {
 
     var body: some Scene {
         WindowGroup {
+            if authService.isLoading {
+                SplashView()
+            } else if authService.user == nil {
+                AuthView(authService: authService)
+            } else {
             ZStack {
                 TabView {
                     DashboardView(dataStore: dataStore, notificationService: notificationService, syncService: syncService)
@@ -103,6 +109,7 @@ struct DoseApp: App {
                     break
                 }
             }
+            } // end auth check
         }
     }
 

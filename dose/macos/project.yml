@@ -1,4 +1,8 @@
 name: DoseMac
+packages:
+  Supabase:
+    url: https://github.com/supabase/supabase-swift.git
+    from: "2.5.1"
 options:
   bundleIdPrefix: com.heyitsmejosh
   deploymentTarget:
@@ -31,6 +35,10 @@ targets:
       - path: ../ios/Data/SubstanceDatabase.swift
       - path: ../ios/Services/DataStore.swift
       - path: ../ios/Services/InsightEngine.swift
+      - path: ../ios/Services/AuthService.swift
+    dependencies:
+      - package: Supabase
+        product: Supabase
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.dose.mac
       GENERATE_INFOPLIST_FILE: YES
