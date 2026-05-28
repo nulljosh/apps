@@ -27,6 +27,11 @@ Litigation planning tool for *Trommel v. AG Canada* (CASE-0001) and *Trommel v. 
 - Supabase auth (email + password) with Face ID biometric lock
 - Full data sync across platforms via Supabase DB
 
+## Security Roadmap
+
+- [ ] Move Supabase anon key out of source — use `Info.plist` entry on iOS/macOS, env var on web (`web/script.js:3`, `ios/Sources/Models/SupabaseClient.swift:6`, `macos/Sources/Models/SupabaseClient.swift:6`)
+- [ ] Remove hardcoded `ALLOWED_EMAIL` (`jatrommel@gmail.com`) from `web/script.js:3` — load from env at deploy time
+
 ## Build
 
 ```bash

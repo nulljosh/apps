@@ -44,6 +44,10 @@ alter table users add column if not exists avatar_url text;
 
 - Deployment went down (404: DEPLOYMENT_NOT_FOUND) on 2026-04-14. Fixed via redeploy. Portfolio screenshot pending re-add.
 
+## Security Roadmap
+
+- [ ] Purge old `.env` from git history (was committed in 3 old commits, no longer tracked): `brew install git-filter-repo && git filter-repo --path spark/.env --invert-paths` then force-push
+
 ## Roadmap
 
 - [ ] AI idea building — when a post is created, daemon auto-generates an implementation plan/code scaffold and attaches it (daemon exists at `daemon/spark-daemon.js`, needs enrichment prompt for builds)
