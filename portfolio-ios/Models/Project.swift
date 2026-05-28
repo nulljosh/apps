@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct Project: Identifiable {
+struct Project: Identifiable, Hashable {
     let id: String
     let name: String
     let summary: String

@@ -10,11 +10,11 @@ struct ContributionGridView: View {
     @State private var selectedContrib: Contribution?
 
     private let levels: [Color] = [
-        Color(.systemGray6),
-        Color(.systemGray4),
-        Color(.systemGray3),
-        Color(.systemGray2),
-        Color(.label).opacity(0.8)
+        Color(red: 0.95, green: 0.95, blue: 0.97),
+        Color(red: 0.82, green: 0.82, blue: 0.84),
+        Color(red: 0.71, green: 0.71, blue: 0.73),
+        Color(red: 0.56, green: 0.56, blue: 0.58),
+        Color.primary.opacity(0.8)
     ]
 
     private var firstDay: Int {
@@ -147,7 +147,9 @@ struct DayDetailView: View {
                 }
             }
             .navigationTitle("Contributions")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
     }
 

@@ -38,7 +38,9 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Portfolio")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.large)
+            #endif
             .task { await viewModel.load() }
         }
     }
