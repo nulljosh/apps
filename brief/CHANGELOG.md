@@ -10,13 +10,15 @@
   $2.5–4M; web `CEILING_PROJECTION` 2250 → 4000).
 - Officers: removed all name strings (`Cst. Darcy G. Ng`, "both Daryls"). Identities unknown,
   pending ATIP, on every platform.
-- Fixed s.18 → s.19 (adult disability, not minority) in grounds, banner, call script, tags.
+- Fixed s.18 → s.19 (adult disability, not minority) everywhere, including both native
+  `ActionsTabView`s and macOS `LimitationBannerView` (view strings aren't symlinked — each
+  platform fixed separately).
 - Rewrote the fabricated 2025-08-02 "first therapy session" journal entry to the truth:
   ongoing therapy with regular counsellor writing the PTSD/s.19 letter; one-off EMDR consult
   was not a fit. No invented date.
 - Added Law Society paid limitation read (1-800-663-1919) as the lead action; pivoted the
   "Now" timeline step away from cold-pitching contingency firms. Marked Klein declined.
-- Cache bumped `?v=16`/`brief-v16` → `?v=17`/`brief-v17`.
+- Cache version auto-bumped by `deploy.sh` on deploy (keeps `?v=N`/`brief-vN` in lockstep).
 
 ## [v6.2.0] — 2026-05-28
 

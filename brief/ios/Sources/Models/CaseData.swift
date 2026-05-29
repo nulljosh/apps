@@ -272,7 +272,7 @@ let caseChecklist: [ChecklistItem] = [
     ChecklistItem(id: 13, label: "Pin discovery date: when you first understood a civil Charter claim was an appropriate remedy", priority: .now),
     ChecklistItem(id: 14, label: "ATIP filed with RCMP — officer names, notebooks (Form 1624), BWC footage, File #2023-25586", priority: .now),
     ChecklistItem(id: 15, label: "FOI filed with E-Comm 9-1-1 BC — 911 audio + CAD notes (neutralizes Godoy scope argument)", priority: .now),
-    ChecklistItem(id: 16, label: "Email outreach: Cameron Ward (declined), Arvay Finlay (declined May 25 — Robin Gage, no capacity), Klein Lawyers, BCCLA", priority: .now),
+    ChecklistItem(id: 16, label: "Outreach status: Cameron Ward (declined), Arvay Finlay (declined May 25), Klein (declined — class-action only), BCCLA", priority: .now),
     ChecklistItem(id: 17, label: "PRIORITY: Call Thomas Harding — TLAG 604-635-1330 (Degen $317k, PK referral)", priority: .now),
     ChecklistItem(id: 18, label: "PRIORITY: Call Neil Chantler — 604-424-8454 / neilchantler@chantlerlaw.ca (PK referral)", priority: .now),
     ChecklistItem(id: 20, label: "Contact Dinsley Litigation — Sean Dinsley 604-477-0766 (Maple Ridge, civil litigation + PI)", priority: .now),
@@ -357,22 +357,21 @@ let caseLawyers: [Lawyer] = [
 ]
 
 let caseScenarios: [Scenario] = [
-    Scenario(name: "Best case", description: "Full trial, all heads, Ward functions maximally triggered, punitive granted.", amount: "$2.5–4M", probability: 0.15, accentColor: .briefGreen),
+    Scenario(name: "Best case", description: "Full trial, all heads, Ward functions maximally triggered, punitive granted.", amount: "$2–3M", probability: 0.15, accentColor: .briefGreen),
     Scenario(name: "Strong", description: "Settlement with silence premium, evidence fully assembled, press-capable counsel.", amount: "$1.5–2.5M", probability: 0.30, accentColor: .briefWarn),
     Scenario(name: "Most likely", description: "AG settles to suppress precedent on forced medication + solitary + Charter violations. No underlying crime. Confidentiality clause standard.", amount: "$1.2–1.8M", probability: 0.40, accentColor: Color.secondary),
     Scenario(name: "Limitation pressure", description: "Limitation read comes back weak, or early settlement without litigation momentum. Still a live floor given 8 breaches and no underlying crime.", amount: "$800k–1.2M", probability: 0.15, accentColor: .briefDanger)
 ]
 
 let damageHeads: [DamageHead] = [
-    DamageHead(head: "s.8 dwelling entry (Feeney)", range: "$150–300k", note: "Highest-tier warrant breach"),
-    DamageHead(head: "s.9 arbitrary detention", range: "$75–150k", note: "No lawful MHA s.28 threshold"),
-    DamageHead(head: "s.7 forced medication (Fleming)", range: "$100–200k", note: "Consent violated"),
-    DamageHead(head: "s.7 positional asphyxia risk", range: "$75–150k", note: "Respiratory distress documented"),
-    DamageHead(head: "PTSD general (Degen floor $317k)", range: "$317–500k", note: "This head alone exceeds Degen"),
-    DamageHead(head: "Future earning capacity (age 26, SWE)", range: "$200–400k+", note: "Vocational economist required"),
-    DamageHead(head: "Punitive (bad-faith state action)", range: "$100–300k", note: "No underlying crime"),
-    DamageHead(head: "Aggravated", range: "$75–150k", note: "Deliberate, concurrent violations"),
-    DamageHead(head: "Special", range: "$50–100k", note: "Treatment, meds, lost income, wrist")
+    DamageHead(head: "Charter s.24(1) damages", range: "$200–500k", note: "Ward — compensation + vindication + deterrence"),
+    DamageHead(head: "Future earning capacity", range: "$300–600k", note: "Age 26, 35+ working years; vocational economist"),
+    DamageHead(head: "General / non-pecuniary", range: "$150–300k", note: "Pain, suffering, loss of dignity, PTSD"),
+    DamageHead(head: "Aggravated damages", range: "$100–200k", note: "Deliberate, bad-faith state action"),
+    DamageHead(head: "Punitive damages", range: "$100–400k", note: "Egregious conduct, public deterrence"),
+    DamageHead(head: "Loss of dignity", range: "$100–200k", note: "Forced medication, solitary, no aftercare"),
+    DamageHead(head: "Special / medical, lost income", range: "$50–100k", note: "Treatment, meds, time off, wrist injury"),
+    DamageHead(head: "Wrist injury / aggravation", range: "$40–80k", note: "Pre-existing fracture worsened by restraint")
 ]
 
 let caseComparables: [CaseComparable] = [
@@ -442,7 +441,7 @@ Email first:
 1. Cameron Ward — cameronward.com — EMAIL — he is the Ward in Ward v. Vancouver
 2. DLA Law — Ingrid@dlalaw.ca — EMAIL — follow up
 3. Arvay Finlay — DECLINED May 25 (Robin Gage, Managing Partner — no capacity)
-4. Klein Lawyers — callkleinlawyers.com — EMAIL
+4. Klein Lawyers — DECLINED (class-action only)
 
 Call also viable:
 5. Paul Kent-Snowsell — KSW — 604-591-7321

@@ -30,7 +30,7 @@ struct LimitationBannerView: View {
 
     private var bannerLabel: String {
         switch store.activeCase {
-        case .rcmp:   return isExpired ? "Limitation — Discoverability + s.18 Active" : "Limitation Deadline"
+        case .rcmp:   return isExpired ? "Limitation — Discoverability + s.19 Active" : "Limitation Deadline"
         case .family: return "Limitation Deadline"
         case .muni:   return "Notice Deadline — Community Charter s.285"
         }

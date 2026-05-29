@@ -83,9 +83,9 @@ struct ActionsTabView: View {
                 if rcmp {
                     Text("Contact at least 3 lawyers before committing to any one. Compare retainer structures — contingency terms vary significantly. Do not sign until all consultations are complete.")
                         .font(.system(size:13)).foregroundStyle(.primary).lineSpacing(3)
-                    Text("Basic 2-yr limit expired Aug 1, 2025 — claim survives on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Therapy start May 2026 supports both. Ultimate deadline: Aug 1, 2038. File as soon as counsel confirms.")
+                    Text("Basic 2-yr limit expired Aug 1, 2025 — claim survives on discoverability (s.8(1)(d)) and PTSD incapacity (s.19). Ongoing therapy + PTSD letter in progress support both. Ultimate deadline: Aug 1, 2038. File as soon as counsel confirms.")
                         .font(.system(size:11,design:.monospaced)).foregroundStyle(.briefWarn).lineSpacing(3).fontWeight(.bold)
-                    Text("DECLINED: Paul Kent (KSW) May 18 — not taking new cases. DLA Law (Ingrid) May 15 — not able to assist.\n\nPriority referrals from Kent:\n1. Thomas Harding — did Degen case ($317k Surrey RCMP)\n2. Neil Chantler — does this type of case\n\nStill awaiting:\n3. Cameron Ward — cameronward.com\n4. Arvay Finlay LLP — 604-696-9928\n5. Klein Lawyers — callkleinlawyers.com\n6. McQuarrie Hunter LLP — 604-581-7001\n7. Sean Hern Law Corp — 604-684-9151\n8. Pivot Legal — 604-255-9700\n9. BCCLA Referral — 604-687-2919\n10. CBA BC — 604-687-3221 / info@cbabc.org\n11. Dinsley Litigation (Sean Dinsley) — 604-477-0766 / admin@dinsleylawcorp.ca — Maple Ridge, civil litigation + PI")
+                    Text("PRIORITY: Law Society limitation read — 1-800-663-1919. One question: does this survive a limitation strike?\n\nFive declines (the market's read on viability):\n1. Paul Kent (KSW) — May 18, not taking new cases\n2. DLA Law (Ingrid) — May 15, unable to assist\n3. Cameron Ward — no capacity\n4. Arvay Finlay LLP — May 25, no capacity\n5. Klein Lawyers — class-action only\n\nStop cold-pitching contingency firms until the limitation read is back. If it survives: McQuarrie Hunter 604-581-7001, BCCLA 604-687-2919, CBA BC 604-687-3221, Dinsley Litigation 604-477-0766.")
                         .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
                     Text("Be expensive to fight quietly. Each press-capable lawyer contact, each documented evidence piece, each Charter ground formally pleaded raises the AG's internal cost of suppressing this case publicly.")
                         .font(.system(size:11,design:.monospaced)).foregroundStyle(.secondary).lineSpacing(3)
@@ -141,7 +141,7 @@ struct ActionsTabView: View {
     private var risksSection: some View {
         SectionCard("Risks — what AG will attack") {
             VStack(alignment:.leading,spacing:10) {
-                risk("Limitation (kill shot).", "Rule 9-5 strike likely. s.8(1)(d) discoverability + s.18 incapacity must both be argued. Anything showing 2023–2025 functional capacity (taxes, leases, employment, banking, driving) hurts s.18.", .briefDanger)
+                risk("Limitation (kill shot).", "Rule 9-5 strike likely. s.8(1)(d) discoverability + s.19 incapacity must both be argued. Anything showing 2023–2025 functional capacity (taxes, leases, employment, banking, driving) hurts s.19.", .briefDanger)
                 risk("Godoy doorway.", "R v. Godoy [1999] 1 SCR 311 gives 911-wellness entry authority. Counter-attack is scope — entry to verify safety, not detain/medicate. The 911 call audio defines the doorway size.", .briefWarn)
                 risk("MHA s.28 apprehension.", "If lawful, forced-medication ground weakens. Father's 'answering well… not violent' testimony is the linchpin against s.28 threshold.", .briefWarn)
                 risk("Causation / baseline.", "AG hires their own forensic psychiatrist; will subpoena pre-2023 GP records looking for alternative causes.", .briefWarn)
