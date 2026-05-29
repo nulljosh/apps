@@ -166,7 +166,7 @@ function freshWorld() {
     grid = result.grid;
     state.resourceNodes = result.resources;
     state.tutorialStep = null; // skip tutorial in auto-start
-    state.autoplay = true;
+    state.autoplay = false; // player drives from start; opt-in to AI autoplay via HUD
 
     const center = GRID_SIZE / 2;
     for (let i = 0; i < 8; i++) {
