@@ -22,6 +22,9 @@ vercel --prod
 ```
 
 ## Roadmap
+- [ ] Reset login credentials to jatrommel@gmail.com (store the new password in Keychain, never in the repo)
+- [ ] Add a forgot-password / reset-password flow
+- [ ] Propagate the forgot-password flow to every app in the codebase that has login or registration
 - [ ] Custom substance creation
 - [ ] Mood and sleep correlation with Apple Health sync
 - [ ] OCR pill identification

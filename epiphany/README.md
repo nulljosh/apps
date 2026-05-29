@@ -49,3 +49,9 @@ Deploy: Vercel (`cd apps/epiphany && npx vercel --prod`)
 ## License
 
 MIT 2026, Joshua Trommel
+
+## Roadmap
+- [ ] Settings > Connect to tally: fix the broken API route (currently returns 'tally unknown')
+- [ ] Stocks view: make it full-screen with an X to dismiss
+- [ ] Stocks view: reliably populate market cap and P/E (recurring failure)
+- [ ] Flights nearby: stop the intermittent 'flights temporarily unavailable'

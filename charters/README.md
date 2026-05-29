@@ -31,3 +31,6 @@ iOS: SwiftUI, iOS 17+, universal
 ## License
 
 MIT 2026 Joshua Trommel
+
+## Roadmap
+- [ ] Vibe-clone the portfolio UI into this project (/vibe)
