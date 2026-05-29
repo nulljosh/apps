@@ -18,7 +18,11 @@ struct GradesView: View {
                             CourseSection(course: course)
                         }
                     }
+                    #if os(iOS)
                     .listStyle(.insetGrouped)
+                    #else
+                    .listStyle(.inset)
+                    #endif
                 }
             }
             .navigationTitle("Grades")

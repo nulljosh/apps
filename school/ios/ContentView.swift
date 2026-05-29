@@ -12,6 +12,6 @@ struct ContentView: View {
             PlanView()
                 .tabItem { Label("Plan", systemImage: "map") }
         }
-        .tint(.white)
+        .tint(.primary)
     }
 }

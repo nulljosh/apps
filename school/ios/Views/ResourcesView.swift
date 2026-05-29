@@ -30,7 +30,11 @@ struct ResourcesView: View {
                     .padding(.vertical, 2)
                 }
             }
+            #if os(iOS)
             .listStyle(.insetGrouped)
+            #else
+            .listStyle(.inset)
+            #endif
             .navigationTitle("Study")
         }
     }

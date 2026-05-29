@@ -32,7 +32,11 @@ struct PlanView: View {
                     UnitProgressRow(unit: 7, topic: "Trig Identities", pct: nil, status: "Self-study")
                 }
             }
+            #if os(iOS)
             .listStyle(.insetGrouped)
+            #else
+            .listStyle(.inset)
+            #endif
             .navigationTitle("Plan")
         }
     }
