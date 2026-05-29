@@ -9,3 +9,4 @@ private/
 .env.local
 .env.*.local
 .env.production
+.vercel
