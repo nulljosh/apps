@@ -3,7 +3,9 @@
 ## Overview
 Grade 12 academic tracker. Web dashboard at school.heyitsmejosh.com + SwiftUI iOS app. Tracks Pre-Calculus 12 (units 1–7) and A&P 12 (units 1–9).
 
-## Status (2026-05-27)
+## Status (2026-05-29)
+- Theme is device-auto across web + iOS/macOS (live `prefers-color-scheme`; no manual toggle). Low-ink print button (grayscale `@media print`) on index, masterclass, cram pages + native print in iOS Study view.
+
 - Pre-Calc 12: Unit 4 active in class (May 26). Module 1 exam rewrite today 3–6pm. Self-study at Unit 7. Module tests remaining.
 - Biology/A&P 12: all 9 units complete, all projects submitted. Done.
 - Applications: CapU Paralegal Studies (applying 2026). UBC Law (after CapU).

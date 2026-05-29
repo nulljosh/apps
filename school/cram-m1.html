@@ -28,12 +28,36 @@ ul{padding-left:1.1rem;}
 .hl{color:var(--t);}
 strong{color:var(--t);}
 .tag{display:inline-block;font-size:.68rem;font-weight:600;padding:.15rem .5rem;border-radius:6px;background:rgba(0,113,227,.2);color:var(--acc);margin-bottom:.4rem;letter-spacing:.04em;}
-@media print{body{background:#fff;color:#111;padding:1rem;background-image:none;}.card{background:#f5f5f7;border-color:#ddd;backdrop-filter:none;}.f{background:#eee;border-color:#ccc;color:#1d4ed8;}.card h2{color:#0071e3;}p,li{color:#333;}strong{color:#111;}.warn{background:#fff0f0;border-color:#fcc;}.warn p{color:#c00;}.tip{background:#f0fff4;border-color:#bce;}.tip p{color:#166534;}}
+.print-btn{position:fixed;top:1rem;right:1rem;width:36px;height:36px;border-radius:50%;border:1px solid var(--b);background:var(--s);color:var(--td);display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);transition:transform .2s cubic-bezier(0.34,1.56,0.64,1),color .3s;z-index:10;}
+.print-btn:hover{color:var(--t);transform:scale(1.1);}
+.print-btn svg{width:16px;height:16px;}
+/* Follow device appearance live */
+@media (prefers-color-scheme: light){
+  :root{--bg:#fff;--s:#f5f5f7;--s2:#eef0f3;--b:#ddd;--t:#1a1a1a;--td:rgba(26,26,26,0.6);}
+  .f{color:#1d4ed8;background:#eef1f6;}
+  .warn{background:#fff0f0;border-color:#fcc;}.warn p{color:#c00;}
+  .tip{background:#f0fff4;border-color:#bce;}.tip p{color:#166534;}
+}
+/* Low-ink print: black on white, no color */
+@media print{
+  body{background:#fff !important;color:#000;padding:1rem;background-image:none;}
+  .print-btn{display:none !important;}
+  .card{background:#fff !important;border-color:#bbb;backdrop-filter:none;break-inside:avoid;}
+  .card h2,.card h3{color:#000;}
+  .f{background:#f2f2f2;border-color:#ccc;color:#000;}
+  p,li{color:#222;}strong{color:#000;}.sub{color:#444;}
+  .tag{background:#eee;color:#000;}
+  .warn{background:#fff;border-color:#999;}.warn p{color:#000;}
+  .tip{background:#fff;border-color:#999;}.tip p{color:#000;}
+}
 </style>
 </head>
 <body>
+<button class="print-btn" aria-label="Print" onclick="window.print()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+</button>
 <h1>Module 1 Rewrite — Cram Sheet</h1>
-<div class="sub">PC12 · LEC · 3–6pm Today · Room A179 · Joshua Trommel</div>
+<div class="sub">PC12 · LEC · Room A179 · Joshua Trommel</div>
 
 <div class="grid">
 

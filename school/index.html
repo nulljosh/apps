@@ -77,7 +77,7 @@
       line-height: 1.1;
     }
 
-    .theme-toggle {
+    .print-btn {
       background: none;
       border: 1px solid var(--border);
       cursor: pointer;
@@ -92,8 +92,8 @@
       height: 32px;
       flex-shrink: 0;
     }
-    .theme-toggle:hover { color: var(--text); transform: scale(1.1); }
-    .theme-toggle svg { width: 14px; height: 14px; }
+    .print-btn:hover { color: var(--text); transform: scale(1.1); }
+    .print-btn svg { width: 14px; height: 14px; }
 
     section { margin-bottom: clamp(3rem, 6vw, 4rem); }
 
@@ -258,6 +258,29 @@
 
     .unit-avg { margin-top: 0.75rem; font-size: 0.8125rem; color: var(--text-secondary); }
     .unit-avg strong { color: var(--text); font-weight: 500; }
+
+    /* Low-ink print: white bg, black text, no color */
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .container { padding: 1rem; max-width: none; }
+      .print-btn { display: none !important; }
+      .fade-up { opacity: 1 !important; transform: none !important; }
+      header { margin-bottom: 1.5rem; }
+      h1 { font-size: 2.5rem; }
+      .item-name, .unit-topic, .unit-avg strong { color: #000 !important; }
+      .item-meta, .item-status, .section-label, .unit-num, .unit-errors,
+      .unit-avg, .stale { color: #444 !important; }
+      .urgent-badge, .live-badge, .pending-badge, .submitted-badge, .done-badge,
+      .grade-a, .grade-b, .grade-c, .grade-pending { color: #000 !important; }
+      .items li, .items li:first-child { border-color: #ccc !important; }
+      .progress-fill, .progress-fill.done { background: #000 !important; opacity: 1; }
+      .unit-card { border-color: #999 !important; }
+      .unit-card.graded, .unit-card.grading { border-left-color: #000 !important; }
+      .unit-card.active, .unit-card.pending { border-color: #999 !important; opacity: 1; }
+      .unit-symbol { color: #888 !important; }
+      a.file-link { color: #000 !important; border: none !important; }
+      .unit-card, section, .items li { break-inside: avoid; }
+    }
   </style>
 </head>
 <body>
@@ -265,10 +288,11 @@
     <header class="fade-up">
       <div class="top-row">
         <span class="section-label">Grade 12</span>
-        <button class="theme-toggle" aria-label="Toggle theme" onclick="toggleTheme()">
+        <button class="print-btn" aria-label="Print" onclick="window.print()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="5"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            <path d="M6 9V2h12v7"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
           </svg>
         </button>
       </div>
@@ -281,17 +305,17 @@
       <ul class="items">
         <li>
           <div class="item-left">
-            <span class="item-name">Module 1 Exam Rewrite</span>
-            <span class="item-meta">3–6pm · Room A179 · last opportunity</span>
+            <span class="item-name">Unit 4 — Exponents &amp; Logs</span>
+            <span class="item-meta">In class · working through lessons</span>
           </div>
-          <div class="item-right"><span class="urgent-badge">today</span></div>
+          <div class="item-right"><span class="pending-badge">active</span></div>
         </li>
         <li>
           <div class="item-left">
-            <span class="item-name">Class at 6:30 if skipping rewrite</span>
-            <span class="item-meta">Finishing U4 · starting U5 in class</span>
+            <span class="item-name">Unit 5 — Rational Expressions</span>
+            <span class="item-meta">Starting in class · learning guide complete</span>
           </div>
-          <div class="item-right"><span class="item-status">tonight</span></div>
+          <div class="item-right"><span class="pending-badge">active</span></div>
         </li>
         <li>
           <div class="item-left">
@@ -302,10 +326,10 @@
         </li>
         <li>
           <div class="item-left">
-            <span class="item-name">Unit 4 — Exponents &amp; Logs</span>
-            <span class="item-meta">Started in class May 26 · doing lessons</span>
+            <span class="item-name">Module 1 Exam Rewrite</span>
+            <span class="item-meta">Room A179 · last window was May 27</span>
           </div>
-          <div class="item-right"><span class="pending-badge">active</span></div>
+          <div class="item-right"><span class="item-status">closed</span></div>
         </li>
       </ul>
     </section>
@@ -454,12 +478,11 @@
         <li>
           <div class="item-left">
             <span class="item-name">Module Tests</span>
-            <span class="item-meta">Module 1 rewrite today 3–6pm · 2 remaining</span>
+            <span class="item-meta">Module 1 rewrite window passed · tests remaining</span>
           </div>
           <div class="item-right">
-            <span class="urgent-badge">today</span>
             <div class="progress-bar"><div class="progress-fill" style="width:33%"></div></div>
-            <span class="item-status">A179 · 3–6pm</span>
+            <span class="item-status">Room A179</span>
           </div>
         </li>
         <li>
@@ -602,15 +625,10 @@
       el.textContent = days <= 0 ? 'Updated today' : `Updated ${days}d ago`;
     })();
 
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark' || (!saved && prefersDark)) document.documentElement.dataset.theme = 'dark';
-
-    function toggleTheme() {
-      const isDark = document.documentElement.dataset.theme === 'dark';
-      document.documentElement.dataset.theme = isDark ? 'light' : 'dark';
-      localStorage.setItem('theme', isDark ? 'light' : 'dark');
-    }
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const applyTheme = e => document.documentElement.dataset.theme = e.matches ? 'dark' : 'light';
+    applyTheme(mq);
+    mq.addEventListener('change', applyTheme);
   </script>
 </body>
 </html>

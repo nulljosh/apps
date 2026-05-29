@@ -33,9 +33,7 @@ struct PlanView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .scrollContentBackground(.hidden)
             .navigationTitle("Plan")
-            .background(Color.black)
         }
     }
 }

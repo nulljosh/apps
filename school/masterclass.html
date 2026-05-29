@@ -66,9 +66,41 @@ td{padding:.55rem .9rem;border:1px solid var(--b);color:var(--td);}
 .mod li{font-size:.8rem;color:var(--td);}
 /* SECTION DIVIDER */
 .section{padding-top:1rem;}
+/* PRINT BUTTON */
+.print-btn{position:fixed;top:1rem;right:1rem;width:36px;height:36px;border-radius:50%;border:1px solid var(--b);background:var(--s);color:var(--td);display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);transition:transform .2s cubic-bezier(0.34,1.56,0.64,1),color .3s;z-index:200;}
+.print-btn:hover{color:var(--t);transform:scale(1.1);}
+.print-btn svg{width:16px;height:16px;}
+/* Follow device appearance live */
+@media (prefers-color-scheme: light){
+  :root{--bg:#fff;--s:#f5f5f7;--s2:#eef0f3;--b:#ddd;--t:#1a1a1a;--td:rgba(26,26,26,0.6);--blue:#1d4ed8;}
+  .sidebar{background:rgba(255,255,255,0.8);}
+  .sidebar a:hover,.sidebar a.active{background:rgba(0,113,227,.08);}
+  .warn p,.warn li{color:#c0392b;}
+  .tip p,.tip li{color:#166534;}
+  .info p{color:#1d4ed8;}
+  .fc-a{color:#166534;}
+}
+/* Low-ink print: black on white, no color */
+@media print{
+  body{background:#fff !important;color:#000;display:block;}
+  .sidebar,.print-btn{display:none !important;}
+  .main{margin-left:0;padding:1rem;max-width:none;}
+  h1,h2,h3,strong,.f,.fi,td,th,.fc-q{color:#000 !important;}
+  h2 .unit-tag,.meta,p,li,.grade-pend{color:#333 !important;}
+  .f,.fi{background:#f2f2f2 !important;border-color:#ccc !important;}
+  th{background:#eee !important;}
+  td,th,hr,.fc,.ex,.mod{border-color:#bbb !important;}
+  .warn,.tip,.info,.ex,.fc,.mod{background:#fff !important;border-color:#999 !important;}
+  .warn p,.warn li,.warn-title,.tip p,.tip li,.tip-title,.info p,.fc-a,.ex-title,.mod-title{color:#000 !important;}
+  .grade-a,.grade-b{color:#000 !important;}
+  h2,.ex,.fc,.mod,table{break-inside:avoid;}
+}
 </style>
 </head>
 <body>
+<button class="print-btn" aria-label="Print" onclick="window.print()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+</button>
 
 <nav class="sidebar">
   <div class="sidebar-title">PC12 Masterclass</div>

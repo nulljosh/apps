@@ -1,5 +1,16 @@
 import SwiftUI
 
+extension Color {
+    /// Adaptive base background that follows the device light/dark setting.
+    static var appBackground: Color {
+        #if os(macOS)
+        Color(nsColor: .windowBackgroundColor)
+        #else
+        Color(uiColor: .systemBackground)
+        #endif
+    }
+}
+
 @MainActor
 @Observable
 final class QuizViewModel {
@@ -94,7 +105,7 @@ struct QuizView: View {
         NavigationStack {
             Group {
                 if vm.loading {
-                    ProgressView().tint(.white)
+                    ProgressView().tint(.primary)
                 } else if let error = vm.error {
                     Text(error).foregroundStyle(.secondary).padding()
                 } else if vm.questions.isEmpty {
@@ -106,7 +117,6 @@ struct QuizView: View {
                 }
             }
             .navigationTitle("Quiz")
-            .background(Color.black)
         }
         .task { await vm.load() }
     }
@@ -136,8 +146,8 @@ struct QuizSetupView: View {
                 Button("Start Quiz") { vm.start() }
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.white)
-                    .foregroundStyle(Color.black)
+                    .background(Color.primary)
+                    .foregroundStyle(Color.appBackground)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .fontWeight(.semibold)
             }
@@ -173,12 +183,12 @@ struct QuizSessionView: View {
                         Text(current.exp).font(.subheadline).foregroundStyle(.secondary)
                     }
                     .padding()
-                    .background(Color.white.opacity(0.05))
+                    .background(Color.primary.opacity(0.05))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     Button(vm.idx + 1 < vm.questions.count ? "Next" : "Results") { vm.next() }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.white.opacity(0.1))
+                        .background(Color.primary.opacity(0.1))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
@@ -209,7 +219,7 @@ struct QuizResultsView: View {
                                 Text(item.correct).font(.subheadline).foregroundStyle(.green)
                             }
                             .padding()
-                            .background(Color.white.opacity(0.05))
+                            .background(Color.primary.opacity(0.05))
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                     }
@@ -217,8 +227,8 @@ struct QuizResultsView: View {
                 Button("Quiz Again") { vm.reset() }
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.white)
-                    .foregroundStyle(Color.black)
+                    .background(Color.primary)
+                    .foregroundStyle(Color.appBackground)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .fontWeight(.semibold)
             }
@@ -253,8 +263,8 @@ struct PillButton: View {
     var body: some View {
         Button(title, action: action)
             .padding(.horizontal, 14).padding(.vertical, 8)
-            .background(active ? Color.white : Color.white.opacity(0.08))
-            .foregroundStyle(active ? Color.black : Color.white)
+            .background(active ? Color.primary : Color.primary.opacity(0.08))
+            .foregroundStyle(active ? Color.appBackground : Color.primary)
             .clipShape(Capsule())
             .animation(.spring(duration: 0.2), value: active)
     }
@@ -268,10 +278,10 @@ struct OptionButton: View {
     let action: () -> Void
 
     var color: Color {
-        guard locked, let sel = selected else { return .white }
+        guard locked, let sel = selected else { return .primary }
         if text == correct { return .green }
         if text == sel { return .red }
-        return Color.white.opacity(0.3)
+        return Color.primary.opacity(0.3)
     }
 
     var body: some View {

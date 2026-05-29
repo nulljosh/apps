@@ -19,11 +19,9 @@ struct GradesView: View {
                         }
                     }
                     .listStyle(.insetGrouped)
-                    .scrollContentBackground(.hidden)
                 }
             }
             .navigationTitle("Grades")
-            .background(Color.black)
         }
         .task { await load() }
     }
