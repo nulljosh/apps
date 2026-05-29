@@ -19,7 +19,7 @@ cd ios && xcodegen generate && open School.xcodeproj   # iOS
 
 ## Deploy
 ```bash
-git push origin main   # Vercel auto-deploy (nulljosh/school)
+cd ~/Documents/Code/apps/school && npx vercel --prod   # CLI deploy, project "school" (lives in nulljosh/apps monorepo)
 ```
 
 ## Key Files

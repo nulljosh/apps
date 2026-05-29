@@ -3,7 +3,7 @@
 ## Overview
 Native iOS 17 + macOS 14 app for school.heyitsmejosh.com. SwiftUI, Swift 6, no external dependencies. Two tabs: live D2L grades + multiple-choice quizzes.
 
-Data source: `https://school.heyitsmejosh.com` (Vercel — separate project from tally, must `vercel --prod` from `tally/school/` to deploy).
+Data source: `https://school.heyitsmejosh.com` (Vercel project `school`; deploy with `cd apps/school && npx vercel --prod`).
 
 Subject structure mirrors `~/Documents/School/`:
 - **math**: units 1-7 (Pre-Calculus 12)
@@ -20,7 +20,7 @@ open School.xcodeproj
 
 ## Deploy
 ```bash
-git push origin main  # GitHub: nulljosh/school-ios
+git push origin main  # GitHub: nulljosh/apps monorepo (apps/school/ios)
 ```
 
 ## Key Files
