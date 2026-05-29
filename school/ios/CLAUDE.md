@@ -9,7 +9,7 @@ Subject structure mirrors `~/Documents/School/`:
 - **math**: units 1-7 (Pre-Calculus 12)
 - **science**: units 1-9 (Biology/A&P 12)
 
-If a unit is added to `~/Documents/School/`, add quiz data for it via `tally/school/tools/generate_quizzes.py` and update `Subject.units` in `Models/Models.swift`.
+If a unit is added to `~/Documents/School/`, add quiz data for it via `tools/generate_quizzes.py` and update `Subject.units` in `Models/Models.swift`.
 
 ## Build
 ```bash
