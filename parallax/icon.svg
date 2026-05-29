@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="40" fill="#0a0a0f"/>
+  <!-- depth layers -->
+  <rect x="30" y="60" width="140" height="90" rx="8" fill="none" stroke="#ffffff10" stroke-width="1.5"/>
+  <rect x="45" y="72" width="110" height="66" rx="6" fill="none" stroke="#ffffff20" stroke-width="1.5"/>
+  <rect x="60" y="84" width="80" height="44" rx="4" fill="none" stroke="#0071e3" stroke-width="1.5"/>
+  <!-- center dot -->
+  <circle cx="100" cy="106" r="6" fill="#0071e3"/>
+  <!-- perspective lines -->
+  <line x1="30" y1="60" x2="60" y2="84" stroke="#ffffff15" stroke-width="1"/>
+  <line x1="170" y1="60" x2="140" y2="84" stroke="#ffffff15" stroke-width="1"/>
+  <line x1="30" y1="150" x2="60" y2="128" stroke="#ffffff15" stroke-width="1"/>
+  <line x1="170" y1="150" x2="140" y2="128" stroke="#ffffff15" stroke-width="1"/>
+  <!-- head/eye icon at top -->
+  <circle cx="100" cy="32" r="12" fill="none" stroke="#ffffff40" stroke-width="1.5"/>
+  <circle cx="100" cy="32" r="4" fill="#ffffff40"/>
+  <!-- sight line from eye to scene -->
+  <line x1="100" y1="44" x2="100" y2="84" stroke="#ffffff15" stroke-width="1" stroke-dasharray="3,3"/>
+</svg>
