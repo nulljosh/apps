@@ -28,8 +28,18 @@ cd ~/Documents/Code/nulljosh.github.io && git add -A && git commit -m "..." && g
 ```
 
 ## Cache busting
-`?v=N` on `style.css` and `script.js` links in `index.html`. Bump N on every CSS or JS change.
-Current: `?v=3`
+`?v=N` on `style.css` and `script.js` links in `index.html`, AND `CACHE = 'brief-vN'` in `sw.js`
+(keep both equal). Bump on every CSS/JS change AND when copying to the live deploy folder.
+Current: `?v=16` / `brief-v16`
+
+## Deep links
+- `?pin=7743` — skips the Supabase auth overlay (read-only view; parents' iMac bookmark).
+- `?case=rcmp|family` — selects the active case on load.
+
+## Resilience
+Supabase is a CDN dependency. `script.js` guards client creation in a try/catch and the DB
+loaders early-return when `_sb` is null, so a CDN failure degrades to a read-only render
+instead of a blank page (the `?pin=7743` view still works).
 
 ## Data sync rule
 When updating case facts, lawyers, or grounds — edit `script.js` AND:

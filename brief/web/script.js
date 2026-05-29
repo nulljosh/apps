@@ -2,15 +2,21 @@
 const SB_URL = 'https://tjsxsqlxjmanwvmywwvw.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqc3hzcWx4am1hbnd2bXl3d3Z3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0OTc0MDEsImV4cCI6MjA4NjA3MzQwMX0.LphLfho3wdQC20MhtcnBpzQUNuBoTOobrugQbNGxc68';
 const ALLOWED_EMAIL = 'jatrommel@gmail.com';
-const _sb = supabase.createClient(SB_URL, SB_KEY);
+// Supabase is a CDN dependency. If it fails to load, the app must still render
+// read-only (and the ?pin=7743 bypass must still work) rather than blank out.
+let _sb = null;
 let _userId = null;
-
-_sb.auth.getSession().then(res => {
-  if (res.data.session) { _userId = res.data.session.user.id; loadAndShow(); }
-});
-_sb.auth.onAuthStateChange((_ev, session) => {
-  if (session && !_userId) { _userId = session.user.id; loadAndShow(); }
-});
+try {
+  if (typeof supabase !== 'undefined') {
+    _sb = supabase.createClient(SB_URL, SB_KEY);
+    _sb.auth.getSession().then(res => {
+      if (res.data.session) { _userId = res.data.session.user.id; loadAndShow(); }
+    });
+    _sb.auth.onAuthStateChange((_ev, session) => {
+      if (session && !_userId) { _userId = session.user.id; loadAndShow(); }
+    });
+  }
+} catch (e) { /* CDN unavailable — stay usable read-only */ }
 
 function loadAndShow() {
   const overlay = document.getElementById('authOverlay');
@@ -951,6 +957,7 @@ document.getElementById('copyScript').addEventListener('click', function() {
 
 // ===== SUPABASE SYNC (called after auth) =====
 function loadChecklistFromDB() {
+  if (!_sb) return;
   _sb.from('brief_checklist').select('*').then(res => {
     (res.data||[]).forEach(r => {
       const it = CHECKLIST.find(x => x.i === String(r.item_index));
@@ -973,6 +980,7 @@ function loadChecklistFromDB() {
 }
 
 function loadLawyerStatusFromDB() {
+  if (!_sb) return;
   _sb.from('brief_lawyer_status').select('*').then(res => {
     (res.data||[]).forEach(r => { _lawyerStatuses[r.lawyer_id] = r.status; });
     document.querySelectorAll('.lawyer[data-lawyer-id]').forEach(card => {

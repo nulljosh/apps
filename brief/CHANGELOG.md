@@ -1,5 +1,26 @@
 # Changelog — Brief
 
+## [v6.2.0] — 2026-05-28
+
+### Deploy fix
+- Live `heyitsmejosh.com/brief` was serving a stale single-case build while `apps/brief/web` held
+  the current multi-case v6.1.x. Synced the canonical web source to the live deploy folder and
+  bumped cache to `?v=16` / `brief-v16`. Fixed `sw.js` precache paths (were `/`-rooted, now `/brief/`,
+  so `addAll` no longer 404-rejects).
+- Corrected `apps/brief/CLAUDE.md`: web is NOT auto-deployed — documented the real copy + cache-bump
+  + push procedure (the doc error that caused the regression).
+
+### CASE-0001
+- Added **Dinsley Litigation** (Sean Dinsley, Maple Ridge — civil litigation + personal injury,
+  604-477-0766 / admin@dinsleylawcorp.ca) to the lawyer list + outreach checklist, all platforms.
+- Added explicit "Call CBA BC Lawyer Referral Service (604-687-3221)" checklist task.
+
+### Web
+- `?pin=7743` overlay bypass and `?case=rcmp|family` deep-link wired into `script.js`.
+- Hardened Supabase init: try/catch + null-client guards so a CDN failure degrades to a read-only
+  render instead of a blank page. Escaped two apostrophes that broke `script.js` parsing (`didn't`,
+  `wouldn't` in single-quoted strings).
+
 ## [v6.1.0] — 2026-05-25
 
 ### CASE-0001 (Trommel v. AG Canada)
