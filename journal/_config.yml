@@ -6,6 +6,7 @@ author:
 permalink: /:year/:month/:day/:slug/
 markdown: kramdown
 timezone: America/Vancouver
+future: true
 
 plugins:
   - jekyll-feed

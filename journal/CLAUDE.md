@@ -7,7 +7,7 @@ v2.2.0
 - SVG headers must match the site CSS. Use monochrome `#000`/`#e8e8e8` with `prefers-color-scheme` media queries embedded in the SVG `<style>` block. No green, amber, or other accents — the dark editorial palette is for landing pages, not this journal.
 - Live site is `journal.heyitsmejosh.com`.
 - Posts live in `_posts/`.
-- `./scripts/ship.sh` is the primary publish path; it lints posts, commits, and pushes `main`. GitHub Actions then builds and deploys `gh-pages` automatically.
+- `./scripts/deploy.sh` is the only publish path. It builds Jekyll locally and ships `_site` to the Vercel `journal` project via the Build Output API (`vercel deploy --prebuilt`), so Vercel never runs Ruby/bundler. There is no GitHub Pages / gh-pages flow and no remote build; a plain `git push` does not deploy.
 - One post per week. Never create more than one entry in the same calendar week. The weekly post must be dated either Friday or Sunday. If multiple entries exist in the same week, merge them into a single Friday or Sunday entry and delete the extras.
 - Filename date and front matter date must match.
 - Write in natural English, not tool-name spam.
@@ -34,14 +34,14 @@ categories: journal daily
 
 ## Run
 ```bash
-cd ~/Documents/Code/journal
+cd ~/Documents/Code/apps/journal
 bundle install
-bundle exec jekyll serve
-./scripts/ship.sh
+bundle exec jekyll serve   # local preview
+./scripts/deploy.sh        # build locally + ship prebuilt static to Vercel
 ```
 
 ## Key Files
 - `_posts/` - Published entries, one per date, with front matter.
-- `scripts/ship.sh` - Only publish path; validates, builds, previews, and pushes.
+- `scripts/deploy.sh` - Only publish path; builds Jekyll locally and deploys `_site` to Vercel with `--prebuilt`.
 - `_config.yml` - Jekyll site configuration.
 - `index.html` - Site entry point.

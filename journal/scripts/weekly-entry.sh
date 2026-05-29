@@ -182,4 +182,7 @@ git add "_posts/${FRIDAY}-week.md"
 git commit -m "journal: ${FRIDAY} week" 2>/dev/null || true
 git push origin main 2>/dev/null || true
 
+# Publish to Vercel (the push alone does not deploy; journal is CLI-deployed).
+"$(dirname "$0")/deploy.sh"
+
 echo "[weekly-entry] Done."
