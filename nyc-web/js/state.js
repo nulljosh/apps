@@ -193,7 +193,7 @@ export function createGameState() {
         tutorialStep: 0,
         lastSaveSlot: null,
         autoSaveEnabled: true,
-        autoplay: true,           // default ON
+        autoplay: false,          // default OFF - player drives, opt-in to AI autoplay
         showSaveIndicator: false,
         // Quest system (integrated)
         questList: [],            // full quest objects with CRUD
