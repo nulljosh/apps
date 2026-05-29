@@ -3,6 +3,7 @@
 # Idempotent: only bumps cache + commits + pushes when web CONTENT actually changed.
 # Run manually, or let the apps pre-push hook run it automatically.
 set -euo pipefail
+export LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8   # BSD sed chokes on em-dashes under C locale
 
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"          # apps/brief/web
 DEST="$(cd "$SRC/../../../nulljosh.github.io/brief" && pwd)" # portfolio deploy folder
@@ -13,7 +14,9 @@ FILES=(index.html script.js style.css sw.js manifest.json icon.svg apple-touch-i
 node --check "$SRC/script.js"
 
 # Content fingerprint (version stamps stripped) — skip if nothing changed since last deploy.
-FP=$(cat "${FILES[@]/#/$SRC/}" | sed -E 's/v=[0-9]+//g; s/brief-v[0-9]+//g' | md5 -q)
+# Text files get version-stripped + hashed; binary (png) is hashed as-is (sed can't read it).
+TEXT=(index.html script.js style.css sw.js manifest.json icon.svg)
+FP=$( { cat "${TEXT[@]/#/$SRC/}" | sed -E 's/v=[0-9]+//g; s/brief-v[0-9]+//g'; md5 -q "$SRC/apple-touch-icon.png"; } | md5 -q)
 if [ -f "$DEST/.deployhash" ] && [ "$(cat "$DEST/.deployhash")" = "$FP" ]; then
   echo "brief: no content change, skipping deploy"; exit 0
 fi
