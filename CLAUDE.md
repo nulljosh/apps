@@ -35,11 +35,13 @@ Standalone apps and experiments. Each subdirectory is independent with its own b
 - **portfolio-ios** -- Portfolio companion
 - **beep** -- Native SwiftUI iOS app for TransLink Compass card. Native login (hidden WKWebView + JS injection), Face ID, balance/trips dashboard, reload sheet.
 - **wiretext-ios** -- Unicode wireframe design tool (iOS)
+- **journal-ios** -- SwiftUI reader for journal.heyitsmejosh.com. Pulls live Atom feed (`/feed.xml`), no bundled content.
 
 ### macOS (SwiftUI)
 - **lingo-macos** -- Language learning
 - **nimble** -- MenuBarExtra (blocked, macOS Tahoe SDK bug)
 - **wiretext-macos** -- Unicode wireframe design tool (macOS)
+- **journal-macos** -- SwiftUI reader for journal.heyitsmejosh.com (display name "Journal", target JournalMac). Shares iOS sources, live Atom feed.
 
 ## Build
 

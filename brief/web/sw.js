@@ -1,9 +1,9 @@
-const CACHE = 'brief-v3';
+const CACHE = 'brief-v16';
 const ASSETS = [
-  '/',
-  '/style.css?v=3',
-  '/script.js?v=3',
-  '/manifest.json',
+  '/brief/',
+  '/brief/style.css?v=16',
+  '/brief/script.js?v=16',
+  '/brief/manifest.json',
 ];
 
 self.addEventListener('install', e => {

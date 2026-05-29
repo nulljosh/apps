@@ -271,7 +271,9 @@ let caseChecklist: [ChecklistItem] = [
     ChecklistItem(id: 15, label: "FOI filed with E-Comm 9-1-1 BC — 911 audio + CAD notes (neutralizes Godoy scope argument)", priority: .now),
     ChecklistItem(id: 16, label: "Email outreach: Cameron Ward (declined), Arvay Finlay (declined May 25 — Robin Gage, no capacity), Klein Lawyers, BCCLA", priority: .now),
     ChecklistItem(id: 17, label: "PRIORITY: Call Thomas Harding — TLAG 604-635-1330 (Degen $317k, PK referral)", priority: .now),
-    ChecklistItem(id: 18, label: "PRIORITY: Call Neil Chantler — 604-424-8454 / neilchantler@chantlerlaw.ca (PK referral)", priority: .now)
+    ChecklistItem(id: 18, label: "PRIORITY: Call Neil Chantler — 604-424-8454 / neilchantler@chantlerlaw.ca (PK referral)", priority: .now),
+    ChecklistItem(id: 20, label: "Contact Dinsley Litigation — Sean Dinsley 604-477-0766 (Maple Ridge, civil litigation + PI)", priority: .now),
+    ChecklistItem(id: 21, label: "Call CBA BC Lawyer Referral Service — 604-687-3221 / info@cbabc.org", priority: .soon)
 ]
 
 let caseLawyers: [Lawyer] = [
@@ -338,7 +340,12 @@ let caseLawyers: [Lawyer] = [
     Lawyer(id: "cb", initials: "CB", name: "Canadian Bar Association BC",
            subtitle: "Lawyer Referral Service",
            tags: [LawyerTag(label: "Free referrals", style: .good)],
-           phone: "6046873221", phoneNote: nil, email: "info@cbabc.org", website: nil)
+           phone: "6046873221", phoneNote: nil, email: "info@cbabc.org", website: nil),
+
+    Lawyer(id: "sd", initials: "SD", name: "Dinsley Litigation",
+           subtitle: "Sean Dinsley · Maple Ridge BC · civil litigation & personal injury",
+           tags: [LawyerTag(label: "Civil litigation", style: .good), LawyerTag(label: "Personal injury", style: .good)],
+           phone: "6044770766", phoneNote: nil, email: "admin@dinsleylawcorp.ca", website: "dinsleylawcorp.ca")
 ]
 
 let caseScenarios: [Scenario] = [

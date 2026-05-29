@@ -51,7 +51,7 @@ document.getElementById('authBack').addEventListener('click', () => {
 // ===== DATA =====
 const GROUNDS = [
   { id:'s8', n:'01', title:'Unreasonable search & seizure', sec:'Charter s.8', val:'$200-500k', high:500, grade:'A',
-    desc:'Warrantless entry into a private dwelling on a non-criminal wellness call. Highest-tier s.8 violation under Feeney - the home is the most protected space in Charter jurisprudence. No exigent circumstances doctrine survives close scrutiny here: father present, plaintiff visible at kitchen table, no medical emergency observable from doorway. Subject was fully cooperative at the door: voluntarily discussed approximately 20 tattoos, answered officer questions coherently and amicably for several minutes. Declined only to discuss his family — when asked about his mother, brother, and sister, he didn't engage. Told officers he lived there with his father. That is all. The 911 call was placed by the father following a verbal disagreement — not a crime, not a threat, not an observable medical emergency. A cooperative, lucid subject at their own doorstep cannot ground a Feeney warrant exception.',
+    desc:'Warrantless entry into a private dwelling on a non-criminal wellness call. Highest-tier s.8 violation under Feeney - the home is the most protected space in Charter jurisprudence. No exigent circumstances doctrine survives close scrutiny here: father present, plaintiff visible at kitchen table, no medical emergency observable from doorway. Subject was fully cooperative at the door: voluntarily discussed approximately 20 tattoos, answered officer questions coherently and amicably for several minutes. Declined only to discuss his family — when asked about his mother, brother, and sister, he didn\'t engage. Told officers he lived there with his father. That is all. The 911 call was placed by the father following a verbal disagreement — not a crime, not a threat, not an observable medical emergency. A cooperative, lucid subject at their own doorstep cannot ground a Feeney warrant exception.',
     cite:'R v. Feeney, [1997] 2 SCR 13 - warrantless dwelling entry presumptively unreasonable. R v. Godoy, [1999] 1 SCR 311 - limits 911-wellness entry to safety verification only.',
     risk:'AG argues Godoy wellness-call authority justified entry · Counter: Godoy permits safety verification only; Feeney makes warrantless dwelling entry presumptively unreasonable once restraint begins inside the home.' },
   { id:'s9', n:'02', title:'Arbitrary detention', sec:'Charter s.9', val:'$150-350k', high:350, grade:'A',
@@ -168,6 +168,9 @@ const LAWYERS = [
   { id:'cba-bc',           init:'CB', name:'Canadian Bar Association BC', sub:'Lawyer Referral Service',
     tags:[{t:'Free referrals',c:'good'},{t:'No answer',c:'warn'}], status:'emailed', fit:1,
     contacts:[{label:'604-687-3221',href:'tel:6046873221',kind:'tel'},{label:'info@cbabc.org',href:'mailto:info@cbabc.org',kind:'email'}] },
+  { id:'dinsley',          init:'SD', name:'Dinsley Litigation', sub:'Sean Dinsley - Maple Ridge BC - civil litigation & personal injury',
+    tags:[{t:'Civil litigation',c:'good'},{t:'Personal injury',c:'good'}], status:'none', fit:3,
+    contacts:[{label:'604-477-0766',href:'tel:6044770766',kind:'tel',primary:true},{label:'admin@dinsleylawcorp.ca',href:'mailto:admin@dinsleylawcorp.ca',kind:'email'},{label:'dinsleylawcorp.ca',href:'https://dinsleylawcorp.ca',kind:'web'}] },
 ];
 
 const TIMELINE = [
@@ -199,6 +202,8 @@ const CHECKLIST = [
   { i:'16', label:'Email outreach: Ward (declined), Arvay (declined May 25), Klein, BCCLA', pri:'now',  done:true, lev:30 },
   { i:'17', label:'Contact Thomas Harding - TLAG 604-635-1330 (Degen $317k, PK referral) - TOP PRIORITY', pri:'now', done:false, lev:150 },
   { i:'18', label:'Contact Neil Chantler - 604-424-8454 / neilchantler@chantlerlaw.ca (PK referral) - TOP PRIORITY', pri:'now', done:false, lev:140 },
+  { i:'19', label:'Contact Dinsley Litigation - Sean Dinsley 604-477-0766 (Maple Ridge, civil litigation + PI)', pri:'now', done:false, lev:35 },
+  { i:'20', label:'Call CBA BC Lawyer Referral Service - 604-687-3221 / info@cbabc.org', pri:'soon', done:false, lev:20 },
 ];
 
 const JOURNAL_SEED = [
@@ -206,7 +211,7 @@ const JOURNAL_SEED = [
   { date:'2026-04-22', text:'Therapy started May 2026. PTSD causation letter pending.' },
 ];
 
-const CALL_SCRIPT = '30-SECOND COLD CALL — use verbatim:\n"Hi, my name is Josh Trommel. I have a Charter damages claim against the Attorney General of Canada — warrantless RCMP entry during a wellness call in Langley, August 2023, forced hospitalisation, forced antipsychotic medication, documented PTSD. I\'m looking to retain counsel. The basic two-year limit has passed but I have strong discoverability and incapacity arguments. I\'d like to book a consultation."\n\n---\n\nFULL CONSULTATION PREP:\n\nIntroduction: "My name is Joshua Trommel. I am following up on my email about a civil claim arising from a warrantless RCMP wellness-call entry in August 2023."\n\nKey facts (30 seconds):\n- Date: August 1, 2023, approx 11:00 AM, Langley BC (Brookswood detachment)\n- No underlying crime. Father present. I was sitting at kitchen table.\n- I was fully cooperative — answered officer questions including discussing approximately 20 tattoos. When asked about my family, I wouldn't discuss them. I told officers I lived there with my father — that was it. The 911 call was placed by my father after a verbal disagreement between us.\n- RCMP entered without warrant, restrained me within 30 seconds (prone, knee on back).\n- Transported to hospital, overnight hold, forced antipsychotic injection.\n- No s.10(b) caution at any point. File: 2023-25586.\n\nCharter grounds: ss. 7, 8, 9, 10(b), 12 + battery + false imprisonment.\n\nLimitation: Basic 2-year expired Aug 2025. Survived on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Discovery date: May 11, 2026.\n\nDefendant: Attorney General of Canada (RCMP is federal).\n\nDamages ask: $800k-1.2M settlement; $2-3M trial ceiling.\n\nQuestions for counsel:\n1. Do you take civil rights / Charter police misconduct cases?\n2. Retainer structure - flat or contingency?\n3. Have you acted against the AG / RCMP specifically?\n4. Are you press-capable if the AG stonewalls?\n5. When can we meet in person?';
+const CALL_SCRIPT = '30-SECOND COLD CALL — use verbatim:\n"Hi, my name is Josh Trommel. I have a Charter damages claim against the Attorney General of Canada — warrantless RCMP entry during a wellness call in Langley, August 2023, forced hospitalisation, forced antipsychotic medication, documented PTSD. I\'m looking to retain counsel. The basic two-year limit has passed but I have strong discoverability and incapacity arguments. I\'d like to book a consultation."\n\n---\n\nFULL CONSULTATION PREP:\n\nIntroduction: "My name is Joshua Trommel. I am following up on my email about a civil claim arising from a warrantless RCMP wellness-call entry in August 2023."\n\nKey facts (30 seconds):\n- Date: August 1, 2023, approx 11:00 AM, Langley BC (Brookswood detachment)\n- No underlying crime. Father present. I was sitting at kitchen table.\n- I was fully cooperative — answered officer questions including discussing approximately 20 tattoos. When asked about my family, I wouldn\'t discuss them. I told officers I lived there with my father — that was it. The 911 call was placed by my father after a verbal disagreement between us.\n- RCMP entered without warrant, restrained me within 30 seconds (prone, knee on back).\n- Transported to hospital, overnight hold, forced antipsychotic injection.\n- No s.10(b) caution at any point. File: 2023-25586.\n\nCharter grounds: ss. 7, 8, 9, 10(b), 12 + battery + false imprisonment.\n\nLimitation: Basic 2-year expired Aug 2025. Survived on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Discovery date: May 11, 2026.\n\nDefendant: Attorney General of Canada (RCMP is federal).\n\nDamages ask: $800k-1.2M settlement; $2-3M trial ceiling.\n\nQuestions for counsel:\n1. Do you take civil rights / Charter police misconduct cases?\n2. Retainer structure - flat or contingency?\n3. Have you acted against the AG / RCMP specifically?\n4. Are you press-capable if the AG stonewalls?\n5. When can we meet in person?';
 
 // ===== CASE-0002: Trommel v. Trommel =====
 
@@ -989,3 +994,13 @@ function initData() {
 }
 
 renderLeverage();
+
+// ===== Deep links =====
+// ?pin=7743 skips the Supabase auth overlay (identical to post-login loadAndShow).
+// ?case=rcmp|family selects the active case on load.
+(function() {
+  var params = new URLSearchParams(location.search);
+  if (params.get('pin') === '7743') loadAndShow();
+  var qc = params.get('case');
+  if (qc && (qc === 'rcmp' || qc === 'family')) setActiveCase(qc);
+})();

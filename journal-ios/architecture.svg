@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" width="640" height="220" font-family="ui-monospace,Menlo,monospace">
+  <rect width="640" height="220" style="fill:#0c0f12"/>
+  <text x="20" y="34" style="fill:#5fd07a;font-size:15px;font-weight:700">Journal (iOS) — data flow</text>
+  <g style="fill:#11161b;stroke:#2a3138">
+    <rect x="20"  y="60" width="150" height="56" rx="8"/>
+    <rect x="200" y="60" width="150" height="56" rx="8"/>
+    <rect x="380" y="60" width="120" height="56" rx="8"/>
+    <rect x="530" y="60" width="90"  height="56" rx="8"/>
+  </g>
+  <g style="fill:#cfd6dd;font-size:12px;text-anchor:middle">
+    <text x="95"  y="84">journal.heyitsmejosh</text>
+    <text x="95"  y="100">.com/feed.xml</text>
+    <text x="275" y="84">FeedStore</text>
+    <text x="275" y="100" style="fill:#8a94a0">URLSession fetch</text>
+    <text x="440" y="84">AtomParser</text>
+    <text x="440" y="100" style="fill:#8a94a0">XMLParser</text>
+    <text x="575" y="84">SwiftUI</text>
+    <text x="575" y="100" style="fill:#8a94a0">list + WebView</text>
+  </g>
+  <g style="stroke:#5fd07a;stroke-width:2;fill:none">
+    <path d="M170 88 L200 88"/><path d="M350 88 L380 88"/><path d="M500 88 L530 88"/>
+  </g>
+  <g style="fill:#5fd07a"><polygon points="200,88 192,84 192,92"/><polygon points="380,88 372,84 372,92"/><polygon points="530,88 522,84 522,92"/></g>
+  <text x="20" y="170" style="fill:#8a94a0;font-size:12px">No bundled content. posts:[Post] starts empty; populated only by the live feed.</text>
+  <text x="20" y="192" style="fill:#8a94a0;font-size:12px">iOS + macOS share FeedStore / Post / AtomParser verbatim.</text>
+</svg>
