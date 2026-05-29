@@ -1,8 +1,8 @@
-const CACHE = 'brief-v16';
+const CACHE = 'brief-v17';
 const ASSETS = [
   '/brief/',
-  '/brief/style.css?v=16',
-  '/brief/script.js?v=16',
+  '/brief/style.css?v=17',
+  '/brief/script.js?v=17',
   '/brief/manifest.json',
 ];
 

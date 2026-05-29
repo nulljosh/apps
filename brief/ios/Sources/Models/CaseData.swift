@@ -145,54 +145,54 @@ extension ShapeStyle where Self == Color {
 // MARK: - Data
 
 let caseGrounds: [Ground] = [
-    Ground(id: "force", number: 1, title: "Excessive Force", section: "s.7",
-           value: "$100–200k", accent: .briefDanger,
-           description: "Officers knelt on subject's back while prone, causing respiratory distress consistent with positional asphyxia — a documented cause of in-custody death. No crime committed. Officers had post-2020 training and knew this technique is prohibited in low-risk situations. Father witnessed. Subject had a pre-existing wrist injury (prior fracture) that was directly aggravated and reinvigorated by the prone restraint — elevates special damages and supports an independent physical harm head. Aggravated assault causing bodily harm.",
-           citation: "Elmardy v. TPSB, 2019 ONSC 2931 ($130k) · Degen v. Min. Public Safety, 2023 BCSC ($317k — Surrey RCMP, PTSD, positional force)",
-           risk: "AG argues force was proportionate · Counter: Degen/Elmardy found liability for prone restraint with no crime; father's testimony of zero resistance is fatal to any proportionality defence.",
+    Ground(id: "s8", number: 1, title: "Unreasonable search & seizure", section: "Charter s.8",
+           value: "$200–500k", accent: .briefDanger,
+           description: "Warrantless entry into a private dwelling on a non-criminal wellness call. Highest-tier s.8 violation under Feeney — the home is the most protected space in Charter jurisprudence. No exigent circumstances doctrine survives close scrutiny here: father present, plaintiff visible at kitchen table, no medical emergency observable from doorway. Subject was fully cooperative at the door: voluntarily discussed approximately 20 tattoos, answered officer questions coherently and amicably for several minutes. Declined only to discuss his family — when asked about his mother, brother, and sister, he didn't engage. Told officers he lived there with his father. That is all. The 911 call was placed by the father following a verbal disagreement — not a crime, not a threat, not an observable medical emergency. A cooperative, lucid subject at their own doorstep cannot ground a Feeney warrant exception.",
+           citation: "R v. Feeney, [1997] 2 SCR 13 — warrantless dwelling entry presumptively unreasonable. R v. Godoy, [1999] 1 SCR 311 — limits 911-wellness entry to safety verification only.",
+           risk: "AG argues Godoy wellness-call authority justified entry · Counter: Godoy permits safety verification only; Feeney makes warrantless dwelling entry presumptively unreasonable once restraint begins inside the home.",
            openByDefault: true),
 
-    Ground(id: "punitive", number: 2, title: "Punitive Conduct", section: "—",
-           value: "$50–150k", accent: .briefWarn,
-           description: "Sustained 7-step cascade of misconduct: unlawful entry, physical assault, arrest without grounds, forced medication, solitary confinement, overnight hold, discharge with no aftercare. Each step a choice. Langley RCMP had no MICR/mental health co-responder in August 2023. Officers responded to a psychiatric wellness call with zero psychiatric support. A helping role weaponized into the worst night of the subject's life.",
-           citation: "High-handed, bad-faith state action — Ward v. Vancouver [2010] SCC 27",
-           risk: "AG argues each step was independently authorized under MHA · Counter: Ward's bad-faith deterrence head applies; a 7-step cascade on a wellness call with no co-responder defeats any good-faith defence."),
+    Ground(id: "s9", number: 2, title: "Arbitrary detention", section: "Charter s.9",
+           value: "$150–350k", accent: .briefDanger,
+           description: "Prone restraint, transport to hospital, overnight hold. No charge laid, no underlying crime. Detention must be authorized by law and not arbitrary — MHA s.28 threshold not met (father testimony defeats apprehension standard). Subject's sole non-compliance was declining to discuss his family when asked about his mother, brother, and sister. He told officers he lived there with his father — nothing more. That is the full extent of the non-cooperation that preceded detention. The 911 call originated from the father following a verbal disagreement between them. No crime. No threat. No observable harm risk. A cooperative, lucid person declining to answer personal family questions does not meet MHA s.28's requirement of a reasonable officer belief of likelihood of harm.",
+           citation: "R v. Grant, 2009 SCC 32 — definition of detention. Mental Health Act (BC) s.28 — apprehension requires officer-formed belief of likelihood of harm.",
+           risk: "AG argues MHA s.28 belief threshold was met on 911-call context · Counter: Grant requires non-arbitrary detention; subject was cogent and cooperative throughout — discussed ~20 tattoos with officers, declined only to discuss his family when asked — told officers he lived with his father, said nothing more (protected right to silence on personal matters). Father's verbal-argument 911 call plus subject's own cooperative conduct destroy the s.28 apprehension standard."),
 
-    Ground(id: "ptsd", number: 3, title: "PTSD General", section: "—",
-           value: "$75–150k", accent: .briefWarn,
-           description: "Every day affected since August 1, 2023 — 33+ months of documented daily impact. No good days. Formal PTSD assessment underway May 2026. Clinical paper trail building. Causation to incident expected to be confirmed in writing by treating therapist. Separate from future earning capacity (age 26, 35+ working years — argued independently).",
-           citation: "Non-pecuniary damages, ongoing — pain, suffering, loss of dignity",
-           risk: "AG hires forensic psychiatrist to argue pre-existing vulnerability breaks causation · Counter: thin skull rule means defendants take plaintiff as found; 33+ months daily impact establishes quantum regardless."),
+    Ground(id: "s7", number: 3, title: "Life, liberty, security of person", section: "Charter s.7",
+           value: "$250–600k", accent: .briefDanger,
+           description: "Forced antipsychotic medication absent consent and absent meaningful incapacity assessment. Fleming v. Ontario establishes that even validly detained persons retain bodily integrity. Engages physical, psychological, and dignity interests simultaneously.",
+           citation: "Fleming v. Ontario, 2019 SCC 45 — bodily integrity protected during state detention. Carter v. Canada, 2015 SCC 5 — s.7 protects against state-imposed physical intervention.",
+           risk: "AG argues valid MHA detention lawfully limits s.7 under s.1 · Counter: Fleming holds bodily integrity survives lawful detention; forced antipsychotic medication without capacity assessment is not saved by s.1."),
 
-    Ground(id: "meds", number: 4, title: "Forced Medication", section: "s.7",
-           value: "$30–75k", accent: .briefWarn,
-           description: "Involuntary antipsychotics administered without consent. Absolute right to refuse treatment is one of the most fundamental rights in Canadian law. Dual liability: s.7 Charter breach (security of the person) + battery tort. Crown defense — BC MHA s.31 'deemed consent' — is itself under active constitutional challenge as a s.7 violation (CCD v. AG BC, BCSC trial May 2025, decision pending).",
-           citation: "Fleming v. Ontario [2019] SCC 45 · CCD v. AG BC (BCSC 2025, pending)",
-           risk: "AG argues MHA s.31 deemed consent authorizes involuntary medication · Counter: Fleming holds bodily integrity survives lawful detention; CCD v. AG BC has s.31 itself under constitutional challenge."),
+    Ground(id: "s10b", number: 4, title: "Right to counsel", section: "Charter s.10(b)",
+           value: "$50–150k", accent: Color.secondary,
+           description: "No caution given at any point of the encounter. Detention triggered s.10(b) immediately under Grant; failure to inform of right to counsel before transport and forced medication compounds every downstream violation.",
+           citation: "R v. Suberu, 2009 SCC 33 — s.10(b) attaches on detention without delay.",
+           risk: "AG argues no formal arrest means s.10(b) did not attach · Counter: Suberu makes clear s.10(b) attaches on detention without delay — prone restraint was detention and no caution was given at any point."),
 
-    Ground(id: "entry", number: 5, title: "Unlawful Entry", section: "s.8",
-           value: "$25–60k", accent: .briefWarn,
-           description: "No Feeney warrant. No genuine exigent circumstances — subject answered door, spoke coherently, exercised right to walk away. Entry into a dwelling is the highest-tier s.8 breach. This is the root violation that enabled the entire chain of events that followed.",
-           citation: "R. v. Feeney [1997] 2 SCR 13",
-           risk: "AG argues Godoy wellness-call authority justified entry · Counter: Feeney makes warrantless dwelling entry presumptively unreasonable; Godoy permits safety verification only, not restraint or forced medication."),
+    Ground(id: "s12", number: 5, title: "Cruel & unusual treatment", section: "Charter s.12",
+           value: "$100–300k", accent: .briefWarn,
+           description: "Prone restraint by kneeling on the back created positional asphyxia risk. Forced antipsychotic injection followed by overnight solitary, no family notification, discharge without aftercare. The aggregate satisfies the s.12 grossly disproportionate threshold.",
+           citation: "R v. Smith, [1987] 1 SCR 1045 — grossly disproportionate test. R v. Boudreault, 2018 SCC 58 — modern s.12 framework.",
+           risk: "AG argues each measure was individually proportionate · Counter: Boudreault assesses s.12 in aggregate; prone restraint plus forced injection plus overnight solitary plus no aftercare satisfies Smith's grossly disproportionate test."),
 
-    Ground(id: "detain", number: 6, title: "Arbitrary Detention", section: "s.9",
-           value: "$20–50k", accent: Color.secondary,
-           description: "Walking away during a non-arrest wellness call is not flight — it is a legal right. Detention began at physical restraint with no lawful authority. Overnight hold with no charge. Mental Health Act apprehension criteria need scrutiny: did the observed behavior legally justify s.28 apprehension?",
-           citation: "R. v. Grant [2009] 2 SCR 353",
-           risk: "AG argues MHA s.28 officer-formed belief threshold was met on 911-call context · Counter: Grant requires non-arbitrary detention; walking away was not flight, and father's testimony dismantles apprehension standard."),
+    Ground(id: "battery", number: 6, title: "Battery & excessive force", section: "common law tort",
+           value: "$80–200k", accent: .briefWarn,
+           description: "Non-consensual physical contact exceeding any lawful authority. Pre-existing wrist fracture aggravated by restraint — additional special damages head. Standard of force assessed objectively per Anderson; officer notebooks must demonstrate proportionality, and the 30-second contact window per father testimony fails that standard.",
+           citation: "Anderson v. Smith, 2010 BCCA — proportionality standard for police use of force.",
+           risk: "AG argues force was objectively proportionate · Counter: Anderson requires proportionality to actual conduct; father confirms zero resistance before prone restraint, and the pre-existing wrist fracture aggravation is a separate special-damages head."),
 
-    Ground(id: "solitary", number: 7, title: "Solitary Confinement", section: "ss.7,12",
-           value: "$15–40k", accent: Color.secondary,
-           description: "Overnight solitary confinement with no charge and no crime committed. Subject was in mental health crisis — placing a distressed person in isolation is the clinical opposite of appropriate care. Released with no aftercare plan, no referral to psychiatric services, no follow-up.",
-           citation: "Ward v. Vancouver [2010] SCC 27",
-           risk: "AG argues overnight hold was clinically appropriate · Counter: Ward bad-faith head applies; isolating a person in mental health crisis with no aftercare, no referral, and no family contact is indefensible."),
+    Ground(id: "falseimp", number: 7, title: "False imprisonment", section: "common law tort",
+           value: "$60–180k", accent: .briefWarn,
+           description: "Overnight solitary confinement absent lawful authority. Each hour past the s.28 examination window is independently actionable. Combined with hospital MHA Form 4 procedural review — was a Form 1 ever generated, signed, and on what evidentiary basis?",
+           citation: "Bird v. The Queen, 2019 SCC 7 — false imprisonment within state custody.",
+           risk: "AG argues MHA s.28 authorized the detention · Counter: Bird requires each hour beyond lawful authority to be independently justified; if no Form 1 was generated or the s.28 threshold was unmet, every hour of the overnight hold is actionable."),
 
-    Ground(id: "counsel", number: 8, title: "Denial of Counsel", section: "s.10(b)",
-           value: "$15–35k", accent: Color.secondary,
-           description: "Upon detention, Charter s.10(b) requires immediate notification of the right to retain and instruct counsel, and a reasonable opportunity to exercise it. Detention is established at the moment of physical restraint. Once detention is proven, the burden shifts to the Crown to demonstrate s.10(b) was complied with. No compliance = automatic breach.",
-           citation: "R. v. Bartle [1994] 3 SCR 173 · R. v. Sinclair [2010] 2 SCR 310",
-           risk: "AG argues no formal arrest triggered s.10(b) · Counter: Bartle/Sinclair make clear s.10(b) attaches at detention; burden shifts to Crown to prove compliance at physical restraint — none existed.")
+    Ground(id: "neginv", number: 8, title: "Negligent investigation", section: "tort — Hill",
+           value: "$50–150k", accent: Color.secondary,
+           description: "Officers owed a duty of care in investigation. Failure to verify wellness-call basis (911 audio defines this), failure to attempt verbal engagement before physical contact, failure to verify MHA s.28 threshold — all breach the Hill standard. Damages flow from downstream harms.",
+           citation: "Hill v. Hamilton-Wentworth Regional Police, 2007 SCC 41 — duty of care in police investigation.",
+           risk: "AG argues officers exercised reasonable real-time judgment · Counter: Hill imposes a duty of care; failure to attempt verbal engagement or verify the s.28 threshold before physical contact are discrete breaches causally tied to downstream harms.")
 ]
 
 let caseFacts: [CaseFact] = [
@@ -201,7 +201,7 @@ let caseFacts: [CaseFact] = [
     CaseFact(key: "Location", value: "Langley, BC"),
     CaseFact(key: "Department", value: "Langley RCMP, Brookswood"),
     CaseFact(key: "Defendant", value: "AG of Canada"),
-    CaseFact(key: "Officers", value: "Cst. Darcy G. Ng (unconfirmed) + second officer (ATIP pending)"),
+    CaseFact(key: "Officers", value: "Two officers — identities unknown, pending ATIP"),
     CaseFact(key: "Witness", value: "Father, in kitchen"),
     CaseFact(key: "Status", value: "Pre-litigation"),
     CaseFact(key: "Wrist injury", value: "Pre-existing fracture aggravated by prone restraint — additional physical harm head", fullWidth: true)
@@ -243,7 +243,7 @@ They brought him to hospital after that and I couldn't see him until next day an
 let journalSeed: [JournalEntry] = [
     JournalEntry(date: "2026-05-11", text: "Discovery date established. Formally confirmed RCMP file #2023-25586 (August 1, 2023), began active legal research, retained a lawyer for consultation, and first understood that a civil proceeding under Ward v. Vancouver (City) [2010] 2 SCR 27 — a s.24(1) Charter damages claim — is an available and appropriate remedy. This constitutes discovery under BC Limitation Act s.8(1)(d). Called Paul Kent-Snowsell 3x; callback confirmed May 12. Contemporaneous record created."),
     JournalEntry(date: "2026-05-10", text: "Formal PTSD assessment underway. Building clinical paper trail. Session directly connected current symptoms to the August 1, 2023 incident."),
-    JournalEntry(date: "2025-08-02", text: "Started therapy. First session — August 2, 2025. Formal discoverability anchor for s.18 incapacity argument under BC Limitation Act."),
+    JournalEntry(date: "2026-05-20", text: "In ongoing therapy with my regular counsellor over the past several months. Raised EMDR with her; she is supportive and is writing a PTSD letter (diagnosis, causation to August 1, 2023, and period of incapacity) — the s.19 disability anchor under the BC Limitation Act. A separate EMDR clinician we tried once was not a good fit; the regular counsellor remains the treating clinician."),
     JournalEntry(date: "2026-05-06", text: "No good days since August 1, 2023. Every day is affected without exception."),
     JournalEntry(date: "2026-05-05", text: "Wakes with stomach aches and night sweats daily. Coping mechanisms developed in direct response to the trauma."),
     JournalEntry(date: "2026-05-03", text: "Nightmares with recurring themes. Worsened in intensity since the incident."),
@@ -252,15 +252,18 @@ let journalSeed: [JournalEntry] = [
 ]
 
 let caseChecklist: [ChecklistItem] = [
+    ChecklistItem(id: 22, label: "PRIORITY: Book Law Society limitation read (1-800-663-1919) — one question: does this survive a limitation strike, yes or no?", priority: .now),
+    ChecklistItem(id: 23, label: "Get s.19 letter from current counsellor: PTSD Dx + causation to Aug 1 2023 + period of incapacity", priority: .now),
+    ChecklistItem(id: 24, label: "Request GP pre-incident records — establish pre-Aug 2023 baseline functioning", priority: .now),
     ChecklistItem(id: 0, label: "Paul Kent declined May 18 — contact Thomas Harding & Neil Chantler (PK referrals — Degen case)", priority: .now),
     ChecklistItem(id: 1, label: "PTSD assessment started (therapy) — get Dx letter", priority: .now),
     ChecklistItem(id: 2, label: "Body cam footage requested from RCMP", priority: .now),
-    ChecklistItem(id: 3, label: "Police report — confirm Cst. Darcy G. Ng + second officer full name via ATIP", priority: .now),
+    ChecklistItem(id: 3, label: "Police report — confirm officer identities via ATIP (names unknown)", priority: .now),
     ChecklistItem(id: 19, label: "RCMP complaint file 2023-XCAP — request copy for record", priority: .now),
     ChecklistItem(id: 4, label: "Hospital discharge records", priority: .now),
     ChecklistItem(id: 5, label: "Pain journal — daily entries", priority: .now),
     ChecklistItem(id: 6, label: "Therapist letter confirming PTSD & causation", priority: .now),
-    ChecklistItem(id: 7, label: "CRCC complaint filed (RCMP is federal — OPCC is BC municipal only)", priority: .soon),
+    ChecklistItem(id: 7, label: "CRCC complaint — window likely closed; ask about an extension (RCMP is federal — OPCC is BC municipal only)", priority: .soon),
     ChecklistItem(id: 8, label: "Father witness statement documented", priority: .soon),
     ChecklistItem(id: 9, label: "Incident date confirmed: August 1, 2023 (File #2023-25586)", priority: .now),
     ChecklistItem(id: 10, label: "Hospital name confirmed", priority: .soon),
@@ -277,6 +280,11 @@ let caseChecklist: [ChecklistItem] = [
 ]
 
 let caseLawyers: [Lawyer] = [
+    Lawyer(id: "lawsociety", initials: "LS", name: "Law Society of BC — PRIORITY",
+           subtitle: "Lawyer Referral Service · paid limitation read · 30-min, then $25",
+           tags: [LawyerTag(label: "Limitation opinion", style: .urgent), LawyerTag(label: "Survive a strike?", style: .urgent), LawyerTag(label: "PRIORITY", style: .urgent)],
+           phone: "18006631919", phoneNote: nil, email: nil, website: "lawsocietybc.ca"),
+
     Lawyer(id: "th", initials: "TH", name: "Thomas Harding — PRIORITY",
            subtitle: "Thomas Harding Law Corp (TLAG) · Surrey BC · PK referral · Degen case $317k",
            tags: [LawyerTag(label: "Degen case $317k", style: .good), LawyerTag(label: "RCMP misconduct", style: .good), LawyerTag(label: "PK referral", style: .urgent), LawyerTag(label: "PRIORITY", style: .urgent)],
@@ -299,7 +307,7 @@ let caseLawyers: [Lawyer] = [
 
     Lawyer(id: "mh", initials: "MH", name: "McQuarrie Hunter LLP",
            subtitle: "Surrey BC",
-           tags: [LawyerTag(label: "BC Limitation Act", style: .good), LawyerTag(label: "Discoverability / s.18", style: .good)],
+           tags: [LawyerTag(label: "BC Limitation Act", style: .good), LawyerTag(label: "Discoverability / s.19", style: .good)],
            phone: "6045817001", phoneNote: nil, email: nil, website: nil),
 
     Lawyer(id: "sh", initials: "SH", name: "Sean Hern Law Corporation",
@@ -318,8 +326,8 @@ let caseLawyers: [Lawyer] = [
            phone: "6046969928", phoneNote: nil, email: nil, website: "arvayfinlay.ca"),
 
     Lawyer(id: "kl", initials: "KL", name: "Klein Lawyers",
-           subtitle: "1385 W 8th Ave #400 · Vancouver BC · Free consult · Contingency",
-           tags: [LawyerTag(label: "RCMP class actions", style: .good), LawyerTag(label: "Federal court", style: .good), LawyerTag(label: "Contingency", style: .good)],
+           subtitle: "1385 W 8th Ave #400 · Vancouver BC · Declined — class-action only",
+           tags: [LawyerTag(label: "RCMP class actions", style: .good), LawyerTag(label: "Declined", style: .fail)],
            phone: "6048747171", phoneNote: nil, email: nil, website: "callkleinlawyers.com"),
 
     Lawyer(id: "pl", initials: "PL", name: "Pivot Legal",
@@ -349,9 +357,10 @@ let caseLawyers: [Lawyer] = [
 ]
 
 let caseScenarios: [Scenario] = [
-    Scenario(name: "Most likely", description: "AG settles to suppress precedent on forced medication + solitary + Charter violations. No underlying crime. Confidentiality clause standard.", amount: "$1.5–2.5M", probability: 0.70, accentColor: .briefWarn),
-    Scenario(name: "Trial", description: "Full trial victory with punitive damages and clear Charter breaches. Ward functions maximally triggered — compensation, vindication, deterrence.", amount: "$2.5–4M", probability: 0.20, accentColor: .briefGreen),
-    Scenario(name: "Worst", description: "Early settlement without litigation momentum, or limitation argument fails.", amount: "$800k–1.2M", probability: 0.10, accentColor: .briefDanger)
+    Scenario(name: "Best case", description: "Full trial, all heads, Ward functions maximally triggered, punitive granted.", amount: "$2.5–4M", probability: 0.15, accentColor: .briefGreen),
+    Scenario(name: "Strong", description: "Settlement with silence premium, evidence fully assembled, press-capable counsel.", amount: "$1.5–2.5M", probability: 0.30, accentColor: .briefWarn),
+    Scenario(name: "Most likely", description: "AG settles to suppress precedent on forced medication + solitary + Charter violations. No underlying crime. Confidentiality clause standard.", amount: "$1.2–1.8M", probability: 0.40, accentColor: Color.secondary),
+    Scenario(name: "Limitation pressure", description: "Limitation read comes back weak, or early settlement without litigation momentum. Still a live floor given 8 breaches and no underlying crime.", amount: "$800k–1.2M", probability: 0.15, accentColor: .briefDanger)
 ]
 
 let damageHeads: [DamageHead] = [
@@ -380,7 +389,7 @@ let caseComparables: [CaseComparable] = [
 ]
 
 let caseTimeline: [TimelineStep] = [
-    TimelineStep(when: "Now", title: "Contact PK referrals", description: "Paul Kent declined May 18. DLA declined May 15. Cameron Ward — no longer practising. Arvay Finlay declined May 25 (Robin Gage, no capacity). Priority: Thomas Harding (Degen $317k) + Neil Chantler — both referred by Kent. Still awaiting: Klein, BCCLA.", dotStyle: .now),
+    TimelineStep(when: "Now", title: "Get the paid limitation read", description: "Five specialist declines (PK, DLA, Cameron Ward, Arvay, Klein) is the market's answer on viability. Book a paid Law Society limitation read (1-800-663-1919) — one question: does this survive a strike? Stop cold-pitching contingency firms until that answer is in hand.", dotStyle: .now),
     TimelineStep(when: "Month 1–2", title: "Evidence gathering", description: "Police report, hospital records, body cam, formal PTSD Dx (in progress), CRCC complaint, ATIP + E-Comm FOI.", dotStyle: .neutral),
     TimelineStep(when: "Month 2–4", title: "Claim filed", description: "Basic deadline expired Aug 1, 2025. If discoverability argument succeeds, file immediately — every day increases risk.", dotStyle: .neutral),
     TimelineStep(when: "Month 6–18", title: "Discovery & negotiation", description: "Evidence exchanged. Settlement talks begin. Federal AG typically prefers quiet settlement.", dotStyle: .warn),
@@ -403,16 +412,16 @@ COLD CALL SCRIPT — use verbatim
 Have ready:
 — File #: 2023-25586 (RCMP file, confirmed Aug 1/2023)
 — Date of incident: August 1, 2023 (CONFIRMED)
-— Officers: Cst. Darcy G. Ng (unconfirmed) + second officer (ATIP pending) — Langley RCMP, Brookswood
+— Officers: two officers, identities unknown — pending ATIP — Langley RCMP, Brookswood
 — RCMP complaint file: 2023-XCAP
 — Witness: Father — written statement documented May 11, 2026 (in hand)
-— PTSD therapy started August 2, 2025 — formal PTSD assessment underway May 2026
+— PTSD therapy ongoing with regular counsellor — PTSD letter (Dx + causation + incapacity) in progress
 — Pre-existing wrist injury (prior fracture) aggravated by prone restraint (special damages)
 — Basic 2-yr limitation expired Aug 1, 2025 — lead with this
 
 LEAD QUESTIONS (limitation defense first):
 1. Basic limitation expired Aug 1, 2025. Is discoverability (s.8(1)(d)) viable — I didn't know a civil Charter claim was an appropriate remedy until recently?
-2. Does PTSD-based incapacity qualify under s.18? What does the therapist letter need to say?
+2. Does PTSD-based incapacity qualify under s.19? What does the therapist letter need to say?
 3. My discovery date is May 11, 2026 — I have a contemporaneous journal record. Is that defensible under s.8(1)(d)?
 4. Can I file a claim now to stop the clock while the limitation argument is developed?
 

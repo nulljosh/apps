@@ -2,9 +2,9 @@
 
 # Brief
 
-![version](https://img.shields.io/badge/version-v6.2.0-blue) ![platform](https://img.shields.io/badge/platform-Web%20%7C%20iOS%20%7C%20macOS-lightgrey) ![license](https://img.shields.io/badge/license-MIT-green)
+![version](https://img.shields.io/badge/version-v6.3.0-blue) ![platform](https://img.shields.io/badge/platform-Web%20%7C%20iOS%20%7C%20macOS-lightgrey) ![license](https://img.shields.io/badge/license-MIT-green)
 
-Litigation planning tool for *Trommel v. AG Canada* (CASE-0001) and *Trommel v. Trommel* (CASE-0002). Private.
+Litigation planning tool for *Trommel v. AG Canada* (CASE-0001), *Trommel v. Trommel* (CASE-0002), and *Baitz v. City of Surrey* (CASE-0003, native only). Private.
 
 **Web:** [heyitsmejosh.com/brief](https://heyitsmejosh.com/brief) (nulljosh.github.io/brief)
 

@@ -1,5 +1,23 @@
 # Changelog — Brief
 
+## [v6.3.0] — 2026-05-29
+
+### CASE-0001 reconciliation + limitation overlay
+- Merged the drifted web and Swift datasets into one consistent Case 01 across web + iOS +
+  macOS. Web's section-based grounds (s.8/s.9/s.7/s.10(b)/s.12/battery/false imprisonment/
+  negligent investigation) are now canonical and ported into `CaseData.swift`, replacing the
+  old harm-based set. Dollar conflicts resolved to the higher figure (scenarios top at
+  $2.5–4M; web `CEILING_PROJECTION` 2250 → 4000).
+- Officers: removed all name strings (`Cst. Darcy G. Ng`, "both Daryls"). Identities unknown,
+  pending ATIP, on every platform.
+- Fixed s.18 → s.19 (adult disability, not minority) in grounds, banner, call script, tags.
+- Rewrote the fabricated 2025-08-02 "first therapy session" journal entry to the truth:
+  ongoing therapy with regular counsellor writing the PTSD/s.19 letter; one-off EMDR consult
+  was not a fit. No invented date.
+- Added Law Society paid limitation read (1-800-663-1919) as the lead action; pivoted the
+  "Now" timeline step away from cold-pitching contingency firms. Marked Klein declined.
+- Cache bumped `?v=16`/`brief-v16` → `?v=17`/`brief-v17`.
+
 ## [v6.2.0] — 2026-05-28
 
 ### Deploy fix

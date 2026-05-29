@@ -91,10 +91,10 @@ const GROUNDS = [
 ];
 
 const SCENARIOS = [
-  { name:'Best case',   desc:'Full trial, all heads, Ward functions maximally triggered, punitive granted.', amt:'$2-3M',       pct:15, color:'var(--good)' },
-  { name:'Strong',      desc:'Settlement with silence premium, evidence fully assembled, press-capable counsel.', amt:'$1.2-1.8M', pct:30, color:'var(--info)' },
-  { name:'Most likely', desc:'AG settles to suppress precedent. Confidentiality clause standard.',           amt:'$800k-1.2M', pct:40, color:'var(--warn)' },
-  { name:'Worst',       desc:'Limitation fails OR settles early without leverage.',                          amt:'$0-350k',    pct:15, color:'var(--danger)' },
+  { name:'Best case',   desc:'Full trial, all heads, Ward functions maximally triggered, punitive granted.', amt:'$2.5-4M',    pct:15, color:'var(--good)' },
+  { name:'Strong',      desc:'Settlement with silence premium, evidence fully assembled, press-capable counsel.', amt:'$1.5-2.5M', pct:30, color:'var(--info)' },
+  { name:'Most likely', desc:'AG settles to suppress precedent. Confidentiality clause standard.',           amt:'$1.2-1.8M', pct:40, color:'var(--warn)' },
+  { name:'Limitation pressure', desc:'Limitation read comes back weak, or early settlement without leverage. Still a live floor given 8 breaches and no underlying crime.', amt:'$800k-1.2M', pct:15, color:'var(--danger)' },
 ];
 
 const STACK_HEADS = [
@@ -141,6 +141,9 @@ const SCALE = [
 ];
 
 const LAWYERS = [
+  { id:'law-society',      init:'LS', name:'Law Society of BC', sub:'Lawyer Referral Service - paid limitation read - 30-min, then $25 - PRIORITY',
+    tags:[{t:'Limitation opinion',c:'urgent'},{t:'Survive a strike?',c:'urgent'},{t:'PRIORITY',c:'urgent'}], status:'none', fit:5,
+    contacts:[{label:'1-800-663-1919',href:'tel:18006631919',kind:'tel',primary:true},{label:'lawsocietybc.ca',href:'https://lawsocietybc.ca',kind:'web'}] },
   { id:'thomas-harding',   init:'TH', name:'Thomas Harding', sub:'Thomas Harding Law Corp (TLAG) - Surrey BC - PK referral - Degen $317k',
     tags:[{t:'Degen case $317k',c:'good'},{t:'RCMP misconduct',c:'good'},{t:'PK referral',c:'urgent'},{t:'PRIORITY',c:'urgent'}], status:'none', fit:5,
     contacts:[{label:'604-635-1330',href:'tel:6046351330',kind:'tel',primary:true},{label:'tlag.ca',href:'https://tlag.ca',kind:'web'}] },
@@ -156,8 +159,8 @@ const LAWYERS = [
   { id:'arvay-finlay',     init:'AF', name:'Arvay Finlay LLP', sub:'Vancouver BC',
     tags:[{t:'Fairy Creek RCMP class',c:'good'},{t:'Charter ss.2/7/8/9',c:'good'},{t:'Declined May 25',c:'fail'}], status:'declined', fit:4,
     contacts:[{label:'604-696-9928',href:'tel:6046969928',kind:'tel'},{label:'arvayfinlay.ca',href:'https://arvayfinlay.ca',kind:'web'}] },
-  { id:'klein-lawyers',    init:'KL', name:'Klein Lawyers', sub:'1385 W 8th Ave #400 - Vancouver BC - free consult, contingency',
-    tags:[{t:'RCMP class actions',c:'good'},{t:'Federal court',c:'good'},{t:'Contingency',c:'good'}], status:'emailed', fit:3,
+  { id:'klein-lawyers',    init:'KL', name:'Klein Lawyers', sub:'1385 W 8th Ave #400 - Vancouver BC - declined, class-action only',
+    tags:[{t:'RCMP class actions',c:'good'},{t:'Declined',c:'fail'}], status:'declined', fit:3,
     contacts:[{label:'604-874-7171',href:'tel:6048747171',kind:'tel',primary:true},{label:'callkleinlawyers.com',href:'https://callkleinlawyers.com',kind:'web'}] },
   { id:'dla-law',          init:'DL', name:'DLA Law', sub:'Dosanjh Ladner Arora - Vancouver BC',
     tags:[{t:'Police misconduct',c:'good'},{t:'Wrongful arrest',c:'good'}], status:'emailed', fit:3,
@@ -166,7 +169,7 @@ const LAWYERS = [
     tags:[{t:'Free referrals',c:'good'},{t:'Civil rights',c:'good'}], status:'none', fit:2,
     contacts:[{label:'604-687-2919',href:'tel:6046872919',kind:'tel'},{label:'bccla.org',href:'https://bccla.org',kind:'web'}] },
   { id:'mcquarrie-hunter', init:'MH', name:'McQuarrie Hunter LLP', sub:'Surrey BC',
-    tags:[{t:'BC Limitation Act',c:'good'},{t:'Discoverability / s.18',c:'good'}], status:'voicemail', fit:3,
+    tags:[{t:'BC Limitation Act',c:'good'},{t:'Discoverability / s.19',c:'good'}], status:'voicemail', fit:3,
     contacts:[{label:'604-581-7001',href:'tel:6045817001',kind:'tel'}] },
   { id:'sean-hern',        init:'SH', name:'Sean Hern Law Corp.', sub:'Vancouver BC - formerly Farris LLP',
     tags:[{t:'Pro bono',c:'good'},{t:'BC FOI/Privacy',c:'good'}], status:'none', fit:2,
@@ -180,7 +183,7 @@ const LAWYERS = [
 ];
 
 const TIMELINE = [
-  { when:'Now',          state:'now',  title:'Call Harding & Chantler',  desc:'Thomas Harding 604-635-1330 (Degen $317k, PK referral) + Neil Chantler 604-424-8454. Ward/DLA/Arvay all declined. Klein + BCCLA still open.' },
+  { when:'Now',          state:'now',  title:'Get the paid limitation read',  desc:'Five specialist declines (PK, DLA, Ward, Arvay, Klein) is the market\'s answer on viability. Book a paid Law Society limitation read (1-800-663-1919) - one question: does this survive a strike? Stop cold-pitching contingency firms until that answer is in hand.' },
   { when:'Month 1-2',    state:'',     title:'Evidence build',           desc:'Police report, ATIP, E-Comm FOI, hospital ROI, BWC, OPCC to CRCC complaint, PTSD diagnosis letter.' },
   { when:'Month 2-4',    state:'warn', title:'Claim filed',              desc:'Basic limit expired Aug 2025. If discoverability holds, file immediately - every day increases risk.' },
   { when:'Month 6-18',   state:'',     title:'Discovery & negotiation',  desc:'Evidence exchanged. Settlement talks begin. Federal AG typically prefers quiet settlement.' },
@@ -192,11 +195,11 @@ const CHECKLIST = [
   { i:'0',  label:'Call Paul Kent-Snowsell - book appointment',                pri:'now',  done:true,  lev:20 },
   { i:'1',  label:'PTSD assessment started (therapy) - get Dx letter',         pri:'now',  done:true,  lev:80 },
   { i:'2',  label:'Body cam footage requested from RCMP',                       pri:'now',  done:false, lev:120 },
-  { i:'3',  label:'Police report - both Daryls full names',                     pri:'now',  done:false, lev:45 },
+  { i:'3',  label:'Police report - confirm officer identities via ATIP (names unknown)', pri:'now',  done:false, lev:45 },
   { i:'4',  label:'Hospital discharge records',                                 pri:'now',  done:false, lev:55 },
   { i:'5',  label:'Pain journal - daily entries',                               pri:'now',  done:false, lev:30 },
   { i:'6',  label:'Therapist letter confirming PTSD & causation',               pri:'now',  done:false, lev:100 },
-  { i:'7',  label:'CRCC complaint filed (federal, not OPCC)',                   pri:'soon', done:false, lev:25 },
+  { i:'7',  label:'CRCC complaint - window likely closed; ask about an extension (federal, not OPCC)', pri:'soon', done:false, lev:25 },
   { i:'8',  label:'Father witness statement documented',                        pri:'soon', done:true,  lev:60 },
   { i:'9',  label:'Incident date confirmed: Aug 1, 2023 - File 2023-25586',    pri:'now',  done:true,  lev:10 },
   { i:'10', label:'Hospital name confirmed',                                    pri:'soon', done:true,  lev:15 },
@@ -210,6 +213,9 @@ const CHECKLIST = [
   { i:'18', label:'Contact Neil Chantler - 604-424-8454 / neilchantler@chantlerlaw.ca (PK referral) - TOP PRIORITY', pri:'now', done:false, lev:140 },
   { i:'19', label:'Contact Dinsley Litigation - Sean Dinsley 604-477-0766 (Maple Ridge, civil litigation + PI)', pri:'now', done:false, lev:35 },
   { i:'20', label:'Call CBA BC Lawyer Referral Service - 604-687-3221 / info@cbabc.org', pri:'soon', done:false, lev:20 },
+  { i:'21', label:'PRIORITY: Book Law Society limitation read (1-800-663-1919) - does this survive a limitation strike, yes or no?', pri:'now', done:false, lev:160 },
+  { i:'22', label:'Get s.19 letter from current counsellor: PTSD Dx + causation to Aug 1 2023 + period of incapacity', pri:'now', done:false, lev:100 },
+  { i:'23', label:'Request GP pre-incident records - establish pre-Aug 2023 baseline functioning', pri:'now', done:false, lev:40 },
 ];
 
 const JOURNAL_SEED = [
@@ -217,7 +223,7 @@ const JOURNAL_SEED = [
   { date:'2026-04-22', text:'Therapy started May 2026. PTSD causation letter pending.' },
 ];
 
-const CALL_SCRIPT = '30-SECOND COLD CALL — use verbatim:\n"Hi, my name is Josh Trommel. I have a Charter damages claim against the Attorney General of Canada — warrantless RCMP entry during a wellness call in Langley, August 2023, forced hospitalisation, forced antipsychotic medication, documented PTSD. I\'m looking to retain counsel. The basic two-year limit has passed but I have strong discoverability and incapacity arguments. I\'d like to book a consultation."\n\n---\n\nFULL CONSULTATION PREP:\n\nIntroduction: "My name is Joshua Trommel. I am following up on my email about a civil claim arising from a warrantless RCMP wellness-call entry in August 2023."\n\nKey facts (30 seconds):\n- Date: August 1, 2023, approx 11:00 AM, Langley BC (Brookswood detachment)\n- No underlying crime. Father present. I was sitting at kitchen table.\n- I was fully cooperative — answered officer questions including discussing approximately 20 tattoos. When asked about my family, I wouldn\'t discuss them. I told officers I lived there with my father — that was it. The 911 call was placed by my father after a verbal disagreement between us.\n- RCMP entered without warrant, restrained me within 30 seconds (prone, knee on back).\n- Transported to hospital, overnight hold, forced antipsychotic injection.\n- No s.10(b) caution at any point. File: 2023-25586.\n\nCharter grounds: ss. 7, 8, 9, 10(b), 12 + battery + false imprisonment.\n\nLimitation: Basic 2-year expired Aug 2025. Survived on discoverability (s.8(1)(d)) and PTSD incapacity (s.18). Discovery date: May 11, 2026.\n\nDefendant: Attorney General of Canada (RCMP is federal).\n\nDamages ask: $800k-1.2M settlement; $2-3M trial ceiling.\n\nQuestions for counsel:\n1. Do you take civil rights / Charter police misconduct cases?\n2. Retainer structure - flat or contingency?\n3. Have you acted against the AG / RCMP specifically?\n4. Are you press-capable if the AG stonewalls?\n5. When can we meet in person?';
+const CALL_SCRIPT = '30-SECOND COLD CALL — use verbatim:\n"Hi, my name is Josh Trommel. I have a Charter damages claim against the Attorney General of Canada — warrantless RCMP entry during a wellness call in Langley, August 2023, forced hospitalisation, forced antipsychotic medication, documented PTSD. I\'m looking to retain counsel. The basic two-year limit has passed but I have strong discoverability and incapacity arguments. I\'d like to book a consultation."\n\n---\n\nFULL CONSULTATION PREP:\n\nIntroduction: "My name is Joshua Trommel. I am following up on my email about a civil claim arising from a warrantless RCMP wellness-call entry in August 2023."\n\nKey facts (30 seconds):\n- Date: August 1, 2023, approx 11:00 AM, Langley BC (Brookswood detachment)\n- No underlying crime. Father present. I was sitting at kitchen table.\n- I was fully cooperative — answered officer questions including discussing approximately 20 tattoos. When asked about my family, I wouldn\'t discuss them. I told officers I lived there with my father — that was it. The 911 call was placed by my father after a verbal disagreement between us.\n- RCMP entered without warrant, restrained me within 30 seconds (prone, knee on back).\n- Transported to hospital, overnight hold, forced antipsychotic injection.\n- No s.10(b) caution at any point. File: 2023-25586.\n\nCharter grounds: ss. 7, 8, 9, 10(b), 12 + battery + false imprisonment.\n\nLimitation: Basic 2-year expired Aug 2025. Survived on discoverability (s.8(1)(d)) and PTSD incapacity (s.19). Discovery date: May 11, 2026.\n\nDefendant: Attorney General of Canada (RCMP is federal).\n\nDamages ask: $1.5-2.5M settlement; $2.5-4M trial ceiling.\n\nQuestions for counsel:\n1. Do you take civil rights / Charter police misconduct cases?\n2. Retainer structure - flat or contingency?\n3. Have you acted against the AG / RCMP specifically?\n4. Are you press-capable if the AG stonewalls?\n5. When can we meet in person?';
 
 // ===== CASE-0002: Trommel v. Trommel =====
 
@@ -334,7 +340,7 @@ function setActiveCase(id) {
 // ===== LEVERAGE =====
 const LAWYER_LEVERAGE = { none:0, voicemail:5, emailed:15, callback:40, retained:180 };
 const BASELINE_PROJECTION = 400;
-const CEILING_PROJECTION  = 2250;
+const CEILING_PROJECTION  = 4000;
 
 let _lawyerStatuses = {};
 const STATUS_CYCLE = ['none','voicemail','emailed','callback','retained','declined'];
@@ -450,7 +456,7 @@ function renderTrajectory(currentTotal) {
   ];
   const details = [
     { l:'Where you stand today',    m:'Current projection of $' + currentTotal + 'k based on completed evidence and counsel posture.', v:'$' + currentTotal + 'k' },
-    { l:'Retain counsel',           m:"One signed retainer flips the AG's posture. Press-capable counsel (Klein Lawyers, Thomas Harding) maximizes the silence premium.", v:'+$180k' },
+    { l:'Retain counsel',           m:"One signed retainer flips the AG's posture. Press-capable counsel (Thomas Harding) maximizes the silence premium.", v:'+$180k' },
     { l:'Complete top 5 evidence',  m:'BWC footage, therapist letter (PTSD + causation), ATIP officer notebooks, E-Comm 911 audio, hospital discharge - top leverage items.', v:'+$295k' },
     { l:'Claim filed',              m:'Filing converts pre-litigation soft leverage to live procedural pressure. AG must engage and consider discovery exposure.', v:'+$100k' },
     { l:'Trial-ready evidence',     m:'Full pleadings, expert reports (forensic psych + vocational economist). Trial threat is now credible.', v:'$' + CEILING_PROJECTION/1000 + 'M ceiling' },
