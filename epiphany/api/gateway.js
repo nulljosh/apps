@@ -79,6 +79,7 @@ const ROUTES = {
   'broker/morning-run':      lazy(() => import('../server/api/broker/morning-run.js')),
   'broker/wealthsimple-auth': lazy(() => import('../server/api/broker/wealthsimple-auth.js')),
   'broker/ws-signal':        lazy(() => import('../server/api/broker/ws-signal.js')),
+  'broker/sync':             lazy(() => import('../server/api/broker/sync.js')),
   crypto:               lazy(() => import('../server/api/crypto.js')),
   reddit:               lazy(() => import('../server/api/reddit.js')),
   emergency:            lazy(() => import('../server/api/emergency.js')),

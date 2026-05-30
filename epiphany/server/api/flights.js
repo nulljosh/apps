@@ -40,8 +40,7 @@ async function fetchOpenSky(bbox) {
     lamax: bbox.lamax,
     lomax: bbox.lomax,
   });
-  try {
-    const headers = { 'Accept': 'application/json' };
+  const headers = { 'Accept': 'application/json' };
     const user = process.env.OPENSKY_USERNAME;
     const pass = process.env.OPENSKY_PASSWORD;
     if (user && pass) {
@@ -80,9 +79,6 @@ async function fetchOpenSky(bbox) {
       noFlights: states.length === 0,
       meta: buildMeta('live', bbox),
     };
-  } catch (err) {
-    throw err;
-  }
 }
 
 export default async function handler(req, res) {

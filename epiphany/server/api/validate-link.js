@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
 
   // Validate slug format (alphanumeric, hyphens only)
-  if (!/^[\w\-]+$/.test(slug)) {
+  if (!/^[\w-]+$/.test(slug)) {
     return res.status(400).json({
       error: 'Invalid slug format',
       details: 'Slug must contain only letters, numbers, and hyphens'

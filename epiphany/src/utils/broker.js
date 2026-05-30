@@ -312,6 +312,15 @@ async function loadWealthsimple() {
   return _WealthsimpleAdapter;
 }
 
+let _SnapTradeAdapter = null;
+async function loadSnapTrade() {
+  if (!_SnapTradeAdapter) {
+    const mod = await import('./brokers/snaptrade.js');
+    _SnapTradeAdapter = mod.SnapTradeAdapter;
+  }
+  return _SnapTradeAdapter;
+}
+
 export const createBroker = async (type, config = {}) => {
   switch (type) {
     case 'ctrader':       return new CTraderAdapter(config);
@@ -321,6 +330,10 @@ export const createBroker = async (type, config = {}) => {
     case 'wealthsimple': {
       const WS = await loadWealthsimple();
       return new WS(config);
+    }
+    case 'snaptrade': {
+      const ST = await loadSnapTrade();
+      return new ST(config);
     }
     default: throw new Error(`[BROKER] Unknown broker type: ${type}`);
   }

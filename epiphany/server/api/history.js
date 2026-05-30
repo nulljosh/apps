@@ -49,7 +49,7 @@ export default async function handler(req, res) {
   const yahooSymbol = SYMBOL_MAP[symbol] || symbol;
 
   // Validate symbol format (alphanumeric, hyphens, dots, equals, carets only)
-  if (!/^[\w\-\.=\^]+$/.test(yahooSymbol)) {
+  if (!/^[\w.=^-]+$/.test(yahooSymbol)) {
     return res.status(400).json({
       error: 'Invalid symbol format',
       details: 'Symbol must contain only letters, numbers, hyphens, dots, equals, and carets'

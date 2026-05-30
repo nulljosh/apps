@@ -1130,7 +1130,6 @@ function ImportModal({ dark, t, glass, font, onImport, onClose }) {
       try {
         const parsed = JSON.parse(jsonText);
         payload = Array.isArray(parsed) ? parsed : { contacts: parsed.contacts || [parsed] };
-        if (Array.isArray(payload)) payload = payload;
       } catch {
         setError('Invalid JSON. Expected an array of contacts.');
         setImporting(false);

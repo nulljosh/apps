@@ -1,6 +1,6 @@
 # Epiphany -- Technical Whitepaper
 
-**v1.5.0** | May 2026
+**v1.6.0** | May 2026
 
 ## Overview
 
@@ -65,13 +65,14 @@ Ticker bar always shows data. If the watchlist filters to zero matches, falls ba
 
 Epiphany ships an end-to-end signal-to-execution pipeline, **paper-only by default**. Real-money trading is gated behind a separate, opt-in step.
 
-- **Broker abstraction** (`src/utils/broker.js`): a common `BrokerAdapter` interface with `connect`, `placeOrder`, `getPositions`, `getBalance`. Adapters: Alpaca (paper + live), cTrader (OAuth2 REST), TradingView (alert/webhook format), Wealthsimple (read-only sync, unofficial API), IBKR (stub). Created via `createBroker(type, config)`.
+- **Broker abstraction** (`src/utils/broker.js`): a common `BrokerAdapter` interface with `connect`, `placeOrder`, `getPositions`, `getBalance`. Adapters: Alpaca (paper + live), SnapTrade (read-only aggregator sync, HMAC-signed REST), cTrader (OAuth2 REST), TradingView (alert/webhook format), Wealthsimple (read-only, unofficial API), IBKR (stub). Created via `createBroker(type, config)`.
+- **Read-only sync** (`server/api/broker/sync.js` + `src/utils/brokers/snaptrade.js`): pulls holdings + balances through SnapTrade (covers Wealthsimple/Questrade in CA plus US brokers under one connection) and writes a snapshot to KV (`broker:snapshot:<userId>`), separate from the user-curated portfolio. No-ops when `SNAPTRADE_CLIENT_ID`/`SNAPTRADE_CONSUMER_KEY` are absent. Strictly read-only -- the adapter's `placeOrder` throws.
 - **Strategy**: Kelly-criterion momentum. Fractional Kelly sizing (default 0.25) capped per position (default 10% equity), MA crossover entry with a momentum-strength and volatility gate, fixed stop/target plus trailing stop. Shared between the in-app simulator (`simBenchmark.js`, 60fps Monte Carlo over the full asset universe) and the backtestable Pine Script port (`tradingview/monica-kelly-strategy.pine`).
 - **Automated morning run** (`server/api/broker/morning-run.js`): Vercel cron at 9:30 AM ET on weekdays. Runs a 500-path / 30-day GBM Monte Carlo per watchlist symbol, converts bull probability into buy/sell/hold, and routes orders to Alpaca paper. Cron-secret authenticated; no-ops cleanly when Alpaca keys are absent.
 - **Manual signal route** (`server/api/broker/signal.js`): accepts `{ symbol, qty, side }`, validates, and places a single paper order.
 - **Guardrails**: paper venue by default, position caps in the sizing math, kill switch via absent/removed keys, and a full per-symbol trade log on every run.
 
-**Roadmap**: read-only multi-broker sync (Plaid / SnapTrade / Flinks) ships before any live execution; live trading follows a paper-trading proving period.
+**Roadmap**: SnapTrade read-only sync ships first (done). Next: full-universe backtest + Kelly tuning, paper-execution hardening, then live execution via SnapTrade routing after a paper-trading proving period.
 
 ## AI Analyst
 
@@ -132,7 +133,7 @@ epiphany/
 - **Cold start**: ~2s (Vercel Fluid Compute)
 - **Data refresh**: 120s polling, paused when hidden
 - **Bundle**: ~1MB gzipped (MapLibre GL is majority)
-- **Tests**: 306 across 23 files
+- **Tests**: 335 across 24 files
 
 ## License
 

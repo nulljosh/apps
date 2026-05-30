@@ -1,4 +1,3 @@
-/* global process */
 // Headless simulator benchmark. Usage: node src/utils/simBenchmark.js [runs]
 
 // Copy of ASSETS from App.jsx (prices only)

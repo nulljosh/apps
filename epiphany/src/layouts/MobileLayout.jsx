@@ -69,7 +69,6 @@ export default function MobileLayout({
               width: 44,
               height: 44,
               borderRadius: 10,
-              border: 'none',
               padding: 0,
               background: 'rgba(255,255,255,0.18)',
               backdropFilter: 'blur(12px)',

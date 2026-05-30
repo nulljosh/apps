@@ -41,7 +41,7 @@ export default async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   const symbol = (req.query.symbol || '').trim().toUpperCase();
-  if (!symbol || !/^[A-Z0-9.\-]{1,10}$/.test(symbol)) {
+  if (!symbol || !/^[A-Z0-9.-]{1,10}$/.test(symbol)) {
     return res.status(400).json({ error: 'Provide ?symbol=TICKER (e.g. AAPL, BRK-B)' });
   }
 
