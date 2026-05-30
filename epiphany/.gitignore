@@ -126,8 +126,7 @@ tmp/
 # Interactive Brokers
 *.tws
 
-# Model artifacts
-models/
+# Model artifacts (case-insensitive FS made `models/` swallow Swift `Models/`)
 saved_models/
 *.pkl
 *.pickle
