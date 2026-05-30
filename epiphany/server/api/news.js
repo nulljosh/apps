@@ -1,9 +1,30 @@
 import { applyCors } from './_cors.js';
+import { getKv } from './_kv.js';
 
 // GDELT GDoc API — free, no auth, real-time global news
 const GDELT_BASE = 'https://api.gdeltproject.org/api/v2/doc/doc';
 const CACHE_TTL = 3 * 60 * 1000;
 const DEDUP_THRESHOLD = 0.6;
+
+// L2 Upstash cache for stock news. Mobile cold-loads were hitting GDELT/Google
+// directly with 3 retries (~3s). A warm KV entry returns instantly without
+// touching either upstream. Mirrors the L2 pattern in stocks-free.js.
+const KV_FRESH_MS = 15 * 60 * 1000;  // serve instantly, no refetch
+const KV_STALE_SEC = 60 * 60;        // KV entry lifetime
+
+async function kvReadNews(key) {
+  const kv = await getKv();
+  if (!kv) return null;
+  const raw = await kv.get(key);
+  if (!raw) return null;
+  try { return typeof raw === 'string' ? JSON.parse(raw) : raw; } catch { return null; }
+}
+
+async function kvWriteNews(key, entry) {
+  const kv = await getKv();
+  if (!kv) return;
+  await kv.set(key, JSON.stringify(entry), { ex: KV_STALE_SEC });
+}
 
 // Cache keyed by "query:lat:lon", capped at 100 entries
 const MAX_CACHE = 100;
@@ -278,13 +299,28 @@ async function fetchGoogleNews(queryTerms, lat, lon) {
 }
 
 async function handleStockNews(req, res, query) {
-  const cacheKey = `stock:${query.toLowerCase()}`;
+  const norm = query.toLowerCase();
+  const cacheKey = `stock:${norm}`;
+  const kvKey = `news:stock:v1:${norm}`;
+
+  // L1 in-memory
   const hit = cache.get(cacheKey);
   if (hit && Date.now() - hit.ts < CACHE_TTL) {
     res.setHeader('Cache-Control', 's-maxage=300');
     return res.status(200).json({
       ...hit.data,
       meta: buildMeta('cache', { cached: true, cacheAgeMs: Date.now() - hit.ts }),
+    });
+  }
+
+  // L2 Upstash — serve instantly while fresh, no upstream call
+  const kvHit = await kvReadNews(kvKey);
+  if (kvHit && kvHit.ts && Date.now() - kvHit.ts < KV_FRESH_MS) {
+    cacheSet(cacheKey, kvHit);
+    res.setHeader('Cache-Control', 's-maxage=300');
+    return res.status(200).json({
+      ...kvHit.data,
+      meta: buildMeta('cache', { cached: true, source: 'kv', cacheAgeMs: Date.now() - kvHit.ts }),
     });
   }
 
@@ -310,20 +346,34 @@ async function handleStockNews(req, res, query) {
     const articles = dedup([...gdeltArticles, ...googleArticles]).filter(a => isEnglishTitle(a.title));
 
     const data = { articles, meta: buildMeta('live') };
-    cacheSet(cacheKey, { ts: Date.now(), data });
+    const entry = { ts: Date.now(), data };
+    cacheSet(cacheKey, entry);
+    await kvWriteNews(kvKey, entry);
     res.setHeader('Cache-Control', 's-maxage=300');
     return res.status(200).json(data);
-  } catch (err) {
+  } catch {
     try {
       const googleArticles = await fetchGoogleNews([query, 'stock'], null, null);
       const articles = dedup(googleArticles).filter(a => isEnglishTitle(a.title));
       if (articles.length > 0) {
         const data = { articles, meta: buildMeta('live', { degraded: true }) };
-        cacheSet(cacheKey, { ts: Date.now(), data });
+        const entry = { ts: Date.now(), data };
+        cacheSet(cacheKey, entry);
+        await kvWriteNews(kvKey, entry);
         res.setHeader('Cache-Control', 's-maxage=300');
         return res.status(200).json(data);
       }
     } catch { /* Google News also failed */ }
+
+    // Both upstreams failed — serve stale KV instead of an empty list
+    if (kvHit && kvHit.data) {
+      cacheSet(cacheKey, kvHit);
+      res.setHeader('Cache-Control', 's-maxage=60');
+      return res.status(200).json({
+        ...kvHit.data,
+        meta: buildMeta('stale', { cached: true, source: 'kv', cacheAgeMs: Date.now() - kvHit.ts }),
+      });
+    }
 
     return res.status(200).json({ articles: [], meta: buildMeta('empty') });
   }

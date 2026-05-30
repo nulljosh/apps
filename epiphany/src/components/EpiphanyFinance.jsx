@@ -6,61 +6,47 @@ import {
 import { compactCurrency, formatCurrency, SYSTEM_FONT } from '../utils/formatting';
 import { simulate } from '../utils/roadmapSim';
 
-const CAT_COLORS = { Food: '#0a84ff', Vape: '#bf5af2', Alcohol: '#ff9f0a', Digital: '#30d158' };
-const CATS = ['Food', 'Vape', 'Alcohol', 'Digital'];
-const DIGITAL_CATS = new Set(['subscriptions', 'tech', 'entertainment', 'digital', 'other', 'services']);
+const CAT_COLORS = { Food: '#0a84ff', Vape: '#bf5af2', Alcohol: '#ff9f0a', Other: '#30d158' };
+const CATS = ['Food', 'Vape', 'Alcohol', 'Other'];
 
+// Real spending only. `months` comes from parsed PDF statements
+// (server/api/statements-shared.js). The 4th bucket is the monthly total minus
+// the three named categories, so nothing is silently dropped. No mock fallback.
 function buildHistoryData(months) {
-  return months
-    .filter((m) => m?.sortKey >= '2025-10')
+  return [...months]
+    .filter((m) => m?.sortKey)
     .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
     .map((m) => {
       const c = m.categories || {};
       const label = m.month.slice(0, 3) + " '" + m.month.slice(-2);
-      return {
-        month: label,
-        Food: Math.round(c.food || 0),
-        Vape: Math.round((c.vape || 0) + (c.vaping || 0)),
-        Alcohol: Math.round(c.alcohol || 0),
-        Digital: Math.round(
-          Object.entries(c)
-            .filter(([k]) => DIGITAL_CATS.has(k))
-            .reduce((s, [, v]) => s + v, 0),
-        ),
-      };
+      const food = Math.round(c.food || 0);
+      const vape = Math.round((c.vape || 0) + (c.vaping || 0) + (c.cannabis || 0));
+      const alcohol = Math.round(c.alcohol || 0);
+      const other = Math.max(0, Math.round((m.total || 0) - food - vape - alcohol));
+      return { month: label, Food: food, Vape: vape, Alcohol: alcohol, Other: other };
     });
 }
 
-const SPENDING = [
-  { month: "Oct '25", Food: 420, Vape: 78, Alcohol: 130, Digital: 45 },
-  { month: "Nov '25", Food: 375, Vape: 82, Alcohol: 105, Digital: 45 },
-  { month: "Dec '25", Food: 500, Vape: 88, Alcohol: 165, Digital: 45 },
-  { month: "Jan '26", Food: 345, Vape: 70, Alcohol: 88, Digital: 45 },
-  { month: "Feb '26", Food: 360, Vape: 74, Alcohol: 92, Digital: 45 },
-  { month: "Mar '26", Food: 395, Vape: 79, Alcohol: 98, Digital: 45 },
-  { month: "Apr '26", Food: 382, Vape: 76, Alcohol: 96, Digital: 45 },
-];
-
-const MONTHLY_AVG = { Food: 397, Vape: 78, Alcohol: 111, Digital: 45 };
+function averageByCategory(history) {
+  if (!history.length) return Object.fromEntries(CATS.map((cat) => [cat, 0]));
+  const sums = Object.fromEntries(CATS.map((cat) => [cat, 0]));
+  for (const row of history) for (const cat of CATS) sums[cat] += row[cat] || 0;
+  return Object.fromEntries(CATS.map((cat) => [cat, Math.round(sums[cat] / history.length)]));
+}
 
 const MAY_START = new Date(2026, 4, 1);
 const MAY_DAYS = 31;
 const DAY_MS = 1000 * 60 * 60 * 24;
 
-function getMayProgress() {
+// Paces the current month against the historical average from real statements.
+function getMayProgress(avg) {
+  const monthlyTotal = CATS.reduce((sum, cat) => sum + (avg[cat] || 0), 0);
   const now = new Date();
   const elapsed = Math.max(0, (now - MAY_START) / DAY_MS);
   const day = Math.min(elapsed, MAY_DAYS);
   const ratio = day / MAY_DAYS;
-  const spent = {
-    Food: Math.round(MONTHLY_AVG.Food * ratio),
-    Vape: Math.round(MONTHLY_AVG.Vape * ratio),
-    Alcohol: Math.round(MONTHLY_AVG.Alcohol * ratio),
-    Digital: day >= 1 ? MONTHLY_AVG.Digital : 0,
-  };
-  const total = Object.values(spent).reduce((s, v) => s + v, 0);
-  const projected = ratio > 0 ? Math.round(total / ratio) : 0;
-  return { day: Math.floor(day), total, projected, ratio };
+  const total = Math.round(monthlyTotal * ratio);
+  return { day: Math.floor(day), total, projected: monthlyTotal, ratio };
 }
 
 const VIEWS = ['netWorth', 'accounts', 'milestones'];
@@ -149,9 +135,11 @@ const TARGET_MONTHLY = 400;
 
 export default function EpiphanyFinance({ t, spending }) {
   const historyData = useMemo(
-    () => (spending?.length ? buildHistoryData(spending) : SPENDING),
+    () => (spending?.length ? buildHistoryData(spending) : []),
     [spending],
   );
+  const hasSpending = historyData.length > 0;
+  const monthlyAvg = useMemo(() => averageByCategory(historyData), [historyData]);
 
   const [view, setView] = useState('netWorth');
   const [monthlyExpenses, setMonthlyExpenses] = useState(650);
@@ -160,7 +148,10 @@ export default function EpiphanyFinance({ t, spending }) {
   const [sweStartYear, setSweStartYear] = useState(2030);
   const [startDebt, setStartDebt] = useState(10000);
 
-  const may = useMemo(() => getMayProgress(), []);
+  const may = useMemo(() => getMayProgress(monthlyAvg), [monthlyAvg]);
+  const rangeLabel = hasSpending
+    ? `${historyData[0].month} – ${historyData[historyData.length - 1].month} · ${historyData.length} ${historyData.length === 1 ? 'month' : 'months'}`
+    : 'No statements imported yet';
 
   const sim = useMemo(
     () => simulate({ monthlyExpenses, annualReturn, sweStartSalary, sweStartYear, startDebt, horizonYears: 17 }),
@@ -182,10 +173,21 @@ export default function EpiphanyFinance({ t, spending }) {
       <div style={{ marginBottom: 14 }}>
         <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.5px' }}>Spending History</div>
         <div style={{ fontSize: 12, color: t.textSecondary, marginTop: 2 }}>
-          Oct '25 – Apr '26 · 4 categories
+          {rangeLabel}
         </div>
       </div>
 
+      {!hasSpending && (
+        <div style={{ ...glass, textAlign: 'center', padding: 28 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: t.text }}>No spending data yet</div>
+          <div style={{ fontSize: 12, color: t.textSecondary, marginTop: 6, lineHeight: 1.5 }}>
+            Import your bank statement PDFs from the Spending tab. Epiphany parses them
+            on your account and the real monthly breakdown shows up here.
+          </div>
+        </div>
+      )}
+
+      {hasSpending && (
       <div style={glass}>
         <div style={label10}>Monthly Breakdown</div>
         <div style={{ width: '100%', height: 200 }}>
@@ -198,7 +200,7 @@ export default function EpiphanyFinance({ t, spending }) {
               <ReferenceLine y={TARGET_MONTHLY} stroke={t.accent} strokeDasharray="4 4"
                 label={{ value: `$${TARGET_MONTHLY} target`, fill: t.accent, fontSize: 10, position: 'insideTopRight' }} />
               {CATS.map((cat) => (
-                <Bar key={cat} dataKey={cat} name={cat} stackId="a" fill={CAT_COLORS[cat]} radius={cat === 'Digital' ? [3, 3, 0, 0] : undefined} />
+                <Bar key={cat} dataKey={cat} name={cat} stackId="a" fill={CAT_COLORS[cat]} radius={cat === 'Other' ? [3, 3, 0, 0] : undefined} />
               ))}
             </BarChart>
           </ResponsiveContainer>
@@ -210,13 +212,15 @@ export default function EpiphanyFinance({ t, spending }) {
             <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}>
               <div style={{ width: 8, height: 8, borderRadius: 2, background: CAT_COLORS[cat] }} />
               <span style={{ color: t.textSecondary }}>{cat}</span>
-              <span style={{ color: t.text, fontVariantNumeric: 'tabular-nums' }}>${MONTHLY_AVG[cat]}/mo avg</span>
+              <span style={{ color: t.text, fontVariantNumeric: 'tabular-nums' }}>${monthlyAvg[cat]}/mo avg</span>
             </div>
           ))}
         </div>
       </div>
+      )}
 
       {/* May tracker */}
+      {hasSpending && (
       <div style={glass}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <div style={label10}>May 2026 Tracker</div>
@@ -249,6 +253,7 @@ export default function EpiphanyFinance({ t, spending }) {
             : 'Month not started yet'}
         </div>
       </div>
+      )}
 
       {/* Forecast */}
       <div style={{ marginBottom: 14 }}>

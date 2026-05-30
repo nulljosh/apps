@@ -35,6 +35,56 @@ function formatTrillions(value) {
   return `${trillions < 0 ? '-' : ''}$${abs}T`;
 }
 
+function formatValue(ind) {
+  if (!ind) return 'n/a';
+  const v = toNumber(ind.value);
+  if (v === null) return 'n/a';
+  switch (ind.unit) {
+    case '%': return `${v.toFixed(2)}%`;
+    case 'K': return `${Math.round(v >= 10000 ? v / 1000 : v).toLocaleString('en-US')}K`;
+    case 'B USD': return `$${Math.round(v >= 10000 ? v / 1000 : v).toLocaleString('en-US')}B`;
+    case 'index': return v.toLocaleString('en-US', { maximumFractionDigits: 1 });
+    default: return v.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  }
+}
+
+function Sparkline({ series, color = '#5eead4', width = 132, height = 30 }) {
+  const pts = (series || []).map(p => toNumber(p.value)).filter(v => v !== null);
+  if (pts.length < 2) return null;
+  const min = Math.min(...pts);
+  const max = Math.max(...pts);
+  const span = max - min || 1;
+  const points = pts
+    .map((v, i) => `${((i / (pts.length - 1)) * width).toFixed(1)},${(height - ((v - min) / span) * height).toFixed(1)}`)
+    .join(' ');
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: 'block', marginTop: 6 }}>
+      <polyline points={points} fill="none" stroke={color} strokeWidth={1.5} strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function MetricCard({ ind }) {
+  const change = toNumber(ind?.change);
+  const up = change !== null && change > 0;
+  const flat = change === null || change === 0;
+  return (
+    <div style={{ border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: 10, background: 'rgba(255,255,255,0.03)' }}>
+      <div style={{ fontSize: 11, textTransform: 'uppercase', color: '#9aa4b7' }}>{ind?.name || '—'}</div>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginTop: 6 }}>
+        <span style={{ fontSize: 22, lineHeight: 1.1, fontFamily: mono }}>{formatValue(ind)}</span>
+        {!flat && (
+          <span style={{ fontSize: 11, fontFamily: mono, color: '#9aa4b7' }}>
+            {up ? '▲' : '▼'} {Math.abs(change).toLocaleString('en-US', { maximumFractionDigits: 2 })}
+          </span>
+        )}
+      </div>
+      <Sparkline series={ind?.series} color={flat ? '#64748b' : up ? '#34d399' : '#f87171'} />
+      <div style={{ fontSize: 10, color: '#9aa4b7', marginTop: 4 }}>{formatAsOf(ind?.date)}</div>
+    </div>
+  );
+}
+
 function skeletonLine(width = '100%') {
   return (
     <div
@@ -159,6 +209,14 @@ export default function MacroPanel() {
               <div style={{ fontSize: 24, lineHeight: 1.1, marginTop: 8, fontFamily: mono }}>{formatTrillions(macro.deficit?.value)}</div>
               <div style={{ fontSize: 10, color: '#9aa4b7', marginTop: 8 }}>{formatAsOf(macro.deficit?.date)}</div>
             </div>
+          </div>
+
+          <div style={{ fontSize: 11, textTransform: 'uppercase', color: '#9aa4b7', marginTop: 2 }}>Labor &amp; Consumer</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            {['unemployment', 'joblessClaims', 'consumerConf', 'pce', 'retailSales']
+              .map(key => macro[key])
+              .filter(Boolean)
+              .map(ind => <MetricCard key={ind.id} ind={ind} />)}
           </div>
         </div>
       )}
