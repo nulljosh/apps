@@ -46,6 +46,11 @@ describe('Cron API', () => {
 
     // Set CRON_SECRET for testing
     process.env.CRON_SECRET = 'mock-credential';
+
+    // Disable real network so success-path tests are deterministic and fast.
+    // Each data source catches fetch failures and degrades to empty, so the
+    // response structure/timings still populate without hitting Yahoo et al.
+    global.fetch = vi.fn(() => Promise.reject(new Error('network disabled in test')));
   });
 
   it('should reject unauthorized requests', async () => {

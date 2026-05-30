@@ -693,6 +693,28 @@ private struct SituationEventDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                if let imageURL = eventImageURL {
+                    AsyncImage(url: imageURL) { phase in
+                        if let image = phase.image {
+                            image.resizable().aspectRatio(contentMode: .fill)
+                        } else if phase.error != nil {
+                            Color.clear
+                        } else {
+                            ProgressView().frame(maxWidth: .infinity)
+                        }
+                    }
+                    .frame(height: 160)
+                    .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                }
+
+                if let typeLabel {
+                    Text(typeLabel)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .textCase(.uppercase)
+                }
+
                 Text(title)
                     .font(.title3.weight(.bold))
 
@@ -718,6 +740,20 @@ private struct SituationEventDetailView: View {
             .padding()
         }
         .preferredColorScheme(.dark)
+    }
+
+    private var eventImageURL: URL? {
+        if case .localEvent(let e) = event, let img = e.imageUrl {
+            return URL(string: img)
+        }
+        return nil
+    }
+
+    private var typeLabel: String? {
+        if case .localEvent(let e) = event {
+            return e.isPlace ? "Place" : "Event"
+        }
+        return nil
     }
 
     private var title: String {
@@ -785,9 +821,12 @@ private struct SituationEventDetailView: View {
             ]
         case .localEvent(let event):
             var result: [(label: String, value: String)] = []
-            if let venue = event.venue { result.append(("Venue", venue)) }
+            // For places the venue is the same as the title, so skip the duplicate.
+            if let venue = event.venue, !(event.isPlace && venue == event.title) {
+                result.append((event.isPlace ? "Place" : "Venue", venue))
+            }
             if let desc = event.eventDescription, !desc.isEmpty { result.append(("About", desc)) }
-            if let date = event.date { result.append(("Date", date)) }
+            if let date = event.date, !event.isPlace { result.append(("Date", date)) }
             if let source = event.source { result.append(("Source", source.capitalized)) }
             if let lat = event.latitude, let lon = event.longitude {
                 result.append(("Latitude", String(format: "%.4f", lat)))

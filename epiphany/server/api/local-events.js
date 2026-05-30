@@ -63,7 +63,7 @@ async function fetchPredictHQ(lat, lon, radius, apiKey) {
   return (data.results || [])
     .filter(e => e.location && e.location.length === 2)
     .map(e => ({
-      lat: e.location[1], lng: e.location[0], type: 'local-event',
+      lat: e.location[1], lng: e.location[0], type: 'local-event', kind: 'event',
       category: e.category || 'event', title: e.title || 'Local event',
       severity: severityFromCategory(e.category),
       timestamp: e.start || new Date().toISOString(),
@@ -85,7 +85,7 @@ async function fetchEventbrite(lat, lon) {
       if (!venue?.latitude || !venue?.longitude) continue;
       events.push({
         lat: parseFloat(venue.latitude), lng: parseFloat(venue.longitude),
-        type: 'local-event', category: 'community',
+        type: 'local-event', kind: 'event', category: 'community',
         title: e.name?.text || 'Event',
         severity: 'low',
         timestamp: e.start?.utc || new Date().toISOString(),
@@ -128,21 +128,25 @@ async function fetchWikipediaSingle(lat, lon) {
     const geoData = await fetchWithTimeout(geoUrl, {}, 6000);
     const pages = geoData.query?.geosearch || [];
 
-    // Batch fetch extracts for all found pages
+    // Batch fetch full intros + lead images for all found pages.
+    // exintro+exchars (not exsentences) avoids truncating on abbreviation periods
+    // like "(pop. approx.)"; pageimages adds a photo in the same request.
     const pageIds = pages.map(p => p.pageid).slice(0, 20);
     let extracts = {};
     if (pageIds.length > 0) {
       try {
-        const extractUrl = `https://en.wikipedia.org/w/api.php?action=query&pageids=${pageIds.join('|')}&prop=extracts&exintro&explaintext&exsentences=2&format=json`;
+        const extractUrl = `https://en.wikipedia.org/w/api.php?action=query&pageids=${pageIds.join('|')}&prop=extracts|pageimages&exintro&explaintext&exchars=600&piprop=thumbnail|original&pithumbsize=480&format=json`;
         const extractData = await fetchWithTimeout(extractUrl, {}, 6000);
         extracts = extractData.query?.pages || {};
       } catch { /* extracts optional */ }
     }
 
     for (const place of pages) {
-      const extract = extracts[place.pageid]?.extract || null;
+      const page = extracts[place.pageid];
+      const extract = page?.extract || null;
+      const image = page?.original?.source || page?.thumbnail?.source || null;
       events.push({
-        lat: place.lat, lng: place.lon, type: 'local-event',
+        lat: place.lat, lng: place.lon, type: 'local-event', kind: 'place',
         category: 'place',
         title: place.title,
         venue: place.title,
@@ -150,6 +154,7 @@ async function fetchWikipediaSingle(lat, lon) {
         timestamp: new Date().toISOString(),
         source: 'wikipedia',
         description: extract,
+        image,
         url: `https://en.wikipedia.org/wiki/${encodeURIComponent(place.title.replace(/ /g, '_'))}`,
       });
     }
@@ -191,7 +196,7 @@ async function fetchOSMVenues(lat, lon) {
 
       const amenity = el.tags?.amenity || el.tags?.tourism || el.tags?.leisure || '';
       events.push({
-        lat: elLat, lng: elLon, type: 'local-event',
+        lat: elLat, lng: elLon, type: 'local-event', kind: 'place',
         category: el.tags?.tourism ? 'attraction' : el.tags?.leisure ? 'recreation' : 'venue',
         title: name,
         venue: name,
@@ -230,7 +235,7 @@ async function fetchEventNews(lat, lon, cityName) {
       events.push({
         lat: lat + (Math.random() - 0.5) * 0.01,
         lng: lon + (Math.random() - 0.5) * 0.01,
-        type: 'local-event', category: 'community',
+        type: 'local-event', kind: 'event', category: 'community',
         title: title.length > 80 ? title.slice(0, 77) + '...' : title,
         severity: 'low',
         timestamp: dateMatch ? new Date(dateMatch[1]).toISOString() : new Date().toISOString(),

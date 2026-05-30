@@ -1138,6 +1138,21 @@ private struct SituationEventDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                if let imageURL = eventImageURL {
+                    AsyncImage(url: imageURL) { phase in
+                        if let image = phase.image {
+                            image.resizable().aspectRatio(contentMode: .fill)
+                        } else if phase.error != nil {
+                            Color.clear
+                        } else {
+                            ProgressView().frame(maxWidth: .infinity)
+                        }
+                    }
+                    .frame(height: 160)
+                    .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                }
+
                 HStack(spacing: 10) {
                     Image(systemName: eventIcon)
                         .font(.title2)
@@ -1247,7 +1262,7 @@ private struct SituationEventDetailView: View {
         case .incident(let i): return i.isInfrastructure ? i.title : "Incident"
         case .weatherAlert: return "Weather Alert"
         case .crime: return "Crime"
-        case .localEvent: return "Local Event"
+        case .localEvent(let e): return e.isPlace ? "Place" : "Event"
         case .trafficIncident: return "Traffic"
         case .aqi: return "Air Quality"
         }
@@ -1260,7 +1275,7 @@ private struct SituationEventDetailView: View {
         case .incident: return "exclamationmark.triangle.fill"
         case .weatherAlert: return "cloud.bolt.fill"
         case .crime: return "shield.lefthalf.filled"
-        case .localEvent: return "mappin.circle.fill"
+        case .localEvent(let e): return e.isPlace ? "mappin.circle.fill" : "calendar"
         case .trafficIncident: return "car.fill"
         case .aqi: return "aqi.medium"
         }
@@ -1291,6 +1306,13 @@ private struct SituationEventDetailView: View {
         default:
             return nil
         }
+    }
+
+    private var eventImageURL: URL? {
+        if case .localEvent(let e) = event, let img = e.imageUrl {
+            return URL(string: img)
+        }
+        return nil
     }
 
     private var title: String {
@@ -1393,9 +1415,12 @@ private struct SituationEventDetailView: View {
             return result
         case .localEvent(let event):
             var result: [(label: String, value: String)] = []
-            if let venue = event.venue { result.append(("Venue", venue)) }
+            // For places the venue is the same as the title, so skip the duplicate.
+            if let venue = event.venue, !(event.isPlace && venue == event.title) {
+                result.append((event.isPlace ? "Place" : "Venue", venue))
+            }
             if let desc = event.eventDescription, !desc.isEmpty { result.append(("About", desc)) }
-            if let date = event.date { result.append(("Date", date)) }
+            if let date = event.date, !event.isPlace { result.append(("Date", date)) }
             if let source = event.source { result.append(("Source", source.capitalized)) }
             if let lat = event.latitude { result.append(("Latitude", String(format: "%.4f", lat))) }
             if let lon = event.longitude { result.append(("Longitude", String(format: "%.4f", lon))) }
