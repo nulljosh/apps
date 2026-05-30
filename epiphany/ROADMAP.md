@@ -17,6 +17,11 @@ Last updated: 2026-05-30
 - **iOS/macOS parity**: port real-spending + macro buildout to native (iOS still on legacy `stocks.js`).
 - **Price-range prediction** overlay across stocks/commodities/crypto (the "beat the market" research bet).
 - **Tally expansion**: show benefits/allowance in the finance panel, not just the payday countdown.
+- **Stripe gate is CODE-COMPLETE, verify config**: checkout/webhook/portal/status (`stripe.js`, `stripe-webhook.js`), server enforcement (`gates.js`: `isPro` + 3/day `checkFreeAiLimit` + `ADMIN_EMAILS` bypass), `useSubscription`, `PricingPage`, and the `AiPanel` `upgrade_required` → paywall handoff all exist and work. Open item is config only: confirm `STRIPE_PRICE_ID_STARTER/PRO`, `STRIPE_WEBHOOK_SECRET`, the live webhook endpoint, and a real Stripe product/price exist in Vercel env + Stripe dashboard. No code to write.
+- **AI is the only gated feature**: brokerage sync, AI daily brief, and the PDF spending importer are NOT behind Pro. Decide whether to gate any of them or keep AI-only freemium.
+- **Map perf after cap bump (v1.9.0)**: marker caps went ~3x; add zoom-based culling in `LiveMapBackdrop.jsx` so dense cities don't render hundreds of markers at low zoom.
+- **`mapGrayscale` cleanup**: now a `const true`; the `filter` ternary and the dark/grayscale `setStyle` branch in `LiveMapBackdrop.jsx` can be simplified (subtract-to-add).
+- **Native parity for v1.8.0–v1.9.0**: cached news, full macro series, real PDF spending, and the map Gotham pass are web-only; iOS/macOS still on legacy `stocks.js`.
 
 ---
 
