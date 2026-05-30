@@ -3,12 +3,35 @@
 // Cache: 60s in-memory keyed by bbox (matches OpenSky rate limits)
 
 const OPENSKY_BASE = 'https://opensky-network.org/api';
+const OPENSKY_TOKEN_URL = 'https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token';
 const MAX_LAT_SPAN = 2.0;
 const MAX_LON_SPAN = 2.0;
 const MIN_ALTITUDE_FT = 500;
 
 const cache = new Map(); // key: bbox string → { data, ts }
 const CACHE_TTL = 60_000; // 60 seconds
+
+let token = null; // { access, exp } — OAuth2 client-credentials, cached in-process
+
+// OpenSky retired Basic auth in 2025; authenticate via OAuth2 client credentials.
+async function getOpenSkyToken() {
+  const id = process.env.OPENSKY_CLIENT_ID;
+  const secret = process.env.OPENSKY_CLIENT_SECRET;
+  if (!id || !secret) return null;
+  if (token && Date.now() < token.exp) return token.access;
+
+  const res = await fetch(OPENSKY_TOKEN_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ grant_type: 'client_credentials', client_id: id, client_secret: secret }),
+    signal: AbortSignal.timeout(5000),
+  });
+  if (!res.ok) throw new Error(`OpenSky token ${res.status}`);
+  const json = await res.json();
+  // Refresh 30s before expiry to avoid edge-of-window 401s.
+  token = { access: json.access_token, exp: Date.now() + (json.expires_in - 30) * 1000 };
+  return token.access;
+}
 
 function buildMeta(status, bbox, extra = {}) {
   return {
@@ -41,10 +64,9 @@ async function fetchOpenSky(bbox) {
     lomax: bbox.lomax,
   });
   const headers = { 'Accept': 'application/json' };
-    const user = process.env.OPENSKY_USERNAME;
-    const pass = process.env.OPENSKY_PASSWORD;
-    if (user && pass) {
-      headers['Authorization'] = 'Basic ' + Buffer.from(`${user}:${pass}`).toString('base64');
+    const access = await getOpenSkyToken();
+    if (access) {
+      headers['Authorization'] = `Bearer ${access}`;
     }
     const res = await fetch(`${OPENSKY_BASE}/states/all?${params}`, {
       signal: AbortSignal.timeout(5000),
