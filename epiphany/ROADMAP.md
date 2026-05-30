@@ -22,6 +22,14 @@ Last updated: 2026-05-30
 - **Map perf after cap bump (v1.9.0)**: marker caps went ~3x; add zoom-based culling in `LiveMapBackdrop.jsx` so dense cities don't render hundreds of markers at low zoom.
 - **`mapGrayscale` cleanup**: now a `const true`; the `filter` ternary and the dark/grayscale `setStyle` branch in `LiveMapBackdrop.jsx` can be simplified (subtract-to-add).
 - **Native parity for v1.8.0–v1.9.0**: cached news, full macro series, real PDF spending, and the map Gotham pass are web-only; iOS/macOS still on legacy `stocks.js`.
+- **Monica/Opticon → Epiphany rename sweep** (~128 refs across 50 files, web + iOS + macOS + watchOS). NOT a blind sed — categorize first:
+  - SAFE: display strings, comments, docs (READMEs, WHITEPAPER, index.html title/meta, JSX text).
+  - MIGRATE, don't rename: `monica_*` localStorage keys (`monica_last_geo`, `monica_geo_granted`, `monica_broker_config`, `monica_broker_autosend`) and any `monica:*` KV cache keys — rename orphans saved state; needs a read-old-write-new migration shim.
+  - DO NOT TOUCH: `com.heyitsmejosh.opticon.pro` / `.ultra` StoreKit product IDs in `ios/Services/StoreKitManager.swift` — registered in App Store Connect, immutable, renaming breaks IAP.
+  - REFACTOR: `watchos/MonicaWatchApp.swift` file + `@main` struct rename (Xcode project refs).
+  - `.monica-map` / `.monica-map-popup` CSS class + selector pairs must rename together.
+  - DONE 2026-05-30: Stripe product "Monica Weekly" → "Epiphany Pro" ($1/wk), price nickname "Epiphany Pro Weekly".
+- **Set backend `STRIPE_PRICE_ID_PRO` in Vercel** = `price_1THURbBmnhdgU9sGA4usKDw1` so `getTierFromPriceId` is explicit instead of defaulting every active sub to `pro` (works today, but implicit).
 
 ---
 
