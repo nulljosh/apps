@@ -1,6 +1,6 @@
 # Epiphany
 
-v1.10.2 -- Personal intelligence platform. Palantir for regular people.
+v1.10.3 -- Personal intelligence platform. Palantir for regular people.
 
 ## Rules
 

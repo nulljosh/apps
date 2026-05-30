@@ -37,12 +37,31 @@ export function getFmpApiKey() {
 // a crumb, and caches the pair. Without this, marketCap/P/E are unobtainable.
 // (Standard yfinance approach.)
 const YAHOO_CRUMB_TTL_MS = 60 * 60 * 1000; // 1h
+const YAHOO_CRUMB_KV_KEY = 'yahoo:crumb';
 let _yahooSession = { cookie: null, crumb: null, ts: 0 };
 
+function _crumbFresh(s) {
+  return Boolean(s && s.crumb && (Date.now() - s.ts) < YAHOO_CRUMB_TTL_MS);
+}
+
 export async function getYahooCrumb({ force = false } = {}) {
-  if (!force && _yahooSession.crumb && (Date.now() - _yahooSession.ts) < YAHOO_CRUMB_TTL_MS) {
-    return _yahooSession;
+  // L1: warm in-instance cache.
+  if (!force && _crumbFresh(_yahooSession)) return _yahooSession;
+
+  // L2: KV survives serverless cold starts, so we fetch a fresh crumb far less
+  // often and stay clear of Yahoo's getcrumb 429. Non-fatal if KV is unavailable.
+  if (!force) {
+    try {
+      const { getKv } = await import('./_kv.js');
+      const kv = await getKv();
+      const cached = kv && await kv.get(YAHOO_CRUMB_KV_KEY);
+      if (_crumbFresh(cached)) {
+        _yahooSession = cached;
+        return _yahooSession;
+      }
+    } catch { /* fall through to a fresh fetch */ }
   }
+
   const ua = YAHOO_HEADERS['User-Agent'];
   try {
     // Step 1: get a session cookie (fc.yahoo.com 404s but still sets the cookie).
@@ -64,6 +83,12 @@ export async function getYahooCrumb({ force = false } = {}) {
     if (!crumb || crumb.length > 40 || /[\s{}]/.test(crumb)) return _yahooSession;
 
     _yahooSession = { cookie, crumb, ts: Date.now() };
+    // Persist for sibling instances; non-fatal if KV is down.
+    try {
+      const { getKv } = await import('./_kv.js');
+      const kv = await getKv();
+      if (kv) await kv.set(YAHOO_CRUMB_KV_KEY, _yahooSession, { ex: 3600 });
+    } catch { /* ignore */ }
     return _yahooSession;
   } catch {
     return _yahooSession;
