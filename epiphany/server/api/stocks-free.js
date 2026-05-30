@@ -5,7 +5,6 @@ import {
   parseSymbols,
   setStockResponseHeaders,
   YAHOO_HEADERS,
-  FMP_BASE,
   getFmpApiKey,
 } from './stocks-shared.js';
 
@@ -111,68 +110,71 @@ async function setKvCached(key, data, ttlSec) {
   }
 }
 
-// FMP batch quote: single call for all symbols
-async function fetchFmpBatch(symbolList) {
-  const apiKey = getFmpApiKey();
-  if (!apiKey) return null;
+// FMP stable API. The legacy v3 batch endpoint (`/api/v3/quote/{symbols}`) was retired
+// Aug 31 2025 and now returns a "Legacy Endpoint" error, which is why market cap / P/E went
+// null in production. The free stable tier has no batch quote, so we fetch per-symbol
+// (chunked): `/stable/quote` for price + marketCap, `/stable/ratios-ttm` for P/E.
+const FMP_STABLE = 'https://financialmodelingprep.com/stable';
 
-  // FMP uses dots for BRK.B style, Yahoo uses BRK-B. Convert.
-  const fmpSymbols = symbolList.map(toFmpSymbol);
-  const url = `${FMP_BASE}/quote/${fmpSymbols.join(',')}?apikey=${apiKey}`;
-
+async function fmpStableGet(path, apiKey) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
   try {
-    const response = await fetch(url, { signal: controller.signal });
+    const sep = path.includes('?') ? '&' : '?';
+    const response = await fetch(`${FMP_STABLE}${path}${sep}apikey=${apiKey}`, { signal: controller.signal });
     clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      console.warn(`FMP batch error: ${response.status}`);
-      return null;
-    }
-
+    if (!response.ok) return null;
     const data = await response.json();
-    if (!Array.isArray(data) || data.length === 0) return null;
-
-    // Map FMP symbols back to Yahoo-style (BRK.B -> BRK-B)
-    const yahooSymbolMap = {};
-    symbolList.forEach(s => {
-      yahooSymbolMap[toFmpSymbol(s)] = s;
-    });
-
-    return data
-      .filter(q => q.symbol && typeof q.price === 'number')
-      .map(q => ({
-        symbol: yahooSymbolMap[q.symbol] || toYahooSymbol(q.symbol),
-        name: q.name || null,
-        shortName: q.name || null,
-        price: q.price,
-        change: q.change ?? 0,
-        changePercent: q.changesPercentage ?? 0,
-        volume: q.volume ?? 0,
-        high: q.dayHigh ?? q.price,
-        low: q.dayLow ?? q.price,
-        open: q.open ?? q.previousClose ?? q.price,
-        prevClose: q.previousClose ?? q.price,
-        fiftyTwoWeekHigh: q.yearHigh ?? null,
-        fiftyTwoWeekLow: q.yearLow ?? null,
-        marketCap: q.marketCap ?? null,
-        peRatio: q.pe ?? null,
-        eps: q.eps ?? null,
-        avgVolume: q.avgVolume ?? null,
-        beta: q.beta ?? null,
-        yield: (q.lastDiv && q.price) ? ((q.lastDiv / q.price) * 100) : null,
-        exchange: q.exchangeShortName ?? q.exchange ?? null,
-        bid: null,
-        ask: null,
-        source: 'fmp',
-      }));
-  } catch (err) {
+    return Array.isArray(data) && data.length ? data[0] : null;
+  } catch {
     clearTimeout(timeoutId);
-    console.warn(`FMP batch fetch error: ${err.message}`);
     return null;
   }
+}
+
+async function fetchFmpSymbol(yahooSym) {
+  const apiKey = getFmpApiKey();
+  if (!apiKey) return null;
+  const fmpSym = toFmpSymbol(yahooSym);
+  const q = await fmpStableGet(`/quote?symbol=${fmpSym}`, apiKey);
+  if (!q || typeof q.price !== 'number') return null;
+  // Stable quote omits P/E on the free tier; ratios-ttm carries it. (Mocks put pe on the quote.)
+  const ratios = await fmpStableGet(`/ratios-ttm?symbol=${fmpSym}`, apiKey);
+  const pe = q.pe ?? ratios?.priceToEarningsRatioTTM ?? null;
+  const eps = q.eps ?? ratios?.netIncomePerShareTTM ?? null;
+  return {
+    symbol: yahooSym,
+    name: q.name || null,
+    shortName: q.name || null,
+    price: q.price,
+    change: q.change ?? 0,
+    changePercent: q.changePercentage ?? q.changesPercentage ?? 0,
+    volume: q.volume ?? 0,
+    high: q.dayHigh ?? q.price,
+    low: q.dayLow ?? q.price,
+    open: q.open ?? q.previousClose ?? q.price,
+    prevClose: q.previousClose ?? q.price,
+    fiftyTwoWeekHigh: q.yearHigh ?? null,
+    fiftyTwoWeekLow: q.yearLow ?? null,
+    marketCap: q.marketCap ?? null,
+    peRatio: pe,
+    eps,
+    avgVolume: q.avgVolume ?? null,
+    beta: q.beta ?? null,
+    yield: (q.lastDiv && q.price) ? ((q.lastDiv / q.price) * 100) : null,
+    exchange: q.exchange ?? q.exchangeShortName ?? null,
+    bid: null,
+    ask: null,
+    source: 'fmp',
+  };
+}
+
+// Per-symbol stable fetch, chunked to respect free-tier rate limits.
+async function fetchFmpBatch(symbolList) {
+  if (!getFmpApiKey()) return null;
+  const results = await chunkedFetch(symbolList, fetchFmpSymbol, 8, 120);
+  const out = results.filter(Boolean);
+  return out.length ? out : null;
 }
 
 // Yahoo fallback: v7 batch quote (fundamentals) + v8 chart (price history)

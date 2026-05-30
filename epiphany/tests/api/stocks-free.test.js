@@ -1,10 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import handler from '../../server/api/stocks-free.js';
 
-// Reset + reassign every test so no mock queue leaks between tests
+// Reset + reassign every test so no mock queue leaks between tests.
+// FMP off by default so Yahoo-path tests aren't disturbed by per-symbol FMP calls;
+// FMP-specific tests opt in by setting process.env.FMP_API_KEY themselves.
 beforeEach(() => {
   vi.resetAllMocks();
   global.fetch = vi.fn();
+  delete process.env.FMP_API_KEY;
 });
 
 const makeChartResponse = (symbol, price = 150, prevClose = 148, opts = {}) => ({
@@ -171,9 +174,11 @@ describe('stocks-free API handler', () => {
 
   it('falls back to query2 when query1 returns non-ok', async () => {
     const { req, res, status, data } = makeReqRes('AAPL');
-    global.fetch = vi.fn()
-      .mockResolvedValueOnce(mockFail(429))  // query1 rate limited
-      .mockResolvedValueOnce(mockOk(makeChartResponse('AAPL', 245, 248))); // query2 ok
+    // URL-aware (order-independent): query1 + FMP unavailable, query2 ok
+    global.fetch = vi.fn().mockImplementation((url) => {
+      if (url.includes('query2')) return Promise.resolve(mockOk(makeChartResponse('AAPL', 245, 248)));
+      return Promise.resolve(mockFail(429));
+    });
 
     await handler(req, res);
 
@@ -183,9 +188,12 @@ describe('stocks-free API handler', () => {
 
   it('falls back to query2 on query1 network error', async () => {
     const { req, res, status, data } = makeReqRes('MSFT');
-    global.fetch = vi.fn()
-      .mockRejectedValueOnce(new Error('ECONNRESET'))
-      .mockResolvedValueOnce(mockOk(makeChartResponse('MSFT', 416, 414)));
+    // URL-aware: query1 network error, query2 ok, FMP unavailable
+    global.fetch = vi.fn().mockImplementation((url) => {
+      if (url.includes('query2')) return Promise.resolve(mockOk(makeChartResponse('MSFT', 416, 414)));
+      if (url.includes('query1')) return Promise.reject(new Error('ECONNRESET'));
+      return Promise.resolve(mockFail(404));
+    });
 
     await handler(req, res);
 
@@ -222,9 +230,12 @@ describe('stocks-free API handler', () => {
   it('treats aborted (timed out) query1 as failure and tries query2', async () => {
     const { req, res, status, data } = makeReqRes('AAPL');
     // Simulate AbortController aborting the query1 request
-    global.fetch = vi.fn()
-      .mockRejectedValueOnce(new DOMException('signal aborted', 'AbortError'))
-      .mockResolvedValueOnce(mockOk(makeChartResponse('AAPL', 245, 248)));
+    // URL-aware: query1 aborts (timeout), query2 ok, FMP unavailable
+    global.fetch = vi.fn().mockImplementation((url) => {
+      if (url.includes('query2')) return Promise.resolve(mockOk(makeChartResponse('AAPL', 245, 248)));
+      if (url.includes('query1')) return Promise.reject(new DOMException('signal aborted', 'AbortError'));
+      return Promise.resolve(mockFail(404));
+    });
 
     await handler(req, res);
 
