@@ -312,13 +312,6 @@ struct MarketsView: View {
                                 }
                             }
                             .buttonStyle(.plain)
-                            .navigationDestination(item: $feedDest) { dest in
-                                switch dest {
-                                case .news: NewsView().environment(appState)
-                                case .macro: MacroView().environment(appState)
-                                case .alerts: AlertsView().environment(appState)
-                                }
-                            }
                         }
 
                         Section {
@@ -418,6 +411,13 @@ struct MarketsView: View {
                 }
             }
             .navigationTitle("Markets")
+            .navigationDestination(item: $feedDest) { dest in
+                switch dest {
+                case .news: NewsView().environment(appState)
+                case .macro: MacroView().environment(appState)
+                case .alerts: AlertsView().environment(appState)
+                }
+            }
         }
         .sheet(item: $selectedStock) { stock in
             let stocks = filteredItems.compactMap { item -> Stock? in
