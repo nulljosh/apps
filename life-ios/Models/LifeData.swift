@@ -541,7 +541,7 @@ enum LifeData {
         LifeSection(label: "Relationships", paragraphs: [
             "I had a few relationships in my late teens and early twenties. The first serious one was with a girl I met online around 2014 who came to my prom in 2017. My parents flew me to NYC that same year to meet her. Probably the best week of my life. I think back on it so fondly that it makes everything else feel worse by comparison.",
             "The one that still affects me the most was someone I was with from April to December 2019. We moved in together and she got pregnant. The abortion was my decision initially. It was mutual but I pushed for it because neither of us could afford it. She developed psychosis and pulled knives on me. It broke us up. We both moved back in with our parents. The abortion is probably the second most confusing and painful thing that has happened in my life, right after what happened with my dad when I was little.",
-            "My longest relationship was with Natania, from roughly 2021 or 2022 through 2024 (~2.5 years). We broke up in summer 2024 — I had been effectively living at her place and her parents didn't want that.",
+            "My longest relationship was with Natania, from roughly 2021 or 2022 through 2024 (~2.5 years). We broke up in summer 2024. I had been effectively living at her place and her parents didn't want that.",
             "I'm not in a relationship right now and I don't see myself getting into one anytime soon. Past relationships left damage that I'm still dealing with years later. I haven't been able to make one last longer than about 3 years. Right now I'd rather focus on getting my own life sorted out first.",
         ], note: nil),
 
@@ -633,7 +633,7 @@ enum LifeData {
         // 28 - Financial Reality
         LifeSection(label: "Financial Reality", paragraphs: [
             "I'm in 5 to 10K of debt. I live with my parents and I don't pay for anything. I couldn't give a fuck about money if I spent a million lifetimes on this planet. There are children being bombed in Gaza. OpenAI is worth 0.8 trillion dollars. Anthropic is worth half that. There are more pressing issues than making money day by day. I live off welfare. I don't care.",
-            "In 2024 I received ~$50,000 from an ICBC settlement after being hit by a car while crossing the road (~2022 or 2023). I used it to buy a car and a dog. The rest burned through the ~2-month period I was homeless in summer 2024 — living in parking lots, shoplifting from Safeway for food. No savings remain from it.",
+            "In 2024 I received ~$50,000 from an ICBC settlement after being hit by a car while crossing the road (~2022 or 2023). I used it to buy a car and a dog. The rest burned through the ~2-month period I was homeless in summer 2024, living in parking lots, shoplifting from Safeway for food. No savings remain from it.",
             "I can sell B2B software. My parents will pay for my education, then I can get a job working in AI software engineering for 100K+ a year. It's not hard. I'm 26, I have time.",
         ], note: nil),
 
@@ -644,7 +644,7 @@ enum LifeData {
 
         // 30
         LifeSection(label: "Career & Projects", paragraphs: [
-            "I want to work in fintech or AI. Wealthsimple and Anthropic are what I'm aiming for. I'm studying calculus and biology and I tend to have a pretty strong memory for things I actually care about.",
+            "I want to work in fintech or AI. Wealthsimple and Anthropic are what I'm aiming for. I finished calculus and passed biology, and I tend to have a pretty strong memory for things I actually care about.",
             "I've built lots of projects I'm proud of. Around age 16, I co-founded Maybulb (maybulb.com) with some internet friends and built Nimble, a Wolfram Alpha menubar app for macOS. We almost sold it for $10K. The ideas and the building aren't the problem. It's getting the motivation to start in the first place, and then figuring out what's next afterwards.",
         ], note: nil),
 
