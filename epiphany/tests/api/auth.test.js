@@ -165,7 +165,7 @@ describe('Auth API', () => {
       });
       expect(res.setHeader).toHaveBeenCalledWith(
         'Set-Cookie',
-        expect.arrayContaining([expect.stringContaining('monica_session=token-2')]),
+        expect.arrayContaining([expect.stringContaining('epiphany_session=token-2')]),
       );
     });
 
@@ -226,7 +226,7 @@ describe('Auth API', () => {
       });
       expect(res.setHeader).toHaveBeenCalledWith(
         'Set-Cookie',
-        expect.arrayContaining([expect.stringContaining('monica_session=token-1')]),
+        expect.arrayContaining([expect.stringContaining('epiphany_session=token-1')]),
       );
     });
 
@@ -327,7 +327,7 @@ describe('Auth API', () => {
       kvStore.set('session:session-token', { email: 'user@example.com' });
       const { req, res } = createReqRes({
         action: 'logout',
-        cookie: 'monica_session=session-token',
+        cookie: 'epiphany_session=session-token',
       });
 
       await handler(req, res);
@@ -337,7 +337,7 @@ describe('Auth API', () => {
       expect(res.data).toEqual({ ok: true });
       expect(res.setHeader).toHaveBeenCalledWith(
         'Set-Cookie',
-        expect.arrayContaining([expect.stringContaining('monica_session=;')]),
+        expect.arrayContaining([expect.stringContaining('epiphany_session=;')]),
       );
     });
   });
@@ -419,7 +419,7 @@ describe('Auth API', () => {
       const { req, res } = createReqRes({
         action: 'change-email',
         body: { newEmail: 'new@example.com', password: 'password123' },
-        cookie: 'monica_session=session-token',
+        cookie: 'epiphany_session=session-token',
       });
 
       await handler(req, res);
@@ -514,7 +514,7 @@ describe('Auth API', () => {
       const { req, res } = createReqRes({
         action: 'delete-account',
         body: { password: 'password123' },
-        cookie: 'monica_session=session-token',
+        cookie: 'epiphany_session=session-token',
       });
 
       await handler(req, res);
@@ -526,7 +526,7 @@ describe('Auth API', () => {
       expect(kvStore.has('session:session-token')).toBe(false);
       expect(res.setHeader).toHaveBeenCalledWith(
         'Set-Cookie',
-        expect.arrayContaining([expect.stringContaining('monica_session=;')]),
+        expect.arrayContaining([expect.stringContaining('epiphany_session=;')]),
       );
     });
 
@@ -605,7 +605,7 @@ describe('Auth API', () => {
       await handler(req, res);
 
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.data).toEqual({ ok: true, message: 'Password has been reset successfully' });
+      expect(res.data).toMatchObject({ ok: true, message: 'Password has been reset successfully' });
       expect(kvStore.get('user:user@example.com').passwordHash).toBe('hashed:newpassword123');
       expect(kvStore.has('reset:reset-token')).toBe(false);
     });

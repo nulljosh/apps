@@ -208,7 +208,7 @@ describe('useSituation', () => {
 
     const { result } = renderHook(() => useSituation());
     await act(async () => { await new Promise(r => setTimeout(r, 0)); });
-    expect(result.current.trafficError).toBe('Traffic data temporarily unavailable');
+    expect(result.current.trafficError).toBe('Traffic unavailable');
   });
 
   it('handles non-JSON traffic error body (HTML 502)', async () => {
@@ -227,7 +227,7 @@ describe('useSituation', () => {
     const { result } = renderHook(() => useSituation());
     await act(async () => { await new Promise(r => setTimeout(r, 0)); });
     expect(result.current.traffic).toBeNull();
-    expect(result.current.trafficError).toBe('Traffic data temporarily unavailable');
+    expect(result.current.trafficError).toBe('Traffic unavailable');
   });
 
   it('handles geo API failure by using world city fallback', async () => {

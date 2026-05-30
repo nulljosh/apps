@@ -1,6 +1,6 @@
 # Epiphany -- Technical Whitepaper
 
-**v1.1.0** | May 2026
+**v1.5.0** | May 2026
 
 ## Overview
 
@@ -53,13 +53,25 @@ Layer toggles in Settings control which marker types render. The `mapLayers` sta
 
 ## Financial Data
 
-- **Stocks**: Yahoo Finance via `/api/stocks-free` (chunked 50/batch, 3 retries, exponential backoff, static fallback prices when all APIs fail)
+- **Stocks**: FMP stable API via `/api/stocks-free` (`/stable/quote` for price/volume/market cap, `/stable/ratios-ttm` for P/E), fetched per-symbol with retries and exponential backoff. Static fallback prices when all APIs fail.
 - **Commodities**: Gold, silver, crude oil
 - **Predictions**: Polymarket (top markets by volume, whale trade aggregation)
 - **Portfolio**: Holdings + debt + spending in Vercel KV, PDF statement upload for analysis
 - **Macro**: Unemployment, PCE, retail sales, consumer confidence, jobless claims
 
 Ticker bar always shows data. If the watchlist filters to zero matches, falls back to full stock list. If live APIs fail entirely, static FALLBACK_DATA prices render.
+
+## Trading Engine
+
+Epiphany ships an end-to-end signal-to-execution pipeline, **paper-only by default**. Real-money trading is gated behind a separate, opt-in step.
+
+- **Broker abstraction** (`src/utils/broker.js`): a common `BrokerAdapter` interface with `connect`, `placeOrder`, `getPositions`, `getBalance`. Adapters: Alpaca (paper + live), cTrader (OAuth2 REST), TradingView (alert/webhook format), Wealthsimple (read-only sync, unofficial API), IBKR (stub). Created via `createBroker(type, config)`.
+- **Strategy**: Kelly-criterion momentum. Fractional Kelly sizing (default 0.25) capped per position (default 10% equity), MA crossover entry with a momentum-strength and volatility gate, fixed stop/target plus trailing stop. Shared between the in-app simulator (`simBenchmark.js`, 60fps Monte Carlo over the full asset universe) and the backtestable Pine Script port (`tradingview/monica-kelly-strategy.pine`).
+- **Automated morning run** (`server/api/broker/morning-run.js`): Vercel cron at 9:30 AM ET on weekdays. Runs a 500-path / 30-day GBM Monte Carlo per watchlist symbol, converts bull probability into buy/sell/hold, and routes orders to Alpaca paper. Cron-secret authenticated; no-ops cleanly when Alpaca keys are absent.
+- **Manual signal route** (`server/api/broker/signal.js`): accepts `{ symbol, qty, side }`, validates, and places a single paper order.
+- **Guardrails**: paper venue by default, position caps in the sizing math, kill switch via absent/removed keys, and a full per-symbol trade log on every run.
+
+**Roadmap**: read-only multi-broker sync (Plaid / SnapTrade / Flinks) ships before any live execution; live trading follows a paper-trading proving period.
 
 ## AI Analyst
 
