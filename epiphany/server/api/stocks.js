@@ -1,5 +1,5 @@
 // Premium stock API: FMP batch (primary) + Yahoo v7 quote (fallback)
-import { parseSymbols, setStockResponseHeaders, YAHOO_HEADERS, FMP_BASE, getFmpApiKey } from './stocks-shared.js';
+import { parseSymbols, setStockResponseHeaders, YAHOO_HEADERS, FMP_BASE, getFmpApiKey, getYahooCrumb } from './stocks-shared.js';
 
 const YAHOO_PROVIDERS = process.env.NODE_ENV === 'test'
   ? ['https://query1.finance.yahoo.com']
@@ -228,23 +228,39 @@ async function enrichWithFundamentals(stocks) {
   const provider = YAHOO_PROVIDERS[0];
   const summaryMap = {};
 
-  await Promise.all(remaining.map(async (symbol) => {
-    const url = `${provider}/v10/finance/quoteSummary/${encodeURIComponent(symbol)}?modules=price,summaryDetail,defaultKeyStatistics`;
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
-    try {
-      const response = await fetch(url, { headers: YAHOO_HEADERS, signal: controller.signal });
-      clearTimeout(timeoutId);
-      if (!response.ok) return;
-      const data = await response.json();
-      const price = data?.quoteSummary?.result?.[0]?.price;
-      const sd = data?.quoteSummary?.result?.[0]?.summaryDetail;
-      const stats = data?.quoteSummary?.result?.[0]?.defaultKeyStatistics;
-      if (price || sd || stats) summaryMap[symbol] = { price, sd, stats };
-    } catch {
-      clearTimeout(timeoutId);
+  // Yahoo v10 requires a cookie+crumb (401 "Invalid Crumb" without it). Fetch the
+  // fundamentals one symbol at a time with crumb + a refresh-on-401 retry. Sequential
+  // (not Promise.all) to stay under Yahoo's 429 rate limit.
+  const fetchSummary = async (symbol) => {
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      const session = await getYahooCrumb({ force: attempt > 0 });
+      const crumbParam = session.crumb ? `&crumb=${encodeURIComponent(session.crumb)}` : '';
+      const url = `${provider}/v10/finance/quoteSummary/${encodeURIComponent(symbol)}?modules=price,summaryDetail,defaultKeyStatistics${crumbParam}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+      try {
+        const headers = session.cookie ? { ...YAHOO_HEADERS, Cookie: session.cookie } : YAHOO_HEADERS;
+        const response = await fetch(url, { headers, signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (response.status === 401 && attempt === 0) continue; // refresh crumb, retry
+        if (!response.ok) return;
+        const data = await response.json();
+        const price = data?.quoteSummary?.result?.[0]?.price;
+        const sd = data?.quoteSummary?.result?.[0]?.summaryDetail;
+        const stats = data?.quoteSummary?.result?.[0]?.defaultKeyStatistics;
+        if (price || sd || stats) summaryMap[symbol] = { price, sd, stats };
+        return;
+      } catch {
+        clearTimeout(timeoutId);
+        return;
+      }
     }
-  }));
+  };
+
+  for (let i = 0; i < remaining.length; i += 5) {
+    await Promise.all(remaining.slice(i, i + 5).map(fetchSummary));
+    if (i + 5 < remaining.length) await sleep(process.env.NODE_ENV === 'test' ? 0 : 150);
+  }
 
   return fmpEnriched.map(s => {
     const info = summaryMap[s.symbol];
