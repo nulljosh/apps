@@ -62,7 +62,8 @@ struct ContentView: View {
     @State private var hoveredSubjectId: String?
     @State private var hoveredCategoryId: String?
 
-    private let categories = QuestionBank.shared.categories
+    @Environment(CourseStore.self) private var store
+    private var categories: [Category] { store.categories }
 
     var body: some View {
         NavigationSplitView {
@@ -72,7 +73,8 @@ struct ContentView: View {
             detailView
         }
         .background(Theme.adaptiveBg)
-        .onAppear {
+        .task {
+            await store.loadCatalog()
             if selectedCategory == nil {
                 selectedCategory = categories.first
             }
@@ -216,8 +218,11 @@ struct ContentView: View {
                             isCompleted: progressManager.progress.completedSubjects.contains(subject.id),
                             isHovered: hoveredSubjectId == subject.id
                         ) {
-                            quizViewModel.startLesson(subjectId: subject.id)
-                            selectedSubject = subject
+                            Task {
+                                let qs = await store.loadCourse(subject.id)
+                                quizViewModel.startLesson(subjectId: subject.id, questions: qs)
+                                selectedSubject = subject
+                            }
                         }
                         .onHover { hovering in
                             hoveredSubjectId = hovering ? subject.id : nil

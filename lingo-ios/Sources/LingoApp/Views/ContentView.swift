@@ -61,7 +61,8 @@ struct ContentView: View {
     @State private var showGame: GameType? = nil
     @State private var quizViewModel = QuizViewModel()
 
-    private let categories = QuestionBank.shared.categories
+    @Environment(CourseStore.self) private var store
+    private var categories: [Category] { store.categories }
 
     enum GameType: String, CaseIterable, Identifiable {
         case chess, game2048, memory, minesweeper, snake
@@ -145,7 +146,8 @@ struct ContentView: View {
                     showQuiz = false
                 }
             }
-            .onAppear {
+            .task {
+            await store.loadCatalog()
                 if selectedCategory == nil {
                     selectedCategory = categories.first
                 }
@@ -276,8 +278,11 @@ struct ContentView: View {
                     isCompleted: progressManager.progress.completedSubjects.contains(subject.id)
                 ) {
                     selectedSubject = subject
-                    quizViewModel.startLesson(subjectId: subject.id)
-                    showQuiz = true
+                    Task {
+                        let qs = await store.loadCourse(subject.id)
+                        quizViewModel.startLesson(subjectId: subject.id, questions: qs)
+                        showQuiz = true
+                    }
                 }
             }
         }

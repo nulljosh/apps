@@ -39,7 +39,7 @@ final class QuizViewModel {
 
     // MARK: - Setup
 
-    func startLesson(subjectId: String) {
+    func startLesson(subjectId: String, questions: [Question]) {
         self.subjectId = subjectId
         currentQuestionIndex = 0
         correctAnswers = 0
@@ -51,8 +51,7 @@ final class QuizViewModel {
         isCorrect = false
         isFinished = false
 
-        let allQuestions = QuestionBank.shared.questions[subjectId] ?? []
-        lessonQuestions = Array(allQuestions.shuffled().prefix(totalQuestions))
+        lessonQuestions = Array(questions.shuffled().prefix(totalQuestions))
     }
 
     // MARK: - Answer handling

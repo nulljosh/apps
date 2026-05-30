@@ -97,13 +97,13 @@ final class ProgressManager {
         }
 
         let langCount = progress.completedSubjects.filter {
-            QuestionBank.languageSubjectIds.contains($0)
+            CourseStore.languageSubjectIds.contains($0)
         }.count
         if langCount >= 3 && !trophies.contains("polyglot") {
             progress.trophyIds.append("polyglot")
         }
 
-        let mathComplete = QuestionBank.mathSubjectIds.allSatisfy {
+        let mathComplete = CourseStore.mathSubjectIds.allSatisfy {
             progress.completedSubjects.contains($0)
         }
         if mathComplete && !trophies.contains("mathWiz") {
