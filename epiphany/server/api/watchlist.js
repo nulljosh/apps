@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   // GET: list watchlist
   if (req.method === 'GET') {
-    const rows = await supabaseRequest(`watchlists?user_email=eq.${encodeURIComponent(email)}&select=symbol,added_at&order=added_at.asc`);
+    const rows = await supabaseRequest(`watchlists?user_email=eq.${encodeURIComponent(email)}&select=id,user_email,symbol,added_at&order=added_at.asc`);
     return res.status(200).json(rows || []);
   }
 
