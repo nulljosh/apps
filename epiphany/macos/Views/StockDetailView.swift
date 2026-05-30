@@ -61,6 +61,14 @@ struct StockDetailView: View {
                         .font(.callout.weight(.medium))
                         .foregroundStyle(changeColor)
                     }
+                    if let sig = Indicators.signal(closes: priceHistory.map(\.close)) {
+                        Text(sig.rawValue.uppercased())
+                            .font(.caption2.weight(.bold))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 3)
+                            .background(signalColor(sig).opacity(0.18), in: Capsule())
+                            .foregroundStyle(signalColor(sig))
+                    }
                 }
                 .padding(.top, 8)
 
@@ -439,6 +447,14 @@ struct StockDetailView: View {
             return .dateTime.month(.abbreviated).day()
         default:
             return .dateTime.month(.abbreviated)
+        }
+    }
+
+    private func signalColor(_ s: Indicators.TradeSignal) -> Color {
+        switch s {
+        case .buy: return .green
+        case .sell: return .red
+        case .hold: return .gray
         }
     }
 
