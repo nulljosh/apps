@@ -28,8 +28,8 @@ struct ContentView: View {
                     TriggerFlowView()
                 }
 
-                // Anger & Conflict, Sleep + Sleep Quality Chart
-                sectionWithVisual([s[2], s[3]]) { SleepQualityChart() }
+                // Anger & Conflict, Sleep
+                sectionPage([s[2], s[3]])
 
                 // Siblings, Extended Family, Pets & Loss
                 sectionPage([s[4], s[5], s[6]])
@@ -45,7 +45,6 @@ struct ContentView: View {
 
                 // Masking & Burnout + Energy Budget + Comparison Table + Dialog Pattern
                 sectionWithVisual([s[12]]) {
-                    MaskingEnergyChart()
                     ComparisonTableView()
                     DialogBlockView()
                 }
@@ -88,8 +87,8 @@ struct ContentView: View {
                     CopingChart()
                 }
 
-                // Physical Health & Body + Body Chart
-                sectionWithVisual([s[24]]) { BodyChart() }
+                // Physical Health & Body
+                sectionPage([s[24]])
 
                 // Identity & Worldview, Screen Time + Stats
                 sectionWithVisual([s[25], s[26]]) { StatsGridView() }

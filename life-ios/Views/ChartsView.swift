@@ -14,7 +14,6 @@ struct ChartsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 32) {
             StabilityChart()
-            EventsBarChart()
         }
     }
 }

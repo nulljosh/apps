@@ -9,7 +9,7 @@
 - Work History: removed a paragraph that should not have been committed.
 - Footer: dropped the giant display name treatment, now normal text.
 - Applied to web (index.html) and iOS (LifeData.swift, ContentView.swift).
-- Deferred: duplicate-chart cleanup pass (see ROADMAP).
+- Chart cleanup: removed 4 redundant charts (events by phase, sleep quality, energy budget, same body) across web + iOS, 25 to 21 SVG / 18 to 14 Swift. Cross-platform parity fix: iOS Career line and em-dash cleanup. Regenerated life.pdf.
 
 ## [v0.0.1] — 2026-05-23
 
