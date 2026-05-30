@@ -32,7 +32,6 @@ const ROUTES = {
 
   // Everything else -- lazy loaded, isolated failures
   aqi:                  lazy(() => import('../server/api/aqi.js')),
-  ai:                   lazy(() => import('../server/api/ai.js')),
   'daily-brief':        lazy(() => import('../server/api/daily-brief.js')),
   commodities:          lazy(() => import('../server/api/commodities.js')),
   'fear-greed':         lazy(() => import('../server/api/fear-greed.js')),
@@ -63,10 +62,8 @@ const ROUTES = {
   dispatch:             lazy(() => import('../server/api/dispatch.js')),
   people:               lazy(() => import('../server/api/people.js')),
   'people-index':       lazy(() => import('../server/api/people-index.js')),
-  'people-enrich':      lazy(() => import('../server/api/people-enrich.js')),
   'people-crossref':    lazy(() => import('../server/api/people-crossref.js')),
   'people-import':      lazy(() => import('../server/api/people-import.js')),
-  'people-auto-enrich': lazy(() => import('../server/api/people-auto-enrich.js')),
   portfolio:            lazy(() => import('../server/api/portfolio.js')),
   watchlist:            lazy(() => import('../server/api/watchlist.js')),
   alerts:               lazy(() => import('../server/api/alerts.js')),

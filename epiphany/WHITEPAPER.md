@@ -83,14 +83,6 @@ Wealthsimple (read only), IBKR (stub). Read only sync
 (`server/api/broker/sync.js`) writes a holdings and cash snapshot to KV and, once
 connected, becomes the portfolio value of record.
 
-## AI Analyst
-
-Claude streaming over SSE with 10 tool functions that run in parallel when
-independent: stock lookup, portfolio query, news search, macro data, ontology CRUD,
-alert management, watchlist ops, note creation. Reachable from the persistent Ask AI
-button and the Cmd+K command bar. Requires `ANTHROPIC_API_KEY`. The app is not AI
-free; AI is the gated Premium feature.
-
 ## Data Sources
 
 | Layer | Source | Auth | Notes |
@@ -124,7 +116,7 @@ jump on load.
 
 Sessions use bcrypt with tokens in Vercel KV (Upstash Redis). Billing is Stripe
 Checkout, Free or $1 per week Premium. Free gets the map, ticker, and situation
-monitor. Premium unlocks AI, portfolio, ontology, and deep data.
+monitor. Premium unlocks portfolio, ontology, and deep data.
 
 ## Companion Apps
 

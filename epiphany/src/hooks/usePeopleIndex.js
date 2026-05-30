@@ -86,31 +86,6 @@ export function usePeopleIndex(isAuthenticated) {
     }
   }, [fetchAll]);
 
-  const enrich = useCallback(async (personId) => {
-    try {
-      const res = await fetch(`${API_BASE}/api/people-enrich`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ personId }),
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        return { ok: false, error: err.error || `Enrichment failed (${res.status})` };
-      }
-      const data = await res.json();
-      // Update local state with enrichment
-      setPeople(prev => prev.map(p =>
-        p.id === personId
-          ? { ...p, enrichment: data.enrichment, updatedAt: new Date().toISOString() }
-          : p
-      ));
-      return { ok: true, enrichment: data.enrichment, linkedAssociates: data.linkedAssociates };
-    } catch {
-      return { ok: false, error: 'Network error' };
-    }
-  }, []);
-
   const crossref = useCallback(async (personId) => {
     try {
       const url = personId
@@ -148,5 +123,5 @@ export function usePeopleIndex(isAuthenticated) {
     }
   }, [fetchAll]);
 
-  return { people, loading, fetchAll, search, upsert, remove, enrich, crossref, importContacts };
+  return { people, loading, fetchAll, search, upsert, remove, crossref, importContacts };
 }

@@ -836,8 +836,6 @@ function RelationshipGraph({ people, ontology, dark, t, onSelectPerson }) {
 
 function PersonDetail({ person, onUpdate, onDelete, onClose, dark, t, peopleIndex }) {
   const [notes, setNotes] = useState(person.notes || '');
-  const [enriching, setEnriching] = useState(false);
-  const [enrichError, setEnrichError] = useState(null);
   const [mentions, setMentions] = useState(null);
   const [mentionsLoading, setMentionsLoading] = useState(false);
   const font = '-apple-system, BlinkMacSystemFont, system-ui, sans-serif';
@@ -869,16 +867,6 @@ function PersonDetail({ person, onUpdate, onDelete, onClose, dark, t, peopleInde
 
   const handleTagsChange = (tags) => {
     onUpdate({ ...person, tags });
-  };
-
-  const handleEnrich = async () => {
-    setEnriching(true);
-    setEnrichError(null);
-    const result = await peopleIndex.enrich(person.id);
-    if (!result.ok) {
-      setEnrichError(result.error);
-    }
-    setEnriching(false);
   };
 
   return (
@@ -929,31 +917,6 @@ function PersonDetail({ person, onUpdate, onDelete, onClose, dark, t, peopleInde
           <div style={{ fontSize: 13, color: t.textSecondary, lineHeight: 1.5, maxWidth: 400, margin: '0 auto' }}>
             {person.bio}
           </div>
-        )}
-
-        {/* Enrich button */}
-        {!person.enrichment && person.searchData?.results?.length > 0 && (
-          <button
-            onClick={handleEnrich}
-            disabled={enriching}
-            style={{
-              marginTop: 10, padding: '6px 16px', borderRadius: 100,
-              border: `1px solid ${t.accent || '#0a84ff'}`,
-              background: `${t.accent || '#0a84ff'}15`,
-              color: t.accent || '#0a84ff',
-              fontSize: 12, fontWeight: 600, fontFamily: font,
-              cursor: enriching ? 'default' : 'pointer',
-              opacity: enriching ? 0.6 : 1,
-              transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
-            }}
-            onMouseEnter={e => { if (!enriching) e.currentTarget.style.transform = 'scale(1.05)'; }}
-            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-          >
-            {enriching ? 'Enriching...' : 'AI Enrich'}
-          </button>
-        )}
-        {enrichError && (
-          <div style={{ fontSize: 11, color: '#FF453A', marginTop: 6 }}>{enrichError}</div>
         )}
       </div>
 
@@ -1687,13 +1650,6 @@ export default function PeoplePanel({ dark, t, isAuthenticated }) {
         const ontObj = personToOntology({ ...person, id: saved.id });
         await ontology.upsert(ontObj);
       } catch { /* non-critical */ }
-
-      // Fire enrichment in the background
-      peopleIndex.enrich(saved.id).then(result => {
-        if (result.ok) {
-          // Enrichment data is already updated in the hook state
-        }
-      });
     }
     setIndexing(false);
   }, [results, isAuthenticated, peopleIndex, ontology]);

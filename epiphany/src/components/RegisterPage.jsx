@@ -12,7 +12,7 @@ function fadeStyle(mounted, delay = 0) {
 
 const TIERS = [
   { name: 'Free', price: '$0', period: 'forever', features: ['Map + all data layers', 'Live stock data + ticker', 'Situation monitor', 'Trading simulator'], highlight: false },
-  { name: 'Premium', price: '$1', period: '/wk', features: ['Everything in Free', 'AI Analyst (Claude)', 'Portfolio + watchlist', 'Ontology + deep data'], highlight: true },
+  { name: 'Premium', price: '$1', period: '/wk', features: ['Everything in Free', 'Portfolio + watchlist', 'Ontology + deep data'], highlight: true },
 ];
 
 export default function RegisterPage({ onRegister, onSwitchToLogin, error }) {

@@ -10,7 +10,6 @@ v1.10.4 -- Personal intelligence platform. Palantir for regular people.
 - Dark mode only, no light/auto theme
 - iOS app: four tabs (Situation, Markets, Portfolio, Settings)
 - Web app: epiphany.heyitsmejosh.com
-- AI endpoint requires ANTHROPIC_API_KEY env var on Vercel
 - Never use raw `setInterval` for API polling -- always use `useVisibilityPolling` from `src/hooks/useVisibilityPolling.js`
 
 ## Run
@@ -27,7 +26,6 @@ Deploy: Vercel. Repo: github.com/nulljosh/epiphany
 
 - **Gateway**: `api/gateway.js` -- critical routes static-imported; everything else lazy-loaded
 - **Auth**: `server/api/auth.js`, `server/api/auth-helpers.js`
-- **AI**: `server/api/ai.js` (streaming + 10 tools), `src/hooks/useAi.js`, `src/components/AiPanel.jsx`
 - **Map**: `src/components/LiveMapBackdrop.jsx` (11 data layers, MapLibre GL)
 - **Local events/places**: `server/api/local-events.js` tags every result with `kind` — `place` (Wikipedia towns/cities, OSM venues/parks) vs `event` (PredictHQ, Eventbrite, news RSS). Detail views (iOS/macOS `SituationView`, web popup) label "Place" vs "Event" and never call a town an event. Wikipedia places carry a lead `image` (pageimages) and a full intro extract (`exintro`+`exchars=600`, not `exsentences` which truncated on abbreviation periods like "(pop. approx."). Reviews/ratings are a gated follow-up — needs `GOOGLE_PLACES_API_KEY` (none set, no fake data).
 - **KV**: `server/api/_kv.js` (Upstash Redis) -- trims env var whitespace at load; wraps get/set/del to catch UrlError; always import via getKv(), never @vercel/kv directly

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 export default function DailyBrief({ t, font, dark }) {
   const [brief, setBrief] = useState(null);
-  const [aiSummary, setAiSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
 
@@ -14,29 +13,6 @@ export default function DailyBrief({ t, font, dark }) {
         if (!res.ok) return;
         const data = await res.json();
         if (!cancelled) setBrief(data);
-
-        // AI commentary — fire-and-forget, non-blocking
-        if (data.points?.length) {
-          try {
-            const aiRes = await fetch('/api/ai', {
-              method: 'POST',
-              credentials: 'include',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                messages: [{
-                  role: 'user',
-                  content: `Summarize today's market in 1 tight sentence (no preamble): ${data.points.join(' | ')}`,
-                }],
-                stream: false,
-              }),
-            });
-            if (aiRes.ok) {
-              const aiData = await aiRes.json();
-              const text = aiData?.content?.[0]?.text || aiData?.text || null;
-              if (!cancelled && text) setAiSummary(text.trim());
-            }
-          } catch { /* AI optional */ }
-        }
       } catch { /* ignore */ } finally {
         if (!cancelled) setLoading(false);
       }
@@ -58,7 +34,7 @@ export default function DailyBrief({ t, font, dark }) {
       marginBottom: 12,
       fontFamily: font,
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: aiSummary || expanded ? 8 : 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: expanded ? 8 : 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: t.textSecondary }}>Daily Brief</span>
           {ts && <span style={{ fontSize: 9, color: t.textTertiary }}>{ts}</span>}
@@ -71,11 +47,6 @@ export default function DailyBrief({ t, font, dark }) {
         </button>
       </div>
 
-      {aiSummary && (
-        <div style={{ fontSize: 11, color: t.text, lineHeight: 1.5, marginBottom: expanded ? 8 : 0 }}>
-          {aiSummary}
-        </div>
-      )}
 
       {expanded && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
