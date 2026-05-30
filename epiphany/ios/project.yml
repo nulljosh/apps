@@ -1,6 +1,7 @@
 name: Epiphany
 options:
   bundleIdPrefix: com.heyitsmejosh
+  createIntermediateGroups: true
   deploymentTarget:
     iOS: "17.0"
 settings:

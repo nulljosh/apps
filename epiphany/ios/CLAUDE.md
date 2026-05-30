@@ -23,8 +23,10 @@ v2.0.1 — Native iPhone intelligence app. 4-tab SwiftUI app (Situation, Markets
 ```bash
 xcodegen generate
 xcodebuild -project Epiphany.xcodeproj -scheme Epiphany -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
-xcodebuild test -project Epiphany.xcodeproj -scheme EpiphanyTests -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+xcodebuild test -project Epiphany.xcodeproj -scheme Epiphany -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
+
+Version lives in `project.yml` (`MARKETING_VERSION`). On every release, sync the README badge and the CLAUDE.md header line to it -- all three must match the build.
 
 ## Key Files
 
