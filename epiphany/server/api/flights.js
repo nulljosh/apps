@@ -24,7 +24,7 @@ async function getOpenSkyToken() {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ grant_type: 'client_credentials', client_id: id, client_secret: secret }),
-    signal: AbortSignal.timeout(5000),
+    signal: AbortSignal.timeout(8000),
   });
   if (!res.ok) throw new Error(`OpenSky token ${res.status}`);
   const json = await res.json();
@@ -69,7 +69,7 @@ async function fetchOpenSky(bbox) {
       headers['Authorization'] = `Bearer ${access}`;
     }
     const res = await fetch(`${OPENSKY_BASE}/states/all?${params}`, {
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(8000),
       headers,
     });
     if (!res.ok) throw new Error(`OpenSky ${res.status}`);
@@ -155,6 +155,7 @@ export default async function handler(req, res) {
       meta: buildMeta('error', bbox, {
         degraded: true,
         warning: 'OpenSky unavailable; no flight data',
+        detail: openSkyErr.message,
       }),
     });
   }
