@@ -88,15 +88,16 @@ export class SnapTradeAdapter {
   }
 
   // Normalized holdings across all linked accounts: { symbol, shares, marketValue, account }.
+  // Uses /positions — the combined /holdings endpoint was retired by SnapTrade (410 Gone).
   async getHoldings() {
     const accounts = await this.listAccounts();
     const holdings = [];
     for (const acct of accounts) {
-      const data = await this._request('GET', `/accounts/${acct.id}/holdings`, {
+      const positions = await this._request('GET', `/accounts/${acct.id}/positions`, {
         query: { userId: this.userId, userSecret: this.userSecret },
       });
-      for (const pos of data.positions ?? []) {
-        const symbol = pos.symbol?.symbol?.symbol ?? pos.symbol?.symbol ?? null;
+      for (const pos of positions ?? []) {
+        const symbol = pos.symbol?.symbol?.symbol ?? pos.symbol?.symbol ?? pos.symbol ?? null;
         if (!symbol) continue;
         holdings.push({
           symbol,

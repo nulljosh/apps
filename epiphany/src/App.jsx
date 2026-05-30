@@ -1205,8 +1205,10 @@ const reset = useCallback(() => {
         .monica-root {
           grid-template-rows: auto 1fr !important;
           grid-template-columns: 1fr !important;
+          height: 100dvh !important;
+          max-height: 100dvh !important;
         }
-        .monica-map { grid-row: 2; grid-column: 1; }
+        .monica-map { grid-row: 2; grid-column: 1; background: var(--monica-bg); }
         .monica-mobile-panel {
           display: none;
           position: fixed;
@@ -1258,12 +1260,14 @@ const reset = useCallback(() => {
       />
 
       {/* Map cell */}
-      <div className="monica-map" style={{ gridColumn: isMobileNav ? '1 / -1' : '1', height: '100%', position: 'relative', overflow: 'hidden', minHeight: 0 }}>
-        <LiveMapBackdrop
-          dark={dark}
-          mapLayers={mapLayers}
-          onMapReady={handleMapReady}
-        />
+      <div className="monica-map" style={{ gridColumn: isMobileNav ? '1 / -1' : '1', height: '100%', position: 'relative', overflow: 'hidden', minHeight: 0, background: 'var(--monica-bg)' }}>
+        {!isMobileNav && (
+          <LiveMapBackdrop
+            dark={dark}
+            mapLayers={mapLayers}
+            onMapReady={handleMapReady}
+          />
+        )}
         <MobileLayout
           t={t} dark={dark} isMobileNav={isMobileNav}
           activeTab={activeTab}

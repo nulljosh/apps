@@ -267,7 +267,9 @@ export default function StockDetail({ stock, onClose, dark, t, onNavigate, curre
   const [activeIndicators, setActiveIndicators] = useState(() => loadIndicators());
   const [showIndicatorPanel, setShowIndicatorPanel] = useState(false);
   const [editingIndicator, setEditingIndicator] = useState(null);
-  const [fullscreen, setFullscreen] = useState(false);
+  // Default to fullscreen on mobile — a short bottom sheet overflows and lets the
+  // underlying watchlist/quote panels bleed through. Full screen + opaque bg fixes it.
+  const [fullscreen, setFullscreen] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
   const oscillatorContainerRef = useRef(null);
   const oscillatorChartRef = useRef(null);
   const scrollRef = useRef(null);
@@ -685,7 +687,7 @@ export default function StockDetail({ stock, onClose, dark, t, onNavigate, curre
         style={{
           width: '100%', maxWidth: fullscreen ? '100vw' : 'min(520px, 100vw)',
           maxHeight: fullscreen ? '100dvh' : '92dvh', height: fullscreen ? '100dvh' : 'auto', overflow: 'auto',
-          background: dark ? 'rgba(28,28,30,0.95)' : 'rgba(255,255,255,0.95)',
+          background: fullscreen ? (dark ? '#1c1c1e' : '#ffffff') : (dark ? 'rgba(28,28,30,0.95)' : 'rgba(255,255,255,0.95)'),
           backdropFilter: 'blur(40px) saturate(180%)',
           WebkitBackdropFilter: 'blur(40px) saturate(180%)',
           borderRadius: fullscreen ? 0 : '16px 16px 0 0',

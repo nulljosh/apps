@@ -1,5 +1,3 @@
-import { MobileMenu, MobileMenuItem, MobileMenuDivider } from '../components/ui';
-
 const FONT = '-apple-system, BlinkMacSystemFont, system-ui, sans-serif';
 
 export default function MobileLayout({
@@ -57,44 +55,28 @@ export default function MobileLayout({
                   {pill.label}
                 </button>
               ))}
+              <div style={{ height: 1, background: 'rgba(255,255,255,0.12)', margin: '2px 4px' }} />
+              {weather && (
+                <div style={{ padding: '8px 16px', fontSize: 11, color: t.textTertiary, fontFamily: FONT }}>
+                  {weather.icon} {weather.temp}&deg;C {weather.description}
+                </div>
+              )}
+              {isFree && (
+                <button
+                  onClick={() => setShowPricing(true)}
+                  style={{ padding: '10px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, minHeight: 44, fontFamily: FONT, cursor: 'pointer', border: 'none', textAlign: 'left', background: 'transparent', color: '#0071e3' }}
+                >
+                  UPGRADE
+                </button>
+              )}
+              <button
+                onClick={logout}
+                style={{ padding: '10px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, minHeight: 44, fontFamily: FONT, cursor: 'pointer', border: 'none', textAlign: 'left', background: 'transparent', color: '#ef4444' }}
+              >
+                LOGOUT
+              </button>
             </div>
           )}
-        </div>
-        {/* Right: hamburger menu */}
-        <div style={{ pointerEvents: 'auto' }}>
-          <MobileMenu
-            t={t}
-            font={FONT}
-            buttonStyle={{
-              width: 44,
-              height: 44,
-              borderRadius: 10,
-              padding: 0,
-              background: 'rgba(255,255,255,0.18)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.35)',
-              boxShadow: 'none',
-            }}
-          >
-            {weather && (
-              <>
-                <MobileMenuItem t={t} font={FONT} style={{ color: t.textTertiary, fontSize: 11, cursor: 'default' }}>
-                  {weather.icon} {weather.temp}&deg;C {weather.description}
-                </MobileMenuItem>
-                <MobileMenuDivider t={t} />
-              </>
-            )}
-            {isFree && (
-              <MobileMenuItem t={t} font={FONT} onClick={() => setShowPricing(true)} style={{ color: '#0071e3' }}>
-                UPGRADE
-              </MobileMenuItem>
-            )}
-            <MobileMenuDivider t={t} />
-            <MobileMenuItem t={t} font={FONT} onClick={logout} style={{ color: '#ef4444' }}>
-              LOGOUT
-            </MobileMenuItem>
-          </MobileMenu>
         </div>
       </div>
 
