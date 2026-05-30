@@ -169,7 +169,9 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState(false);
   const [retryKey, setRetryKey] = useState(0);
-  const [mapGrayscale, setMapGrayscale] = useState(() => localStorage.getItem('epiphany_map_grayscale') !== 'false');
+  // Grayscale basemap is the permanent Gotham look — colored data markers ride
+  // on top. No user toggle; the monochrome map is the brand identity.
+  const mapGrayscale = true;
 
   useEffect(() => { centerRef.current = center; }, [center]);
 
@@ -421,7 +423,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
             trafficIncidents: traffic.incidents || [],
             earthquakes: eq.earthquakes || [],
             events: ev.events || [],
-            markets: Array.isArray(mk) ? mk.slice(0, 20) : [],
+            markets: Array.isArray(mk) ? mk.slice(0, 60) : [],
             newsArticles: Array.isArray(news?.articles) ? news.articles : [],
             crimeIncidents: crime.incidents || [],
             localEvents: localEv.events || [],
@@ -507,7 +509,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
       createMarker(maplibregl, mapInstanceRef.current, markersRef.current, css, title, data, lon, lat, layerType, activePopupRef, content);
 
     if (mapLayers.incidents !== false)
-    payload.incidents.slice(0, 25).forEach((inc) => {
+    payload.incidents.slice(0, 80).forEach((inc) => {
       if (inc.lon == null || inc.lat == null) return;
       const t = inc.type || 'incident';
       const cat = inc.category || 'infrastructure';
@@ -548,7 +550,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
     });
 
     if (mapLayers.traffic !== false)
-    payload.trafficIncidents.slice(0, 20).forEach((inc) => {
+    payload.trafficIncidents.slice(0, 60).forEach((inc) => {
       const p = inc.position;
       if (!p || p.lon == null || p.lat == null) return;
       addMarker(
@@ -560,7 +562,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
     });
 
     if (mapLayers.earthquakes !== false)
-    payload.earthquakes.slice(0, 12).forEach((eq) => {
+    payload.earthquakes.slice(0, 120).forEach((eq) => {
       if (eq.lon == null || eq.lat == null) return;
       const size = Math.max(10, Math.min(18, (eq.mag || 0) * 2.4));
       addMarker(
@@ -572,7 +574,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
     });
 
     if (mapLayers.news !== false)
-    payload.events.slice(0, 16).forEach((ev) => {
+    payload.events.slice(0, 120).forEach((ev) => {
       // Use server-provided country centroid first, fall back to title keyword match
       let coords = (typeof ev.lat === 'number' && typeof ev.lon === 'number')
         ? { lat: ev.lat, lon: ev.lon, label: ev.country || 'Global' }
@@ -587,7 +589,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
     });
 
     if (mapLayers.news !== false)
-    payload.newsArticles.slice(0, 12).forEach((article) => {
+    payload.newsArticles.slice(0, 120).forEach((article) => {
       let target = geoKeywordMatch(article.title);
       if (!target && typeof article.lat === 'number' && typeof article.lon === 'number') {
         const dist = Math.abs(article.lat - center.lat) + Math.abs(article.lon - center.lon);
@@ -606,7 +608,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
 
     // Crime incidents
     if (mapLayers.crime !== false)
-    payload.crimeIncidents.slice(0, 25).forEach((crime, i) => {
+    payload.crimeIncidents.slice(0, 80).forEach((crime, i) => {
       const c = extractCoords(crime);
       if (!c) return;
       const { lat, lon } = c;
@@ -620,7 +622,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
 
     // Local events
     if (mapLayers.localEvents !== false)
-    payload.localEvents.slice(0, 25).forEach((ev, i) => {
+    payload.localEvents.slice(0, 80).forEach((ev, i) => {
       const c = extractCoords(ev);
       if (!c) return;
       const { lat, lon } = c;
@@ -634,7 +636,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
 
     // Emergency services (fire stations, hospitals, ambulances) — data from incidents.js Overpass
     if (mapLayers.incidents !== false)
-    payload.emergencyIncidents.slice(0, 40).forEach((inc) => {
+    payload.emergencyIncidents.slice(0, 120).forEach((inc) => {
       const lat = inc.lat ?? inc.position?.lat;
       const lon = inc.lon ?? inc.position?.lon;
       if (lat == null || lon == null) return;
@@ -652,7 +654,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
 
     // Weather alerts
     if (mapLayers.weather !== false)
-    payload.weatherAlerts.slice(0, 10).forEach((wa, i) => {
+    payload.weatherAlerts.slice(0, 80).forEach((wa, i) => {
       const lat = wa.lat;
       const lon = wa.lon;
       if (lat == null || lon == null) return;
@@ -666,7 +668,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
 
     // Wildfires
     if (mapLayers.wildfires !== false)
-    payload.wildfires.slice(0, 30).forEach((fire, i) => {
+    payload.wildfires.slice(0, 80).forEach((fire, i) => {
       if (fire.lat == null || fire.lon == null) return;
       addMarker(
         'width:10px;height:10px;border-radius:50%;background:#f97316;animation:pulse-amber 1.6s infinite;',
@@ -680,7 +682,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
     flightMarkersRef.current.forEach(m => m.marker.remove());
     flightMarkersRef.current = [];
     if (mapLayers.flights !== false) {
-      payload.flights.slice(0, 40).forEach((fl) => {
+      payload.flights.slice(0, 120).forEach((fl) => {
         if (fl.lat == null || fl.lon == null) return;
         const cs = (fl.callsign || '').trim();
         const trackLink = cs ? `https://www.flightaware.com/live/flight/${cs}` : null;
@@ -716,7 +718,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
 
     // Emergency services (Waze + city CAD: police, fire, EMS, accidents)
     if (mapLayers.incidents !== false)
-    payload.emergencyIncidents.slice(0, 50).forEach((ev) => {
+    payload.emergencyIncidents.slice(0, 120).forEach((ev) => {
       if (ev.lat == null || ev.lng == null) return;
       const cat = ev.category || 'alert';
       const icon = cat === 'police' ? '🚔' : cat === 'fire' ? '🚒' : cat === 'ems' ? '🚑' : cat === 'accident' ? '💥' : cat === 'hazard' ? '⚠️' : cat === 'road_closed' ? '🚫' : '🚨';
@@ -731,7 +733,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
 
     // AQI readings
     if (mapLayers.aqi !== false)
-    payload.aqiReadings.slice(0, 15).forEach((reading) => {
+    payload.aqiReadings.slice(0, 40).forEach((reading) => {
       if (reading.lat == null || reading.lon == null) return;
       const aqi = reading.aqi || reading.value || 0;
       const aqiColor = aqi <= 50 ? '#22c55e' : aqi <= 100 ? '#eab308' : aqi <= 150 ? '#f97316' : '#ef4444';
@@ -746,7 +748,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
     });
 
     if (mapLayers.predictions !== false)
-    payload.markets.slice(0, 20).forEach((m) => {
+    payload.markets.slice(0, 60).forEach((m) => {
       const p = geoKeywordMatch(m.question);
       if (!p) return; // Only show predictions with a real geographic match
       // Filter: only show if matched city is within ~2 degrees of map center (viewport)
@@ -909,15 +911,6 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
       >
         ⌖
       </button>
-      <button
-        onClick={() => { const next = !mapGrayscale; setMapGrayscale(next); localStorage.setItem('epiphany_map_grayscale', String(next)); }}
-        aria-label="Toggle color map"
-        title={mapGrayscale ? 'Enable color' : 'Grayscale'}
-        style={{ position: 'absolute', right: 14, bottom: 98, zIndex: 2, width: 34, height: 34, border: '1px solid rgba(255,255,255,0.24)', borderRadius: 9999, background: mapGrayscale ? 'rgba(2,6,23,0.82)' : 'rgba(59,130,246,0.7)', color: '#fff', font: '700 14px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-      >
-        {mapGrayscale ? '◑' : '●'}
-      </button>
-
       {mapLayers.flights !== false && payload.noFlights && (
         <div style={{ position: 'absolute', bottom: 146, left: '50%', transform: 'translateX(-50%)', zIndex: 3, pointerEvents: 'none' }}>
           <div style={{ background: 'rgba(2,6,23,0.72)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.14)', borderRadius: 8, padding: '5px 12px', color: '#94a3b8', fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,system-ui,sans-serif', whiteSpace: 'nowrap', letterSpacing: '0.04em' }}>
