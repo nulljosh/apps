@@ -629,8 +629,8 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
       const { lat, lon } = c;
       addMarker(
         'width:14px;height:14px;border-radius:50%;background:#a855f7;animation:pulse-cyan 2.2s infinite;',
-        ev.title || 'Event',
-        { type: 'local-event', title: ev.title || 'Local Event', detail: ev.description || ev.venue || ev.source || 'Nearby event', level: 'local', source: ev.source || 'Event data', link: ev.url || mapsLink(lat, lon) },
+        ev.title || (ev.kind === 'place' ? 'Place' : 'Event'),
+        { type: 'local-event', title: ev.title || (ev.kind === 'place' ? 'Place' : 'Event'), detail: ev.description || ev.venue || ev.source || (ev.kind === 'place' ? 'Nearby place' : 'Nearby event'), level: ev.kind === 'place' ? 'place' : 'event', source: ev.source || 'Map data', link: ev.url || mapsLink(lat, lon), image: ev.image || null },
         lon, lat, 'localEvents'
       );
     });
