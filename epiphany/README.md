@@ -62,3 +62,19 @@ PWA, avatar sync across web and native. Palantir-style icon on all platforms.
 Monica to Epiphany rename across web, iOS, macOS, watchOS.
 
 Open items live in [ROADMAP.md](ROADMAP.md).
+
+## Tomorrow — free API keys (paste and go)
+
+Two free keys unblock macro + flights. Sign up (2 min each), then run:
+
+```bash
+cd ~/Documents/Code/apps/epiphany
+# FRED (macro) — key from fredaccount.stlouisfed.org -> API Keys
+vercel env rm FRED_API_KEY production -y && printf 'YOUR_FRED_KEY' | vercel env add FRED_API_KEY production
+# OpenSky (flights) — account at opensky-network.org
+printf 'USERNAME' | vercel env add OPENSKY_USERNAME production
+printf 'PASSWORD' | vercel env add OPENSKY_PASSWORD production
+vercel --prod
+```
+
+Skipped (need billing): Google Places, gas prices.
