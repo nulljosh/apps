@@ -13,12 +13,13 @@ Done this pass (see git): daily-brief rewired off FMP onto Yahoo crumb path (fix
 button (AI was only reachable via Cmd+K), whitepaper rewritten algorithms-first,
 ROADMAP/README cleanup.
 
+Done 2026-05-30:
+- **Macro** — valid `FRED_API_KEY` set on Vercel, `/api/macro` returns live series.
+- **Flights** — OpenSky OAuth2 client credentials (`OPENSKY_CLIENT_ID` +
+  `OPENSKY_CLIENT_SECRET`) set; `flights.js` does the token exchange (Basic auth
+  was retired in 2025).
+
 Blocked on keys / accounts (no fake data, cannot self-provision):
-- **Macro returns `[]`** — `FRED_API_KEY` is set on Vercel but FRED rejects it
-  (every series empty). Needs a valid FRED key, then redeploy. Free at
-  fredaccount.stlouisfed.org → API Keys.
-- **Flights "temporarily unavailable"** — OpenSky anon is throttled. Set
-  `OPENSKY_USERNAME` + `OPENSKY_PASSWORD` (free account) on Vercel.
 - **POI map layers** (coffee, restaurants, gas, groceries, parks, shopping) +
   Google-Maps-style place detail (phone, hours, photo carousel) — endpoints stubbed
   (`places.js`, `pois.js`, `gas.js`); blocked on `GOOGLE_PLACES_API_KEY` /

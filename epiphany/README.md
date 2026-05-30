@@ -71,10 +71,11 @@ Two free keys unblock macro + flights. Sign up (2 min each), then run:
 cd ~/Documents/Code/apps/epiphany
 # FRED (macro) — key from fredaccount.stlouisfed.org -> API Keys
 vercel env rm FRED_API_KEY production -y && printf 'YOUR_FRED_KEY' | vercel env add FRED_API_KEY production
-# OpenSky (flights) — account at opensky-network.org
-printf 'USERNAME' | vercel env add OPENSKY_USERNAME production
-printf 'PASSWORD' | vercel env add OPENSKY_PASSWORD production
-vercel --prod
+# OpenSky (flights) — OAuth2 API client at opensky-network.org → Account → API Clients
+# (Basic auth was retired in 2025; download the client credentials JSON)
+printf 'CLIENT_ID' | vercel env add OPENSKY_CLIENT_ID production
+printf 'CLIENT_SECRET' | vercel env add OPENSKY_CLIENT_SECRET production
+git push   # epiphany auto-deploys from the apps monorepo
 ```
 
 Skipped (need billing): Google Places, gas prices.
