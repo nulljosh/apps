@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'lingo-v2';
+const CACHE_VERSION = 'lingo-v3';
 
 const APP_SHELL = [
     './',

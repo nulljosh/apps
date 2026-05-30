@@ -2,7 +2,7 @@
 
 # Lingo
 
-![version](https://img.shields.io/badge/version-v1.2.0-blue)
+![version](https://img.shields.io/badge/version-v1.3.0-blue)
 
 Interactive learning platform -- languages, programming, computers, math, science, and more.
 
@@ -11,8 +11,11 @@ Interactive learning platform -- languages, programming, computers, math, scienc
 ## Features
 
 - Data-driven courses: lazy-loaded JSON packs, scales past 100+ courses
+- Skill-tree lesson path: units, locked/unlocked nodes, crowns on completed lessons
+- Computers track: digital-literacy course (hardware, files, internet, security, AI, command line)
 - Exercise types: translation, sentence building, listening, typing, math, multiple choice
 - SM-2 spaced repetition with per-card review scheduling
+- Audio pronunciation via on-device text-to-speech (per-course language voice)
 - XP, daily streaks, lives, trophies
 - Speech recognition for spoken answers
 - Offline-capable PWA (service worker caches catalog + visited packs)
@@ -38,14 +41,20 @@ npx vercel --prod
 
 - [x] Spaced repetition algorithm
 - [x] Offline mode (service worker)
-- [ ] Skill-tree lesson path (units, crowns)
-- [ ] Computer/digital-literacy track
+- [x] Skill-tree lesson path (units, crowns)
+- [x] Computer/digital-literacy track
+- [x] Audio pronunciation (TTS)
 - [ ] Live code runner (Pyodide + sandboxed JS)
 - [ ] 100+ languages via content generator
-- [ ] Audio pronunciation (TTS)
 - [ ] Accounts + cloud sync + leaderboard (Supabase)
 
 ## Changelog
+
+v1.3.0
+- Skill-tree lesson path: units, locked/unlocked nodes, per-lesson crowns, per-lesson progress.
+- New Computers category + `Computer Basics` digital-literacy course (6 units, real content).
+- Deep, unit-structured Spanish and Python courses replace the flat migrated banks.
+- Text-to-speech pronunciation on listening exercises (per-course language voice).
 
 v1.2.0
 - Course content moved to lazy-loaded JSON packs (`content/`). Removed dead PocketBase scaffolding.

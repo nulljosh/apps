@@ -156,6 +156,18 @@
         }
       ]
     },
+    "computers": {
+      "title": "Choose a computer skill",
+      "subjects": [
+        {
+          "id": "computers",
+          "name": "Computer Basics",
+          "icon": "fa-solid fa-computer",
+          "level": "Digital Literacy",
+          "packPath": "content/courses/computers.json"
+        }
+      ]
+    },
     "math": {
       "title": "Choose a math topic",
       "subjects": [

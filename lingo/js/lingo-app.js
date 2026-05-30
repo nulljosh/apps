@@ -59,6 +59,7 @@ const DEFAULT_PROGRESS = {
     streak: 0,
     hearts: 5,
     completed_subjects: [],
+    lessons_completed: {},
     trophy_ids: [],
     last_played: ''
 };
@@ -82,7 +83,8 @@ let gameState = {
     answerWords: [],
     lessonQuestions: [],
     currentQuestionData: null,
-    completedSubjects: []
+    completedSubjects: [],
+    selectedLesson: null
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -232,7 +234,14 @@ function getDueCount(subjectId) {
     }).length;
 }
 
-function getQuestionsForLesson(subjectId) {
+function getQuestionsForLesson(subjectId, subset) {
+    // When a skill-tree lesson is chosen, play exactly its exercises; otherwise
+    // draw from the whole subject (review mode), due cards first.
+    if (Array.isArray(subset)) {
+        const ordered = [...subset];
+        shuffle(ordered);
+        return ordered;
+    }
     const subjectQuestions = questions[subjectId] || [];
     const srs = getSrsData();
     const now = new Date();
@@ -520,6 +529,7 @@ function setupEventListeners() {
         });
     });
 
+    document.getElementById('treeBackBtn').addEventListener('click', resetToHome);
     document.getElementById('checkBtn').addEventListener('click', checkAnswer);
     document.getElementById('skipBtn').addEventListener('click', skipQuestion);
     document.getElementById('continueBtn').addEventListener('click', continueLearning);
@@ -821,28 +831,151 @@ function selectSubject(card) {
     if (card.dataset.game === 'true') {
         setTimeout(() => startGame(card.dataset.subject), 300);
     } else {
-        setTimeout(() => startLesson(), 300);
+        setTimeout(() => showSkillTree(card.dataset.subject), 300);
     }
+}
+
+// Ordered list of every lesson in a course (units flattened), with unit titles.
+function getLessonOrder(pack) {
+    const order = [];
+    (pack.units || []).forEach((unit) => {
+        (unit.lessons || []).forEach((lesson) => {
+            order.push({ unitId: unit.id, unitTitle: unit.title, lesson });
+        });
+    });
+    return order;
+}
+
+function lessonKey(subjectId, lessonId) {
+    return `${subjectId}/${lessonId}`;
+}
+
+function isLessonComplete(subjectId, lessonId) {
+    return Boolean(loadProgress().lessons_completed[lessonKey(subjectId, lessonId)]);
+}
+
+// A lesson unlocks when it is first in the course or the previous lesson is done.
+function isLessonUnlocked(subjectId, order, index) {
+    if (index === 0) return true;
+    return isLessonComplete(subjectId, order[index - 1].lesson.id);
+}
+
+function makeIcon(faClass) {
+    const icon = document.createElement('i');
+    icon.className = faClass;
+    icon.setAttribute('aria-hidden', 'true');
+    return icon;
+}
+
+async function showSkillTree(subjectId) {
+    gameState.selectedSubject = subjectId;
+    await loadCourse(subjectId);
+    const pack = PACK_CACHE[subjectId];
+    if (!pack) { startLesson(); return; }
+    document.getElementById('subjectSelection').style.display = 'none';
+    document.getElementById('resultContainer').classList.remove('active');
+    document.getElementById('lessonContainer').classList.remove('active');
+    document.getElementById('skillTree').classList.add('active');
+    renderSkillTree(pack);
+}
+
+function renderSkillTree(pack) {
+    const meta = findSubjectMeta(pack.id) || {};
+    const treeIcon = document.getElementById('treeIcon');
+    treeIcon.textContent = '';
+    treeIcon.appendChild(makeIcon(meta.icon || pack.icon || 'fa-solid fa-book'));
+    document.getElementById('treeTitle').textContent = pack.name;
+    const order = getLessonOrder(pack);
+    const done = order.filter((entry) => isLessonComplete(pack.id, entry.lesson.id)).length;
+    document.getElementById('treeSub').textContent = `${done} / ${order.length} lessons complete`;
+
+    const host = document.getElementById('treeUnits');
+    host.textContent = '';
+    let flatIndex = 0;
+    (pack.units || []).forEach((unit) => {
+        const unitEl = document.createElement('div');
+        unitEl.className = 'tree-unit';
+        const heading = document.createElement('div');
+        heading.className = 'tree-unit-title';
+        heading.textContent = unit.title;
+        unitEl.appendChild(heading);
+
+        (unit.lessons || []).forEach((lesson) => {
+            const index = flatIndex;
+            flatIndex += 1;
+            const complete = isLessonComplete(pack.id, lesson.id);
+            const unlocked = isLessonUnlocked(pack.id, order, index);
+            const node = document.createElement('button');
+            node.className = 'tree-node' + (complete ? ' complete' : '') + (unlocked ? '' : ' locked');
+            node.disabled = !unlocked;
+            node.setAttribute('aria-label', `${lesson.title}${complete ? ', complete' : unlocked ? '' : ', locked'}`);
+            const dot = document.createElement('span');
+            dot.className = 'tree-node-dot';
+            dot.appendChild(makeIcon(complete ? 'fa-solid fa-crown' : unlocked ? 'fa-solid fa-play' : 'fa-solid fa-lock'));
+            const label = document.createElement('span');
+            label.className = 'tree-node-label';
+            label.textContent = lesson.title;
+            node.appendChild(dot);
+            node.appendChild(label);
+            if (unlocked) node.addEventListener('click', () => startLesson(lesson.id));
+            unitEl.appendChild(node);
+        });
+        host.appendChild(unitEl);
+    });
 }
 
 function resetToHome() {
     document.getElementById('lessonContainer').classList.remove('active');
     document.getElementById('resultContainer').classList.remove('active');
+    document.getElementById('skillTree').classList.remove('active');
     document.getElementById('subjectSelection').style.display = 'block';
+    gameState.selectedLesson = null;
     document.querySelectorAll('.subject-card').forEach((card) => card.classList.remove('selected'));
     renderSubjects(gameState.selectedCategory);
 }
 
-async function startLesson() {
+// Speak text aloud with the course's language voice (real audio, no asset files).
+function speak(text, lang) {
+    if (!text || !('speechSynthesis' in window)) return;
+    try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        if (lang) utter.lang = lang;
+        utter.rate = 0.9;
+        window.speechSynthesis.speak(utter);
+    } catch (_) { /* TTS unavailable */ }
+}
+
+function currentLang() {
+    const meta = findSubjectMeta(gameState.selectedSubject);
+    return (meta && meta.lang) || LANG_CODES[gameState.selectedSubject] || 'en-US';
+}
+
+async function startLesson(lessonId) {
+    gameState.selectedLesson = lessonId || null;
     document.getElementById('subjectSelection').style.display = 'none';
+    document.getElementById('skillTree').classList.remove('active');
     document.getElementById('lessonContainer').classList.add('active');
     gameState.currentQuestion = 0;
     gameState.correctAnswers = 0;
     gameState.hearts = 5;
     await loadCourse(gameState.selectedSubject);
-    gameState.lessonQuestions = getQuestionsForLesson(gameState.selectedSubject);
+    const subset = lessonId ? getLessonExercises(gameState.selectedSubject, lessonId) : null;
+    gameState.lessonQuestions = getQuestionsForLesson(gameState.selectedSubject, subset);
+    gameState.totalQuestions = gameState.lessonQuestions.length || 10;
     updateStats();
     loadQuestion();
+}
+
+// Pull a single lesson's exercises (stamped with ids) from a cached pack.
+function getLessonExercises(subjectId, lessonId) {
+    const pack = PACK_CACHE[subjectId];
+    if (!pack) return [];
+    for (const unit of pack.units || []) {
+        const lesson = (unit.lessons || []).find((entry) => entry.id === lessonId);
+        if (lesson) return lesson.exercises;
+    }
+    return [];
 }
 
 function loadQuestion() {
@@ -990,8 +1123,16 @@ function renderQuestion(question) {
         icon.style.opacity = '0.5';
         icon.setAttribute('aria-hidden', 'true');
         questionText.appendChild(icon);
-        questionText.appendChild(document.createTextNode(question.audio));
+        const replayBtn = document.createElement('button');
+        replayBtn.type = 'button';
+        replayBtn.className = 'btn tts-btn';
+        replayBtn.setAttribute('aria-label', 'Play audio');
+        replayBtn.appendChild(makeIcon('fa-solid fa-volume-high'));
+        replayBtn.appendChild(document.createTextNode(' Play'));
+        replayBtn.addEventListener('click', () => speak(question.audio || question.answer, currentLang()));
+        questionText.appendChild(replayBtn);
         container.appendChild(questionText);
+        speak(question.audio || question.answer, currentLang());
 
         if (hasSpeech) {
             const micBtn = document.createElement('button');
@@ -1195,11 +1336,18 @@ function showResults() {
         gameState.completedSubjects.push(gameState.selectedSubject);
     }
 
+    // Crown a skill-tree lesson only when the player survived (hearts remaining).
+    const lessonsCompleted = { ...progress.lessons_completed };
+    if (gameState.selectedLesson && gameState.hearts > 0) {
+        lessonsCompleted[lessonKey(gameState.selectedSubject, gameState.selectedLesson)] = true;
+    }
+
     saveProgress({
         xp: gameState.xp,
         streak: gameState.streak,
         hearts: Math.max(gameState.hearts, 0),
         completed_subjects: [...gameState.completedSubjects],
+        lessons_completed: lessonsCompleted,
         last_played: today
     });
 
@@ -1216,9 +1364,18 @@ function showResults() {
 
 function continueLearning() {
     document.getElementById('resultContainer').classList.remove('active');
+    document.getElementById('lessonContainer').classList.remove('active');
+    // Came from a skill-tree lesson: return to the tree so the new crown and the
+    // next unlocked lesson are visible. Otherwise fall back to subject select.
+    const pack = PACK_CACHE[gameState.selectedSubject];
+    if (gameState.selectedLesson && pack) {
+        gameState.selectedLesson = null;
+        document.getElementById('skillTree').classList.add('active');
+        renderSkillTree(pack);
+        return;
+    }
     document.getElementById('subjectSelection').style.display = 'block';
     document.querySelectorAll('.subject-card').forEach((card) => card.classList.remove('selected'));
-    document.getElementById('lessonContainer').classList.remove('active');
     renderSubjects(gameState.selectedCategory);
 }
 

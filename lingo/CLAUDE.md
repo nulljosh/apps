@@ -1,5 +1,5 @@
 # Lingo
-v1.2.0
+v1.3.0
 
 ## Rules
 
@@ -18,6 +18,17 @@ Courses are data, not code. The runtime never hardcodes lessons.
 - `content/schema.json` -- the pack contract. Shared source of truth for web, native (lingo-ios/macos), and the generator.
 
 A course appears in the catalog only if it has a real pack (no empty shells, no fake data).
+
+Categories: `languages`, `programming`, `computers`, `math`, `science`, `skills` (+ `games`).
+
+## Skill tree
+
+Selecting a subject opens a unit/lesson path (`#skillTree`) before the lesson runner. A
+lesson unlocks when it is first in the course or the previous lesson is complete; completed
+lessons show a crown. Per-lesson completion lives in `lessons_completed` (keyed
+`<subjectId>/<lessonId>`) inside `lingo.progress`. Starting a tree lesson plays exactly that
+lesson's exercises; the legacy whole-subject path (`startLesson()` with no id) stays as review
+mode. Listening exercises speak via on-device `speechSynthesis` using the pack `lang`.
 
 ## Scripts
 
