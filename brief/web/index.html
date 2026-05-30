@@ -99,6 +99,7 @@
   <div class="case-switcher">
     <button class="cs-btn active" data-case="rcmp" onclick="setActiveCase('rcmp')">CASE-0001</button>
     <button class="cs-btn" data-case="family" onclick="setActiveCase('family')">CASE-0002</button>
+    <button class="cs-btn" data-case="muni" onclick="setActiveCase('muni')">CASE-0003</button>
   </div>
   <div class="strip-pill case-rcmp" id="stripPill" title="Live settlement projection">
     <span id="pillVal">$&mdash;</span>
@@ -116,6 +117,7 @@
     <div class="l">Case Brief &middot; Volume I</div>
     <div class="r case-rcmp">Charter ss. 7 &middot; 8 &middot; 9 &middot; 10(b) &middot; 12</div>
     <div class="r case-family">BC Privacy Act s.3 &middot; IIMS &middot; Negligence</div>
+    <div class="r case-muni">BC OLA s.3 &middot; Municipal negligence &middot; s.285 notice</div>
   </div>
   <h1 class="hero-title case-rcmp">
     Trommel <span class="v">v.</span> Attorney General of Canada
@@ -123,8 +125,12 @@
   <h1 class="hero-title case-family">
     Trommel <span class="v">v.</span> Trommel
   </h1>
+  <h1 class="hero-title case-muni">
+    Baitz <span class="v">v.</span> City of Surrey
+  </h1>
   <p class="hero-sub case-rcmp">Charter violations arising from a warrantless wellness-call entry. Langley, British Columbia &mdash; August 1, 2023, ~11:00 AM. Two RCMP officers, one dwelling, no underlying crime.</p>
   <p class="hero-sub case-family">Family tort claims arising from appropriation of personality, intentional infliction of mental suffering, parental negligence, and wrongful eviction. BC Supreme Court &mdash; discovery May 2026 &mdash; basic limit May 2028.</p>
+  <p class="hero-sub case-muni">Municipal slip-and-fall. Sylvia Baitz fell on a sunken sidewalk panel on Main Street, Surrey BC. Bilateral knee injuries. <strong>BC Community Charter s.285 notice is due within 2 months of the incident</strong> &mdash; send before anything else or the claim is barred.</p>
 
   <div class="clock case-rcmp">
     <div class="clock-hd">
@@ -177,6 +183,23 @@
       <div class="sub">All heads &middot; punitive granted</div>
     </div>
   </div>
+  <div class="tristat case-muni">
+    <div class="col">
+      <div class="lbl">Floor</div>
+      <div class="val tnum">$6<span style="font-size:0.55em;color:var(--muted)">&ndash;8k</span></div>
+      <div class="sub">Minor injury cap + medical</div>
+    </div>
+    <div class="col likely">
+      <div class="lbl">Most likely</div>
+      <div class="val tnum">$8<span style="font-size:0.55em;color:var(--muted)">&ndash;14k</span></div>
+      <div class="sub">Notice sent &middot; Surrey settles</div>
+    </div>
+    <div class="col">
+      <div class="lbl">Best case</div>
+      <div class="val tnum">$20<span style="font-size:0.55em;color:var(--muted)">&ndash;40k</span></div>
+      <div class="sub">Joint injury confirmed</div>
+    </div>
+  </div>
 
   <div class="tabs">
     <button class="tab-btn active" data-tab="case"><span class="n">I.</span>The Case</button>
@@ -203,6 +226,14 @@
     <div class="na-body">
       <div class="na-title">Law Society BC referral &mdash; find tort counsel</div>
       <div class="na-note">Ask for civil litigation with intentional torts / appropriation of personality. 30-min free consult.</div>
+    </div>
+    <a class="na-call" href="tel:18006631919">1-800-663-1919 &rarr;</a>
+  </div>
+  <div class="next-action case-muni">
+    <div class="na-lbl">Next action &middot; time-gated</div>
+    <div class="na-body">
+      <div class="na-title">Send the s.285 notice to Surrey &mdash; due within 2 months</div>
+      <div class="na-note">Registered mail + email to the Surrey City Clerk, 13450 104 Ave. Miss the window and the claim is barred. Then book a free PI consult.</div>
     </div>
     <a class="na-call" href="tel:18006631919">1-800-663-1919 &rarr;</a>
   </div>
@@ -233,6 +264,22 @@
       <div class="row"><div class="k">Discovery</div><div class="v">May 2026</div></div>
       <div class="row"><div class="k">Hard deadline</div><div class="v">May 1, 2028 <em>&middot; 2-yr basic from May 2026 discovery</em></div></div>
       <div class="row"><div class="k">Core claims</div><div class="v">Appropriation of personality &middot; IIMS &middot; parental negligence &middot; battery &middot; wrongful eviction</div></div>
+    </div>
+  </section>
+
+  <section class="section case-muni">
+    <div class="section-hd"><div class="lbl"><b>Facts</b> &middot; cover sheet</div><div class="hint">notice required &middot; urgent</div></div>
+    <div class="facts">
+      <div class="row"><div class="k">Plaintiff</div><div class="v">Sylvia Baitz</div></div>
+      <div class="row"><div class="k">Defendant</div><div class="v">City of Surrey</div></div>
+      <div class="row"><div class="k">Forum</div><div class="v">BC Small Claims / Supreme</div></div>
+      <div class="row"><div class="k">Incident date</div><div class="v danger">[DATE] &mdash; confirm immediately</div></div>
+      <div class="row"><div class="k">Location</div><div class="v">Main Street, Surrey BC <em>&middot; near intersection</em></div></div>
+      <div class="row"><div class="k">Hazard</div><div class="v">Sunken/uneven sidewalk panel <em>&middot; gravel displaced, raised edge</em></div></div>
+      <div class="row"><div class="k">Injury</div><div class="v">Bilateral knee lacerations &middot; road rash <em>&middot; bandaged, bleeding</em></div></div>
+      <div class="row"><div class="k">Photos</div><div class="v">3 preserved &middot; IMG_9319 (dip), IMG_9320 (scene), IMG_9322 (injuries)</div></div>
+      <div class="row"><div class="k">Notice deadline</div><div class="v danger">2 months from incident &middot; Community Charter s.285</div></div>
+      <div class="row"><div class="k">Status</div><div class="v danger">Notice required &mdash; urgent</div></div>
     </div>
   </section>
 
@@ -311,6 +358,11 @@
         <div>Trial ceiling <b>$1.5M+</b></div>
         <div>Deadline <b>May 2028</b></div>
       </div>
+      <div class="r case-muni">
+        <div>Most likely <b>$8k &ndash; $14k</b></div>
+        <div>Best case <b>$20k &ndash; $40k</b></div>
+        <div>Floor <b>$6k &ndash; $8k</b> &middot; minor injury cap</div>
+      </div>
     </div>
     <div class="stack-toggle">
       <button data-m="conservative">Conservative</button>
@@ -365,6 +417,14 @@
     <div class="na-body">
       <div class="na-title">Law Society BC referral &mdash; find tort counsel</div>
       <div class="na-note">5 firms listed &middot; none contacted yet</div>
+    </div>
+    <a class="na-call" href="tel:18006631919">1-800-663-1919 &rarr;</a>
+  </div>
+  <div class="next-action case-muni">
+    <div class="na-lbl">Next action &middot; time-gated</div>
+    <div class="na-body">
+      <div class="na-title">Send the s.285 notice, then retain PI counsel on contingency</div>
+      <div class="na-note">3 firms listed &middot; Law Society PI referral, Slater Vecchio, ASFS (Surrey local)</div>
     </div>
     <a class="na-call" href="tel:18006631919">1-800-663-1919 &rarr;</a>
   </div>

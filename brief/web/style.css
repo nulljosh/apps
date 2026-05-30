@@ -648,6 +648,10 @@ footer { margin-top: 80px; padding: 28px 0; border-top: 1px solid var(--rule); d
 .cs-btn.active { background:var(--danger); color:#fff; border-color:var(--danger); }
 .cs-btn:not(.active):hover { background:var(--paper-2); color:var(--ink); }
 
-body[data-activecase="family"] .case-rcmp { display:none !important; }
-body[data-activecase="rcmp"] .case-family { display:none !important; }
-.case-family { display:none; }
+/* N-case visibility: hide only non-active blocks; active blocks keep their natural display */
+.case-family, .case-muni { display:none; }
+body[data-activecase="rcmp"]   .case-family, body[data-activecase="rcmp"]   .case-muni,
+body[data-activecase="family"] .case-rcmp,   body[data-activecase="family"] .case-muni,
+body[data-activecase="muni"]   .case-rcmp,   body[data-activecase="muni"]   .case-family { display:none !important; }
+body[data-activecase="family"] .case-family,
+body[data-activecase="muni"]   .case-muni { display:revert !important; }

@@ -8,8 +8,8 @@ v6.3.0 — Cross-platform litigation tool. Web + iOS + macOS. Private.
   unknown (pending ATIP). s.19 incapacity (not s.18). Law Society limitation read is the
   lead action.
 - **CASE-0002**: Trommel v. Trommel (family tort)
-- **CASE-0003**: Baitz v. City of Surrey (municipal negligence) — iOS + macOS only; not yet
-  ported to web
+- **CASE-0003**: Baitz v. City of Surrey (municipal negligence) — Web + iOS + macOS. Web port
+  via a `CASES` registry in `web/script.js` (grandmother's-fall s.285 notice case)
 
 ## Structure
 

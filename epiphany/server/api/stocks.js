@@ -289,8 +289,9 @@ export default async function handler(req, res) {
 
     stocks = stocks.filter(q => q.symbol && typeof q.price === 'number');
 
-    // Enrich with fundamentals if missing
-    const needsEnrichment = stocks.some(s => s.marketCap == null || !s.name || s.name === s.symbol);
+    // Enrich with fundamentals if missing. Treat 0 as missing: FMP free tier returns
+    // marketCap/peRatio of 0 for some stocks, which is always a data error, not a real value.
+    const needsEnrichment = stocks.some(s => !s.marketCap || !s.peRatio || !s.name || s.name === s.symbol);
     if (needsEnrichment) {
       try {
         const enriched = await enrichWithFundamentals(stocks);

@@ -52,6 +52,6 @@ MIT 2026, Joshua Trommel
 
 ## Roadmap
 - [ ] Settings > Connect to tally: fix the broken API route (currently returns 'tally unknown')
-- [ ] Stocks view: make it full-screen with an X to dismiss
-- [ ] Stocks view: reliably populate market cap and P/E (recurring failure)
+- [x] Stocks view: full-screen toggle added beside the close button (StockDetail.jsx)
+- [x] Stocks view: market cap / P/E reliability — fresh-cache now gated on ≥50% fundamentals coverage (stops serving partial/empty data for the full TTL); stocks.js enrichment treats 0 as missing
 - [ ] Flights nearby: stop the intermittent 'flights temporarily unavailable'

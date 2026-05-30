@@ -450,9 +450,11 @@ export default async function handler(req, res) {
       });
     }
 
-    // Only cache if at least one stock has pe or marketCap populated.
-    // Caching a null-fundamentals response locks out the fallback chain for the full TTL.
-    const hasFundamentals = stocks.some(s => s.peRatio || s.marketCap);
+    // Only cache as fresh if fundamentals coverage is high enough.
+    // A partial/empty response (most stocks missing pe & marketCap) would otherwise
+    // lock out the FMP/Yahoo fallback chain for the full TTL and serve unreliable data.
+    const withFundamentals = stocks.filter(s => s.peRatio || s.marketCap).length;
+    const hasFundamentals = stocks.length > 0 && withFundamentals / stocks.length >= 0.5;
     if (ENABLE_CACHE) {
       cache.set(cacheKey, { ts: Date.now(), data: stocks });
     }
@@ -464,7 +466,7 @@ export default async function handler(req, res) {
     } else {
       // Still write stale so we have something on total failure, but skip fresh
       // so the next request retries the full pipeline instead of serving cached nulls.
-      console.warn('stocks-free: fundamentals all null/zero, skipping fresh KV cache');
+      console.warn(`stocks-free: fundamentals coverage ${withFundamentals}/${stocks.length} below 50%, skipping fresh KV cache`);
       await setKvCached(kvKeys.stale, stocks, KV_STALE_IF_ERROR_TTL_SEC);
     }
 

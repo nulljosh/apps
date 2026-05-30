@@ -313,17 +313,92 @@ const FAMILY_TIMELINE = [
 
 const FAMILY_CALL_SCRIPT = '30-SECOND — USE VERBATIM (Law Society referral):\n"Hi, my name is Josh Trommel. I\'m looking for a civil litigation lawyer with experience in intentional torts and appropriation of personality in BC. I have claims against my parents arising from commercial use of my likeness without consent, intentional infliction of mental suffering over a 20-year period, parental negligence, and wrongful eviction into homelessness. Discovery date is May 2026, basic limitation expires May 2028. I\'d like to book a 30-minute consultation."\n\n---\n\nFULL OUTREACH EMAIL:\nSubject: Civil Consultation — Appropriation of Personality / IIMS — Trommel\n\nHi [Name],\n\nMy name is Joshua Trommel. I\'m seeking a civil litigation lawyer with experience in intentional torts and/or appropriation of personality claims in BC.\n\nI have potential claims against my parents:\n1. Commercial use of my face and likeness on family business vehicles without consent — ongoing appropriation of personality tort under BC Privacy Act s.3.\n2. Intentional infliction of mental suffering — documented 20+ year pattern: eviction into homelessness, police weaponized during emotional distress, parking lot confrontation while homeless (father\'s stated priority: a Yelp review).\n3. Parental negligence contributing to documented PTSD.\n\nI have a separate Charter claim against the AG of Canada (RCMP). Discovery date: May 2026. Basic limitation expires May 2028.\n\nAvailable for consultation at your earliest convenience.\nJoshua Trommel · 778-201-4533';
 
-function getActiveChecklist() { return webActiveCase === 'rcmp' ? CHECKLIST : FAMILY_CHECKLIST; }
+// ===== CASE-0003: Baitz v. City of Surrey =====
+
+const MUNI_GROUNDS = [
+  { id:'occ', n:'01', title:'Occupiers Liability', sec:'BC OLA RSBC 1996 c.337 s.3', val:'$4–8k', high:8, grade:'A',
+    desc:'Municipality is occupier of the sidewalk. Duty to take reasonable care that persons on the premises are reasonably safe. The pavement dip is an observable structural hazard; photographic evidence establishes the defect pre-existed the fall.',
+    cite:'BC Occupiers Liability Act RSBC 1996 c.337 s.3 · Waldick v. Malcolm [1991] 2 SCR 456',
+    risk:'Surrey argues the hazard was open and obvious · Counter: Waldick holds occupiers must address known hazards regardless; an elderly plaintiff with altered gait is a foreseeable visitor.' },
+  { id:'neg', n:'02', title:'Municipal Negligence', sec:'Anns/Cooper — operational failure', val:'$3–6k', high:6, grade:'B',
+    desc:'Post-2021 SCC, municipalities are not immune for operational decisions — daily maintenance failures are actionable. Sunken concrete panel plus displaced gravel is an operational (not policy) failure. Surrey owes a duty of care to pedestrians on its sidewalks.',
+    cite:'Nelson (City) v. Marchi, 2021 SCC 41 · Anns/Cooper test — proximity + foreseeability',
+    risk:'Surrey invokes policy immunity (budgeting/prioritization) · Counter: Marchi held operational maintenance failures are not shielded by policy immunity.' },
+  { id:'notice', n:'03', title:'Mandatory Notice Requirement', sec:'BC Community Charter s.285', val:'prerequisite', high:8, grade:'A',
+    desc:'Written notice must be given to the municipality within 2 months of the incident or the claim is barred entirely. Notice must specify date, time, location, and general nature of injury. Send registered mail plus email to the Surrey City Clerk immediately.',
+    cite:'BC Community Charter SBC 2003 c.26 s.285',
+    risk:'Missing the 2-month window bars the claim entirely · Send notice before anything else — this is the only truly time-gated step in the entire claim.' },
+];
+
+const MUNI_SCENARIOS = [
+  { name:'Best case', desc:'Bone or joint injury confirmed. Not minor-injury classification. Full special damages.', amt:'$20–40k', pct:10, color:'var(--good)' },
+  { name:'Likely',    desc:'Notice sent. PI lawyer retained. Surrey settles to avoid litigation cost.',          amt:'$8–14k',  pct:50, color:'var(--warn)' },
+  { name:'Floor',     desc:'Minor injury cap ($5,500) plus out-of-pocket medical only.',                        amt:'$6–8k',   pct:30, color:'var(--info)' },
+  { name:'Worst',     desc:'Notice window missed. Claim barred entirely.',                                      amt:'$0',      pct:10, color:'var(--danger)' },
+];
+
+const MUNI_STACK_HEADS = [
+  { label:'Minor injury — pain & suffering cap', sub:'Road rash = minor injury cap',        low:3,   high:5.5, grade:'B' },
+  { label:'Medical expenses (out of pocket)',    sub:'Physio, wound care, GP visits',        low:0.5, high:2,   grade:'C' },
+  { label:'Lost wages / activity',               sub:'If any work or activities missed',     low:0,   high:3,   grade:'C' },
+  { label:'Future medical',                      sub:'If treatment ongoing',                 low:0,   high:1.5, grade:'C' },
+];
+
+const MUNI_LAWYERS = [
+  { id:'lawsociety-pi', init:'LS', name:'Law Society of BC — PI Referral', sub:'Lawyer Referral Service · free consult · PI specialists · contingency',
+    tags:[{t:'Free consult',c:'good'},{t:'PI specialists',c:'good'},{t:'Contingency',c:'good'}], status:'none', fit:5,
+    contacts:[{label:'1-800-663-1919',href:'tel:18006631919',kind:'tel',primary:true},{label:'lawsocietybc.ca',href:'https://lawsocietybc.ca',kind:'web'}] },
+  { id:'slater-muni', init:'SV', name:'Slater Vecchio LLP', sub:'Vancouver BC · personal injury · municipal claims',
+    tags:[{t:'Slip & fall',c:'good'},{t:'Municipal liability',c:'good'}], status:'none', fit:4,
+    contacts:[{label:'slatervecchio.com',href:'https://slatervecchio.com',kind:'web'}] },
+  { id:'asfs', init:'AH', name:'Acheson Sweeney Foley Sahota', sub:'Surrey / Vancouver BC · personal injury',
+    tags:[{t:'Surrey local',c:'good'},{t:'Municipal liability',c:'good'}], status:'none', fit:4,
+    contacts:[{label:'604-591-1777',href:'tel:6045911777',kind:'tel',primary:true}] },
+];
+
+const MUNI_CHECKLIST = [
+  { i:'m0', label:'Send written notice to Surrey City Clerk — registered mail + email TODAY',          pri:'now',  done:false, lev:50 },
+  { i:'m1', label:'Preserve all 3 photos with date/GPS metadata intact (IMG_9319, 9320, 9322)',        pri:'now',  done:false, lev:40 },
+  { i:'m2', label:'Document exact incident date, time, and intersection',                              pri:'now',  done:false, lev:35 },
+  { i:'m3', label:'GP or walk-in visit — get injury documented on file today',                         pri:'now',  done:false, lev:35 },
+  { i:'m4', label:'Keep all medical receipts (wound care, physio, meds)',                              pri:'now',  done:false, lev:20 },
+  { i:'m5', label:'Return to scene — measure dip depth with tape measure, photograph',                 pri:'soon', done:false, lev:25 },
+  { i:'m6', label:'Check if hazard was previously reported to Surrey (FOI request)',                   pri:'soon', done:false, lev:30 },
+  { i:'m7', label:'Document any missed work, appointments, or activities (dates + amounts)',           pri:'soon', done:false, lev:15 },
+  { i:'m8', label:'Get free consult with PI lawyer — contingency means no upfront cost',               pri:'now',  done:false, lev:30 },
+  { i:'m9', label:'Witness contact info — anyone who saw the fall or knows the hazard',                pri:'soon', done:false, lev:20 },
+];
+
+const MUNI_TIMELINE = [
+  { when:'Now — urgent', state:'now',  title:'Send notice to Surrey',   desc:'BC Community Charter s.285: written notice within 2 months or the claim is barred. Send to Surrey City Clerk, 13450 104 Ave, Surrey BC V3T 1V8. Include date, location, nature of injury. Registered mail + email.' },
+  { when:'Week 1–2',     state:'',     title:'Evidence build',          desc:'Photograph the hazard with a measuring tape. GP visit to get the injury on record. Preserve all receipts. Write a precise incident account with timestamps.' },
+  { when:'Month 1',      state:'',     title:'Lawyer consult',          desc:'PI lawyers take these on contingency — no upfront cost. Free consult through Law Society BC (1-800-663-1919) or call Slater Vecchio / ASFS directly.' },
+  { when:'Month 1–3',    state:'warn', title:'Demand to Surrey',        desc:'Lawyer sends a without-prejudice demand. Surrey Risk Management typically settles to avoid litigation cost on clear operational failures.' },
+  { when:'Month 3–12',   state:'good', title:'Settlement',              desc:'Most municipal slip-and-falls settle within 6 months. Lump sum covers medical plus pain/suffering. No trial needed at this quantum.' },
+  { when:'2 yrs',        state:'bad',  title:'Hard limitation',         desc:'2-year limitation from the incident date. Must file BC Supreme Court (or Small Claims under $35k) or settle before this date.' },
+];
+
+const MUNI_CALL_SCRIPT = 'WRITTEN NOTICE TO SURREY — send immediately, registered mail:\n\nCity of Surrey, City Clerk\n13450 104 Ave\nSurrey, BC V3T 1V8\n\nRe: Notice of Claim — Sidewalk Slip and Fall\nPursuant to: BC Community Charter SBC 2003 c.26, s.285\n\nClaimant: Sylvia Baitz\nIncident date: [DATE OF FALL]\nIncident location: Main Street (near [CROSS STREET]), Surrey, BC\nNature of injury: Fall caused by sunken/uneven sidewalk panel. Bilateral knee lacerations and abrasions. Ongoing pain and reduced mobility.\n\nThe claimant reserves all rights to pursue a civil claim for damages.\n\nYours truly,\n[Signature]\n[Date]\n\n---\n\nLAWYER CALL (30 seconds):\n"Hi, I\'m calling about a slip-and-fall against the City of Surrey. My grandmother Sylvia Baitz fell on a sunken sidewalk panel at Main Street, Surrey in [MONTH] 2026. She has bilateral knee injuries — road rash and lacerations. We have photos of the hazard and injuries. I need to confirm the s.285 notice has gone out and then retain counsel. Do you take municipal slip-and-fall cases on contingency?"';
+
+const CASES = {
+  rcmp:   { grounds:GROUNDS,        scenarios:SCENARIOS,        stack:STACK_HEADS,        lawyers:LAWYERS,        timeline:TIMELINE,        script:CALL_SCRIPT,        maxHigh:600, file:'CASE-0001', title:'Brief — Trommel v. AG Canada' },
+  family: { grounds:FAMILY_GROUNDS, scenarios:FAMILY_SCENARIOS, stack:FAMILY_STACK_HEADS, lawyers:FAMILY_LAWYERS, timeline:FAMILY_TIMELINE, script:FAMILY_CALL_SCRIPT, maxHigh:200, file:'CASE-0002', title:'Brief — Trommel v. Trommel' },
+  muni:   { grounds:MUNI_GROUNDS,   scenarios:MUNI_SCENARIOS,   stack:MUNI_STACK_HEADS,   lawyers:MUNI_LAWYERS,   timeline:MUNI_TIMELINE,   script:MUNI_CALL_SCRIPT,   maxHigh:8,   file:'CASE-0003', title:'Brief — Baitz v. City of Surrey' },
+};
+function C() { return CASES[webActiveCase] || CASES.rcmp; }
+
 const CL_STORE_FAMILY = 'brief.v3.checklist.family';
-function getClStore() { return webActiveCase === 'rcmp' ? CL_STORE : CL_STORE_FAMILY; }
+const CL_STORE_MUNI   = 'brief.v3.checklist.muni';
+function getActiveChecklist() { return webActiveCase === 'family' ? FAMILY_CHECKLIST : webActiveCase === 'muni' ? MUNI_CHECKLIST : CHECKLIST; }
+function getClStore() { return webActiveCase === 'family' ? CL_STORE_FAMILY : webActiveCase === 'muni' ? CL_STORE_MUNI : CL_STORE; }
 
 function setActiveCase(id) {
   webActiveCase = id;
   document.body.dataset.activecase = id;
   document.querySelectorAll('.cs-btn').forEach(b => b.classList.toggle('active', b.dataset.case === id));
   const f = document.getElementById('stripFile');
-  if (f) f.textContent = id === 'rcmp' ? 'CASE-0001' : 'CASE-0002';
-  document.title = id === 'rcmp' ? 'Brief — Trommel v. AG Canada' : 'Brief — Trommel v. Trommel';
+  if (f) f.textContent = C().file;
+  document.title = C().title;
   renderGrounds('grounds-case', '');
   renderGrounds('grounds-money', '2');
   renderScenarios();
@@ -334,7 +409,7 @@ function setActiveCase(id) {
   renderTimeline();
   if (id === 'rcmp') renderLeverage();
   const scriptEl = document.getElementById('scriptText');
-  if (scriptEl) scriptEl.textContent = id === 'rcmp' ? CALL_SCRIPT : FAMILY_CALL_SCRIPT;
+  if (scriptEl) scriptEl.textContent = C().script;
 }
 
 // ===== LEVERAGE =====
@@ -579,8 +654,8 @@ function renderTrajectory(currentTotal) {
 function renderGrounds(containerId, suffix) {
   const c = document.getElementById(containerId);
   while (c.firstChild) c.removeChild(c.firstChild);
-  const data = webActiveCase === 'rcmp' ? GROUNDS : FAMILY_GROUNDS;
-  const maxHigh = webActiveCase === 'rcmp' ? 600 : 200;
+  const data = C().grounds;
+  const maxHigh = C().maxHigh;
   data.forEach(g => {
     const w = document.createElement('div');
     w.className = 'ground';
@@ -630,7 +705,7 @@ renderGrounds('grounds-money', '2');
 function renderScenarios() {
   const c = document.getElementById('scenarios');
   while (c.firstChild) c.removeChild(c.firstChild);
-  const data = webActiveCase === 'rcmp' ? SCENARIOS : FAMILY_SCENARIOS;
+  const data = C().scenarios;
   data.forEach((s,i) => {
     const d = document.createElement('div'); d.className = 'scen';
     const row = document.createElement('div'); row.className = 'scen-row';
@@ -657,7 +732,7 @@ let stackMode = 'strong';
 function renderStack() {
   const c = document.getElementById('stackRows');
   c.innerHTML = '';
-  const heads = webActiveCase === 'rcmp' ? STACK_HEADS : FAMILY_STACK_HEADS;
+  const heads = C().stack;
   const total = heads.reduce((s,h) => s + (stackMode==='strong'?h.high:h.low), 0);
   const max = Math.max(...heads.map(h => stackMode==='strong'?h.high:h.low));
   document.getElementById('stackTot').textContent = '$' + (total/1000).toFixed(2) + 'M';
@@ -731,7 +806,7 @@ document.querySelectorAll('.stack-toggle button').forEach(b => {
 function renderLawyers() {
   const c = document.getElementById('lawyers');
   while (c.firstChild) c.removeChild(c.firstChild);
-  const data = webActiveCase === 'rcmp' ? LAWYERS : FAMILY_LAWYERS;
+  const data = C().lawyers;
   data.forEach(L => {
     const isPriority = L.id === 'thomas-harding' || L.id === 'neil-chantler';
     const d = document.createElement('div'); d.className = 'lawyer' + (isPriority ? ' priority' : ''); d.dataset.lawyerId = L.id;
@@ -779,7 +854,7 @@ renderLawyers();
 function renderTimeline() {
   const c = document.getElementById('timeline');
   while (c.firstChild) c.removeChild(c.firstChild);
-  const data = webActiveCase === 'rcmp' ? TIMELINE : FAMILY_TIMELINE;
+  const data = C().timeline;
   data.forEach((t,i) => {
     const d = document.createElement('div'); d.className = 'tl-item';
     const when = document.createElement('div'); when.className = 'tl-when'; when.textContent = t.when;

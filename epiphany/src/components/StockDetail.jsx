@@ -267,6 +267,7 @@ export default function StockDetail({ stock, onClose, dark, t, onNavigate, curre
   const [activeIndicators, setActiveIndicators] = useState(() => loadIndicators());
   const [showIndicatorPanel, setShowIndicatorPanel] = useState(false);
   const [editingIndicator, setEditingIndicator] = useState(null);
+  const [fullscreen, setFullscreen] = useState(false);
   const oscillatorContainerRef = useRef(null);
   const oscillatorChartRef = useRef(null);
   const scrollRef = useRef(null);
@@ -673,7 +674,7 @@ export default function StockDetail({ stock, onClose, dark, t, onNavigate, curre
         background: 'rgba(0,0,0,0.5)',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
-        display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+        display: 'flex', alignItems: fullscreen ? 'stretch' : 'flex-end', justifyContent: 'center',
         fontFamily: font,
         animation: 'fadeIn 0.2s ease',
       }}
@@ -682,18 +683,35 @@ export default function StockDetail({ stock, onClose, dark, t, onNavigate, curre
         onClick={e => e.stopPropagation()}
         ref={scrollRef}
         style={{
-          width: '100%', maxWidth: 'min(520px, 100vw)',
-          maxHeight: '92dvh', overflow: 'auto',
+          width: '100%', maxWidth: fullscreen ? '100vw' : 'min(520px, 100vw)',
+          maxHeight: fullscreen ? '100dvh' : '92dvh', height: fullscreen ? '100dvh' : 'auto', overflow: 'auto',
           background: dark ? 'rgba(28,28,30,0.95)' : 'rgba(255,255,255,0.95)',
           backdropFilter: 'blur(40px) saturate(180%)',
           WebkitBackdropFilter: 'blur(40px) saturate(180%)',
-          borderRadius: '16px 16px 0 0',
+          borderRadius: fullscreen ? 0 : '16px 16px 0 0',
           padding: 20,
           // FIX: use safe-area-inset-top so header is never hidden behind browser chrome on mobile
           paddingTop: 'max(44px, calc(env(safe-area-inset-top) + 16px))',
-          animation: 'slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          animation: fullscreen ? 'fadeIn 0.2s ease' : 'slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
+        {/* Fullscreen toggle */}
+        <button
+          onClick={() => setFullscreen(f => !f)}
+          aria-label={fullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+          style={{
+            position: 'absolute', top: 12, right: 52,
+            background: dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)',
+            border: 'none', borderRadius: '50%',
+            width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', color: t.textSecondary, fontSize: 13,
+            transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          }}
+          onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+          onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          {fullscreen ? '⤡' : '⤢'}
+        </button>
         {/* Close button */}
         <button
           onClick={onClose}
