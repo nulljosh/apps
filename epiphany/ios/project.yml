@@ -59,3 +59,19 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.epiphany.uitests
         GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Epiphany:
+    build:
+      targets:
+        Epiphany: all
+        EpiphanyTests: [test]
+        EpiphanyUITests: [test]
+    run:
+      # Silence simulator framework log spam (MapKit/CoreLocation/PerfPower
+      # telemetry, CAMetalLayer 0x0). These are OS logs, not app bugs.
+      environmentVariables:
+        OS_ACTIVITY_MODE: disable
+    test:
+      targets:
+        - EpiphanyTests
+        - EpiphanyUITests
