@@ -1,5 +1,16 @@
 # Changelog
 
+## [v4.2.0] — 2026-05-30
+
+- Friendships: Alex is the one friend now and visits more, things are good. Added that I hardly use social media and the friend who left Twitter is back on it.
+- School: finished calculus on Duolingo, got a tutor, finishing at LEC, passed biology. Updated Career section and chart tooltips to match.
+- Housing: pulled the garage-door photo ad out of the housing paragraph (non-sequitur), now a one-line cross-reference to CASE-0002 in the brief.
+- Mental Health: expanded the wellness-check incident with the cooperative-at-door context (Feeney/Godoy) and cross-referenced CASE-0001.
+- Work History: removed a paragraph that should not have been committed.
+- Footer: dropped the giant display name treatment, now normal text.
+- Applied to web (index.html) and iOS (LifeData.swift, ContentView.swift).
+- Deferred: duplicate-chart cleanup pass (see ROADMAP).
+
 ## [v0.0.1] — 2026-05-23
 
 - ddb14c30 chore: snow leopard pass (supabase)

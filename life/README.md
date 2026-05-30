@@ -2,8 +2,8 @@
 
 # Joshua Adam Trommel
 
-![version](https://img.shields.io/badge/version-v4.1.1-blue)
-![updated](https://img.shields.io/badge/updated-April_2026-green)
+![version](https://img.shields.io/badge/version-v4.2.0-blue)
+![updated](https://img.shields.io/badge/updated-May_2026-green)
 
 Personal life summary and timeline for therapy. 32 text sections interleaved with 27 visual elements: charts, pull quotes, a stats dashboard, and a geographically accurate Pacific Northwest map. True 50/50 split between prose and visuals.
 

@@ -224,9 +224,8 @@ struct ContentView: View {
                 .padding(.vertical, 12)
                 .padding(.horizontal, 24)
             Text("Joshua Adam Trommel")
-                .font(.system(size: 72, weight: .bold))
-                .tracking(-3)
-                .foregroundStyle(.primary.opacity(0.08))
+                .font(.body)
+                .foregroundStyle(.secondary)
                 .padding(.top, 24)
             Spacer()
         }
