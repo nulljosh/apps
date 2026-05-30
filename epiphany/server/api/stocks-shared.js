@@ -31,6 +31,45 @@ export function getFmpApiKey() {
   return process.env.FMP_API_KEY || '';
 }
 
+// Yahoo gated its fundamentals endpoints (v7 quote, v10 quoteSummary) behind a
+// cookie + crumb in 2024-25. Calling them without one returns 401 "Invalid
+// Crumb". This fetches a session cookie from fc.yahoo.com, then exchanges it for
+// a crumb, and caches the pair. Without this, marketCap/P/E are unobtainable.
+// (Standard yfinance approach.)
+const YAHOO_CRUMB_TTL_MS = 60 * 60 * 1000; // 1h
+let _yahooSession = { cookie: null, crumb: null, ts: 0 };
+
+export async function getYahooCrumb({ force = false } = {}) {
+  if (!force && _yahooSession.crumb && (Date.now() - _yahooSession.ts) < YAHOO_CRUMB_TTL_MS) {
+    return _yahooSession;
+  }
+  const ua = YAHOO_HEADERS['User-Agent'];
+  try {
+    // Step 1: get a session cookie (fc.yahoo.com 404s but still sets the cookie).
+    const cookieRes = await fetch('https://fc.yahoo.com', {
+      headers: { 'User-Agent': ua, Accept: '*/*' },
+      redirect: 'manual',
+    });
+    const rawCookie = cookieRes.headers.get('set-cookie');
+    const cookie = rawCookie ? rawCookie.split(';')[0] : null;
+    if (!cookie) return _yahooSession;
+
+    // Step 2: exchange the cookie for a crumb.
+    const crumbRes = await fetch('https://query1.finance.yahoo.com/v1/test/getcrumb', {
+      headers: { 'User-Agent': ua, Accept: '*/*', Cookie: cookie },
+    });
+    if (!crumbRes.ok) return _yahooSession;
+    const crumb = (await crumbRes.text()).trim();
+    // A valid crumb is a short opaque token, never JSON or an error sentence.
+    if (!crumb || crumb.length > 40 || /[\s{}]/.test(crumb)) return _yahooSession;
+
+    _yahooSession = { cookie, crumb, ts: Date.now() };
+    return _yahooSession;
+  } catch {
+    return _yahooSession;
+  }
+}
+
 export function parseSymbols(raw, { max = 50, validate = false, tooManyMessage } = {}) {
   const symbolList = (raw || DEFAULT_SYMBOLS)
     .split(',')

@@ -6,6 +6,7 @@ import {
   setStockResponseHeaders,
   YAHOO_HEADERS,
   getFmpApiKey,
+  getYahooCrumb,
 } from './stocks-shared.js';
 
 // Bidirectional symbol normalization: Yahoo uses hyphens, FMP uses dots.
@@ -177,76 +178,91 @@ async function fetchFmpBatch(symbolList) {
   return out.length ? out : null;
 }
 
-// Yahoo fallback: v7 batch quote (fundamentals) + v8 chart (price history)
+// Yahoo fallback: v7 batch quote (fundamentals) + v8 chart (price history).
+// Yahoo gates v7 behind a cookie+crumb; without it the call returns 401.
 async function fetchYahooBatch(symbolList) {
+  const fields = 'regularMarketPrice,regularMarketChange,regularMarketChangePercent,regularMarketVolume,regularMarketDayHigh,regularMarketDayLow,regularMarketOpen,regularMarketPreviousClose,fiftyTwoWeekHigh,fiftyTwoWeekLow,marketCap,trailingPE,epsTrailingTwelveMonths,averageDailyVolume3Month,beta,trailingAnnualDividendYield,bid,ask,fullExchangeName';
   for (const base of YAHOO_URLS) {
-    const url = `${base}/v7/finance/quote?symbols=${symbolList.map(encodeURIComponent).join(',')}&fields=regularMarketPrice,regularMarketChange,regularMarketChangePercent,regularMarketVolume,regularMarketDayHigh,regularMarketDayLow,regularMarketOpen,regularMarketPreviousClose,fiftyTwoWeekHigh,fiftyTwoWeekLow,marketCap,trailingPE,epsTrailingTwelveMonths,averageDailyVolume3Month,beta,trailingAnnualDividendYield,bid,ask,fullExchangeName`;
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-      const response = await fetch(url, { signal: controller.signal, headers: YAHOO_HEADERS });
-      clearTimeout(timeoutId);
-      if (!response.ok) continue;
-      const data = await response.json();
-      const quotes = data.quoteResponse?.result;
-      if (!Array.isArray(quotes) || quotes.length === 0) continue;
-      return quotes
-        .filter(q => typeof q.regularMarketPrice === 'number')
-        .map(q => ({
-          symbol: q.symbol,
-          shortName: q.shortName || q.longName || null,
-          price: q.regularMarketPrice,
-          change: q.regularMarketChange ?? 0,
-          changePercent: q.regularMarketChangePercent ?? 0,
-          volume: q.regularMarketVolume ?? 0,
-          high: q.regularMarketDayHigh ?? q.regularMarketPrice,
-          low: q.regularMarketDayLow ?? q.regularMarketPrice,
-          open: q.regularMarketOpen ?? q.regularMarketPreviousClose ?? q.regularMarketPrice,
-          prevClose: q.regularMarketPreviousClose ?? q.regularMarketPrice,
-          fiftyTwoWeekHigh: q.fiftyTwoWeekHigh ?? null,
-          fiftyTwoWeekLow: q.fiftyTwoWeekLow ?? null,
-          marketCap: q.marketCap ?? null,
-          peRatio: q.trailingPE ?? null,
-          eps: q.epsTrailingTwelveMonths ?? null,
-          avgVolume: q.averageDailyVolume3Month ?? null,
-          beta: q.beta ?? null,
-          yield: q.trailingAnnualDividendYield != null ? q.trailingAnnualDividendYield * 100 : null,
-          bid: q.bid ?? null,
-          ask: q.ask ?? null,
-          exchange: q.fullExchangeName ?? q.exchange ?? null,
-          source: 'yahoo',
-        }));
-    } catch (err) {
-      // try next base URL
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      const session = await getYahooCrumb({ force: attempt > 0 });
+      const crumbParam = session.crumb ? `&crumb=${encodeURIComponent(session.crumb)}` : '';
+      const url = `${base}/v7/finance/quote?symbols=${symbolList.map(encodeURIComponent).join(',')}&fields=${fields}${crumbParam}`;
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+        const headers = session.cookie ? { ...YAHOO_HEADERS, Cookie: session.cookie } : YAHOO_HEADERS;
+        const response = await fetch(url, { signal: controller.signal, headers });
+        clearTimeout(timeoutId);
+        if (response.status === 401 && attempt === 0) continue; // refresh crumb, retry
+        if (!response.ok) break; // next base
+        const data = await response.json();
+        const quotes = data.quoteResponse?.result;
+        if (!Array.isArray(quotes) || quotes.length === 0) break; // next base
+        return quotes
+          .filter(q => typeof q.regularMarketPrice === 'number')
+          .map(q => ({
+            symbol: q.symbol,
+            shortName: q.shortName || q.longName || null,
+            price: q.regularMarketPrice,
+            change: q.regularMarketChange ?? 0,
+            changePercent: q.regularMarketChangePercent ?? 0,
+            volume: q.regularMarketVolume ?? 0,
+            high: q.regularMarketDayHigh ?? q.regularMarketPrice,
+            low: q.regularMarketDayLow ?? q.regularMarketPrice,
+            open: q.regularMarketOpen ?? q.regularMarketPreviousClose ?? q.regularMarketPrice,
+            prevClose: q.regularMarketPreviousClose ?? q.regularMarketPrice,
+            fiftyTwoWeekHigh: q.fiftyTwoWeekHigh ?? null,
+            fiftyTwoWeekLow: q.fiftyTwoWeekLow ?? null,
+            marketCap: q.marketCap ?? null,
+            peRatio: q.trailingPE ?? null,
+            eps: q.epsTrailingTwelveMonths ?? null,
+            avgVolume: q.averageDailyVolume3Month ?? null,
+            beta: q.beta ?? null,
+            yield: q.trailingAnnualDividendYield != null ? q.trailingAnnualDividendYield * 100 : null,
+            bid: q.bid ?? null,
+            ask: q.ask ?? null,
+            exchange: q.fullExchangeName ?? q.exchange ?? null,
+            source: 'yahoo',
+          }));
+      } catch (err) {
+        break; // try next base URL
+      }
     }
   }
   return null;
 }
 
-// Yahoo v10 quoteSummary: reliable fundamentals (marketCap + trailingPE) with no API key
+// Yahoo v10 quoteSummary: marketCap + trailingPE. Keyless, but requires the
+// cookie+crumb session — this is the reliable fundamentals source in prod.
 async function fetchYahooFundamentals(symbol) {
   for (const base of YAHOO_URLS) {
-    const url = `${base}/v10/finance/quoteSummary/${encodeURIComponent(symbol)}?modules=summaryDetail,defaultKeyStatistics`;
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-      const response = await fetch(url, { signal: controller.signal, headers: YAHOO_HEADERS });
-      clearTimeout(timeoutId);
-      if (!response.ok) continue;
-      const data = await response.json();
-      const sd = data.quoteSummary?.result?.[0]?.summaryDetail;
-      const ks = data.quoteSummary?.result?.[0]?.defaultKeyStatistics;
-      if (!sd && !ks) continue;
-      return {
-        marketCap: sd?.marketCap?.raw ?? null,
-        peRatio: sd?.trailingPE?.raw ?? ks?.trailingPE?.raw ?? null,
-        beta: ks?.beta?.raw ?? null,
-        eps: ks?.trailingEps?.raw ?? null,
-        avgVolume: sd?.averageVolume?.raw ?? null,
-        yield: sd?.dividendYield?.raw != null ? sd.dividendYield.raw * 100 : null,
-      };
-    } catch {
-      // try next base
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      const session = await getYahooCrumb({ force: attempt > 0 });
+      const crumbParam = session.crumb ? `&crumb=${encodeURIComponent(session.crumb)}` : '';
+      const url = `${base}/v10/finance/quoteSummary/${encodeURIComponent(symbol)}?modules=summaryDetail,defaultKeyStatistics${crumbParam}`;
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+        const headers = session.cookie ? { ...YAHOO_HEADERS, Cookie: session.cookie } : YAHOO_HEADERS;
+        const response = await fetch(url, { signal: controller.signal, headers });
+        clearTimeout(timeoutId);
+        if (response.status === 401 && attempt === 0) continue; // refresh crumb, retry
+        if (!response.ok) break; // next base
+        const data = await response.json();
+        const sd = data.quoteSummary?.result?.[0]?.summaryDetail;
+        const ks = data.quoteSummary?.result?.[0]?.defaultKeyStatistics;
+        if (!sd && !ks) break; // next base
+        return {
+          marketCap: sd?.marketCap?.raw ?? null,
+          peRatio: sd?.trailingPE?.raw ?? ks?.trailingPE?.raw ?? null,
+          beta: ks?.beta?.raw ?? null,
+          eps: ks?.trailingEps?.raw ?? null,
+          avgVolume: sd?.averageVolume?.raw ?? null,
+          yield: sd?.dividendYield?.raw != null ? sd.dividendYield.raw * 100 : null,
+        };
+      } catch {
+        break; // try next base
+      }
     }
   }
   return null;
@@ -430,9 +446,13 @@ export default async function handler(req, res) {
       !s.marketCap || !s.peRatio || s.beta == null || s.eps == null || s.avgVolume == null || s.yield == null
     );
     if (missingFundamentals.length > 0) {
-      const fundamentalsResults = await Promise.all(
+      // Chunk these — firing all ~35 v10 calls at once trips Yahoo's 429 rate limit.
+      const fundamentalsResults = await chunkedFetch(
+        missingFundamentals,
         // Always send Yahoo-format symbol to Yahoo endpoints
-        missingFundamentals.map(s => fetchYahooFundamentals(toYahooSymbol(s.symbol)))
+        (s) => fetchYahooFundamentals(toYahooSymbol(s.symbol)),
+        5,
+        150,
       );
       const fundMap = new Map(
         missingFundamentals.map((s, i) => [s.symbol, fundamentalsResults[i]])
