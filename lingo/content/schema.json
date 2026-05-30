@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lingo.heyitsmejosh.com/content/schema.json",
+  "title": "Lingo course pack",
+  "description": "Single source of truth for a course. Consumed by web (js/lingo-app.js), native (lingo-ios/lingo-macos), and the generator (scripts/gen-pack.mjs).",
+  "type": "object",
+  "required": ["id", "name", "category", "units"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+    "name": { "type": "string" },
+    "category": {
+      "type": "string",
+      "enum": ["languages", "programming", "computers", "math", "science", "skills"]
+    },
+    "icon": { "type": "string", "description": "Font Awesome class, e.g. 'fa-solid fa-python'" },
+    "level": { "type": "string" },
+    "lang": { "type": "string", "description": "BCP-47 tag for TTS/speech, e.g. 'es-ES'. Languages only." },
+    "version": { "type": "integer", "minimum": 1, "default": 1 },
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "lessons"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "lessons": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "title", "exercises"],
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "string" },
+                "title": { "type": "string" },
+                "exercises": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "$ref": "#/definitions/exercise" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "exercise": {
+      "type": "object",
+      "required": ["type", "question", "answer"],
+      "properties": {
+        "id": { "type": "string", "description": "Stable id for SRS. Auto-stamped if absent." },
+        "type": {
+          "type": "string",
+          "enum": ["translation", "sentence", "listening", "math", "mathChoice", "fillblank", "match", "select", "code"]
+        },
+        "question": { "type": "string" },
+        "answer": { "type": "string" },
+        "choices": { "type": "array", "items": { "type": "string" }, "description": "translation/mathChoice/select" },
+        "words": { "type": "array", "items": { "type": "string" }, "description": "sentence word bank" },
+        "audio": { "type": "string", "description": "listening prompt text spoken via TTS" },
+        "pairs": {
+          "type": "array",
+          "items": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 2 },
+          "description": "match exercise: [left, right] pairs"
+        },
+        "lang": { "type": "string", "description": "code exercise language: python | javascript" },
+        "starter": { "type": "string", "description": "code exercise starter source" },
+        "tests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stdin": { "type": "string" },
+              "expect": { "type": "string" }
+            }
+          },
+          "description": "code exercise grading cases"
+        }
+      }
+    }
+  }
+}

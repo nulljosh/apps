@@ -44,6 +44,12 @@ const LANG_CODES = {
 
 const LANGUAGE_SUBJECTS = new Set(Object.keys(LANG_CODES));
 
+// Catalog + lazy course packs (replaces the old inline lingo-data.js globals).
+// categories is filled from content/catalog.json; questions caches loaded packs.
+let categories = {};
+const questions = {};
+const PACK_CACHE = {};
+
 const PROFILE_KEY = 'lingo.profile';
 const PROGRESS_KEY = 'lingo.progress';
 const SRS_KEY = 'lingo.srs';
@@ -79,8 +85,7 @@ let gameState = {
     completedSubjects: []
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    normalizeQuestionBank();
+document.addEventListener('DOMContentLoaded', async () => {
     initTheme();
     setupEventListeners();
     setupKeyboardNav();
@@ -88,11 +93,58 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAvatarPicker('authAvatarPicker', selectedAuthAvatar, (avatarId) => {
         selectedAuthAvatar = avatarId;
     });
-    renderSubjects('languages');
     initSpeechRecognition();
     updateStats();
+    await loadCatalog();
+    renderSubjects('languages');
     initializeApp();
 });
+
+// Fetch the course catalog (course metadata only, not lesson content).
+async function loadCatalog() {
+    try {
+        const res = await fetch('content/catalog.json');
+        const data = await res.json();
+        categories = data.categories || {};
+    } catch (_) {
+        categories = {};
+    }
+}
+
+function findSubjectMeta(subjectId) {
+    for (const cat of Object.values(categories)) {
+        const found = (cat.subjects || []).find((subject) => subject.id === subjectId);
+        if (found) return found;
+    }
+    return null;
+}
+
+// Lazily fetch and flatten a course pack into the SRS-ready exercise array.
+async function loadCourse(subjectId) {
+    if (questions[subjectId]) return questions[subjectId];
+    const meta = findSubjectMeta(subjectId);
+    const path = meta && meta.packPath ? meta.packPath : `content/courses/${subjectId}.json`;
+    let pack;
+    try {
+        const res = await fetch(path);
+        pack = await res.json();
+    } catch (_) {
+        questions[subjectId] = [];
+        return questions[subjectId];
+    }
+    const flat = [];
+    (pack.units || []).forEach((unit) => {
+        (unit.lessons || []).forEach((lesson) => {
+            (lesson.exercises || []).forEach((exercise) => flat.push(exercise));
+        });
+    });
+    flat.forEach((exercise, index) => {
+        if (!exercise.id) exercise.id = `${subjectId}_${index}`;
+    });
+    questions[subjectId] = flat;
+    PACK_CACHE[subjectId] = pack;
+    return flat;
+}
 
 function initializeApp() {
     localProfile = loadProfile();
@@ -458,16 +510,6 @@ function renderProfilePanel() {
     });
 }
 
-function normalizeQuestionBank() {
-    Object.entries(questions).forEach(([subjectId, subjectQuestions]) => {
-        subjectQuestions.forEach((question, index) => {
-            if (!question.id) {
-                question.id = `${subjectId}-${question.type}-${index + 1}`;
-            }
-        });
-    });
-}
-
 function setupEventListeners() {
     document.querySelectorAll('.category-tab').forEach((tab) => {
         tab.addEventListener('click', () => {
@@ -791,12 +833,13 @@ function resetToHome() {
     renderSubjects(gameState.selectedCategory);
 }
 
-function startLesson() {
+async function startLesson() {
     document.getElementById('subjectSelection').style.display = 'none';
     document.getElementById('lessonContainer').classList.add('active');
     gameState.currentQuestion = 0;
     gameState.correctAnswers = 0;
     gameState.hearts = 5;
+    await loadCourse(gameState.selectedSubject);
     gameState.lessonQuestions = getQuestionsForLesson(gameState.selectedSubject);
     updateStats();
     loadQuestion();

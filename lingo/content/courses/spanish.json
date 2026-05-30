@@ -1,0 +1,215 @@
+{
+  "id": "spanish",
+  "name": "Spanish",
+  "category": "languages",
+  "icon": "fa-solid fa-earth-americas",
+  "level": "Beginner to Advanced",
+  "version": 1,
+  "units": [
+    {
+      "id": "u1",
+      "title": "All",
+      "lessons": [
+        {
+          "id": "u1l1",
+          "title": "Lesson 1",
+          "exercises": [
+            {
+              "type": "translation",
+              "question": "Hello",
+              "answer": "Hola",
+              "choices": [
+                "Hola",
+                "Adios",
+                "Por favor",
+                "Gracias"
+              ],
+              "id": "spanish_0"
+            },
+            {
+              "type": "translation",
+              "question": "Thank you",
+              "answer": "Gracias",
+              "choices": [
+                "Hola",
+                "Gracias",
+                "De nada",
+                "Por favor"
+              ],
+              "id": "spanish_1"
+            },
+            {
+              "type": "sentence",
+              "question": "The cat is small",
+              "answer": "El gato es pequeno",
+              "words": [
+                "El",
+                "gato",
+                "es",
+                "pequeno",
+                "grande",
+                "perro"
+              ],
+              "id": "spanish_2"
+            },
+            {
+              "type": "translation",
+              "question": "Water",
+              "answer": "Agua",
+              "choices": [
+                "Agua",
+                "Fuego",
+                "Tierra",
+                "Aire"
+              ],
+              "id": "spanish_3"
+            },
+            {
+              "type": "sentence",
+              "question": "I like coffee",
+              "answer": "Me gusta el cafe",
+              "words": [
+                "Me",
+                "gusta",
+                "el",
+                "cafe",
+                "te",
+                "no"
+              ],
+              "id": "spanish_4"
+            },
+            {
+              "type": "translation",
+              "question": "Goodbye",
+              "answer": "Adios",
+              "choices": [
+                "Adios",
+                "Hola",
+                "Buenas",
+                "Salud"
+              ],
+              "id": "spanish_5"
+            },
+            {
+              "type": "translation",
+              "question": "Please",
+              "answer": "Por favor",
+              "choices": [
+                "Por favor",
+                "Gracias",
+                "De nada",
+                "Lo siento"
+              ],
+              "id": "spanish_6"
+            }
+          ]
+        },
+        {
+          "id": "u1l2",
+          "title": "Lesson 2",
+          "exercises": [
+            {
+              "type": "translation",
+              "question": "House",
+              "answer": "Casa",
+              "choices": [
+                "Casa",
+                "Carro",
+                "Cama",
+                "Calle"
+              ],
+              "id": "spanish_7"
+            },
+            {
+              "type": "translation",
+              "question": "Dog",
+              "answer": "Perro",
+              "choices": [
+                "Gato",
+                "Perro",
+                "Pajaro",
+                "Pez"
+              ],
+              "id": "spanish_8"
+            },
+            {
+              "type": "translation",
+              "question": "Book",
+              "answer": "Libro",
+              "choices": [
+                "Libro",
+                "Libra",
+                "Litro",
+                "Listo"
+              ],
+              "id": "spanish_9"
+            },
+            {
+              "type": "sentence",
+              "question": "The dog is big",
+              "answer": "El perro es grande",
+              "words": [
+                "El",
+                "perro",
+                "es",
+                "grande",
+                "pequeno",
+                "gato"
+              ],
+              "id": "spanish_10"
+            },
+            {
+              "type": "sentence",
+              "question": "I want water",
+              "answer": "Yo quiero agua",
+              "words": [
+                "Yo",
+                "quiero",
+                "agua",
+                "cafe",
+                "tengo",
+                "el"
+              ],
+              "id": "spanish_11"
+            },
+            {
+              "type": "sentence",
+              "question": "She eats bread",
+              "answer": "Ella come pan",
+              "words": [
+                "Ella",
+                "come",
+                "pan",
+                "El",
+                "bebe",
+                "leche"
+              ],
+              "id": "spanish_12"
+            },
+            {
+              "type": "listening",
+              "question": "Type what you hear",
+              "audio": "Buenos dias",
+              "answer": "Buenos dias",
+              "id": "spanish_13"
+            }
+          ]
+        },
+        {
+          "id": "u1l3",
+          "title": "Lesson 3",
+          "exercises": [
+            {
+              "type": "listening",
+              "question": "Type what you hear",
+              "audio": "Lo siento",
+              "answer": "Lo siento",
+              "id": "spanish_14"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "lang": "es-ES"
+}

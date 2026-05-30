@@ -1,0 +1,154 @@
+{
+  "id": "calculus",
+  "name": "Calculus",
+  "category": "math",
+  "icon": "fa-solid fa-infinity",
+  "level": "Derivatives & Integrals",
+  "version": 1,
+  "units": [
+    {
+      "id": "u1",
+      "title": "All",
+      "lessons": [
+        {
+          "id": "u1l1",
+          "title": "Lesson 1",
+          "exercises": [
+            {
+              "type": "math",
+              "question": "Derivative of x^2",
+              "answer": "2x",
+              "id": "calculus_0"
+            },
+            {
+              "type": "math",
+              "question": "Derivative of 5x^3",
+              "answer": "15x^2",
+              "id": "calculus_1"
+            },
+            {
+              "type": "math",
+              "question": "Integral of 2x dx",
+              "answer": "x^2 + C",
+              "id": "calculus_2"
+            },
+            {
+              "type": "math",
+              "question": "Derivative of sin(x)",
+              "answer": "cos(x)",
+              "id": "calculus_3"
+            },
+            {
+              "type": "math",
+              "question": "Derivative of e^x",
+              "answer": "e^x",
+              "id": "calculus_4"
+            },
+            {
+              "type": "math",
+              "question": "Integral of 1/x dx",
+              "answer": "ln|x| + C",
+              "id": "calculus_5"
+            },
+            {
+              "type": "math",
+              "question": "Derivative of ln(x)",
+              "answer": "1/x",
+              "id": "calculus_6"
+            }
+          ]
+        },
+        {
+          "id": "u1l2",
+          "title": "Lesson 2",
+          "exercises": [
+            {
+              "type": "math",
+              "question": "Derivative of cos(x)",
+              "answer": "-sin(x)",
+              "id": "calculus_7"
+            },
+            {
+              "type": "math",
+              "question": "Integral of 3x^2 dx",
+              "answer": "x^3 + C",
+              "id": "calculus_8"
+            },
+            {
+              "type": "math",
+              "question": "Derivative of x^4",
+              "answer": "4x^3",
+              "id": "calculus_9"
+            },
+            {
+              "type": "mathChoice",
+              "question": "What does the derivative represent?",
+              "answer": "Rate of change",
+              "choices": [
+                "Rate of change",
+                "Area under curve",
+                "Maximum value",
+                "Average value"
+              ],
+              "id": "calculus_10"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Integral represents?",
+              "answer": "Area under curve",
+              "choices": [
+                "Area under curve",
+                "Slope at a point",
+                "Rate of change",
+                "Maximum value"
+              ],
+              "id": "calculus_11"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Limit as x->0 of sin(x)/x?",
+              "answer": "1",
+              "choices": [
+                "0",
+                "1",
+                "infinity",
+                "undefined"
+              ],
+              "id": "calculus_12"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Chain rule is used for?",
+              "answer": "Composite functions",
+              "choices": [
+                "Composite functions",
+                "Products",
+                "Quotients",
+                "Constants"
+              ],
+              "id": "calculus_13"
+            }
+          ]
+        },
+        {
+          "id": "u1l3",
+          "title": "Lesson 3",
+          "exercises": [
+            {
+              "type": "mathChoice",
+              "question": "L'Hopital's rule applies when?",
+              "answer": "0/0 or infinity/infinity",
+              "choices": [
+                "0/0 or infinity/infinity",
+                "Always",
+                "Only polynomials",
+                "Only trig functions"
+              ],
+              "id": "calculus_14"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

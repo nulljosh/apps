@@ -2,40 +2,53 @@
 
 # Lingo
 
-![version](https://img.shields.io/badge/version-v1.1.0-blue)
+![version](https://img.shields.io/badge/version-v1.2.0-blue)
 
-Interactive learning platform -- languages, programming, math, science, and more.
+Interactive learning platform -- languages, programming, computers, math, science, and more.
 
 [lingo.heyitsmejosh.com](https://lingo.heyitsmejosh.com)
 
 ## Features
 
-- 39 subjects, 330+ questions across 5 categories
-- Multiple exercise types: translation, sentence building, typing, math
-- XP, daily streaks, lives system
-- Dark mode with system preference detection
-- Liquid glass UI with animated backgrounds
-- Progress persistence via localStorage
+- Data-driven courses: lazy-loaded JSON packs, scales past 100+ courses
+- Exercise types: translation, sentence building, listening, typing, math, multiple choice
+- SM-2 spaced repetition with per-card review scheduling
+- XP, daily streaks, lives, trophies
+- Speech recognition for spoken answers
+- Offline-capable PWA (service worker caches catalog + visited packs)
+- Dark/light mode with system preference detection
+
+## Architecture
+
+Courses are content, not code. See `content/` (catalog + per-course packs) and `CLAUDE.md`.
 
 ## Run
 
 ```bash
-open index.html
+python3 -m http.server 8080
 ```
 
 ## Deploy
 
-Vercel (static).
+```bash
+npx vercel --prod
+```
 
 ## Roadmap
 
-- [ ] Spaced repetition algorithm
-- [ ] Audio pronunciation
-- [ ] User accounts + cloud sync
-- [ ] Offline mode (service worker)
-- [ ] Leaderboard system
+- [x] Spaced repetition algorithm
+- [x] Offline mode (service worker)
+- [ ] Skill-tree lesson path (units, crowns)
+- [ ] Computer/digital-literacy track
+- [ ] Live code runner (Pyodide + sandboxed JS)
+- [ ] 100+ languages via content generator
+- [ ] Audio pronunciation (TTS)
+- [ ] Accounts + cloud sync + leaderboard (Supabase)
 
 ## Changelog
+
+v1.2.0
+- Course content moved to lazy-loaded JSON packs (`content/`). Removed dead PocketBase scaffolding.
 
 v1.1.0
 - Added light theme with auto system preference detection.

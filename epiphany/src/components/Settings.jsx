@@ -6,6 +6,7 @@ const BASE_NAV = [
   { id: 'account', label: 'Account' },
   { id: 'security', label: 'Security' },
   { id: 'tally', label: 'Tally' },
+  { id: 'brokerage', label: 'Brokerage' },
   { id: 'about', label: 'About' },
 ];
 
@@ -68,6 +69,29 @@ export default function Settings({ dark, setDark, t, mapLayers, setMapLayers, ti
   const handleTallyDisconnect = async () => {
     await fetch('/api/tally?action=disconnect', { method: 'POST' });
     setTallyConnected(false); setTallyMsg(null);
+  };
+
+  // Read-only brokerage sync via SnapTrade. One button: registers the user, opens the
+  // hosted connection portal if nothing is linked, otherwise pulls holdings + cash.
+  const [brokerSyncing, setBrokerSyncing] = useState(false);
+  const [brokerSnapshot, setBrokerSnapshot] = useState(null);
+  const [brokerMsg, setBrokerMsg] = useState(null);
+
+  const handleBrokerSync = async () => {
+    setBrokerSyncing(true); setBrokerMsg(null);
+    try {
+      const res = await fetch('/api/broker/sync', { method: 'POST', credentials: 'include' });
+      const d = await res.json();
+      if (d.skipped) { setBrokerMsg({ error: false, text: 'Brokerage sync not configured yet' }); }
+      else if (d.linked === false && d.linkUrl) {
+        window.open(d.linkUrl, '_blank', 'noopener');
+        setBrokerMsg({ error: false, text: 'Finish linking in the popup, then press Sync again' });
+      } else if (d.linked) {
+        setBrokerSnapshot(d);
+        setBrokerMsg({ error: false, text: `Synced ${new Date(d.syncedAt).toLocaleTimeString()}` });
+      } else { setBrokerMsg({ error: true, text: d.error || 'Sync failed' }); }
+    } catch { setBrokerMsg({ error: true, text: 'Network error' }); }
+    setBrokerSyncing(false);
   };
 
   const [avatarUploading, setAvatarUploading] = useState(false);
@@ -329,6 +353,26 @@ export default function Settings({ dark, setDark, t, mapLayers, setMapLayers, ti
           </>
         )}
 
+        {section === 'brokerage' && (
+          <>
+            <div style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', color: t.textTertiary, marginBottom: 12 }}>Read-only sync</div>
+            <p style={{ fontSize: 12, color: t.textSecondary, margin: '0 0 12px' }}>Link a brokerage through SnapTrade to pull holdings and cash. Read-only — no orders are ever placed.</p>
+            <button onClick={handleBrokerSync} disabled={brokerSyncing} style={btnStyle(true)}>{brokerSyncing ? '...' : 'Connect / Sync brokerage'}</button>
+            {brokerMsg && <div style={msgStyle(brokerMsg.error)}>{brokerMsg.text}</div>}
+            {brokerSnapshot?.linked && (
+              <div style={{ marginTop: 16 }}>
+                <Row label="Cash" t={t}><span style={{ fontSize: 12, color: t.text, fontFamily: font }}>${(brokerSnapshot.balance?.total ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></Row>
+                {(brokerSnapshot.holdings ?? []).map((h, i) => (
+                  <Row key={`${h.symbol}-${i}`} label={`${h.symbol} · ${h.shares}`} t={t}>
+                    <span style={{ fontSize: 12, color: t.textSecondary, fontFamily: font }}>{h.marketValue != null ? `$${h.marketValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : '—'}</span>
+                  </Row>
+                ))}
+                {(brokerSnapshot.holdings ?? []).length === 0 && <p style={{ fontSize: 12, color: t.textTertiary, margin: '8px 0 0' }}>No holdings in linked accounts.</p>}
+              </div>
+            )}
+          </>
+        )}
+
         {section === 'map' && (
           <>
             <div style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', color: t.textTertiary, marginBottom: 12 }}>Visible layers</div>
@@ -348,7 +392,7 @@ export default function Settings({ dark, setDark, t, mapLayers, setMapLayers, ti
 
         {section === 'about' && (
           <>
-            <Row label="Version" t={t}><span style={{ fontSize: 12, color: t.textSecondary, fontFamily: font }}>v1.1.0</span></Row>
+            <Row label="Version" t={t}><span style={{ fontSize: 12, color: t.textSecondary, fontFamily: font }}>v1.7.0</span></Row>
             <Row label="Name" t={t}><span style={{ fontSize: 12, color: t.textSecondary, fontFamily: font }}>Epiphany</span></Row>
           </>
         )}

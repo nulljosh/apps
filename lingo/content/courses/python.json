@@ -1,0 +1,214 @@
+{
+  "id": "python",
+  "name": "Python",
+  "category": "programming",
+  "icon": "fa-brands fa-python",
+  "level": "General Purpose",
+  "version": 1,
+  "units": [
+    {
+      "id": "u1",
+      "title": "All",
+      "lessons": [
+        {
+          "id": "u1l1",
+          "title": "Lesson 1",
+          "exercises": [
+            {
+              "type": "mathChoice",
+              "question": "Import library in Python?",
+              "answer": "import",
+              "choices": [
+                "include",
+                "import",
+                "require",
+                "use"
+              ],
+              "id": "python_0"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Python list comprehension syntax?",
+              "answer": "[x for x in list]",
+              "choices": [
+                "[x for x in list]",
+                "{x for x in list}",
+                "(x for x in list)",
+                "<x for x in list>"
+              ],
+              "id": "python_1"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Define function in Python?",
+              "answer": "def function_name():",
+              "choices": [
+                "def function_name():",
+                "function function_name():",
+                "fn function_name():",
+                "func function_name():"
+              ],
+              "id": "python_2"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Python indentation?",
+              "answer": "4 spaces",
+              "choices": [
+                "2 spaces",
+                "4 spaces",
+                "1 tab",
+                "No standard"
+              ],
+              "id": "python_3"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Python package manager?",
+              "answer": "pip",
+              "choices": [
+                "npm",
+                "pip",
+                "yarn",
+                "gem"
+              ],
+              "id": "python_4"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Create a dictionary?",
+              "answer": "{\"key\": \"value\"}",
+              "choices": [
+                "{\"key\": \"value\"}",
+                "[\"key\": \"value\"]",
+                "(\"key\": \"value\")",
+                "<\"key\": \"value\">"
+              ],
+              "id": "python_5"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Python ternary operator?",
+              "answer": "x if condition else y",
+              "choices": [
+                "x if condition else y",
+                "condition ? x : y",
+                "if condition then x else y",
+                "x when condition else y"
+              ],
+              "id": "python_6"
+            }
+          ]
+        },
+        {
+          "id": "u1l2",
+          "title": "Lesson 2",
+          "exercises": [
+            {
+              "type": "mathChoice",
+              "question": "Open a file for reading?",
+              "answer": "open(\"file\", \"r\")",
+              "choices": [
+                "open(\"file\", \"r\")",
+                "file.open(\"r\")",
+                "read(\"file\")",
+                "File.new(\"file\")"
+              ],
+              "id": "python_7"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Python decorator syntax?",
+              "answer": "@decorator",
+              "choices": [
+                "@decorator",
+                "#decorator",
+                "!decorator",
+                "$decorator"
+              ],
+              "id": "python_8"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Create a virtual environment?",
+              "answer": "python -m venv env",
+              "choices": [
+                "python -m venv env",
+                "pip install venv",
+                "virtualenv --create",
+                "python --venv env"
+              ],
+              "id": "python_9"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Which is immutable?",
+              "answer": "tuple",
+              "choices": [
+                "list",
+                "dict",
+                "tuple",
+                "set"
+              ],
+              "id": "python_10"
+            },
+            {
+              "type": "mathChoice",
+              "question": "String formatting with f-strings?",
+              "answer": "f\"Hello {name}\"",
+              "choices": [
+                "f\"Hello {name}\"",
+                "\"Hello %s\" % name",
+                "\"Hello \" + name",
+                "format(\"Hello\", name)"
+              ],
+              "id": "python_11"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Handle exceptions?",
+              "answer": "try/except",
+              "choices": [
+                "try/except",
+                "try/catch",
+                "try/handle",
+                "begin/rescue"
+              ],
+              "id": "python_12"
+            },
+            {
+              "type": "mathChoice",
+              "question": "Lambda function syntax?",
+              "answer": "lambda x: x + 1",
+              "choices": [
+                "lambda x: x + 1",
+                "(x) => x + 1",
+                "fn(x) = x + 1",
+                "def lambda(x): x + 1"
+              ],
+              "id": "python_13"
+            }
+          ]
+        },
+        {
+          "id": "u1l3",
+          "title": "Lesson 3",
+          "exercises": [
+            {
+              "type": "mathChoice",
+              "question": "Check if key exists in dict?",
+              "answer": "\"key\" in dict",
+              "choices": [
+                "\"key\" in dict",
+                "dict.has(\"key\")",
+                "dict.contains(\"key\")",
+                "dict.exists(\"key\")"
+              ],
+              "id": "python_14"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

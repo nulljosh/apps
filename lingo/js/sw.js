@@ -1,10 +1,11 @@
-const CACHE_VERSION = 'lingo-v1';
+const CACHE_VERSION = 'lingo-v2';
 
 const APP_SHELL = [
     './',
     './index.html',
     './js/lingo-app.js',
-    './js/lingo-data.js',
+    './js/games.js',
+    './content/catalog.json',
     './assets/icon.svg',
     './manifest.json'
 ];
@@ -35,34 +36,16 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
-
-    if (url.origin === location.origin) {
-        // App shell: cache-first, update in background
-        event.respondWith(
-            caches.match(event.request).then((cached) => {
-                const fetched = fetch(event.request).then((response) => {
-                    if (response.ok) {
-                        const clone = response.clone();
-                        caches.open(CACHE_VERSION).then((cache) => cache.put(event.request, clone));
-                    }
-                    return response;
-                }).catch(() => cached);
-                return cached || fetched;
-            })
-        );
-    } else {
-        // CDN: stale-while-revalidate
-        event.respondWith(
-            caches.match(event.request).then((cached) => {
-                const fetched = fetch(event.request).then((response) => {
-                    if (response.ok) {
-                        const clone = response.clone();
-                        caches.open(CACHE_VERSION).then((cache) => cache.put(event.request, clone));
-                    }
-                    return response;
-                }).catch(() => cached);
-                return cached || fetched;
-            })
-        );
-    }
+    const handler = (cached) => {
+        const fetched = fetch(event.request).then((response) => {
+            if (response.ok) {
+                const clone = response.clone();
+                caches.open(CACHE_VERSION).then((cache) => cache.put(event.request, clone));
+            }
+            return response;
+        }).catch(() => cached);
+        return cached || fetched;
+    };
+    // Same-origin (incl. content/ packs) and CDN both use stale-while-revalidate.
+    event.respondWith(caches.match(event.request).then(handler));
 });
