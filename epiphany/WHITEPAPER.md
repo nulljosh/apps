@@ -1,139 +1,147 @@
-# Epiphany -- Technical Whitepaper
+# Epiphany Technical Whitepaper
 
-**v1.6.0** | May 2026
+**v1.10.4** | May 2026
 
-## Overview
+Epiphany is a map first intelligence platform. It pulls live geospatial data,
+markets, prediction markets, people, and news into one view, and it can trade a
+portfolio on a quantified signal. Palantir for regular people. Live at
+[epiphany.heyitsmejosh.com](https://epiphany.heyitsmejosh.com), with companion
+apps for iOS, macOS, and watchOS.
 
-Epiphany is a personal intelligence platform. It aggregates live geospatial data, financial markets, prediction markets, people intelligence, and news into a single map-first interface. Palantir for regular people.
+This paper leads with the algorithms. Everything after the trading and prediction
+sections is supporting detail.
 
-Live at [epiphany.heyitsmejosh.com](https://epiphany.heyitsmejosh.com). Companion apps for iOS, macOS, and watchOS.
+## Prediction and Trading Algorithm
 
-## Architecture
+The core bet is that a disciplined, sized, rules based strategy beats discretionary
+trading. The pipeline runs signal to execution and is paper only by default. Real
+money is a separate opt in step.
+
+### 1. Price prediction (Monte Carlo)
+
+For each symbol the engine runs a Geometric Brownian Motion simulation: 500 price
+paths over a 30 day horizon. Drift and volatility come from the symbol's recent
+daily returns (log returns, annualized). Each path steps daily:
 
 ```
-Browser / iOS / macOS / watchOS
-              |
-       Vercel Gateway (api/gateway.js)
-              |
-  +-----------+-----------+-----------+
-  |           |           |           |
-Auth      11 Data      AI Chat     Stripe
-(KV)      Sources     (Claude)   (billing)
+S(t+1) = S(t) * exp((mu - 0.5 * sigma^2) * dt + sigma * sqrt(dt) * Z)
 ```
 
-**Gateway**: Single serverless entry point. Critical routes (auth, stocks, markets) are static imports. Everything else lazy-loads with try/catch isolation -- one broken route cannot crash others. Edge caching with per-route TTLs. Bot blocking.
+where `mu` is drift, `sigma` is volatility, `dt` is one trading day, and `Z` is a
+standard normal draw. The bull probability is the share of the 500 paths that close
+above the current price. That probability becomes the raw conviction score. This
+runs in the in app simulator at 60fps (`src/utils/simBenchmark.js`) across the full
+asset universe, and in the weekday morning cron (`server/api/broker/morning-run.js`).
+
+### 2. Technical signal (entry filter)
+
+A trade only triggers when the technicals agree with the prediction. The composite
+signal (`src/utils/indicators.js`) combines:
+
+- **RSI (14)**: Wilder's smoothing. Above 55 reads as strength, below 45 as weakness.
+- **MACD (12/26/9)**: histogram above zero is bullish momentum, below zero bearish.
+- **Moving average trend**: 50 period versus 200 period (or the longest available).
+  Fast above slow is an uptrend.
+
+Each component contributes plus or minus one to a score. Score of plus two or more
+is Buy, minus two or less is Sell, otherwise Hold. The same score drives the
+Buy/Hold/Sell badge shown on every stock.
+
+### 3. Position sizing (Kelly)
+
+Size comes from the fractional Kelly criterion. Full Kelly fraction is:
+
+```
+f* = (p * b - (1 - p)) / b
+```
+
+where `p` is the bull probability from step 1 and `b` is the reward to risk ratio
+implied by the target and stop. Epiphany uses a default 0.25 fraction of `f*` to cut
+variance, then caps any single position at 10% of equity. A momentum strength and
+volatility gate blocks sizing into chop.
+
+### 4. Execution and guardrails
+
+- **Entry**: moving average crossover confirmed by the composite signal.
+- **Exit**: fixed stop and target, plus a trailing stop once in profit.
+- **Venue**: paper by default. Live routing goes through SnapTrade after a paper
+  proving period.
+- **Kill switch**: removing the broker keys disables all order placement.
+- **Audit**: a full per symbol trade log is written on every run.
+
+The strategy is shared with a backtestable Pine Script port
+(`tradingview/monica-kelly-strategy.pine`) so the same rules can be validated on
+TradingView history.
+
+### Broker abstraction
+
+`src/utils/broker.js` defines one `BrokerAdapter` interface (`connect`, `placeOrder`,
+`getPositions`, `getBalance`). Adapters: Alpaca (paper and live), SnapTrade (read
+only aggregator sync, HMAC signed REST, covers Wealthsimple and Questrade in Canada
+plus US brokers under one connection), cTrader (OAuth2), TradingView (webhook),
+Wealthsimple (read only), IBKR (stub). Read only sync
+(`server/api/broker/sync.js`) writes a holdings and cash snapshot to KV and, once
+connected, becomes the portfolio value of record.
+
+## AI Analyst
+
+Claude streaming over SSE with 10 tool functions that run in parallel when
+independent: stock lookup, portfolio query, news search, macro data, ontology CRUD,
+alert management, watchlist ops, note creation. Reachable from the persistent Ask AI
+button and the Cmd+K command bar. Requires `ANTHROPIC_API_KEY`. The app is not AI
+free; AI is the gated Premium feature.
 
 ## Data Sources
 
 | Layer | Source | Auth | Notes |
 |-------|--------|------|-------|
-| Earthquakes | USGS | None | Global, real-time |
-| Flights | OpenSky Network | Optional | Rate-limited unauthenticated |
-| Incidents | OpenStreetMap Overpass | None | Police, fire, hospitals, construction, cameras |
-| Traffic | TomTom / HERE | API key | Keys need renewal |
-| Weather | NWS + Environment Canada | None | Alerts only |
-| Crime | GDELT + local feeds | None | Geo-tagged crime events |
-| Local Events | Wikipedia GeoSearch, Ticketmaster, PredictHQ | Mixed | Wikipedia is the free universal fallback |
-| Wildfires | NASA EONET / FIRMS | Optional | Satellite fire detections |
-| News | GDELT | None | Global news with geo-extraction |
+| Earthquakes | USGS | None | Global, real time |
+| Flights | OpenSky Network | Optional | Throttled when unauthenticated |
+| Incidents | OpenStreetMap Overpass | None | Police, fire, hospitals, cameras |
+| Traffic | TomTom | API key | Free tier, key needed |
+| Weather | NWS + Environment Canada | None | Alerts |
+| Crime | Vancouver and Surrey open data, GDELT | None | Geo tagged |
+| Local events and places | Wikipedia, OSM, Ticketmaster | Mixed | Wikipedia is the free fallback |
+| Wildfires | NASA EONET / FIRMS | Optional | Satellite detections |
+| News | GDELT | None | Geo extraction |
 | Predictions | Polymarket | None | Whale tracking, probability markets |
-| Heatmap | Derived | N/A | Client-side density from all sources |
+| Macro | FRED | API key | Fed funds, CPI, GDP, unemployment, treasuries |
 
-All sources fetch in parallel every 120 seconds. Polling pauses when the tab is hidden (`useVisibilityPolling`). Each source has its own error boundary -- failures return empty arrays, never block other sources.
-
-**Geo-matching rule**: Markers only render with real geographic coordinates. No synthetic scatter, no estimated positions, no placeholder data.
+All sources fetch in parallel every 120 seconds and pause when the tab is hidden
+(`useVisibilityPolling`). Each source has its own error boundary, so a failure
+returns an empty array instead of blocking the others. Markers only render with real
+coordinates. No synthetic scatter, no placeholder data.
 
 ## Map Engine
 
-MapLibre GL JS with CARTO basemaps (dark/light). DOM-based markers with CSS pulse animations per layer type. Heatmap layer computed from all geo-tagged data points.
-
-Geolocation chain: browser GPS > cached position (30 min TTL) > IP fallback. No jump on load -- position resolved before first render when cached.
-
-Layer toggles in Settings control which marker types render. The `mapLayers` state is passed through and checked per layer section in the rendering effect.
-
-## Financial Data
-
-- **Stocks**: FMP stable API via `/api/stocks-free` (`/stable/quote` for price/volume/market cap, `/stable/ratios-ttm` for P/E), fetched per-symbol with retries and exponential backoff. Static fallback prices when all APIs fail.
-- **Commodities**: Gold, silver, crude oil
-- **Predictions**: Polymarket (top markets by volume, whale trade aggregation)
-- **Portfolio**: Holdings + debt + spending in Vercel KV, PDF statement upload for analysis
-- **Macro**: Unemployment, PCE, retail sales, consumer confidence, jobless claims
-
-Ticker bar always shows data. If the watchlist filters to zero matches, falls back to full stock list. If live APIs fail entirely, static FALLBACK_DATA prices render.
-
-## Trading Engine
-
-Epiphany ships an end-to-end signal-to-execution pipeline, **paper-only by default**. Real-money trading is gated behind a separate, opt-in step.
-
-- **Broker abstraction** (`src/utils/broker.js`): a common `BrokerAdapter` interface with `connect`, `placeOrder`, `getPositions`, `getBalance`. Adapters: Alpaca (paper + live), SnapTrade (read-only aggregator sync, HMAC-signed REST), cTrader (OAuth2 REST), TradingView (alert/webhook format), Wealthsimple (read-only, unofficial API), IBKR (stub). Created via `createBroker(type, config)`.
-- **Read-only sync** (`server/api/broker/sync.js` + `src/utils/brokers/snaptrade.js`): pulls holdings + balances through SnapTrade (covers Wealthsimple/Questrade in CA plus US brokers under one connection) and writes a snapshot to KV (`broker:snapshot:<userId>`), separate from the user-curated portfolio. No-ops when `SNAPTRADE_CLIENT_ID`/`SNAPTRADE_CONSUMER_KEY` are absent. Strictly read-only -- the adapter's `placeOrder` throws.
-- **Strategy**: Kelly-criterion momentum. Fractional Kelly sizing (default 0.25) capped per position (default 10% equity), MA crossover entry with a momentum-strength and volatility gate, fixed stop/target plus trailing stop. Shared between the in-app simulator (`simBenchmark.js`, 60fps Monte Carlo over the full asset universe) and the backtestable Pine Script port (`tradingview/monica-kelly-strategy.pine`).
-- **Automated morning run** (`server/api/broker/morning-run.js`): Vercel cron at 9:30 AM ET on weekdays. Runs a 500-path / 30-day GBM Monte Carlo per watchlist symbol, converts bull probability into buy/sell/hold, and routes orders to Alpaca paper. Cron-secret authenticated; no-ops cleanly when Alpaca keys are absent.
-- **Manual signal route** (`server/api/broker/signal.js`): accepts `{ symbol, qty, side }`, validates, and places a single paper order.
-- **Guardrails**: paper venue by default, position caps in the sizing math, kill switch via absent/removed keys, and a full per-symbol trade log on every run.
-
-**Roadmap**: SnapTrade read-only sync ships first (done). Next: full-universe backtest + Kelly tuning, paper-execution hardening, then live execution via SnapTrade routing after a paper-trading proving period.
-
-## AI Analyst
-
-Claude streaming via SSE. 10 tool functions executing in parallel when independent: stock lookup, portfolio query, news search, macro data, ontology CRUD, alert management, watchlist ops, note creation.
-
-## People Intelligence
-
-Three-tier search with cascading timeouts:
-1. Google Custom Search (5s timeout)
-2. DuckDuckGo (3s timeout)
-3. Wikipedia (3s timeout, universal fallback)
-
-Social link detection across 10 platforms. AI enrichment: company, location, sentiment, key facts, associates, industry tags. Cross-referencing against GDELT for news mentions. Relationship graph rendered client-side.
-
-Search cancels previous in-flight requests via AbortController. 12s hard timeout with error display and retry button.
+MapLibre GL JS on a CARTO dark basemap. DOM markers with per layer CSS pulse
+animations. The heatmap is computed client side from every geo tagged point.
+Geolocation chain is browser GPS, then cached position (30 minute TTL), then IP
+fallback. Position resolves before first render when cached, so the map does not
+jump on load.
 
 ## Auth and Billing
 
-- **Sessions**: bcrypt, tokens in Vercel KV (Upstash Redis)
-- **Billing**: Stripe Checkout -- Free / $1 per week (Premium)
-- **Feature gates**: Free gets map + ticker + situation monitor. Premium unlocks AI, portfolio, ontology, deep data.
-
-## Navigation
-
-Single-level top nav: **Situation | Markets | Portfolio | People | Settings**. No nested tabs. Map always visible as background. Panels slide from right (desktop) or bottom sheet (mobile). Keyboard shortcuts 1-5 for tabs, Cmd+K for command bar.
+Sessions use bcrypt with tokens in Vercel KV (Upstash Redis). Billing is Stripe
+Checkout, Free or $1 per week Premium. Free gets the map, ticker, and situation
+monitor. Premium unlocks AI, portfolio, ontology, and deep data.
 
 ## Companion Apps
 
 | Platform | Framework | Notes |
 |----------|-----------|-------|
-| iOS | SwiftUI | 4 tabs, MapKit, parallel data preload, 2-retry networking |
-| macOS | SwiftUI | 5-section bottom nav, 4-column grids, MapKit |
-| watchOS | SwiftUI | Complications only |
-| Widgets | SwiftUI | iOS + macOS widget extensions |
+| iOS | SwiftUI | 4 tabs, MapKit, parallel preload, auto refresh markets |
+| macOS | SwiftUI | 5 section nav, MapKit |
+| watchOS | SwiftUI | Glance complications |
+| Widgets | SwiftUI | iOS and macOS extensions |
 
-All native apps share the API backend. URLSession with cookie persistence. People view unified: search at top, index grid below, relationship graph at bottom.
-
-## Repo Structure
-
-```
-epiphany/
-  api/              Vercel serverless gateway
-  server/           API route handlers (auth, stocks, AI, map sources)
-  src/              React web app (Vite)
-  ios/              iPhone app (SwiftUI)
-  macos/            Mac app (SwiftUI)
-  watchos/          Watch app (SwiftUI)
-  widgets-ios/      iOS widget extension
-  widgets-macos/    macOS widget extension
-  tradingview/      Pine Script strategies
-  public/           Static assets
-  scripts/          Build scripts
-  tests/            Vitest + Playwright
-```
+All native apps share the API backend over URLSession with cookie persistence.
 
 ## Performance
 
-- **Cold start**: ~2s (Vercel Fluid Compute)
-- **Data refresh**: 120s polling, paused when hidden
-- **Bundle**: ~1MB gzipped (MapLibre GL is majority)
-- **Tests**: 335 across 24 files
+Cold start about 2 seconds on Vercel Fluid Compute. Data refresh on a 120 second
+poll, paused when hidden. Bundle about 1MB gzipped, mostly MapLibre GL. Test suite
+runs across Vitest and Playwright.
 
 ## License
 

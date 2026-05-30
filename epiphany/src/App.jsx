@@ -1331,6 +1331,25 @@ const reset = useCallback(() => {
         }}
       />
 
+      {!aiPanelOpen && (
+        <button
+          onClick={() => setAiPanelOpen(true)}
+          aria-label="Ask Epiphany AI"
+          title="Ask Epiphany AI"
+          style={{
+            position: 'fixed', right: 18, bottom: isMobileNav ? 86 : 24, zIndex: 9000,
+            height: 52, padding: '0 20px', borderRadius: 100,
+            background: '#0071e3', color: '#fff', border: 'none',
+            boxShadow: '0 6px 20px rgba(0,113,227,0.4)', cursor: 'pointer',
+            fontSize: 15, fontWeight: 700, letterSpacing: '0.02em',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px) scale(1.03)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
+        >Ask AI</button>
+      )}
+
       <AiPanel open={aiPanelOpen} onClose={() => setAiPanelOpen(false)} />
 
       {showHelp && (

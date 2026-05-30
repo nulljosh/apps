@@ -1,30 +1,50 @@
 import { applyCors } from './_cors.js';
-import { getFmpApiKey, FMP_BASE } from './stocks-shared.js';
+import { getYahooCrumb, YAHOO_HEADERS, DEFAULT_SYMBOLS, isMarketHours } from './stocks-shared.js';
 
 const CACHE_TTL = 60 * 60 * 1000; // 1 hour
 let cache = { ts: 0, data: null };
 
-async function fetchTopMovers(apiKey) {
-  if (!apiKey) return { gainers: [], losers: [] };
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8000);
-  try {
-    const [gainRes, loseRes] = await Promise.all([
-      fetch(`${FMP_BASE}/stock_market/gainers?apikey=${apiKey}`, { signal: controller.signal }),
-      fetch(`${FMP_BASE}/stock_market/losers?apikey=${apiKey}`, { signal: controller.signal }),
-    ]);
-    clearTimeout(timer);
-    const gainers = gainRes.ok ? (await gainRes.json()).slice(0, 5).map(s => ({
-      symbol: s.symbol, name: s.name, price: s.price, change: s.changesPercentage,
-    })) : [];
-    const losers = loseRes.ok ? (await loseRes.json()).slice(0, 5).map(s => ({
-      symbol: s.symbol, name: s.name, price: s.price, change: s.changesPercentage,
-    })) : [];
-    return { gainers, losers };
-  } catch {
-    clearTimeout(timer);
-    return { gainers: [], losers: [] };
+const YAHOO_BASES = ['https://query1.finance.yahoo.com', 'https://query2.finance.yahoo.com'];
+
+// Movers come from the working Yahoo v7 batch quote (cookie+crumb authed) -- NOT
+// FMP, which has never had a key in prod (so movers were always empty -> the
+// "no data available" brief). Keyless, free, same path the stocks pipeline uses.
+async function fetchTopMovers() {
+  const session = await getYahooCrumb();
+  const crumbParam = session?.crumb ? `&crumb=${encodeURIComponent(session.crumb)}` : '';
+  const headers = { ...YAHOO_HEADERS };
+  if (session?.cookie) headers.Cookie = session.cookie;
+  const fields = 'symbol,shortName,regularMarketPrice,regularMarketChangePercent';
+
+  for (const base of YAHOO_BASES) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    try {
+      const url = `${base}/v7/finance/quote?symbols=${encodeURIComponent(DEFAULT_SYMBOLS)}&fields=${fields}${crumbParam}`;
+      const res = await fetch(url, { headers, signal: controller.signal });
+      clearTimeout(timer);
+      if (!res.ok) continue;
+      const data = await res.json();
+      const quotes = data.quoteResponse?.result;
+      if (!Array.isArray(quotes) || quotes.length === 0) continue;
+      const rows = quotes
+        .filter(q => Number.isFinite(q.regularMarketChangePercent))
+        .map(q => ({
+          symbol: q.symbol,
+          name: q.shortName || q.symbol,
+          price: q.regularMarketPrice,
+          change: q.regularMarketChangePercent,
+        }));
+      const sorted = [...rows].sort((a, b) => b.change - a.change);
+      return {
+        gainers: sorted.filter(r => r.change > 0).slice(0, 5),
+        losers: sorted.filter(r => r.change < 0).slice(-5).reverse(),
+      };
+    } catch {
+      clearTimeout(timer);
+    }
   }
+  return { gainers: [], losers: [] };
 }
 
 const ENGLISH_STOPS = new Set(['the', 'is', 'are', 'was', 'has', 'for', 'and', 'but', 'not', 'this', 'that', 'with', 'from', 'will', 'said', 'new', 'after']);
@@ -67,6 +87,11 @@ function buildBrief(movers, headlines) {
     points.push(h);
   }
 
+  // Guaranteed baseline so the brief is never empty ("no data available").
+  if (points.length === 0) {
+    points.push(isMarketHours() ? 'US markets are open. Quotes updating live.' : 'US markets are closed. Showing last session.');
+  }
+
   return points.slice(0, 5);
 }
 
@@ -82,9 +107,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const apiKey = getFmpApiKey();
     const [movers, headlines] = await Promise.all([
-      fetchTopMovers(apiKey),
+      fetchTopMovers(),
       fetchHeadlines(),
     ]);
 

@@ -6,6 +6,41 @@ Last updated: 2026-05-30
 
 ---
 
+## From 2026-05-30 brain dump (Epiphany.pdf) — open / blocked
+
+Done this pass (see git): daily-brief rewired off FMP onto Yahoo crumb path (fixes
+"no data"), Buy/Hold/Sell badge + `src/utils/indicators.js`, persistent Ask AI
+button (AI was only reachable via Cmd+K), whitepaper rewritten algorithms-first,
+ROADMAP/README cleanup.
+
+Blocked on keys / accounts (no fake data, cannot self-provision):
+- **Macro returns `[]`** — `FRED_API_KEY` is set on Vercel but FRED rejects it
+  (every series empty). Needs a valid FRED key, then redeploy. Free at
+  fredaccount.stlouisfed.org → API Keys.
+- **Flights "temporarily unavailable"** — OpenSky anon is throttled. Set
+  `OPENSKY_USERNAME` + `OPENSKY_PASSWORD` (free account) on Vercel.
+- **POI map layers** (coffee, restaurants, gas, groceries, parks, shopping) +
+  Google-Maps-style place detail (phone, hours, photo carousel) — endpoints stubbed
+  (`places.js`, `pois.js`, `gas.js`); blocked on `GOOGLE_PLACES_API_KEY` /
+  `GAS_PRICES_API_KEY`. Existing layers already default on.
+- **AI / Daily-brief commentary** — needs `ANTHROPIC_API_KEY` on Vercel.
+
+Open code work:
+- **Brokerage auto-sync** — interval pull (~30 min, jittered, backoff) so we are not
+  rate-limited; SnapTrade keys are now live on Vercel.
+- **iOS/macOS brokerage login** — open SnapTrade `linkUrl` via SFSafariViewController
+  (web-only today).
+- **iOS markets auto-refresh + retry** — `MarketsView.swift` (stale 30+ min complaint).
+- **Spending** — user statement upload UI so uploads permeate the account
+  (`EpiphanyFinance.jsx` + PDF importer already exist).
+- **Live trading / order placement** — `placeOrder` throws by design; build order
+  ticket + keep paper-only until an explicit opt-in.
+- **Apple Pay / StoreKit native upgrade** — Stripe gate exists server-side; wire IAP
+  for Pro. No custodial banking (regulatory).
+- **Tally connect route** — Settings > Connect to tally returns "tally unknown".
+
+---
+
 ## Deferred from 2026-05-30 feedback pass (v1.8.0 shipped news cache + macro + real spending)
 
 - **Buy/Sell/Hold badge** on `StockDetail.jsx` from FMP `grades-consensus` / `price-target-consensus` (stable API).
@@ -198,41 +233,6 @@ Last updated: 2026-05-30
 
 ---
 
-## Done
+## Shipped
 
-- Avatar doesn't update after upload — `setAvatarVersion` moved into success block (`Settings.jsx`) — 2026-05-26
-- AQI layer type bug — markers now use `'aqi'` layerType, separate toggle from incidents (`LiveMapBackdrop.jsx`, `App.jsx`) — 2026-05-26
-- Mobile stocks overflow — `flexWrap: 'wrap'` + `paddingTop: 44` already in StockDetail (was pre-fixed) — 2026-05-26
-- Password reset email says "Monica" — already fixed in `_email.js` — 2026-05-26
-- Simulator tab (60fps trading, Kelly criterion, edge detection) wired into nav
-- iOS avatar cache invalidation on avatarUpdatedAt change (web + iOS + macOS)
-- Snow leopard pass (deps, lint, security) — 2026-05-23
-- CSP header (`server/api/_cors.js`)
-- Upstash Redis migration (from @vercel/kv)
-- Supabase keep-alive cron
-- iOS plane filter: flights >35,000 ft hidden by default; Settings toggle to re-enable
-- iOS avatar: pixel art generator, SVGRasterizer white-render fixed
-- Rename: Monica → Epiphany (GitHub repo, Vercel, iOS/macOS bundle IDs, READMEs, CLAUDE.md, memory)
-- STALE indicator (age label, portfolio sync stale, iOS/macOS native)
-- Ticker visibility toggle (web + iOS + macOS, persisted)
-- Macro pulse strip (dynamic from `/api/macro`)
-- Map layers (11 layers, coord validation, layer filtering, toggle infra)
-- Ticker (live data + static fallback)
-- Avatar sync iOS/web
-- Upgrade button UX (PricingPage modal)
-- Error resilience (fetchJsonGraceful, iOS/macOS decode logging)
-- Gateway stability (lazy() per route, try/catch isolation)
-- Double star watchlist fix
-- Polymarket whale tracking
-- Tally payday on web
-- People tabs merged (web + iOS + macOS)
-- Nav flattened (Situation | Markets | Simulator | Portfolio | People | Settings)
-- Fake map data removed (real coords only)
-- Wikipedia popup links fixed
-- Repo cleanup (10 dead folders removed, 5 expired Vercel env vars removed)
-- Reddit + CoinGecko data sources added
-- Whitepaper written
-- Palantir-style icon across all platforms
-- Emergency dispatch layer (police/fire/EMS)
-- Daily Brief component (AI-generated morning summary on Situation tab)
-- Landing Page (Fraunces headlines, animated node-graph canvas, pricing)
+The full shipped list now lives in [README.md](README.md#shipped).

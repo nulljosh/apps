@@ -502,6 +502,18 @@ struct MarketsView: View {
                 rebuildItems()
             }
         }
+        // Refresh immediately on return from background so data is never left
+        // 30+ minutes stale waiting for the next timer tick.
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active, isVisible else { return }
+            Task {
+                async let s: Void = appState.loadStocks(force: true)
+                async let c: Void = appState.loadCommodities(force: true)
+                async let k: Void = appState.loadCrypto(force: true)
+                _ = await (s, c, k)
+                rebuildItems()
+            }
+        }
     }
 }
 

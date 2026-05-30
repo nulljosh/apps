@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { createChart, ColorType, LineType, CrosshairMode, CandlestickSeries, BarSeries, LineSeries, AreaSeries, BaselineSeries, HistogramSeries } from 'lightweight-charts';
 import { formatCurrency, formatVolume, formatMarketCap, relativeTime } from '../utils/formatting';
+import { signal as computeSignal } from '../utils/indicators';
 
 const EMPTY = {};
 const CHART_TYPES = [
@@ -633,6 +634,11 @@ export default function StockDetail({ stock, onClose, dark, t, onNavigate, curre
   }, [history, dark, activeIndicators]);
 
   const d = detail || EMPTY;
+  const tradeSignal = useMemo(() => {
+    if (!Array.isArray(history) || history.length < 35) return null;
+    return computeSignal(history.map(h => h.close).filter(Number.isFinite));
+  }, [history]);
+
   const price = d.price ?? stock?.price;
   const change = d.change ?? (stock?.changePercent != null ? (price * stock.changePercent / 100) : 0);
   const changePercent = d.changePercent ?? stock?.changePercent ?? 0;
@@ -767,6 +773,19 @@ export default function StockDetail({ stock, onClose, dark, t, onNavigate, curre
             }}>
               {positive ? '+' : ''}{change.toFixed(2)} ({positive ? '+' : ''}{changePercent.toFixed(2)}%)
             </span>
+            {tradeSignal && (
+              <span
+                title={tradeSignal.reasons.join(' · ') || 'Technical signal'}
+                style={{
+                  display: 'inline-block', padding: '3px 10px', borderRadius: 100,
+                  fontSize: 13, fontWeight: 700, letterSpacing: '0.03em',
+                  background: tradeSignal.label === 'Buy' ? 'rgba(48,209,88,0.18)' : tradeSignal.label === 'Sell' ? 'rgba(255,69,58,0.18)' : 'rgba(142,142,147,0.18)',
+                  color: tradeSignal.label === 'Buy' ? '#30d158' : tradeSignal.label === 'Sell' ? '#ff453a' : t.textSecondary,
+                }}
+              >
+                {tradeSignal.label.toUpperCase()}
+              </span>
+            )}
           </div>
         </div>
 
