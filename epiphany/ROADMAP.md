@@ -2,7 +2,21 @@
 
 Ordered by effort (fewest tokens → most). Ship the top first.
 
-Last updated: 2026-05-26
+Last updated: 2026-05-30
+
+---
+
+## Deferred from 2026-05-30 feedback pass (v1.8.0 shipped news cache + macro + real spending)
+
+- **Buy/Sell/Hold badge** on `StockDetail.jsx` from FMP `grades-consensus` / `price-target-consensus` (stable API).
+- **TradingView sector heatmap/treemap** (Recharts Treemap) as a Markets sub-tab, sized by mcap, colored by % change.
+- **Map Gotham pass**: raise `slice()` item caps in `LiveMapBackdrop.jsx` (12-40/layer), surface layer toggles out of dev-only (`Settings.jsx`), zoom-based density, polish clickable event popups, lock grayscale basemap + drop the toggle so the map shows everything immediately like Google Maps.
+- **Ground News-style news**: source-diversity / bias-lean badges + grouping in `news.js` + `NewsWidget.jsx`. Also extend the L2 Upstash cache to the geo/general news path (only the stock path is cached so far).
+- **Auth UX**: surface the already-built Apple Sign In (`auth.js` ~line 265) on `LoginPage.jsx`; add TOTP 2FA (Wealthsimple-grade).
+- **SnapTrade holdings render**: sync works but `Settings.jsx` shows cash totals only — render per-position symbol/shares/marketValue.
+- **iOS/macOS parity**: port real-spending + macro buildout to native (iOS still on legacy `stocks.js`).
+- **Price-range prediction** overlay across stocks/commodities/crypto (the "beat the market" research bet).
+- **Tally expansion**: show benefits/allowance in the finance panel, not just the payday countdown.
 
 ---
 
