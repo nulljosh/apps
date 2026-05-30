@@ -22,56 +22,61 @@ function getCached(cacheKey, maxAgeMs) {
   return cached.data;
 }
 
-// FMP batch quote
-async function fetchFmpQuotes(symbolList) {
-  const apiKey = getFmpApiKey();
-  if (!apiKey) return null;
+// FMP stable API. The legacy v3 batch `/quote/{symbols}` endpoint was retired Aug 31 2025;
+// the free stable tier has no batch quote, so fetch per-symbol: `/stable/quote` (price +
+// marketCap) and `/stable/ratios-ttm` (P/E via priceToEarningsRatioTTM).
+const FMP_STABLE = 'https://financialmodelingprep.com/stable';
 
-  const fmpSymbols = symbolList.map(s => s.replace('-', '.'));
-  const url = `${FMP_BASE}/quote/${fmpSymbols.join(',')}?apikey=${apiKey}`;
-
+async function fmpStableGet(path, apiKey) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
   try {
-    const response = await fetch(url, { signal: controller.signal });
+    const sep = path.includes('?') ? '&' : '?';
+    const response = await fetch(`${FMP_STABLE}${path}${sep}apikey=${apiKey}`, { signal: controller.signal });
     clearTimeout(timeoutId);
-
     if (!response.ok) return null;
-
     const data = await response.json();
-    if (!Array.isArray(data)) return null;
-
-    const yahooSymbolMap = {};
-    symbolList.forEach(s => { yahooSymbolMap[s.replace('-', '.')] = s; });
-
-    return data
-      .filter(q => q.symbol && typeof q.price === 'number')
-      .map(q => ({
-        symbol: yahooSymbolMap[q.symbol] || q.symbol,
-        name: q.name || q.companyName || yahooSymbolMap[q.symbol] || q.symbol,
-        price: q.price,
-        change: q.change ?? 0,
-        changePercent: q.changesPercentage ?? 0,
-        volume: q.volume ?? 0,
-        marketCap: q.marketCap ?? q.market_cap ?? q.marketCapitalization ?? null,
-        peRatio: q.pe ?? q.priceEarningsRatio ?? q.trailingPE ?? null,
-        eps: q.eps ?? q.epsTTM ?? null,
-        beta: q.beta ?? null,
-        avgVolume: q.avgVolume ?? q.averageVolume ?? null,
-        yield: (q.lastDiv && q.price) ? ((q.lastDiv / q.price) * 100) : null,
-        fiftyTwoWeekHigh: q.yearHigh ?? null,
-        fiftyTwoWeekLow: q.yearLow ?? null,
-        open: q.open ?? null,
-        prevClose: q.previousClose ?? null,
-        high: q.dayHigh ?? null,
-        low: q.dayLow ?? null,
-      }));
-  } catch (err) {
+    return Array.isArray(data) && data.length ? data[0] : null;
+  } catch {
     clearTimeout(timeoutId);
-    console.warn(`FMP quote error: ${err.message}`);
     return null;
   }
+}
+
+async function fetchFmpSymbol(yahooSym) {
+  const apiKey = getFmpApiKey();
+  if (!apiKey) return null;
+  const fmpSym = yahooSym.replace('-', '.');
+  const q = await fmpStableGet(`/quote?symbol=${fmpSym}`, apiKey);
+  if (!q || typeof q.price !== 'number') return null;
+  const ratios = await fmpStableGet(`/ratios-ttm?symbol=${fmpSym}`, apiKey);
+  return {
+    symbol: yahooSym,
+    name: q.name || q.companyName || yahooSym,
+    price: q.price,
+    change: q.change ?? 0,
+    changePercent: q.changePercentage ?? q.changesPercentage ?? 0,
+    volume: q.volume ?? 0,
+    marketCap: q.marketCap ?? q.market_cap ?? q.marketCapitalization ?? null,
+    peRatio: q.pe ?? q.priceEarningsRatio ?? ratios?.priceToEarningsRatioTTM ?? null,
+    eps: q.eps ?? q.epsTTM ?? ratios?.netIncomePerShareTTM ?? null,
+    beta: q.beta ?? null,
+    avgVolume: q.avgVolume ?? q.averageVolume ?? null,
+    yield: (q.lastDiv && q.price) ? ((q.lastDiv / q.price) * 100) : null,
+    fiftyTwoWeekHigh: q.yearHigh ?? null,
+    fiftyTwoWeekLow: q.yearLow ?? null,
+    open: q.open ?? null,
+    prevClose: q.previousClose ?? null,
+    high: q.dayHigh ?? null,
+    low: q.dayLow ?? null,
+  };
+}
+
+async function fetchFmpQuotes(symbolList) {
+  if (!getFmpApiKey()) return null;
+  const results = await Promise.all(symbolList.map(fetchFmpSymbol));
+  const out = results.filter(Boolean);
+  return out.length ? out : null;
 }
 
 // Yahoo v8 chart fallback (v7 quote endpoint now requires auth)
