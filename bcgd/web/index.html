@@ -2804,6 +2804,22 @@
         </a>
     </div>
 
+    <!-- Booking backend (Supabase). Fill these in before deploying — see the bcgd
+         README "Supabase setup" runbook. SB_URL / SB_ANON_KEY come from Supabase →
+         Project Settings → API. BCGD_ORG_UUID must match the org seeded by the
+         migration. Until filled, the form still works (confirmation-only). -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SB_URL = '';        // e.g. https://yourproject.supabase.co
+        const SB_ANON_KEY = '';   // anon public key
+        const BCGD_ORG_UUID = '11111111-1111-4111-8111-111111111111';
+        let _bcgdSb = null;
+        try {
+            if (SB_URL && SB_ANON_KEY && window.supabase) {
+                _bcgdSb = window.supabase.createClient(SB_URL, SB_ANON_KEY);
+            }
+        } catch (e) { /* stays usable (confirmation-only) if CDN/config unavailable */ }
+    </script>
     <script>
         // FAQ accordion
         function toggleFaq(el) {
@@ -2821,14 +2837,33 @@
             document.getElementById('mobileMenu').classList.remove('active');
         }
 
-        // Booking form handler
-        function handleBooking(event) {
+        // Booking form handler — sends the request to the dashboard leads inbox.
+        async function handleBooking(event) {
             event.preventDefault();
             const form = event.target;
             const name = form.name.value;
             const service = form.service.options[form.service.selectedIndex].text;
-            alert('Thank you, ' + name + '! Your ' + service + ' booking request has been received. We will call you shortly to confirm your time slot.');
-            form.reset();
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) submitBtn.disabled = true;
+            try {
+                if (_bcgdSb) {
+                    const { error } = await _bcgdSb.from('leads').insert({
+                        org_id: BCGD_ORG_UUID,
+                        name: name,
+                        phone: form.phone.value,
+                        service: service,
+                        message: form.message ? form.message.value : '',
+                        source: 'web',
+                    });
+                    if (error) throw error;
+                }
+                alert('Thank you, ' + name + '! Your ' + service + ' booking request has been received. We will call you shortly to confirm your time slot.');
+                form.reset();
+            } catch (e) {
+                alert('Sorry, something went wrong sending your request. Please call us at (604) 240-0180 and we will help right away.');
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
         }
 
         // Reading progress bar
