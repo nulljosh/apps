@@ -1,8 +1,13 @@
 import { applyCors } from './_cors.js';
 
-const FRED_BASE = 'https://api.stlouisfed.org/fred/series/observations';
+// Keyless FRED CSV download endpoint. The JSON observations API requires a
+// registered api_key; this public graph CSV does not. Same underlying data,
+// zero config, no key to rotate or break. (Switched 2026-05-30 after the
+// api_key path went dead — empty in prod, unregistered locally.)
+const FRED_CSV = 'https://fred.stlouisfed.org/graph/fredgraph.csv';
 const REQUEST_TIMEOUT_MS = 8000;
 const CACHE_TTL_MS = 60 * 60 * 1000;
+const OBS_LIMIT = 12;
 
 const SERIES = [
   { id: 'fedFunds',    seriesId: 'FEDFUNDS',        name: 'Fed Funds Rate',    unit: '%' },
@@ -21,33 +26,35 @@ const SERIES = [
 
 let cache = { ts: 0, data: null };
 
-async function fetchSeries(seriesId, apiKey) {
-  const params = new URLSearchParams({
-    series_id: seriesId,
-    api_key: apiKey,
-    sort_order: 'desc',
-    limit: '12',
-    file_type: 'json',
-  });
-
+async function fetchSeries(seriesId) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
-    const response = await fetch(`${FRED_BASE}?${params.toString()}`, {
+    const response = await fetch(`${FRED_CSV}?id=${seriesId}`, {
       method: 'GET',
       signal: controller.signal,
-      headers: { Accept: 'application/json' },
+      headers: { Accept: 'text/csv' },
     });
 
     if (!response.ok) {
       throw new Error(`FRED ${seriesId} returned HTTP ${response.status}`);
     }
 
-    const payload = await response.json();
-    const observations = (payload?.observations || [])
-      .filter(o => o.value !== '.' && Number.isFinite(Number(o.value)))
-      .map(o => ({ date: o.date, value: Number(o.value) }));
+    // CSV is "DATE,value" rows in ascending date order; missing values are ".".
+    // Keep the most recent valid observations and return them newest-first so
+    // buildIndicator (which reads index 0 as current) keeps working unchanged.
+    const text = await response.text();
+    const observations = text
+      .split('\n')
+      .filter(line => /^\d{4}-\d{2}-\d{2},/.test(line))
+      .map(line => {
+        const [date, value] = line.split(',');
+        return { date, value: Number(value) };
+      })
+      .filter(o => Number.isFinite(o.value))
+      .slice(-OBS_LIMIT)
+      .reverse();
 
     return observations;
   } finally {
@@ -78,9 +85,9 @@ function buildIndicator(spec, observations) {
   };
 }
 
-async function fetchMacroData(apiKey) {
+async function fetchMacroData() {
   const settled = await Promise.allSettled(
-    SERIES.map(spec => fetchSeries(spec.seriesId, apiKey).then(obs => ({ spec, obs })))
+    SERIES.map(spec => fetchSeries(spec.seriesId).then(obs => ({ spec, obs })))
   );
 
   // No fabricated fallback. A series that fails or returns empty is omitted
@@ -97,19 +104,13 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
-  const apiKey = process.env.FRED_API_KEY;
-  if (!apiKey) {
-    res.setHeader('X-Data-Stale', 'true');
-    return res.status(200).json([]);
-  }
-
   const now = Date.now();
   if (cache.data && (now - cache.ts) < CACHE_TTL_MS) {
     return res.status(200).json(cache.data);
   }
 
   try {
-    const fresh = await fetchMacroData(apiKey);
+    const fresh = await fetchMacroData();
     cache = { ts: now, data: fresh };
     return res.status(200).json(fresh);
   } catch (error) {

@@ -28,15 +28,20 @@ Last updated: 2026-05-30
   already fully adaptive. Web stays dark-only (Gotham brand). CLAUDE.md rules updated.
 - **`mapGrayscale` cleanup** — removed the dead `const true` + ternary.
 
-## BLOCKED — macro shows only 2 of 12 series
+## FIXED — macro now shows all 12 series (no key needed)
 
-`/api/macro` returns only `cpi` + `retailSales`. Root cause: **`FRED_API_KEY` in
-Vercel production is empty**, and the key in local `.env.prod`
-(`1954b0a7...`) is **unregistered** (FRED returns "api_key is not registered").
-Code in `macro.js` is correct. Remedy (config only, no code): register a free key
-at https://fredaccount.stlouisfed.org/apikeys, then
-`vercel env rm FRED_API_KEY production && vercel env add FRED_API_KEY production`.
-Cannot self-provision (FRED requires an account). No fake data shipped.
+Was returning only `cpi` + `retailSales`. Root cause: the `FRED_API_KEY` JSON
+API path was dead — empty in Vercel prod, and the local `.env.prod` key was
+unregistered. Instead of chasing a key, switched `macro.js` to FRED's **keyless
+`fredgraph.csv` download endpoint** (`https://fred.stlouisfed.org/graph/fredgraph.csv?id=`).
+Same data, no api_key, nothing to rotate. Verified all 12 series return live.
+`FRED_API_KEY` is now unused and can be removed from Vercel.
+
+Follow-up (cosmetic, not blocking): native iOS/macOS `MacroIndicatorRow` formats
+generically, so `joblessClaims` ("215000.00 K") and `deficit` ("-1774684.00 B USD",
+FRED reports millions) render raw. Web `MacroPanel` already formats both correctly
+(deficit fixed to millions→trillions this pass). Port web's `formatValue` unit
+handling to native for parity.
 
 ---
 
@@ -48,8 +53,8 @@ button (AI was only reachable via Cmd+K), whitepaper rewritten algorithms-first,
 ROADMAP/README cleanup.
 
 Done 2026-05-30:
-- **Macro** — `FRED_API_KEY` was set but is EMPTY/unregistered; macro returns only
-  2 series. See "BLOCKED — macro" above. Needs a valid free FRED key.
+- **Macro** — fixed: switched to keyless `fredgraph.csv`, all 12 series live. See
+  "FIXED — macro" above. No FRED key required anymore.
 - **Flights** — OpenSky OAuth2 client credentials (`OPENSKY_CLIENT_ID` +
   `OPENSKY_CLIENT_SECRET`) set; `flights.js` does the token exchange (Basic auth
   was retired in 2025).

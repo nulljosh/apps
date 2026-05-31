@@ -30,7 +30,8 @@ function formatIndex(value) {
 function formatTrillions(value) {
   const num = toNumber(value);
   if (num === null) return 'n/a';
-  const trillions = num / 1e12;
+  // FRED FYFSD is reported in millions of dollars, so millions / 1e6 = trillions.
+  const trillions = num / 1e6;
   const abs = Math.abs(trillions).toFixed(2);
   return `${trillions < 0 ? '-' : ''}$${abs}T`;
 }
