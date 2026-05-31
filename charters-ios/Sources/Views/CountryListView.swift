@@ -39,36 +39,23 @@ struct CountryListView: View {
             }
             Divider().background(Color(hex: "1f3050"))
 
-            List(filtered, selection: $selectedCountry) { country in
-                Button {
-                    selectedCountry = country
-                    showCompare = false
-                } label: {
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text(country.name)
-                                    .font(.system(.body, design: .serif).weight(.bold))
-                                    .foregroundColor(Color(hex: "e8e4da"))
-                                Text(country.region.uppercased())
-                                    .font(.system(size: 10, weight: .medium))
-                                    .foregroundColor(Color(hex: "7a8e9e"))
-                                    .tracking(1)
-                            }
-                            Spacer()
-                            Text("\(country.allArticles.count) articles")
-                                .font(.system(size: 10))
-                                .foregroundColor(Color(hex: "4e9cd7"))
-                                .padding(.horizontal, 8).padding(.vertical, 3)
-                                .background(Color(hex: "4e9cd7").opacity(0.1))
-                                .clipShape(Capsule())
+            ScrollView {
+                LazyVStack(spacing: 12) {
+                    ForEach(filtered) { country in
+                        Button {
+                            selectedCountry = country
+                            showCompare = false
+                        } label: {
+                            CountryCard(country: country)
                         }
+                        .buttonStyle(CardButtonStyle())
                     }
-                    .padding(.vertical, 4)
                 }
-                .listRowBackground(Color(hex: "111c2e"))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
+                .scrollTargetLayout()
             }
-            .listStyle(.plain)
+            .scrollTargetBehavior(.viewAligned)
             .scrollContentBackground(.hidden)
         }
         .searchable(text: $searchText, prompt: "Search rights...")
@@ -100,6 +87,71 @@ struct CountryListView: View {
         .sheet(isPresented: $showAuth) {
             AuthView()
         }
+    }
+}
+
+struct CountryCard: View {
+    let country: Country
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(country.name)
+                        .font(.system(.title3, design: .serif).weight(.bold))
+                        .foregroundColor(Color(hex: "e8e4da"))
+                    Text(country.region.uppercased())
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(Color(hex: "7a8e9e"))
+                        .tracking(1.2)
+                }
+                Spacer()
+                Text("\(country.allArticles.count) articles")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(Color(hex: "4e9cd7"))
+                    .padding(.horizontal, 10).padding(.vertical, 4)
+                    .background(Color(hex: "4e9cd7").opacity(0.12))
+                    .clipShape(Capsule())
+            }
+            HStack(spacing: 6) {
+                ForEach(Array(country.allTags).sorted(), id: \.self) { tag in
+                    Text(tag)
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundColor(Color(hex: tagColor(tag)))
+                        .padding(.horizontal, 8).padding(.vertical, 3)
+                        .background(Color(hex: tagColor(tag)).opacity(0.12))
+                        .clipShape(Capsule())
+                }
+            }
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(hex: "111c2e"))
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .stroke(Color(hex: "1f3050"), lineWidth: 1)
+        )
+        .shadow(color: .black.opacity(0.35), radius: 12, y: 6)
+    }
+
+    func tagColor(_ t: String) -> String {
+        switch t {
+        case "civil": return "4e9cd7"
+        case "political": return "6a9fcf"
+        case "economic": return "7aab7a"
+        case "social": return "c4956a"
+        case "cultural": return "a07bc8"
+        default: return "7a8e9e"
+        }
+    }
+}
+
+struct CardButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
 
