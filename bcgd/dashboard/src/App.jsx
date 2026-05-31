@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getParts, saveParts, addHistory, getSettings, saveSettings, buildReorderMailto, CATEGORIES, getPin, getJobs, saveJobs, JOB_STATUSES, generateId, seedIfEmpty, getHistory, parseJobsMarkdown } from './lib/storage';
+import { addHistory, getSettings, saveSettings, buildReorderMailto, CATEGORIES, JOB_STATUSES, parseJobsMarkdown } from './lib/storage';
+import { useAuth } from './context/AuthContext';
+import { fetchParts, savePart, deletePart, fetchJobs, saveJob, deleteJob, fetchLeads, deleteLead, subscribe } from './lib/db';
 import CycleCountModal from './components/CycleCountModal';
-seedIfEmpty();
 import 'animate.css';
 import Logo from './components/Logo';
-import PinGate from './components/PinGate';
+import Login from './components/Login';
 import PartList from './components/PartList';
 import PartForm from './components/PartForm';
 import JobList from './components/JobList';
 import JobForm from './components/JobForm';
+import LeadList from './components/LeadList';
 import HistoryLog from './components/HistoryLog';
 import Settings from './components/Settings';
 import CustomerList from './components/CustomerList';
@@ -34,9 +36,10 @@ function plural(n, word) {
 }
 
 export default function App() {
-  const [authenticated, setAuthenticated] = useState(!getPin());
-  const [parts, setParts] = useState(getParts);
-  const [jobs, setJobs] = useState(getJobs);
+  const { user, orgId, loading, signOut, isConfigured } = useAuth();
+  const [parts, setParts] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [leads, setLeads] = useState([]);
   const [editingPart, setEditingPart] = useState(null);
   const [editingJob, setEditingJob] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -51,14 +54,24 @@ export default function App() {
   const [settings, setSettings] = useState(getSettings);
   const [showSettings, setShowSettings] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
-  const [dismissedBanner, setDismissedBanner] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [importText, setImportText] = useState('');
   const [cycleCount, setCycleCount] = useState(false);
   const [cycleIndex, setCycleIndex] = useState(0);
 
-  useEffect(() => { saveParts(parts); }, [parts]);
-  useEffect(() => { saveJobs(jobs); }, [jobs]);
+  // Load everything from Supabase once signed in, and stay live via realtime.
+  useEffect(() => {
+    if (!user) { setParts([]); setJobs([]); setLeads([]); return; }
+    fetchParts().then(setParts);
+    fetchJobs().then(setJobs);
+    fetchLeads().then(setLeads);
+    const unsubs = [
+      subscribe('parts', () => fetchParts().then(setParts)),
+      subscribe('jobs', () => fetchJobs().then(setJobs)),
+      subscribe('leads', () => fetchLeads().then(setLeads)),
+    ];
+    return () => unsubs.forEach(u => u());
+  }, [user]);
 
   useEffect(() => {
     if ('Notification' in window && Notification.permission === 'default') {
@@ -95,34 +108,29 @@ export default function App() {
 
   // ---- Part handlers ----
 
-  const handleSave = useCallback((part) => {
-    setParts(prev => {
-      const exists = prev.find(p => p.id === part.id);
-      if (exists) {
-        addHistory({
-          action: 'updated',
-          partName: part.name,
-          sku: part.sku,
-          details: `Qty: ${exists.quantity} -> ${part.quantity}`,
-        });
-        return prev.map(p => p.id === part.id ? part : p);
-      }
+  const handleSave = useCallback(async (part) => {
+    const exists = parts.find(p => p.id === part.id);
+    try {
+      await savePart(orgId, part);
       addHistory({
-        action: 'added',
+        action: exists ? 'updated' : 'added',
         partName: part.name,
         sku: part.sku,
-        details: `Qty: ${part.quantity}`,
+        details: exists ? `Qty: ${exists.quantity} -> ${part.quantity}` : `Qty: ${part.quantity}`,
       });
-      return [...prev, part];
-    });
+      setParts(prev => exists ? prev.map(p => p.id === part.id ? part : p) : [...prev, part]);
+      showToast(exists ? 'Part saved' : 'Part added');
+    } catch (e) {
+      showToast(`Save failed: ${e.message}`);
+    }
     setEditingPart(null);
     setShowForm(false);
-    showToast(part ? 'Part saved' : 'Part added');
-  }, [showToast]);
+  }, [parts, orgId, showToast]);
 
-  const handleDelete = useCallback((id) => {
-    setParts(prev => {
-      const part = prev.find(p => p.id === id);
+  const handleDelete = useCallback(async (id) => {
+    const part = parts.find(p => p.id === id);
+    try {
+      await deletePart(id);
       if (part) {
         addHistory({
           action: 'removed',
@@ -131,22 +139,28 @@ export default function App() {
           details: `Had ${part.quantity} in stock`,
         });
       }
-      return prev.filter(p => p.id !== id);
-    });
+      setParts(prev => prev.filter(p => p.id !== id));
+      showToast('Part removed');
+    } catch (e) {
+      showToast(`Delete failed: ${e.message}`);
+    }
     setDeleteConfirm(null);
-    showToast('Part removed');
-  }, [showToast]);
+  }, [parts, showToast]);
 
-  const handleAdjustQty = useCallback((id, delta) => {
-    setParts(prev => prev.map(p => {
-      if (p.id !== id) return p;
-      const newQty = Math.max(0, p.quantity + delta);
+  const handleAdjustQty = useCallback(async (id, delta) => {
+    const p = parts.find(x => x.id === id);
+    if (!p) return;
+    const newQty = Math.max(0, p.quantity + delta);
+    const updated = { ...p, quantity: newQty };
+    try {
+      await savePart(orgId, updated);
       addHistory({
         action: delta > 0 ? 'restocked' : 'used',
         partName: p.name,
         sku: p.sku,
         details: `Qty: ${p.quantity} -> ${newQty}`,
       });
+      setParts(prev => prev.map(x => x.id === id ? updated : x));
       if (newQty <= p.minThreshold && p.quantity > p.minThreshold && settings.alertsEnabled) {
         showToast(`Low stock: ${p.name} (${newQty}/${p.minThreshold})`);
         if ('Notification' in window && Notification.permission === 'granted') {
@@ -155,9 +169,10 @@ export default function App() {
           });
         }
       }
-      return { ...p, quantity: newQty };
-    }));
-  }, [settings.alertsEnabled, showToast]);
+    } catch (e) {
+      showToast(`Update failed: ${e.message}`);
+    }
+  }, [parts, orgId, settings.alertsEnabled, showToast]);
 
   const handleSort = useCallback((key) => {
     setSortKey(prev => {
@@ -172,59 +187,102 @@ export default function App() {
 
   // ---- Job handlers ----
 
-  const handleSaveJob = useCallback((job) => {
-    setJobs(prev => {
-      const exists = prev.find(j => j.id === job.id);
-      if (exists) return prev.map(j => j.id === job.id ? job : j);
-      return [...prev, job];
-    });
+  const handleSaveJob = useCallback(async (job) => {
+    const exists = jobs.find(j => j.id === job.id);
+    try {
+      await saveJob(orgId, job);
+      setJobs(prev => exists ? prev.map(j => j.id === job.id ? job : j) : [job, ...prev]);
+      showToast('Job saved');
+    } catch (e) {
+      showToast(`Save failed: ${e.message}`);
+    }
     setEditingJob(null);
     setShowJobForm(false);
-    showToast('Job saved');
-  }, [showToast]);
+  }, [jobs, orgId, showToast]);
 
-  const handleDeleteJob = useCallback((id) => {
-    setJobs(prev => prev.filter(j => j.id !== id));
+  const handleDeleteJob = useCallback(async (id) => {
+    try {
+      await deleteJob(id);
+      setJobs(prev => prev.filter(j => j.id !== id));
+      showToast('Job removed');
+    } catch (e) {
+      showToast(`Delete failed: ${e.message}`);
+    }
     setJobDeleteConfirm(null);
-    showToast('Job removed');
   }, [showToast]);
 
-  const handleAdvanceJob = useCallback((id) => {
-    setJobs(prev => prev.map(j => {
-      if (j.id !== id) return j;
-      const idx = JOB_STATUSES.indexOf(j.status);
-      if (idx < JOB_STATUSES.length - 1) {
-        return { ...j, status: JOB_STATUSES[idx + 1] };
-      }
-      return j;
-    }));
-    showToast('Job advanced');
-  }, [showToast]);
+  const handleAdvanceJob = useCallback(async (id) => {
+    const j = jobs.find(x => x.id === id);
+    if (!j) return;
+    const idx = JOB_STATUSES.indexOf(j.status);
+    if (idx < 0 || idx >= JOB_STATUSES.length - 1) return;
+    const updated = { ...j, status: JOB_STATUSES[idx + 1] };
+    try {
+      await saveJob(orgId, updated);
+      setJobs(prev => prev.map(x => x.id === id ? updated : x));
+      showToast('Job advanced');
+    } catch (e) {
+      showToast(`Update failed: ${e.message}`);
+    }
+  }, [jobs, orgId, showToast]);
 
-  const handleImportJobs = useCallback(() => {
+  const handleImportJobs = useCallback(async () => {
     const parsed = parseJobsMarkdown(importText);
     if (!parsed.length) { showToast('No jobs found in text'); return; }
-    setJobs(prev => [...prev, ...parsed]);
-    setImportText('');
-    setShowImport(false);
-    showToast(`Imported ${parsed.length} job${parsed.length === 1 ? '' : 's'}`);
-  }, [importText, showToast]);
+    try {
+      await Promise.all(parsed.map(j => saveJob(orgId, j)));
+      setJobs(prev => [...parsed, ...prev]);
+      setImportText('');
+      setShowImport(false);
+      showToast(`Imported ${parsed.length} job${parsed.length === 1 ? '' : 's'}`);
+    } catch (e) {
+      showToast(`Import failed: ${e.message}`);
+    }
+  }, [importText, orgId, showToast]);
 
   // Cycle count: set an exact counted quantity for one part by id.
-  const handleCycleSet = useCallback((id, newQty) => {
-    setParts(prev => prev.map(p => {
-      if (p.id !== id || p.quantity === newQty) return p;
+  const handleCycleSet = useCallback(async (id, newQty) => {
+    const p = parts.find(x => x.id === id);
+    if (!p || p.quantity === newQty) return;
+    const updated = { ...p, quantity: newQty };
+    try {
+      await savePart(orgId, updated);
       addHistory({ action: 'counted', partName: p.name, sku: p.sku, details: `Qty: ${p.quantity} -> ${newQty}` });
-      return { ...p, quantity: newQty };
-    }));
+      setParts(prev => prev.map(x => x.id === id ? updated : x));
+    } catch (e) {
+      showToast(`Update failed: ${e.message}`);
+    }
+  }, [parts, orgId, showToast]);
+
+  // ---- Lead handlers ----
+
+  // Convert a website booking request into a job (prefilled form).
+  const handleConvertLead = useCallback((lead) => {
+    setEditingJob({
+      customer: lead.name || '', phone: lead.phone || '', email: lead.email || '',
+      service: lead.service || '', status: 'Scheduled', notes: lead.message || '',
+      address: '', scheduledAt: '',
+    });
+    setShowJobForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  const handleDismissLead = useCallback(async (id) => {
+    try {
+      await deleteLead(id);
+      setLeads(prev => prev.filter(l => l.id !== id));
+      showToast('Lead dismissed');
+    } catch (e) {
+      showToast(`Failed: ${e.message}`);
+    }
+  }, [showToast]);
 
   // ---- Derived data ----
 
   const totalUnits = parts.reduce((s, p) => s + p.quantity, 0);
   const totalValue = parts.reduce((s, p) => s + Math.round(p.quantity * p.cost * 100) / 100, 0);
   const lowStockParts = parts.filter(p => p.quantity <= p.minThreshold);
-  const openLeads = jobs.filter(j => j.status === 'Lead').length;
+  const openLeads = leads.length;
   const scheduledJobs = jobs.filter(j => j.status === 'Scheduled').length;
 
   // Intelligence derived data
@@ -266,10 +324,18 @@ export default function App() {
       return 0;
     });
 
-  // ---- PIN gate ----
+  // ---- Auth gate ----
 
-  if (!authenticated) {
-    return <PinGate onAuthenticated={() => setAuthenticated(true)} />;
+  if (isConfigured && loading) {
+    return (
+      <div className="login-screen">
+        <div className="login-card glass-card"><p className="empty-hint">Loading…</p></div>
+      </div>
+    );
+  }
+
+  if (!isConfigured || !user) {
+    return <Login />;
   }
 
   return (
@@ -282,26 +348,18 @@ export default function App() {
             <span className="app-subtitle">Operations Dashboard</span>
           </div>
         </div>
-        <button
-          className="btn btn-secondary settings-toggle"
-          onClick={() => setShowSettings(s => !s)}
-        >
-          {showSettings ? 'Close Settings' : 'Settings'}
-        </button>
+        <div className="header-actions">
+          <button
+            className="btn btn-secondary settings-toggle"
+            onClick={() => setShowSettings(s => !s)}
+          >
+            {showSettings ? 'Close Settings' : 'Settings'}
+          </button>
+          <button className="btn btn-secondary" onClick={signOut}>Sign out</button>
+        </div>
       </header>
 
       <main className="app-main">
-        {/* ---- Recovery banner (new browser / empty localStorage) ---- */}
-        {parts.length === 0 && getHistory().length === 0 && !dismissedBanner && (
-          <div className="recovery-banner glass-card animate__animated animate__fadeInDown">
-            <div className="recovery-text">
-              <strong>No inventory data found.</strong>
-              <span>Migrating from another browser? Open this dashboard in Safari (or wherever you used it), go to <strong>Settings &rarr; Export backup</strong>, then come back and use <strong>Settings &rarr; Import backup</strong> here.</span>
-            </div>
-            <button className="btn btn-secondary btn-sm" onClick={() => setDismissedBanner(true)}>Dismiss</button>
-          </div>
-        )}
-
         {/* ---- Stats Row ---- */}
         <div className="stats-row animate__animated animate__fadeInUp">
           <div className="stat-card glass-card">
@@ -337,6 +395,17 @@ export default function App() {
             </div>
           )}
         </div>
+
+        {/* ---- Booking Requests (leads inbox) ---- */}
+        {leads.length > 0 && (
+          <div className="section animate__animated animate__fadeInUp" style={{ animationDelay: '0.03s' }}>
+            <h2 className="section-title">
+              Booking Requests
+              <span className="accordion-count">{leads.length} new</span>
+            </h2>
+            <LeadList leads={leads} onConvert={handleConvertLead} onDismiss={handleDismissLead} />
+          </div>
+        )}
 
         {/* ---- Low Stock Alerts ---- */}
         {lowStockParts.length > 0 && (

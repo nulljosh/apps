@@ -9,7 +9,7 @@ const SERVICES = [
 
 const EMPTY = {
   customer: '', address: '', phone: '', email: '',
-  service: '', status: 'Lead', notes: '', scheduledAt: '',
+  service: '', status: 'Scheduled', notes: '', scheduledAt: '',
 };
 
 export default function JobForm({ job, onSave, onCancel }) {
