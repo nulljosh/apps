@@ -1,6 +1,6 @@
 # Epiphany iOS
 
-v2.0.2 — Native iPhone intelligence app. 4-tab SwiftUI app (Situation, Markets, Portfolio, Settings), portrait-only, dark mode only. API: epiphany.heyitsmejosh.com
+v2.0.2 — Native iPhone intelligence app. 4-tab SwiftUI app (Situation, Markets, Portfolio, Settings), portrait-only, auto light/dark. API: epiphany.heyitsmejosh.com
 
 ## Rules
 
@@ -9,7 +9,7 @@ v2.0.2 — Native iPhone intelligence app. 4-tab SwiftUI app (Situation, Markets
 - All data preloaded on launch in parallel (stocks, crypto, commodities, finance, Tally, fear/greed)
 - Stay logged in between launches (session cookie + keychain)
 - No emojis
-- Dark mode locked via `preferredColorScheme(.dark)` in EpiphanyApp — do not revert
+- Follows system appearance (auto light/dark). No `preferredColorScheme` lock. `Palette` is fully adaptive (see `Helpers/Helpers.swift`)
 
 ## Tabs
 

@@ -7,7 +7,7 @@ v1.10.4 -- Personal intelligence platform. Palantir for regular people.
 - Map stays steady -- no jumps on load, no flashing on state changes
 - No fake prices before real data arrives
 - Mobile-first layout
-- Dark mode only, no light/auto theme
+- Web: dark only (Gotham brand, hardcoded dark surfaces). Native (iOS/macOS/watchOS): follows system appearance via adaptive `Palette`
 - iOS app: four tabs (Situation, Markets, Portfolio, Settings)
 - Web app: epiphany.heyitsmejosh.com
 - Never use raw `setInterval` for API polling -- always use `useVisibilityPolling` from `src/hooks/useVisibilityPolling.js`

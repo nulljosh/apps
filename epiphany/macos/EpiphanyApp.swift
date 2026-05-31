@@ -8,7 +8,6 @@ struct EpiphanyApp: App {
         WindowGroup {
             ContentView()
                 .environment(appState)
-                .preferredColorScheme(.dark)
                 .task {
                     await appState.restoreAuthentication()
                     appState.error = nil

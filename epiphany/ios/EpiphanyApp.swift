@@ -17,7 +17,6 @@ struct EpiphanyApp: App {
                         .environment(appState)
                 }
             }
-            .preferredColorScheme(.dark)
             .task {
                 guard !hasStartedLaunchFlow else { return }
                 hasStartedLaunchFlow = true

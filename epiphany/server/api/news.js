@@ -393,12 +393,28 @@ export default async function handler(req, res) {
 
   // Build cache key
   const cacheKey = `${category}:${lat ?? ''}:${lon ?? ''}`;
+  const kvKey = `news:geo:v1:${cacheKey}`;
+
+  // L1 in-memory
   const hit = cache.get(cacheKey);
   if (hit && Date.now() - hit.ts < CACHE_TTL) {
     res.setHeader('Cache-Control', 's-maxage=300');
     return res.status(200).json({
       ...hit.data,
       meta: buildMeta('cache', { cached: true, cacheAgeMs: Date.now() - hit.ts }),
+    });
+  }
+
+  // L2 Upstash — survives cold starts, serves instantly while fresh.
+  // The geo/general path previously had no KV layer, so every cold lambda
+  // hit GDELT + Google directly (~3s). This mirrors the stock path.
+  const kvHit = await kvReadNews(kvKey);
+  if (kvHit && kvHit.ts && Date.now() - kvHit.ts < KV_FRESH_MS) {
+    cacheSet(cacheKey, kvHit);
+    res.setHeader('Cache-Control', 's-maxage=300');
+    return res.status(200).json({
+      ...kvHit.data,
+      meta: buildMeta('cache', { cached: true, source: 'kv', cacheAgeMs: Date.now() - kvHit.ts }),
     });
   }
 
@@ -448,7 +464,9 @@ export default async function handler(req, res) {
       articles,
       meta: buildMeta('live'),
     };
-    cacheSet(cacheKey, { ts: Date.now(), data });
+    const entry = { ts: Date.now(), data };
+    cacheSet(cacheKey, entry);
+    await kvWriteNews(kvKey, entry);
     res.setHeader('Cache-Control', 's-maxage=300');
     return res.status(200).json(data);
   } catch (err) {
@@ -467,12 +485,14 @@ export default async function handler(req, res) {
           warning: 'GDELT unavailable; serving Google News results',
         }),
       };
-      cacheSet(cacheKey, { ts: Date.now(), data });
+      const entry = { ts: Date.now(), data };
+      cacheSet(cacheKey, entry);
+      await kvWriteNews(kvKey, entry);
       res.setHeader('Cache-Control', 's-maxage=300');
       return res.status(200).json(data);
     }
 
-    // Return stale cache on failure instead of empty array
+    // Return stale cache on failure instead of empty array (L1, then L2 KV)
     const stale = cache.get(cacheKey);
     if (stale) {
       res.setHeader('Cache-Control', 's-maxage=60');
@@ -482,6 +502,20 @@ export default async function handler(req, res) {
           cached: true,
           degraded: true,
           cacheAgeMs: Date.now() - stale.ts,
+          warning: 'GDELT unavailable; serving stale cached news',
+        }),
+      });
+    }
+    if (kvHit && kvHit.data) {
+      cacheSet(cacheKey, kvHit);
+      res.setHeader('Cache-Control', 's-maxage=60');
+      return res.status(200).json({
+        ...kvHit.data,
+        meta: buildMeta('stale', {
+          cached: true,
+          source: 'kv',
+          degraded: true,
+          cacheAgeMs: Date.now() - kvHit.ts,
           warning: 'GDELT unavailable; serving stale cached news',
         }),
       });

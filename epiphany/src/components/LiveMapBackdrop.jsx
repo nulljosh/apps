@@ -172,7 +172,6 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
   const [retryKey, setRetryKey] = useState(0);
   // Grayscale basemap is the permanent Gotham look — colored data markers ride
   // on top. No user toggle; the monochrome map is the brand identity.
-  const mapGrayscale = true;
 
   useEffect(() => { centerRef.current = center; }, [center]);
 
@@ -380,60 +379,68 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
         const bbox = { lamin: center.lat - 1, lomin: center.lon - 1, lamax: center.lat + 1, lomax: center.lon + 1 };
         const bboxQ = `lamin=${bbox.lamin}&lomin=${bbox.lomin}&lamax=${bbox.lamax}&lomax=${bbox.lomax}`;
         // Vercel functions cold-start; first hit can hang past short timeouts.
-        // Retry once with a longer timeout before falling back to empty data.
-        const safeFetch = async (url, fallback) => {
+        // Retry once with a longer timeout, then return FAILED (null) so the
+        // merge below keeps last-known-good data instead of blanking the layer.
+        // A successful-but-empty response is distinct from FAILED and DOES clear.
+        const FAILED = null;
+        const safeFetch = async (url) => {
           for (let attempt = 0; attempt < 2; attempt++) {
             const ctrl = new AbortController();
             const timer = setTimeout(() => ctrl.abort(), attempt === 0 ? 6000 : 12000);
             try {
               const r = await fetch(url, { signal: ctrl.signal });
               clearTimeout(timer);
-              if (!r.ok) { console.warn(`[map] ${url} returned ${r.status}`); return fallback; }
+              if (!r.ok) { console.warn(`[map] ${url} returned ${r.status}`); return FAILED; }
               return await r.json();
             } catch (err) {
               clearTimeout(timer);
               if (attempt === 1) {
                 console.warn(`[map] ${url} failed after retry:`, err.message);
-                return fallback;
+                return FAILED;
               }
               // backoff before retry
-              await new Promise(r => setTimeout(r, 600));
+              await new Promise(res => setTimeout(res, 600));
             }
           }
-          return fallback;
+          return FAILED;
         };
         const [inc, traffic, eq, ev, mk, news, crime, localEv, weather, fires, fl, aqi, emerg] = await Promise.all([
-          safeFetch(apiPath(`/api/incidents?lat=${center.lat}&lon=${center.lon}&${bboxQ}`), { incidents: [] }),
-          safeFetch(apiPath(`/api/traffic?lat=${center.lat}&lon=${center.lon}&${bboxQ}`), { incidents: [], flow: {} }),
-          safeFetch(apiPath(`/api/earthquakes?lat=${center.lat}&lon=${center.lon}&radius=500`), { earthquakes: [] }),
-          safeFetch(apiPath(`/api/events?lat=${center.lat}&lon=${center.lon}`), { events: [] }),
-          safeFetch(apiPath('/api/markets'), []),
-          safeFetch(apiPath(`/api/news?lat=${center.lat}&lon=${center.lon}`), { articles: [] }),
-          safeFetch(apiPath(`/api/crime?lat=${center.lat}&lon=${center.lon}`), { incidents: [] }),
-          safeFetch(apiPath(`/api/local-events?lat=${center.lat}&lon=${center.lon}`), { events: [] }),
-          safeFetch(apiPath(`/api/weather-alerts?lat=${center.lat}&lon=${center.lon}`), { alerts: [] }),
-          safeFetch(apiPath(`/api/wildfires?lat=${center.lat}&lon=${center.lon}`), { fires: [] }),
-          safeFetch(apiPath(`/api/flights?${bboxQ}`), { states: [] }),
-          safeFetch(apiPath(`/api/aqi?lat=${center.lat}&lon=${center.lon}`), { readings: [] }),
-          safeFetch(apiPath(`/api/emergency?lat=${center.lat}&lon=${center.lon}&${bboxQ}`), { incidents: [] }),
+          safeFetch(apiPath(`/api/incidents?lat=${center.lat}&lon=${center.lon}&${bboxQ}`)),
+          safeFetch(apiPath(`/api/traffic?lat=${center.lat}&lon=${center.lon}&${bboxQ}`)),
+          safeFetch(apiPath(`/api/earthquakes?lat=${center.lat}&lon=${center.lon}&radius=500`)),
+          safeFetch(apiPath(`/api/events?lat=${center.lat}&lon=${center.lon}`)),
+          safeFetch(apiPath('/api/markets')),
+          safeFetch(apiPath(`/api/news?lat=${center.lat}&lon=${center.lon}`)),
+          safeFetch(apiPath(`/api/crime?lat=${center.lat}&lon=${center.lon}`)),
+          safeFetch(apiPath(`/api/local-events?lat=${center.lat}&lon=${center.lon}`)),
+          safeFetch(apiPath(`/api/weather-alerts?lat=${center.lat}&lon=${center.lon}`)),
+          safeFetch(apiPath(`/api/wildfires?lat=${center.lat}&lon=${center.lon}`)),
+          safeFetch(apiPath(`/api/flights?${bboxQ}`)),
+          safeFetch(apiPath(`/api/aqi?lat=${center.lat}&lon=${center.lon}`)),
+          safeFetch(apiPath(`/api/emergency?lat=${center.lat}&lon=${center.lon}&${bboxQ}`)),
         ]);
         if (!cancelled) {
           fetchCountRef.current += 1;
-          setPayload({
-            incidents: inc.incidents || [],
-            trafficIncidents: traffic.incidents || [],
-            earthquakes: eq.earthquakes || [],
-            events: ev.events || [],
-            markets: Array.isArray(mk) ? mk.slice(0, 60) : [],
-            newsArticles: Array.isArray(news?.articles) ? news.articles : [],
-            crimeIncidents: crime.incidents || [],
-            localEvents: localEv.events || [],
-            weatherAlerts: weather.alerts || [],
-            wildfires: fires.fires || [],
-            flights: fl.states || [],
-            noFlights: fl.noFlights === true,
-            aqiReadings: aqi.readings || [],
-            emergencyIncidents: emerg.incidents || [],
+          // Merge: a failed endpoint (null) keeps the prior layer so markers
+          // never blink out mid-poll. Only a real response replaces the layer.
+          setPayload((prev) => {
+            const merge = (resp, key, prevArr) => (resp == null ? prevArr : (resp[key] || []));
+            return {
+              incidents: merge(inc, 'incidents', prev.incidents),
+              trafficIncidents: merge(traffic, 'incidents', prev.trafficIncidents),
+              earthquakes: merge(eq, 'earthquakes', prev.earthquakes),
+              events: merge(ev, 'events', prev.events),
+              markets: mk == null ? prev.markets : (Array.isArray(mk) ? mk.slice(0, 60) : []),
+              newsArticles: news == null ? prev.newsArticles : (Array.isArray(news?.articles) ? news.articles : []),
+              crimeIncidents: merge(crime, 'incidents', prev.crimeIncidents),
+              localEvents: merge(localEv, 'events', prev.localEvents),
+              weatherAlerts: merge(weather, 'alerts', prev.weatherAlerts),
+              wildfires: merge(fires, 'fires', prev.wildfires),
+              flights: merge(fl, 'states', prev.flights),
+              noFlights: fl == null ? prev.noFlights : (fl.noFlights === true),
+              aqiReadings: merge(aqi, 'readings', prev.aqiReadings),
+              emergencyIncidents: merge(emerg, 'incidents', prev.emergencyIncidents),
+            };
           });
         }
       } catch {
@@ -495,7 +502,6 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
       fl: payload.flights.length,
       em: payload.emergencyIncidents.length,
       c: `${center.lat.toFixed(3)},${center.lon.toFixed(3)}`,
-      v: fetchCountRef.current,
       ml: Object.keys(mapLayers).filter(k => mapLayers[k] !== false).join(','),
     });
 
@@ -503,8 +509,12 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
     prevPayloadRef.current = payloadKey;
 
     const maplibregl = maplibreRef.current;
-    markersRef.current.forEach(m => m.remove());
+    // Add-then-remove: build the new marker set first, drop the old set only
+    // after the new one is on the map, so there is never an empty frame.
+    const staleMarkers = markersRef.current;
+    const staleFlights = flightMarkersRef.current;
     markersRef.current = [];
+    flightMarkersRef.current = [];
 
     const addMarker = (css, title, data, lon, lat, layerType, content = '') =>
       createMarker(maplibregl, mapInstanceRef.current, markersRef.current, css, title, data, lon, lat, layerType, activePopupRef, content);
@@ -680,8 +690,6 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
     });
 
     // Flights — markers stored in flightMarkersRef for dead-reckoning animation
-    flightMarkersRef.current.forEach(m => m.marker.remove());
-    flightMarkersRef.current = [];
     if (mapLayers.flights !== false) {
       payload.flights.slice(0, 120).forEach((fl) => {
         if (fl.lat == null || fl.lon == null) return;
@@ -765,6 +773,10 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
         p.lon, p.lat, 'predictions'
       );
     });
+
+    // New set is fully rendered — now retire the previous markers (no flash).
+    staleMarkers.forEach(m => m.remove());
+    staleFlights.forEach(m => m.marker.remove());
   }, [center.lat, center.lon, payload, mapLoaded, mapLayers]);
 
   // Dead-reckoning animation — moves flight markers between 60s polls
@@ -899,7 +911,7 @@ function LiveMapBackdrop({ dark, mapLayers, onMapReady }) {
       `}</style>
       <div
         ref={mapRef}
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'auto', filter: mapGrayscale ? 'grayscale(1)' : 'none' }}
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'auto', filter: 'grayscale(1)' }}
       />
       <button
         onClick={() => {

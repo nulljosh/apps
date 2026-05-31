@@ -6,6 +6,40 @@ Last updated: 2026-05-30
 
 ---
 
+## Done 2026-05-30 (evening pass)
+
+- **Map glitch fixed** (`LiveMapBackdrop.jsx`) — markers were blinking in/out on
+  every poll and on pan/zoom. Two root causes, both fixed:
+  1. `safeFetch` returned an empty `[]` fallback on every Vercel cold-start
+     timeout, which *overwrote* good layer data. Different endpoints time out each
+     poll, so layers flickered. Now a failed fetch returns `FAILED` (null) and the
+     payload **merge keeps last-known-good data** per layer. Empty only when the
+     endpoint genuinely returns empty.
+  2. Marker rebuild was keyed on `fetchCountRef`, forcing a full teardown+rebuild
+     every 120s poll (visible flash), and removal happened *before* re-adding (empty
+     frame). Dropped `v` from the rebuild key; switched to **add-new-then-remove-old**
+     so there is never an empty frame. This also kills the "quiet area" gap on pan.
+- **News slow load fixed** (`news.js`) — extended the L2 Upstash KV cache to the
+  geo/general path (`news:geo:v1:*`). Previously only the stock path was KV-cached,
+  so every cold lambda on the map/feed hit GDELT + Google directly (~3s). Now warm
+  KV serves instantly and survives cold starts. (Roadmap item below: done.)
+- **iOS/macOS auto light/dark** — removed `preferredColorScheme(.dark)` locks
+  (`ios/EpiphanyApp`, `macos/EpiphanyApp`, `macos SituationView`). `Palette` was
+  already fully adaptive. Web stays dark-only (Gotham brand). CLAUDE.md rules updated.
+- **`mapGrayscale` cleanup** — removed the dead `const true` + ternary.
+
+## BLOCKED — macro shows only 2 of 12 series
+
+`/api/macro` returns only `cpi` + `retailSales`. Root cause: **`FRED_API_KEY` in
+Vercel production is empty**, and the key in local `.env.prod`
+(`1954b0a7...`) is **unregistered** (FRED returns "api_key is not registered").
+Code in `macro.js` is correct. Remedy (config only, no code): register a free key
+at https://fredaccount.stlouisfed.org/apikeys, then
+`vercel env rm FRED_API_KEY production && vercel env add FRED_API_KEY production`.
+Cannot self-provision (FRED requires an account). No fake data shipped.
+
+---
+
 ## From 2026-05-30 brain dump (Epiphany.pdf) — open / blocked
 
 Done this pass (see git): daily-brief rewired off FMP onto Yahoo crumb path (fixes
@@ -14,7 +48,8 @@ button (AI was only reachable via Cmd+K), whitepaper rewritten algorithms-first,
 ROADMAP/README cleanup.
 
 Done 2026-05-30:
-- **Macro** — valid `FRED_API_KEY` set on Vercel, `/api/macro` returns live series.
+- **Macro** — `FRED_API_KEY` was set but is EMPTY/unregistered; macro returns only
+  2 series. See "BLOCKED — macro" above. Needs a valid free FRED key.
 - **Flights** — OpenSky OAuth2 client credentials (`OPENSKY_CLIENT_ID` +
   `OPENSKY_CLIENT_SECRET`) set; `flights.js` does the token exchange (Basic auth
   was retired in 2025).
@@ -47,7 +82,7 @@ Open code work:
 - **Buy/Sell/Hold badge** on `StockDetail.jsx` from FMP `grades-consensus` / `price-target-consensus` (stable API).
 - **TradingView sector heatmap/treemap** (Recharts Treemap) as a Markets sub-tab, sized by mcap, colored by % change.
 - **Map Gotham pass**: raise `slice()` item caps in `LiveMapBackdrop.jsx` (12-40/layer), surface layer toggles out of dev-only (`Settings.jsx`), zoom-based density, polish clickable event popups, lock grayscale basemap + drop the toggle so the map shows everything immediately like Google Maps.
-- **Ground News-style news**: source-diversity / bias-lean badges + grouping in `news.js` + `NewsWidget.jsx`. Also extend the L2 Upstash cache to the geo/general news path (only the stock path is cached so far).
+- **Ground News-style news**: source-diversity / bias-lean badges + grouping in `news.js` + `NewsWidget.jsx`. ~~Also extend the L2 Upstash cache to the geo/general news path~~ DONE 2026-05-30 (`news:geo:v1:*`).
 - **Auth UX**: surface the already-built Apple Sign In (`auth.js` ~line 265) on `LoginPage.jsx`; add TOTP 2FA (Wealthsimple-grade).
 - **SnapTrade holdings render**: sync works but `Settings.jsx` shows cash totals only — render per-position symbol/shares/marketValue.
 - **iOS/macOS parity**: port real-spending + macro buildout to native (iOS still on legacy `stocks.js`).

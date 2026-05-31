@@ -739,7 +739,6 @@ private struct SituationEventDetailView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
         }
-        .preferredColorScheme(.dark)
     }
 
     private var eventImageURL: URL? {
