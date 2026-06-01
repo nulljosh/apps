@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.1.0] — 2026-05-31
+
+- Visible zoom controls: floating glass +/-/reset cluster with live zoom-% readout (web, iOS, macOS)
+- Web: two-finger pinch-zoom, double-tap reset, scroll now zooms about the cursor
+- iOS/macOS: button zoom keeps the view centered; double-tap/double-click resets; macOS `0` key resets
+
 ## [v1.0.1] — 2026-05-23
 
 - 6a12fdfc chore: snow leopard pass (charters)

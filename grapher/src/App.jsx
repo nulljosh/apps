@@ -59,7 +59,7 @@ export default function App() {
           marginLeft: 'auto', fontSize: 11,
           color: 'var(--text-secondary)',
           fontFamily: '"SF Mono", "Menlo", monospace',
-        }}>scroll to zoom · drag to pan</span>
+        }}>pinch or +/- to zoom · drag to pan</span>
       </div>
 
       <div className="main-layout">

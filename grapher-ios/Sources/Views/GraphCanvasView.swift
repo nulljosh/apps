@@ -47,7 +47,62 @@ struct GraphCanvasView: View {
                         }
                 )
             )
+            .onTapGesture(count: 2) { resetView() }
+            .overlay(alignment: .bottomTrailing) { zoomCluster }
         }
+    }
+
+    // MARK: - Zoom controls
+
+    private var zoomPct: Int { Int((scale / 60 * 100).rounded()) }
+
+    private var zoomCluster: some View {
+        VStack(spacing: 4) {
+            Text("\(zoomPct)%")
+                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .foregroundColor(.white.opacity(0.5))
+            zoomButton("plus", "Zoom in") { zoomBy(1.3) }
+            zoomButton("minus", "Zoom out") { zoomBy(1 / 1.3) }
+            zoomButton("arrow.counterclockwise", "Reset view") { resetView() }
+        }
+        .padding(6)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+        .overlay(RoundedRectangle(cornerRadius: 14).stroke(.white.opacity(0.1), lineWidth: 1))
+        .padding(16)
+    }
+
+    private func zoomButton(_ systemName: String, _ label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(.white.opacity(0.85))
+                .frame(width: 44, height: 44)
+                .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 10))
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
+    }
+
+    private func zoomBy(_ factor: CGFloat) {
+        let newScale = max(10, min(400, scale * factor))
+        let ratio = newScale / scale
+        guard ratio != 1 else { return }
+        withAnimation(.easeOut(duration: 0.18)) {
+            offset = CGSize(width: offset.width * ratio, height: offset.height * ratio)
+            scale = newScale
+        }
+        lastScale = newScale
+        lastOffset = offset
+    }
+
+    private func resetView() {
+        withAnimation(.easeOut(duration: 0.18)) {
+            scale = 60
+            offset = .zero
+        }
+        lastScale = 60
+        lastOffset = .zero
     }
 
     // MARK: - Drawing

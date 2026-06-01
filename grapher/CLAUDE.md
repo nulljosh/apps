@@ -1,6 +1,6 @@
 # Grapher
 
-v1.0.0 — Desmos-style graphing calculator. Client-side only, no backend.
+v1.1.0 — Desmos-style graphing calculator. Client-side only, no backend.
 
 ## Run
 

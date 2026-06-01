@@ -2,6 +2,6 @@
 
 # Grapher
 
-![version](https://img.shields.io/badge/version-v1.0.1-blue)
+![version](https://img.shields.io/badge/version-v1.1.0-blue)
 
 Desmos-style graphing calculator. Multi-equation, zoom/pan, Apple Liquid Glass UI.
