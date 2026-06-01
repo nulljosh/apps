@@ -18,7 +18,7 @@
       --card: rgba(255,255,255,0.85);
       --text: #1d1d1f;
       --sub: #6e6e73;
-      --tab-h: 60px;
+      --border: rgba(0,0,0,0.08);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
@@ -28,6 +28,7 @@
         --card: rgba(44,44,46,0.85);
         --text: #f5f5f7;
         --sub: #98989d;
+        --border: rgba(255,255,255,0.1);
       }
     }
 
@@ -35,325 +36,146 @@
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
-      height: 100dvh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      align-items: center;
+      padding: calc(24px + env(safe-area-inset-top, 0px)) 20px calc(24px + var(--safe-bottom));
+      gap: 24px;
     }
 
-    /* Header */
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px 8px;
-      padding-top: calc(12px + env(safe-area-inset-top, 0px));
-      background: var(--card);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      flex-shrink: 0;
-      min-height: 56px;
+      text-align: center;
+      margin-top: 8vh;
     }
 
     header h1 {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.2px;
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
 
-    header button {
-      background: none;
-      border: none;
-      color: var(--blue);
-      font-size: 17px;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-family: inherit;
-    }
-
-    header button:active { opacity: 0.6; }
-    #back-btn { visibility: hidden; }
-
-    /* Progress bar */
-    #progress-bar {
-      height: 3px;
-      background: var(--blue);
-      width: 0%;
-      transition: width 0.15s linear, opacity 0.3s;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      flex-shrink: 0;
-    }
-
-    /* Frame */
-    #frame-wrap {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-
-    /* Offline overlay */
-    #offline {
-      display: none;
-      position: absolute;
-      inset: 0;
-      background: var(--bg);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      padding: 40px;
-      text-align: center;
-    }
-
-    #offline.visible { display: flex; }
-
-    #offline svg { color: var(--sub); }
-
-    #offline h2 {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-    }
-
-    #offline p {
+    header p {
       color: var(--sub);
       font-size: 15px;
-      line-height: 1.5;
+      margin-top: 6px;
     }
 
-    #offline button {
-      background: var(--blue);
-      color: white;
-      border: none;
-      font-family: inherit;
-      font-size: 16px;
-      font-weight: 500;
-      padding: 12px 28px;
-      border-radius: 100px;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), opacity 0.15s;
-    }
-
-    #offline button:active { transform: scale(0.96); opacity: 0.8; }
-
-    /* Tab bar */
-    nav {
+    main {
+      width: 100%;
+      max-width: 420px;
       display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--blue);
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 600;
+      padding: 16px;
+      border-radius: 16px;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), background 0.15s;
+    }
+
+    .cta:active { transform: scale(0.97); background: var(--blue-dark); }
+
+    .links {
+      display: flex;
+      flex-direction: column;
       background: var(--card);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(0,0,0,0.08);
-      padding-bottom: var(--safe-bottom);
-      flex-shrink: 0;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
     }
 
-    nav button {
-      flex: 1;
-      background: none;
-      border: none;
+    .links a {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 3px;
-      padding: 8px 0;
-      cursor: pointer;
-      color: var(--sub);
-      font-family: inherit;
-      font-size: 10px;
+      gap: 14px;
+      padding: 15px 16px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 16px;
       font-weight: 500;
-      letter-spacing: 0.2px;
-      min-height: var(--tab-h);
-      transition: color 0.15s;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
     }
 
-    nav button.active { color: var(--blue); }
+    .links a:last-child { border-bottom: none; }
+    .links a:active { background: rgba(0,113,227,0.08); }
 
-    nav button svg {
-      width: 24px;
-      height: 24px;
-      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    .links svg { width: 22px; height: 22px; color: var(--blue); flex-shrink: 0; }
+
+    .links .chev { margin-left: auto; color: var(--sub); width: 8px; }
+
+    footer {
+      color: var(--sub);
+      font-size: 12px;
+      text-align: center;
+      max-width: 420px;
+      line-height: 1.5;
+      margin-top: auto;
     }
-
-    nav button:active svg { transform: scale(0.88); }
   </style>
 </head>
 <body>
 
-<div id="progress-bar"></div>
-
 <header>
-  <button id="back-btn" onclick="goBack()">
-    <svg width="10" height="18" viewBox="0 0 10 18" fill="none">
-      <path d="M9 1L1 9L9 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Back
-  </button>
-  <h1 id="page-title">Compass</h1>
-  <button onclick="reload()">
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M1 9C1 4.58 4.58 1 9 1c2.76 0 5.2 1.37 6.72 3.47" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M17 9c0 4.42-3.58 8-8 8-2.76 0-5.2-1.37-6.72-3.47" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M14 1l2.72 3.47L13.4 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M4 17l-2.72-3.47L4.6 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
+  <h1>Beep</h1>
+  <p>Compass Card</p>
 </header>
 
-<div id="frame-wrap">
-  <iframe
-    id="frame"
-    title="Compass Card"
-    sandbox="allow-same-origin allow-scripts allow-forms allow-top-navigation allow-popups"
-  ></iframe>
-
-  <div id="offline">
-    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="2" y1="2" x2="22" y2="22"/>
-      <path d="M8.5 16.5a5 5 0 0 1 7 0"/>
-      <path d="M2 8.82a15 15 0 0 1 4.17-2.65"/>
-      <path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/>
-      <path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/>
-      <path d="M5 12.85a10 10 0 0 1 5.17-2.8"/>
-      <line x1="12" y1="20" x2="12.01" y2="20" stroke-width="2"/>
-    </svg>
-    <h2>No Connection</h2>
-    <p>Check your network and try again.</p>
-    <button onclick="retry()">Retry</button>
-  </div>
-</div>
-
-<nav>
-  <button class="active" data-url="https://www.compasscard.ca/" onclick="navigate(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<main>
+  <a class="cta" href="https://www.compasscard.ca/" target="_blank" rel="noopener">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="2" y="5" width="20" height="14" rx="2"/>
       <line x1="2" y1="10" x2="22" y2="10"/>
     </svg>
-    Home
-  </button>
-  <button data-url="https://www.compasscard.ca/LoadValue" onclick="navigate(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"/>
-      <line x1="12" y1="8" x2="12" y2="16"/>
-      <line x1="8" y1="12" x2="16" y2="12"/>
-    </svg>
-    Reload
-  </button>
-  <button data-url="https://www.compasscard.ca/CardUse" onclick="navigate(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="3" width="20" height="14" rx="2"/>
-      <path d="M8 21l8 0"/>
-      <line x1="12" y1="17" x2="12" y2="21"/>
-    </svg>
-    Trips
-  </button>
-  <button data-url="https://www.compasscard.ca/MyAccount" onclick="navigate(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="8" r="4"/>
-      <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/>
-    </svg>
-    Account
-  </button>
-</nav>
+    Open Compass Card
+  </a>
 
-<script>
-  const frame = document.getElementById('frame');
-  const bar = document.getElementById('progress-bar');
-  const backBtn = document.getElementById('back-btn');
-  const offline = document.getElementById('offline');
-  const tabs = document.querySelectorAll('nav button');
+  <div class="links">
+    <a href="https://www.compasscard.ca/LoadValue" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="16"/>
+        <line x1="8" y1="12" x2="16" y2="12"/>
+      </svg>
+      Reload Balance
+      <svg class="chev" viewBox="0 0 10 18" fill="none"><path d="M1 1l8 8-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="https://www.compasscard.ca/CardUse" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <path d="M8 21l8 0"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+      Trips &amp; Usage
+      <svg class="chev" viewBox="0 0 10 18" fill="none"><path d="M1 1l8 8-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="https://www.compasscard.ca/MyAccount" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/>
+      </svg>
+      My Account
+      <svg class="chev" viewBox="0 0 10 18" fill="none"><path d="M1 1l8 8-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</main>
 
-  let history = [];
-  let currentURL = 'https://www.compasscard.ca/';
-  let loading = false;
+<footer>
+  Opens compasscard.ca in your browser. TransLink's site blocks embedding, so Beep links out to keep login working.
+</footer>
 
-  function setProgress(pct) {
-    bar.style.width = pct + '%';
-    bar.style.opacity = pct > 0 && pct < 100 ? '1' : '0';
-  }
-
-  function showOffline(show) {
-    offline.classList.toggle('visible', show);
-  }
-
-  function updateBack() {
-    backBtn.style.visibility = history.length > 0 ? 'visible' : 'hidden';
-  }
-
-  function navigate(btn) {
-    const url = btn.dataset.url;
-    if (url === currentURL && !offline.classList.contains('visible')) return;
-    history = [];
-    updateBack();
-    tabs.forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    loadURL(url);
-  }
-
-  function loadURL(url) {
-    showOffline(false);
-    setProgress(30);
-    currentURL = url;
-    frame.src = url;
-
-    // Detect load via timeout fallback (iframe cross-origin limits events)
-    clearTimeout(window._loadTimer);
-    window._loadTimer = setTimeout(() => setProgress(100), 3000);
-  }
-
-  function goBack() {
-    if (history.length === 0) return;
-    const prev = history.pop();
-    updateBack();
-    loadURL(prev);
-  }
-
-  function reload() {
-    if (offline.classList.contains('visible')) {
-      retry();
-      return;
-    }
-    frame.src = frame.src;
-    setProgress(20);
-  }
-
-  function retry() {
-    loadURL(currentURL);
-  }
-
-  frame.addEventListener('load', () => {
-    setProgress(100);
-    try {
-      const title = frame.contentDocument?.title;
-      if (title) document.getElementById('page-title').textContent = title;
-    } catch (e) {
-      // cross-origin — expected
-    }
-  });
-
-  frame.addEventListener('error', () => {
-    setProgress(0);
-    showOffline(true);
-  });
-
-  // Initial load
-  loadURL(currentURL);
-</script>
 </body>
 </html>

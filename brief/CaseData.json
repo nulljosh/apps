@@ -50,6 +50,15 @@
       "key": "Wrist injury",
       "value": "Pre-existing fracture aggravated by prone restraint \u2014 additional physical harm head",
       "fullWidth": true
+    },
+    {
+      "key": "ICBC claim",
+      "value": "MVA claim 2022\u20132024 (separate matter) \u2014 documents pre-existing wrist fracture + pre-incident medical baseline",
+      "fullWidth": true
+    },
+    {
+      "key": "Family support",
+      "value": "Mother assisted navigating the ICBC claim and this legal process \u2014 corroborates s.19 incapacity"
     }
   ],
   "grounds": [
@@ -77,7 +86,7 @@
       "title": "PTSD General",
       "section": "\u2014",
       "value": "$75\u2013150k",
-      "description": "Every day affected since August 1, 2023. No good days. Formal PTSD assessment underway May 2026. Causation to incident to be confirmed by treating therapist. Separate from future earning capacity head.",
+      "description": "Every day affected since August 1, 2023. No good days. Formal PTSD assessment underway May 2026. Causation to incident to be confirmed by treating therapist. Separate from future earning capacity head. High function (daily coding, legal self-study) does not negate injury: capacity in unrelated domains is not a defence to non-pecuniary PTSD harm or to domain-specific litigation incapacity under s.19.",
       "citation": "Non-pecuniary damages \u2014 pain, suffering, loss of dignity"
     },
     {
@@ -201,6 +210,11 @@
       "label": "Pin discovery date: when you first understood a civil Charter claim was an appropriate remedy",
       "priority": "now",
       "done": true
+    },
+    {
+      "id": 25,
+      "label": "Request ICBC claim file (2022–2024) — wrist fracture records + pre-incident medical baseline",
+      "priority": "now"
     },
     {
       "id": 14,
@@ -487,6 +501,14 @@
     "crown_dilemma": "Crown cannot simultaneously argue PTSD was not severe enough for s.18 (to defeat limitation) and argue no permanent injury (to limit damages). Same PTSD. Same severity standard."
   },
   "journal_seed": [
+    {
+      "date": "2026-06-01",
+      "text": "Getting better, slowly — but the PTSD still hits hard. Being able to code every day and study law does not mean I am not traumatized by the unlawful actions of the government and police. High function in one part of life is not the absence of injury in another. For the record: my mom helped me navigate all of this — I could not have carried the claim alone."
+    },
+    {
+      "date": "2026-06-01",
+      "text": "For the file: an ICBC claim ran 2022–2024 (a separate motor-vehicle matter). It documents the pre-existing wrist fracture and a pre-incident medical baseline. The PTSD here is causally tied to the August 1, 2023 police incident; any apportionment against the MVA injuries to be separated by independent psychiatric evidence."
+    },
     {
       "date": "2026-05-11",
       "text": "Discovery date established. Formally confirmed RCMP file #2023-25586 (August 1, 2023), began active legal research, retained a lawyer for consultation, and first understood that a civil proceeding under Ward v. Vancouver (City) [2010] 2 SCR 27 \u2014 a s.24(1) Charter damages claim \u2014 is an available and appropriate remedy. This constitutes discovery under BC Limitation Act s.8(1)(d). Called Paul Kent-Snowsell 3x; callback confirmed May 12. Contemporaneous record created."

@@ -67,7 +67,7 @@ const GROUNDS = [
   { id:'s7', n:'03', title:'Life, liberty, security of person', sec:'Charter s.7', val:'$250-600k', high:600, grade:'A',
     desc:'Forced antipsychotic medication absent consent and absent meaningful incapacity assessment. Fleming v. Ontario establishes that even validly detained persons retain bodily integrity. Engages physical, psychological, and dignity interests simultaneously.',
     cite:'Fleming v. Ontario, 2019 SCC 45 - bodily integrity protected during state detention. Carter v. Canada, 2015 SCC 5 - s.7 protects against state-imposed physical intervention.',
-    risk:'AG argues valid MHA detention lawfully limits s.7 under s.1 · Counter: Fleming holds bodily integrity survives lawful detention; forced antipsychotic medication without capacity assessment is not saved by s.1.' },
+    risk:'AG argues valid MHA detention lawfully limits s.7 under s.1 · Counter: Fleming holds bodily integrity survives lawful detention; forced antipsychotic medication without capacity assessment is not saved by s.1. AG may further argue high function (daily coding, legal self-study) negates injury · Counter: capacity in unrelated domains does not negate domain-specific litigation incapacity (s.19) or the severity of non-pecuniary PTSD harm — "no good days since Aug 1, 2023" is the lived measure.' },
   { id:'s10b', n:'04', title:'Right to counsel', sec:'Charter s.10(b)', val:'$50-150k', high:150, grade:'C',
     desc:'No caution given at any point of the encounter. Detention triggered s.10(b) immediately under Grant; failure to inform of right to counsel before transport and forced medication compounds every downstream violation.',
     cite:'R v. Suberu, 2009 SCC 33 - s.10(b) attaches on detention without delay.',
@@ -216,9 +216,12 @@ const CHECKLIST = [
   { i:'21', label:'PRIORITY: Book Law Society limitation read (1-800-663-1919) - does this survive a limitation strike, yes or no?', pri:'now', done:false, lev:160 },
   { i:'22', label:'Get s.19 letter from current counsellor: PTSD Dx + causation to Aug 1 2023 + period of incapacity', pri:'now', done:false, lev:100 },
   { i:'23', label:'Request GP pre-incident records - establish pre-Aug 2023 baseline functioning', pri:'now', done:false, lev:40 },
+  { i:'25', label:'Request ICBC claim file (2022-2024) - wrist fracture records + pre-incident medical baseline', pri:'now', done:false, lev:45 },
 ];
 
 const JOURNAL_SEED = [
+  { date:'2026-06-01', text:'Getting better, slowly — but the PTSD still hits hard. Being able to code every day and study law does not mean I am not traumatized by the unlawful actions of the government and police. High function in one part of life is not the absence of injury in another. For the record: my mom helped me navigate all of this — I could not have carried the claim alone.' },
+  { date:'2026-06-01', text:'For the file: an ICBC claim ran 2022–2024 (a separate motor-vehicle matter). It documents the pre-existing wrist fracture and a pre-incident medical baseline. The PTSD here is causally tied to the August 1, 2023 police incident; any apportionment against the MVA injuries to be separated by independent psychiatric evidence.' },
   { date:'2026-05-11', text:'May 11, 2026 — pinned as formal discovery date for s.8(1)(d) discoverability argument.' },
   { date:'2026-04-22', text:'Therapy started May 2026. PTSD causation letter pending.' },
 ];

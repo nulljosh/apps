@@ -162,7 +162,7 @@ let caseGrounds: [Ground] = [
            value: "$250–600k", accent: .briefDanger,
            description: "Forced antipsychotic medication absent consent and absent meaningful incapacity assessment. Fleming v. Ontario establishes that even validly detained persons retain bodily integrity. Engages physical, psychological, and dignity interests simultaneously.",
            citation: "Fleming v. Ontario, 2019 SCC 45 — bodily integrity protected during state detention. Carter v. Canada, 2015 SCC 5 — s.7 protects against state-imposed physical intervention.",
-           risk: "AG argues valid MHA detention lawfully limits s.7 under s.1 · Counter: Fleming holds bodily integrity survives lawful detention; forced antipsychotic medication without capacity assessment is not saved by s.1."),
+           risk: "AG argues valid MHA detention lawfully limits s.7 under s.1 · Counter: Fleming holds bodily integrity survives lawful detention; forced antipsychotic medication without capacity assessment is not saved by s.1. AG may further argue high function (daily coding, legal self-study) negates injury · Counter: capacity in unrelated domains does not negate domain-specific litigation incapacity (s.19) or the severity of non-pecuniary PTSD harm — 'no good days since Aug 1, 2023' is the lived measure."),
 
     Ground(id: "s10b", number: 4, title: "Right to counsel", section: "Charter s.10(b)",
            value: "$50–150k", accent: Color.secondary,
@@ -204,7 +204,9 @@ let caseFacts: [CaseFact] = [
     CaseFact(key: "Officers", value: "Two officers — identities unknown, pending ATIP"),
     CaseFact(key: "Witness", value: "Father, in kitchen"),
     CaseFact(key: "Status", value: "Pre-litigation"),
-    CaseFact(key: "Wrist injury", value: "Pre-existing fracture aggravated by prone restraint — additional physical harm head", fullWidth: true)
+    CaseFact(key: "Wrist injury", value: "Pre-existing fracture aggravated by prone restraint — additional physical harm head", fullWidth: true),
+    CaseFact(key: "ICBC claim", value: "MVA claim 2022–2024 (separate matter) — documents pre-existing wrist fracture + pre-incident medical baseline", fullWidth: true),
+    CaseFact(key: "Family support", value: "Mother assisted navigating the ICBC claim and this legal process — corroborates s.19 incapacity")
 ]
 
 let caseWitnesses: [Witness] = [
@@ -241,6 +243,8 @@ They brought him to hospital after that and I couldn't see him until next day an
 ]
 
 let journalSeed: [JournalEntry] = [
+    JournalEntry(date: "2026-06-01", text: "Getting better, slowly — but the PTSD still hits hard. Being able to code every day and study law does not mean I am not traumatized by the unlawful actions of the government and police. High function in one part of life is not the absence of injury in another. For the record: my mom helped me navigate all of this — I could not have carried the claim alone."),
+    JournalEntry(date: "2026-06-01", text: "For the file: an ICBC claim ran 2022–2024 (a separate motor-vehicle matter). It documents the pre-existing wrist fracture and a pre-incident medical baseline. The PTSD here is causally tied to the August 1, 2023 police incident; any apportionment against the MVA injuries to be separated by independent psychiatric evidence."),
     JournalEntry(date: "2026-05-11", text: "Discovery date established. Formally confirmed RCMP file #2023-25586 (August 1, 2023), began active legal research, retained a lawyer for consultation, and first understood that a civil proceeding under Ward v. Vancouver (City) [2010] 2 SCR 27 — a s.24(1) Charter damages claim — is an available and appropriate remedy. This constitutes discovery under BC Limitation Act s.8(1)(d). Called Paul Kent-Snowsell 3x; callback confirmed May 12. Contemporaneous record created."),
     JournalEntry(date: "2026-05-10", text: "Formal PTSD assessment underway. Building clinical paper trail. Session directly connected current symptoms to the August 1, 2023 incident."),
     JournalEntry(date: "2026-05-20", text: "In ongoing therapy with my regular counsellor over the past several months. Raised EMDR with her; she is supportive and is writing a PTSD letter (diagnosis, causation to August 1, 2023, and period of incapacity) — the s.19 disability anchor under the BC Limitation Act. A separate EMDR clinician we tried once was not a good fit; the regular counsellor remains the treating clinician."),
@@ -255,6 +259,7 @@ let caseChecklist: [ChecklistItem] = [
     ChecklistItem(id: 22, label: "PRIORITY: Book Law Society limitation read (1-800-663-1919) — one question: does this survive a limitation strike, yes or no?", priority: .now),
     ChecklistItem(id: 23, label: "Get s.19 letter from current counsellor: PTSD Dx + causation to Aug 1 2023 + period of incapacity", priority: .now),
     ChecklistItem(id: 24, label: "Request GP pre-incident records — establish pre-Aug 2023 baseline functioning", priority: .now),
+    ChecklistItem(id: 25, label: "Request ICBC claim file (2022–2024) — wrist fracture records + pre-incident medical baseline", priority: .now),
     ChecklistItem(id: 0, label: "Paul Kent declined May 18 — contact Thomas Harding & Neil Chantler (PK referrals — Degen case)", priority: .now),
     ChecklistItem(id: 1, label: "PTSD assessment started (therapy) — get Dx letter", priority: .now),
     ChecklistItem(id: 2, label: "Body cam footage requested from RCMP", priority: .now),

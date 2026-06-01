@@ -769,7 +769,7 @@ document.getElementById('bc').addEventListener('click',()=>switchView('compare')
 document.querySelectorAll('.fb').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));
   b.classList.add('on');AF=b.dataset.f;
-  if(CV==='list')renderList();
+  renderList();
   if(CV==='compare')renderCompare();
   if(AC){const c=D.find(x=>x.id===AC);if(c)renderPanel(c,document.getElementById('ps').value);}
 }));
@@ -784,6 +784,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(AC)closePanel();
 populateCompareSelects();
 renderStats();
 initMap();
+renderList();
 loadHash();
 
 const SEED_CASES=[
