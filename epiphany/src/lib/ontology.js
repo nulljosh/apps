@@ -1,5 +1,5 @@
-// Monica Personal Ontology -- unified object model for all data sources
-// Every piece of data in Monica becomes a typed object with relationships.
+// Epiphany Personal Ontology -- unified object model for all data sources
+// Every piece of data in Epiphany becomes a typed object with relationships.
 
 export const OBJECT_TYPES = ['asset', 'person', 'event', 'place', 'account', 'transaction', 'note', 'alert', 'decision'];
 
@@ -53,7 +53,7 @@ export function deterministicId(type, key) {
   return `${type}:${key}`;
 }
 
-// Convert existing Monica data types into ontology objects
+// Convert existing Epiphany data types into ontology objects
 
 export function stockToAsset(symbol, stockData) {
   return {

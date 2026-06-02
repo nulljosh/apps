@@ -704,7 +704,7 @@ export default function FinancePanel({ dark, t, stocks, isAuthenticated }) {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = 'monica-portfolio.json';
+    anchor.download = 'epiphany-portfolio.json';
     anchor.click();
     URL.revokeObjectURL(url);
   }, [exportData]);

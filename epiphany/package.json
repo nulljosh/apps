@@ -16,7 +16,6 @@
     "test:speed": "playwright test tests/speed.spec.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.80.0",
     "@mozilla/readability": "^0.6.0",
     "@stripe/stripe-js": "^8.7.0",
     "@trickfilm400/rollup-plugin-off-main-thread": "^3.0.0-pre1",
